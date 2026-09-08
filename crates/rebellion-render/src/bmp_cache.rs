@@ -111,9 +111,9 @@ impl DllSource {
     pub fn dll_dir_name(self) -> &'static str {
         match self {
             DllSource::Strategy => "strategy-dll",
-            DllSource::Common   => "common-dll",
+            DllSource::Common => "common-dll",
             DllSource::Tactical => "tactical-dll",
-            DllSource::Gokres   => "gokres-dll",
+            DllSource::Gokres => "gokres-dll",
         }
     }
 
@@ -121,9 +121,9 @@ impl DllSource {
     pub fn texture_prefix(self) -> &'static str {
         match self {
             DllSource::Strategy => "strategy",
-            DllSource::Common   => "common",
+            DllSource::Common => "common",
             DllSource::Tactical => "tactical",
-            DllSource::Gokres   => "gokres",
+            DllSource::Gokres => "gokres",
         }
     }
 }
@@ -141,74 +141,10 @@ impl DllSource {
 pub mod resources {
     /// Resource IDs for `COMMON.DLL` BMPs.
     ///
-    /// Covers the global main-menu background and the standard strategy-view
-    /// button library used by the cockpit controls.
+    /// Covers the global main-menu background and shared interface resources.
     pub mod common {
         /// Main title-screen background.
         pub const MAIN_MENU_BG: u32 = 20001;
-
-        /// Cockpit button: Officers.
-        pub const BTN_OFFICERS_NORMAL: u32 = 11001;
-        /// Cockpit button: Officers (pressed/active).
-        pub const BTN_OFFICERS_PRESSED: u32 = 11002;
-        /// Cockpit button: Officers (disabled).
-        pub const BTN_OFFICERS_DISABLED: u32 = 11003;
-
-        /// Cockpit button: Fleets.
-        pub const BTN_FLEETS_NORMAL: u32 = 11004;
-        /// Cockpit button: Fleets (pressed/active).
-        pub const BTN_FLEETS_PRESSED: u32 = 11005;
-        /// Cockpit button: Fleets (disabled).
-        pub const BTN_FLEETS_DISABLED: u32 = 11006;
-
-        /// Cockpit button: Manufacturing.
-        pub const BTN_MANUFACTURING_NORMAL: u32 = 11007;
-        /// Cockpit button: Manufacturing (pressed/active).
-        pub const BTN_MANUFACTURING_PRESSED: u32 = 11008;
-        /// Cockpit button: Manufacturing (disabled).
-        pub const BTN_MANUFACTURING_DISABLED: u32 = 11009;
-
-        /// Cockpit button: Missions.
-        pub const BTN_MISSIONS_NORMAL: u32 = 11010;
-        /// Cockpit button: Missions (pressed/active).
-        pub const BTN_MISSIONS_PRESSED: u32 = 11011;
-        /// Cockpit button: Missions (disabled).
-        pub const BTN_MISSIONS_DISABLED: u32 = 11012;
-
-        /// Cockpit button: Research.
-        pub const BTN_RESEARCH_NORMAL: u32 = 11013;
-        /// Cockpit button: Research (pressed/active).
-        pub const BTN_RESEARCH_PRESSED: u32 = 11014;
-        /// Cockpit button: Research (disabled).
-        pub const BTN_RESEARCH_DISABLED: u32 = 11015;
-
-        /// Cockpit button: Encyclopedia.
-        pub const BTN_ENCYCLOPEDIA_NORMAL: u32 = 11016;
-        /// Cockpit button: Encyclopedia (pressed/active).
-        pub const BTN_ENCYCLOPEDIA_PRESSED: u32 = 11017;
-        /// Cockpit button: Encyclopedia (disabled).
-        pub const BTN_ENCYCLOPEDIA_DISABLED: u32 = 11018;
-
-        /// Cockpit button: Save/Load.
-        pub const BTN_SAVE_LOAD_NORMAL: u32 = 11019;
-        /// Cockpit button: Save/Load (pressed/active).
-        pub const BTN_SAVE_LOAD_PRESSED: u32 = 11020;
-        /// Cockpit button: Save/Load (disabled).
-        pub const BTN_SAVE_LOAD_DISABLED: u32 = 11021;
-
-        /// Cockpit button: decrease game speed.
-        pub const BTN_SPEED_DOWN_NORMAL: u32 = 11022;
-        /// Cockpit button: decrease game speed (pressed/active).
-        pub const BTN_SPEED_DOWN_PRESSED: u32 = 11023;
-        /// Cockpit button: decrease game speed (disabled).
-        pub const BTN_SPEED_DOWN_DISABLED: u32 = 11024;
-
-        /// Cockpit button: increase game speed.
-        pub const BTN_SPEED_UP_NORMAL: u32 = 11025;
-        /// Cockpit button: increase game speed (pressed/active).
-        pub const BTN_SPEED_UP_PRESSED: u32 = 11026;
-        /// Cockpit button: increase game speed (disabled).
-        pub const BTN_SPEED_UP_DISABLED: u32 = 11027;
 
         /// Main-menu button: restart the game.
         pub const BTN_RESTART_GAME_NORMAL: u32 = 10035;
@@ -225,6 +161,8 @@ pub mod resources {
     pub mod strategy {
         /// Main galaxy map starfield background.
         pub const GALAXY_BACKGROUND: u32 = 900;
+        /// Imperial galaxy-map cockpit background.
+        pub const GALAXY_BACKGROUND_EMPIRE: u32 = 901;
         /// Galaxy display toggle: off.
         pub const GALAXY_DISPLAY_OFF: u32 = 902;
         /// Galaxy display toggle: on.
@@ -799,6 +737,13 @@ impl BmpCache {
 
         if !self.textures.contains_key(&key) {
             let handle = self.load_texture(ctx, source, resource_id);
+            if handle.is_none() {
+                eprintln!(
+                    "[bmp_cache] asset unavailable source={} resource_id={}",
+                    source.dll_dir_name(),
+                    resource_id
+                );
+            }
             self.textures.insert(key, handle);
         }
 
@@ -808,18 +753,20 @@ impl BmpCache {
     /// Bulk-load all resources in `[start, end]` (inclusive) for one DLL.
     ///
     /// Useful for pre-warming the cache before the first frame that needs
-    /// those textures, avoiding hitches.  Missing files are silently skipped.
-    pub fn preload_range(
-        &mut self,
-        ctx: &egui::Context,
-        source: DllSource,
-        start: u32,
-        end: u32,
-    ) {
+    /// those textures, avoiding hitches. Missing files are logged once and
+    /// negatively cached so later frames do not repeat the same lookup.
+    pub fn preload_range(&mut self, ctx: &egui::Context, source: DllSource, start: u32, end: u32) {
         for id in start..=end {
             let key = (source, id);
             if !self.textures.contains_key(&key) {
                 let handle = self.load_texture(ctx, source, id);
+                if handle.is_none() {
+                    eprintln!(
+                        "[bmp_cache] asset unavailable source={} resource_id={}",
+                        source.dll_dir_name(),
+                        id
+                    );
+                }
                 self.textures.insert(key, handle);
             }
         }
@@ -870,24 +817,20 @@ impl BmpCache {
         let dll_dir = source.dll_dir_name();
 
         // 1. Check HD PNG override first.
-        let bytes = get_hd_bytes(dll_dir, resource_id)
-            .or_else(|| get_bmp_bytes(dll_dir, resource_id))?;
+        let bytes =
+            get_hd_bytes(dll_dir, resource_id).or_else(|| get_bmp_bytes(dll_dir, resource_id))?;
 
         // 2. Decode and register as egui texture (same as native path).
-        let img = match image::load_from_memory(&bytes) {
+        let color_image = match decode_color_image(&bytes, source, resource_id) {
             Ok(i) => i,
             Err(e) => {
-                eprintln!("[bmp_cache] WASM decode failed for {}/{}: {}", dll_dir, resource_id, e);
+                eprintln!(
+                    "[bmp_cache] WASM decode failed for {}/{}: {}",
+                    dll_dir, resource_id, e
+                );
                 return None;
             }
         };
-        let rgba = img.to_rgba8();
-        let (w, h) = rgba.dimensions();
-
-        let color_image = egui::ColorImage::from_rgba_unmultiplied(
-            [w as usize, h as usize],
-            rgba.as_raw(),
-        );
 
         Some(ctx.load_texture(
             &format!("{}_{}", source.texture_prefix(), resource_id),
@@ -909,6 +852,34 @@ fn rebase_path_prefix(path: &Path, from_prefix: &str, to_prefix: &str) -> PathBu
         .unwrap_or_else(|_| path.to_path_buf())
 }
 
+/// Decode a staged image and apply the original game's blue-screen
+/// transparency to the two full cockpit frames.
+fn decode_color_image(
+    bytes: &[u8],
+    source: DllSource,
+    resource_id: u32,
+) -> image::ImageResult<egui::ColorImage> {
+    let mut rgba = image::load_from_memory(bytes)?.to_rgba8();
+    let is_cockpit = source == DllSource::Strategy
+        && matches!(
+            resource_id,
+            resources::strategy::GALAXY_BACKGROUND | resources::strategy::GALAXY_BACKGROUND_EMPIRE
+        );
+    if is_cockpit {
+        for pixel in rgba.pixels_mut() {
+            if pixel[0] < 32 && pixel[1] < 32 && pixel[2] > 192 {
+                pixel[3] = 0;
+            }
+        }
+    }
+
+    let (w, h) = rgba.dimensions();
+    Ok(egui::ColorImage::from_rgba_unmultiplied(
+        [w as usize, h as usize],
+        rgba.as_raw(),
+    ))
+}
+
 // ---------------------------------------------------------------------------
 // File loader (native only)
 // ---------------------------------------------------------------------------
@@ -921,18 +892,35 @@ fn load_image_as_texture(
     resource_id: u32,
     path: &Path,
 ) -> Option<TextureHandle> {
-    let bytes = std::fs::read(path).ok()?;
+    let bytes = match std::fs::read(path) {
+        Ok(bytes) => bytes,
+        Err(error) => {
+            eprintln!(
+                "[bmp_cache] read failed source={} resource_id={} path={} error={}",
+                source.dll_dir_name(),
+                resource_id,
+                path.display(),
+                error
+            );
+            return None;
+        }
+    };
 
     // `image` crate auto-detects format from magic bytes — handles both BMP
     // (which may be palette-indexed) and PNG.
-    let img = image::load_from_memory(&bytes).ok()?;
-    let rgba = img.to_rgba8();
-    let (w, h) = rgba.dimensions();
-
-    let color_image = egui::ColorImage::from_rgba_unmultiplied(
-        [w as usize, h as usize],
-        rgba.as_raw(),
-    );
+    let color_image = match decode_color_image(&bytes, source, resource_id) {
+        Ok(image) => image,
+        Err(error) => {
+            eprintln!(
+                "[bmp_cache] decode failed source={} resource_id={} path={} error={}",
+                source.dll_dir_name(),
+                resource_id,
+                path.display(),
+                error
+            );
+            return None;
+        }
+    };
 
     let handle = ctx.load_texture(
         &format!("{}_{}", source.texture_prefix(), resource_id),
@@ -941,4 +929,45 @@ fn load_image_as_texture(
     );
 
     Some(handle)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn missing_resource_is_negatively_cached() {
+        let mut cache = BmpCache::new();
+        let ctx = egui::Context::default();
+        let key = (DllSource::Common, 999_999);
+
+        assert!(cache.get(&ctx, key.0, key.1).is_none());
+        assert!(matches!(cache.textures.get(&key), Some(None)));
+        assert!(cache.get(&ctx, key.0, key.1).is_none());
+        assert_eq!(cache.textures.len(), 1);
+    }
+
+    #[test]
+    fn cockpit_background_blue_screen_becomes_transparent() {
+        let mut image = image::RgbaImage::new(2, 1);
+        image.put_pixel(0, 0, image::Rgba([0, 0, 255, 255]));
+        image.put_pixel(1, 0, image::Rgba([80, 90, 100, 255]));
+
+        let mut encoded = Vec::new();
+        image::DynamicImage::ImageRgba8(image)
+            .write_to(
+                &mut std::io::Cursor::new(&mut encoded),
+                image::ImageFormat::Png,
+            )
+            .unwrap();
+        let decoded = decode_color_image(
+            &encoded,
+            DllSource::Strategy,
+            resources::strategy::GALAXY_BACKGROUND,
+        )
+        .unwrap();
+
+        assert_eq!(decoded.pixels[0].a(), 0);
+        assert_eq!(decoded.pixels[1].a(), 255);
+    }
 }

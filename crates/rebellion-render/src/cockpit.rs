@@ -31,7 +31,7 @@
 //! |-----|----|---------|
 //! | STRATEGY | 900 | Galaxy map starfield background (640×481) |
 //! | COMMON | 20001 | Main-menu background (640×480) |
-//! | COMMON | 11001-11215 | Button sprite library |
+//! | COMMON | 11001-11275 | Animated cockpit display sequences, not a sequential logical-button map |
 //!
 //! Alliance-specific cockpit elements are distinguished in the original game
 //! by color palettes applied at render time.  We approximate with `ALLIANCE_BLUE`
@@ -40,52 +40,8 @@
 use egui_macroquad::egui::{self, Ui};
 use macroquad::prelude::*;
 
-use crate::bmp_cache::{BmpCache, DllSource};
+use crate::bmp_cache::{resources, BmpCache, DllSource};
 use crate::theme;
-
-// ---------------------------------------------------------------------------
-// Button sprite ID mapping
-// ---------------------------------------------------------------------------
-
-/// COMMON.DLL resource IDs for a single cockpit button (3 states).
-///
-/// The button sprite library (IDs 11001–11215) stores every button as a
-/// sequential triplet: `[unpressed, pressed, disabled]`.  The base ID is the
-/// unpressed state; pressed is base+1, disabled is base+2.
-#[derive(Debug, Clone, Copy)]
-struct ButtonSprite {
-    /// COMMON.DLL resource ID for the unpressed/normal state.
-    normal: u32,
-    /// COMMON.DLL resource ID for the pressed/active state.
-    pressed: u32,
-}
-
-impl ButtonSprite {
-    const fn from_base(base: u32) -> Self {
-        ButtonSprite { normal: base, pressed: base + 1 }
-    }
-}
-
-impl CockpitButton {
-    /// Return the COMMON.DLL sprite triplet for this button.
-    ///
-    /// IDs are from the original game's COMMON.DLL button library (11001–11215).
-    /// Mapping derived from resource extraction order: 9 main strategy-view
-    /// control buttons occupy the first 27 IDs in groups of 3.
-    fn sprite(self) -> ButtonSprite {
-        match self {
-            CockpitButton::Officers      => ButtonSprite::from_base(11001),
-            CockpitButton::Fleets        => ButtonSprite::from_base(11004),
-            CockpitButton::Manufacturing => ButtonSprite::from_base(11007),
-            CockpitButton::Missions      => ButtonSprite::from_base(11010),
-            CockpitButton::Research      => ButtonSprite::from_base(11013),
-            CockpitButton::Encyclopedia  => ButtonSprite::from_base(11016),
-            CockpitButton::SaveLoad      => ButtonSprite::from_base(11019),
-            CockpitButton::SpeedDown     => ButtonSprite::from_base(11022),
-            CockpitButton::SpeedUp       => ButtonSprite::from_base(11025),
-        }
-    }
-}
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -176,7 +132,10 @@ impl Default for CockpitState {
 
 impl CockpitState {
     pub fn new(faction: CockpitFaction) -> Self {
-        CockpitState { faction, ..Default::default() }
+        CockpitState {
+            faction,
+            ..Default::default()
+        }
     }
 
     /// Compute the galaxy map viewport given the current screen size.
@@ -203,11 +162,7 @@ impl CockpitState {
 ///
 /// Call before `egui_macroquad::ui` so the chrome renders beneath egui panels.
 /// Returns the viewport reserved for the galaxy map.
-pub fn draw_cockpit_chrome(
-    state: &CockpitState,
-    cache: &mut BmpCache,
-    ctx: &egui::Context,
-) -> CockpitViewport {
+pub fn draw_cockpit_chrome(state: &CockpitState) -> CockpitViewport {
     let sw = screen_width();
     let sh = screen_height();
 
@@ -249,19 +204,36 @@ pub fn draw_cockpit_chrome(
     // Thin accent line at top of bottom bar
     draw_rectangle(0.0, bottom_y, sw, 2.0, accent_color);
 
-    // Try to load galaxy background texture (STRATEGY.DLL id 900).
-    // This renders behind the galaxy dots when present.
-    // (We can't scissor/clip macroquad draw calls to the viewport without
-    // a render target, so we just draw it across the map area.)
-    let vp = state.galaxy_viewport();
-    if let Some(tex) = cache.get(ctx, DllSource::Strategy, 900) {
-        let size = egui::vec2(vp.width, vp.height);
-        // The texture is registered in egui; we draw it via egui's painter
-        // in a transparent overlay pass inside draw_cockpit_egui_layer.
-        let _ = (tex, size); // consumed in the egui layer below
-    }
+    state.galaxy_viewport()
+}
 
-    vp
+/// Draw the faction's authentic STRATEGY.DLL cockpit frame as the first egui
+/// layer of the frame. Panels rendered afterward remain readable above it.
+pub fn draw_cockpit_background(ctx: &egui::Context, state: &CockpitState, cache: &mut BmpCache) {
+    let background_id = if state.faction == CockpitFaction::Alliance {
+        resources::strategy::GALAXY_BACKGROUND
+    } else {
+        resources::strategy::GALAXY_BACKGROUND_EMPIRE
+    };
+    let Some(texture) = cache.get(ctx, DllSource::Strategy, background_id) else {
+        return;
+    };
+
+    // `SidePanel` paints on egui's canonical background layer. Painting the
+    // cockpit into a separate `Order::Background` layer can still place that
+    // layer above side panels, depending on egui's area ordering. Use the same
+    // canonical layer instead: this shape is appended first, then panels append
+    // their frames, text, and bitmaps over it later in the frame.
+    let painter = ctx.layer_painter(egui::LayerId::background());
+    painter.image(
+        texture.id(),
+        egui::Rect::from_min_max(
+            egui::Pos2::ZERO,
+            egui::pos2(screen_width(), screen_height()),
+        ),
+        egui::Rect::from_min_max(egui::Pos2::ZERO, egui::pos2(1.0, 1.0)),
+        egui::Color32::WHITE,
+    );
 }
 
 /// Draw egui-layer cockpit elements: control button bar.
@@ -272,7 +244,7 @@ pub fn draw_cockpit_chrome(
 pub fn draw_cockpit_egui_layer(
     ctx: &egui::Context,
     state: &CockpitState,
-    cache: &mut BmpCache,
+    _cache: &mut BmpCache,
     // Panel visibility flags so buttons show active state
     show_officers: bool,
     show_fleets: bool,
@@ -306,88 +278,56 @@ pub fn draw_cockpit_egui_layer(
                     theme::EMPIRE_RED
                 };
 
-                // Helper: render a cockpit button using a BMP sprite triplet from
-                // COMMON.DLL, with a text-button fallback when assets are absent.
-                //
-                // `active` = panel is currently open (renders pressed sprite).
-                // `disabled` = button should be grayed (not used yet, reserved for
-                //   e.g. Death Star button when DS not constructed).
-                //
-                // The closure captures `cache` mutably and `ctx` immutably, which
-                // means we call it sequentially (not in parallel).
-                let sprite_btn = |ui: &mut Ui,
-                                  label: &str,
-                                  key: &str,
-                                  active: bool,
-                                  sprite: ButtonSprite,
-                                  cache: &mut BmpCache|
-                    -> bool {
-                    // Pick which resource ID to show based on state.
-                    let res_id = if active { sprite.pressed } else { sprite.normal };
-
-                    if let Some(tex) = cache.get(ctx, DllSource::Common, res_id) {
-                        // Sprite available — render as an image button.
-                        // Original button dimensions are ~52×32 pixels; we preserve
-                        // that aspect ratio and add a highlight tint when active.
-                        let size = egui::vec2(52.0, 32.0);
-                        let tint = if active {
-                            // Brighter tint when panel is open
-                            egui::Color32::from_rgba_unmultiplied(220, 220, 255, 255)
-                        } else {
-                            egui::Color32::WHITE
-                        };
-                        let tex_id = tex.id();
-                        let img = egui::Image::new((tex_id, size))
-                            .tint(tint);
-                        let response = ui.add(egui::ImageButton::new(img)
-                            .frame(false));
-                        // Tooltip with label and keyboard shortcut.
-                        response.on_hover_text(format!("{} [{}]", label, key))
-                               .clicked()
-                    } else {
-                        // Fallback: styled text button when sprites not staged.
+                // The extracted 11001–11275 resources are animated cockpit
+                // sequences, not one logical button per numeric triplet. Until
+                // the original command-to-sequence table is resolved, use a
+                // clear functional label instead of displaying unrelated art.
+                let control_btn =
+                    |ui: &mut Ui, label: &str, key: &str, active: bool| -> bool {
                         let text = format!("{}\n[{}]", label, key);
-                        let rt = egui::RichText::new(text)
-                            .size(9.0)
-                            .color(if active { faction_active } else { theme::TEXT_SECONDARY });
-                        let response = ui.add(egui::Button::new(rt)
-                            .min_size(egui::vec2(52.0, 32.0))
-                            .fill(if active {
+                        let rt = egui::RichText::new(text).size(9.0).color(if active {
+                            faction_active
+                        } else {
+                            theme::TEXT_SECONDARY
+                        });
+                        ui.add(egui::Button::new(rt).min_size(egui::vec2(52.0, 32.0)).fill(
+                            if active {
                                 egui::Color32::from_rgba_unmultiplied(30, 60, 120, 200)
                             } else {
                                 egui::Color32::from_rgba_unmultiplied(10, 15, 30, 200)
-                            }));
-                        response.clicked()
-                    }
-                };
+                            },
+                        ))
+                        .on_hover_text(format!("{} [{}]", label, key))
+                        .clicked()
+                    };
 
                 // Main panel buttons (Officers → Encyclopedia)
                 let buttons: &[(CockpitButton, &str, &str, bool)] = &[
-                    (CockpitButton::Officers,      "Officers",     "O", show_officers),
-                    (CockpitButton::Fleets,        "Fleets",       "F", show_fleets),
-                    (CockpitButton::Manufacturing, "Mfg",          "M", show_manufacturing),
-                    (CockpitButton::Missions,      "Missions",     "N", show_missions),
-                    (CockpitButton::Research,      "Research",     "T", show_research),
-                    (CockpitButton::Encyclopedia,  "Encyclopedia", "E", enc_open),
+                    (CockpitButton::Officers, "Officers", "O", show_officers),
+                    (CockpitButton::Fleets, "Fleets", "F", show_fleets),
+                    (CockpitButton::Manufacturing, "Mfg", "M", show_manufacturing),
+                    (CockpitButton::Missions, "Missions", "N", show_missions),
+                    (CockpitButton::Research, "Research", "T", show_research),
+                    (CockpitButton::Encyclopedia, "Encyclopedia", "E", enc_open),
                 ];
                 for &(btn_id, label, key, active) in buttons {
-                    if sprite_btn(ui, label, key, active, btn_id.sprite(), cache) {
+                    if control_btn(ui, label, key, active) {
                         clicked = Some(btn_id);
                     }
                 }
 
                 ui.add_space(16.0);
 
-                if sprite_btn(ui, "Save/Load", "S", false, CockpitButton::SaveLoad.sprite(), cache) {
+                if control_btn(ui, "Save/Load", "S", false) {
                     clicked = Some(CockpitButton::SaveLoad);
                 }
 
                 ui.add_space(16.0);
 
-                if sprite_btn(ui, "Slower", "<", false, CockpitButton::SpeedDown.sprite(), cache) {
+                if control_btn(ui, "Slower", "<", false) {
                     clicked = Some(CockpitButton::SpeedDown);
                 }
-                if sprite_btn(ui, "Faster", ">", false, CockpitButton::SpeedUp.sprite(), cache) {
+                if control_btn(ui, "Faster", ">", false) {
                     clicked = Some(CockpitButton::SpeedUp);
                 }
             });

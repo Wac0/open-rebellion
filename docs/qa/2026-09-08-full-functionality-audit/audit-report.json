@@ -247,7 +247,10 @@
       "evidence": [
         "data/base/ui",
         "data/hd",
-        "docs/qa/defect-inventory.md"
+        "docs/qa/defect-inventory.md",
+        "Astra medium browser run R6: Strategy 11016-11027 returned HTTP 200 but rendered character portraits",
+        "ghidra/notes/FUN_00405560.c: animated COMMON.DLL resource bases are non-sequential logical controls",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-cockpit-pr-audit.md"
       ],
       "acceptance": "Every image consumer has resource identity, runtime load, screenshot, interaction, and fallback evidence on each claimed platform."
     },

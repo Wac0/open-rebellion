@@ -39,8 +39,8 @@ pub use bmp_cache::{BmpCache, DllSource};
 #[cfg(target_arch = "wasm32")]
 pub use bmp_cache::set_bmp_cache;
 pub use cockpit::{
-    draw_cockpit_chrome, draw_cockpit_egui_layer, CockpitButton, CockpitFaction, CockpitState,
-    CockpitViewport,
+    draw_cockpit_background, draw_cockpit_chrome, draw_cockpit_egui_layer, CockpitButton,
+    CockpitFaction, CockpitState, CockpitViewport,
 };
 pub use combat_view::{draw_combat_summary, BattleOutcome, CombatResult, CombatSummaryState};
 pub use encyclopedia::{draw_encyclopedia, EncyclopediaState, EncyclopediaTab};

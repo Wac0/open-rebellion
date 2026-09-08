@@ -356,6 +356,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [ ] Wire Save, Load, Delete, and the main-menu save picker on native and WASM.
 - [ ] Persist complete deterministic campaign state and surface corruption/quota errors.
 - [ ] Correct the native HD root; prefetch `TROOPSD.DAT`; package browser runtime data.
+- [ ] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence; do not infer logical buttons from sequential resource IDs.
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [ ] Link README parity claims to acceptance evidence and add two-run fingerprints.
 

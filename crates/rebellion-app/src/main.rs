@@ -37,18 +37,18 @@ use rebellion_render::panels::research::{draw_research, ResearchPanelState};
 use rebellion_render::{
     advisor_combat_result, advisor_death_star, advisor_greet, advisor_manufacturing_complete,
     advisor_mission_result, advisor_uprising, draw_advisor, draw_blockade_indicators,
-    draw_cockpit_chrome, draw_cockpit_egui_layer, draw_encyclopedia, draw_event_screen,
-    draw_facility_icons, draw_fleet_context_menu, draw_fleet_overlays, draw_fleets,
-    draw_fog_overlay, draw_galaxy_map, draw_game_setup, draw_ground_combat, draw_main_menu,
-    draw_manufacturing, draw_message_log, draw_missions, draw_officers, draw_save_load,
-    draw_sector_boundaries, draw_status_bar, draw_system_context_menu, draw_system_info_panel,
-    draw_tactical_view, hovered_fleet, show_event_screen, update_event_screen, AdvisorFaction,
-    AdvisorState, AudioVolumeState, BmpCache, CockpitButton, CockpitFaction, CockpitState,
-    Difficulty, EncyclopediaState, EventScreenState, FleetsState, GalaxyMapState, GameMessage,
-    GameSetupAction, GameSetupState, GroundAction, GroundCombatState, MainMenuAction,
-    ManufacturingPanelState, MessageCategory, MessageLog, MessageLogState, MissionsPanelState,
-    MusicContext, OfficersState, PanelAction, SfxKind, TacticalAction, TacticalState, VideoError,
-    VideoPlayer, VoiceLine,
+    draw_cockpit_background, draw_cockpit_chrome, draw_cockpit_egui_layer, draw_encyclopedia,
+    draw_event_screen, draw_facility_icons, draw_fleet_context_menu, draw_fleet_overlays,
+    draw_fleets, draw_fog_overlay, draw_galaxy_map, draw_game_setup, draw_ground_combat,
+    draw_main_menu, draw_manufacturing, draw_message_log, draw_missions, draw_officers,
+    draw_save_load, draw_sector_boundaries, draw_status_bar, draw_system_context_menu,
+    draw_system_info_panel, draw_tactical_view, hovered_fleet, show_event_screen,
+    update_event_screen, AdvisorFaction, AdvisorState, AudioVolumeState, BmpCache, CockpitButton,
+    CockpitFaction, CockpitState, Difficulty, EncyclopediaState, EventScreenState, FleetsState,
+    GalaxyMapState, GameMessage, GameSetupAction, GameSetupState, GroundAction,
+    GroundCombatState, MainMenuAction, ManufacturingPanelState, MessageCategory, MessageLog,
+    MessageLogState, MissionsPanelState, MusicContext, OfficersState, PanelAction, SfxKind,
+    TacticalAction, TacticalState, VideoError, VideoPlayer, VoiceLine,
 };
 
 /// Top-level game mode state machine.
@@ -61,6 +61,8 @@ enum GameMode {
     Cutscene { kind: CutsceneKind },
     /// Title screen: New Game / Load Game / Quit.
     MainMenu,
+    /// Save-slot picker entered from the main menu.
+    LoadGame,
     /// Campaign configuration: galaxy size, difficulty, faction.
     GameSetup,
     /// The main strategy game: galaxy map + War Room panels.
@@ -121,6 +123,96 @@ fn window_conf() -> Conf {
     }
 }
 
+fn read_save_slots(saves_dir: &Path) -> Vec<rebellion_render::SaveSlotInfo> {
+    rebellion_data::save::list_saves(saves_dir)
+        .into_iter()
+        .filter_map(|result| result.ok())
+        .map(|meta| rebellion_render::SaveSlotInfo {
+            slot: meta.slot,
+            name: meta.name,
+            timestamp: if meta.timestamp_secs == 0 {
+                "Browser save".to_string()
+            } else {
+                let hours = (meta.timestamp_secs / 3600) % 24;
+                let minutes = (meta.timestamp_secs / 60) % 60;
+                format!("{:02}:{:02}", hours, minutes)
+            },
+            game_tick: meta.game_tick,
+        })
+        .collect()
+}
+
+struct LiveCampaign<'a> {
+    world: &'a mut GameWorld,
+    clock: &'a mut GameClock,
+    manufacturing: &'a mut ManufacturingState,
+    missions: &'a mut MissionState,
+    events: &'a mut EventState,
+    ai: &'a mut AIState,
+    movement: &'a mut MovementState,
+    fog_alliance: &'a mut FogState,
+    fog_empire: &'a mut FogState,
+    player_faction: &'a mut MissionFaction,
+    blockade: &'a mut BlockadeState,
+    uprising: &'a mut UprisingState,
+    death_star: &'a mut DeathStarState,
+    research: &'a mut ResearchState,
+    jedi: &'a mut JediState,
+    victory: &'a mut VictoryState,
+    betrayal: &'a mut BetrayalState,
+    economy: &'a mut EconomyState,
+}
+
+impl LiveCampaign<'_> {
+    fn snapshot(&self) -> rebellion_data::save::SaveState {
+        rebellion_data::save::SaveState {
+            world: self.world.clone(),
+            clock: self.clock.clone(),
+            manufacturing: self.manufacturing.clone(),
+            missions: self.missions.clone(),
+            events: self.events.clone(),
+            ai: self.ai.clone(),
+            movement: self.movement.clone(),
+            fog_alliance: self.fog_alliance.clone(),
+            fog_empire: self.fog_empire.clone(),
+            player_is_alliance: *self.player_faction == MissionFaction::Alliance,
+            blockade: self.blockade.clone(),
+            uprising: self.uprising.clone(),
+            death_star: self.death_star.clone(),
+            research: self.research.clone(),
+            jedi: self.jedi.clone(),
+            victory: self.victory.clone(),
+            betrayal: self.betrayal.clone(),
+            economy: self.economy.clone(),
+        }
+    }
+
+    fn restore(self, state: rebellion_data::save::SaveState) {
+        *self.world = state.world;
+        *self.clock = state.clock;
+        *self.manufacturing = state.manufacturing;
+        *self.missions = state.missions;
+        *self.events = state.events;
+        *self.ai = state.ai;
+        *self.movement = state.movement;
+        *self.fog_alliance = state.fog_alliance;
+        *self.fog_empire = state.fog_empire;
+        *self.player_faction = if state.player_is_alliance {
+            MissionFaction::Alliance
+        } else {
+            MissionFaction::Empire
+        };
+        *self.blockade = state.blockade;
+        *self.uprising = state.uprising;
+        *self.death_star = state.death_star;
+        *self.research = state.research;
+        *self.jedi = state.jedi;
+        *self.victory = state.victory;
+        *self.betrayal = state.betrayal;
+        *self.economy = state.economy;
+    }
+}
+
 #[macroquad::main(window_conf)]
 async fn main() {
     // Accept an optional GData path as the first CLI argument.
@@ -170,6 +262,7 @@ async fn main() {
             "SYSTEMSD.DAT",
             "CAPSHPSD.DAT",
             "FIGHTSD.DAT",
+            "TROOPSD.DAT",
             "MJCHARSD.DAT",
             "MNCHARSD.DAT",
         ];
@@ -451,8 +544,10 @@ async fn main() {
     let mut dual_ai_mode = false;
     let mut ai2_state: Option<AIState> = None;
     let mut movement_state = MovementState::new();
-    let mut fog_state = FogState::new(Faction::Alliance);
-    FogSystem::seed(&mut fog_state, &world);
+    let mut fog_alliance_state = FogState::new(Faction::Alliance);
+    let mut fog_empire_state = FogState::new(Faction::Empire);
+    FogSystem::seed(&mut fog_alliance_state, &world);
+    FogSystem::seed(&mut fog_empire_state, &world);
     let mut combat_cooldowns: std::collections::HashMap<rebellion_core::ids::SystemKey, u64> =
         std::collections::HashMap::new();
     let mut blockade_state = BlockadeState::new();
@@ -532,22 +627,7 @@ async fn main() {
     let mut show_save_load = false;
     let mut save_load_panel_state = rebellion_render::SaveLoadPanelState::default();
     let saves_dir = rebellion_data::save::default_saves_dir();
-    let save_slots: Vec<rebellion_render::SaveSlotInfo> =
-        rebellion_data::save::list_saves(&saves_dir)
-            .into_iter()
-            .filter_map(|r| r.ok())
-            .map(|m| rebellion_render::SaveSlotInfo {
-                slot: m.slot,
-                name: m.name,
-                timestamp: {
-                    let secs = m.timestamp_secs;
-                    let h = (secs / 3600) % 24;
-                    let min = (secs / 60) % 60;
-                    format!("Tick {} ({:02}:{:02})", m.game_tick, h, min)
-                },
-                game_tick: m.game_tick,
-            })
-            .collect();
+    let mut save_slots = read_save_slots(&saves_dir);
 
     // ── Event screen overlay ─────────────────────────────────────────────────
     let mut event_screen_state = EventScreenState::new();
@@ -563,12 +643,11 @@ async fn main() {
         // gdata_path is data/base; staged UI BMPs live at data/base/ui/
         let ui_path = gdata_path.join("ui");
         bmp_cache.set_base_path(&ui_path);
-        // HD PNG overrides at data/hd/ui/ (sibling of data/base/)
+        // HD PNG overrides at data/hd/{dll-name}/{resource_id}.png.
         let hd_ui_path = gdata_path
             .parent()
             .unwrap_or(std::path::Path::new("."))
-            .join("hd")
-            .join("ui");
+            .join("hd");
         bmp_cache.set_hd_path(hd_ui_path);
     }
 
@@ -637,12 +716,20 @@ async fn main() {
                 }
             }
         } else if is_key_pressed(KeyCode::Escape) && !event_screen_state.is_active() {
-            // In Galaxy mode, Escape could open a menu later.
-            // For now, Escape quits from any mode.
-            break;
+            if game_mode == GameMode::LoadGame {
+                save_load_panel_state.close();
+                game_mode = GameMode::MainMenu;
+            } else {
+                // In Galaxy mode, Escape could open a menu later.
+                // For now, Escape quits from any other mode.
+                break;
+            }
         }
         // ── Galaxy-mode keyboard shortcuts (blocked during event screen) ────
-        if game_mode == GameMode::Galaxy && !event_screen_state.is_active() {
+        if game_mode == GameMode::Galaxy
+            && !event_screen_state.is_active()
+            && !show_save_load
+        {
             if is_key_pressed(KeyCode::R) {
                 map_state = GalaxyMapState::default();
             }
@@ -694,7 +781,14 @@ async fn main() {
             toggle_panel!(KeyCode::D, show_death_star);
             toggle_panel!(KeyCode::L, show_loyalty);
             if is_key_pressed(KeyCode::S) && !matches!(game_mode, GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }) {
-                show_save_load = !show_save_load;
+                if show_save_load {
+                    save_load_panel_state.close();
+                    show_save_load = false;
+                } else {
+                    save_slots = read_save_slots(&saves_dir);
+                    save_load_panel_state.open_save();
+                    show_save_load = true;
+                }
             }
             if is_key_pressed(KeyCode::E) {
                 enc_state.open = !enc_state.open;
@@ -1043,7 +1137,15 @@ async fn main() {
             }
 
             // ── Fog of war ──────────────────────────────────────────────────
-            let reveals = FogSystem::advance(&mut fog_state, &world, &movement_state);
+            let alliance_reveals =
+                FogSystem::advance(&mut fog_alliance_state, &world, &movement_state);
+            let empire_reveals =
+                FogSystem::advance(&mut fog_empire_state, &world, &movement_state);
+            let reveals = if player_faction == MissionFaction::Alliance {
+                alliance_reveals
+            } else {
+                empire_reveals
+            };
             for reveal in &reveals {
                 let sys_name = world
                     .systems
@@ -1794,7 +1896,7 @@ async fn main() {
                 clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
                 let mut menu_action = None;
                 egui_macroquad::ui(|ctx| {
-                    menu_action = draw_main_menu(ctx);
+                    menu_action = draw_main_menu(ctx, &mut bmp_cache);
                 });
                 egui_macroquad::draw();
 
@@ -1805,14 +1907,27 @@ async fn main() {
                             game_mode = GameMode::GameSetup;
                         }
                         MainMenuAction::LoadGame => {
-                            show_save_load = true;
-                            game_mode = GameMode::Galaxy;
+                            save_slots = read_save_slots(&saves_dir);
+                            save_load_panel_state.open_load();
+                            game_mode = GameMode::LoadGame;
                         }
                         MainMenuAction::Quit => {
                             break;
                         }
                     }
                 }
+            }
+
+            GameMode::LoadGame => {
+                clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
+                egui_macroquad::ui(|ctx| {
+                    if let Some(action) =
+                        draw_save_load(ctx, &save_slots, &mut save_load_panel_state)
+                    {
+                        panel_actions.push(action);
+                    }
+                });
+                egui_macroquad::draw();
             }
 
             GameMode::GameSetup => {
@@ -1872,12 +1987,10 @@ async fn main() {
                             };
 
                             // Initialize game state for chosen faction
-                            let dat_faction = match faction {
-                                MissionFaction::Alliance => Faction::Alliance,
-                                MissionFaction::Empire => Faction::Empire,
-                            };
-                            fog_state = FogState::new(dat_faction);
-                            FogSystem::seed(&mut fog_state, &world);
+                            fog_alliance_state = FogState::new(Faction::Alliance);
+                            fog_empire_state = FogState::new(Faction::Empire);
+                            FogSystem::seed(&mut fog_alliance_state, &world);
+                            FogSystem::seed(&mut fog_empire_state, &world);
                             economy_state = EconomyState::default();
 
                             // AI controls the opposite faction
@@ -1929,22 +2042,16 @@ async fn main() {
             }
 
             GameMode::Galaxy => {
-                // 1. Cockpit chrome (pure macroquad) — draws top/bottom bars,
-                //    returns the viewport rect available for the galaxy map.
-                //    We need an egui context for the BmpCache texture registration,
-                //    but draw_cockpit_chrome is called before the egui pass so we
-                //    pass a dummy context ref via a temporary egui_macroquad scope.
-                //    The chrome bars themselves use only macroquad draw calls.
-                let cockpit_vp = {
-                    // Use a temporary egui context scope just for texture registration.
-                    // The returned viewport is used below.
-                    let mut vp_out = None;
-                    egui_macroquad::ui(|ctx| {
-                        vp_out = Some(draw_cockpit_chrome(&cockpit_state, &mut bmp_cache, ctx));
-                    });
-                    egui_macroquad::draw();
-                    vp_out.unwrap_or_else(|| cockpit_state.galaxy_viewport())
+                let fog_state = if player_faction == MissionFaction::Alliance {
+                    &fog_alliance_state
+                } else {
+                    &fog_empire_state
                 };
+                // 1. Cockpit chrome (pure macroquad) — draws top/bottom bars
+                // and returns the viewport rect available for the galaxy map.
+                // The authentic bitmap frame is drawn in the single egui pass
+                // below so input is consumed exactly once per game frame.
+                let cockpit_vp = draw_cockpit_chrome(&cockpit_state);
 
                 // Pass cockpit viewport to galaxy map for mouse input clamping.
                 map_state.viewport = Some((
@@ -1960,7 +2067,7 @@ async fn main() {
                 // 2. Fog overlay (pure macroquad) — dim non-visible systems
                 draw_fog_overlay(
                     &world,
-                    &fog_state,
+                    fog_state,
                     cam.cam_x,
                     cam.cam_y,
                     cam.zoom,
@@ -2027,6 +2134,10 @@ async fn main() {
 
                 // 4. All egui panels in a single ui() + draw() pass
                 egui_macroquad::ui(|ctx| {
+                    // Register the cockpit background before panels so the
+                    // opaque chrome never covers their content or artwork.
+                    draw_cockpit_background(ctx, &cockpit_state, &mut bmp_cache);
+
                     // War Room panels (mutually exclusive left panels)
                     if show_officers {
                         if let Some(action) = draw_officers(
@@ -2275,7 +2386,14 @@ async fn main() {
                             }
                             CockpitButton::SaveLoad => {
                                 if !matches!(game_mode, GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }) {
-                                    show_save_load = !show_save_load;
+                                    if show_save_load {
+                                        save_load_panel_state.close();
+                                        show_save_load = false;
+                                    } else {
+                                        save_slots = read_save_slots(&saves_dir);
+                                        save_load_panel_state.open_save();
+                                        show_save_load = true;
+                                    }
                                 }
                             }
                             CockpitButton::SpeedDown => {
@@ -2620,49 +2738,209 @@ async fn main() {
 
         // 5. Apply panel actions
         for action in panel_actions {
-            // Handle actions that need local UI state not available in apply_panel_action.
-            match &action {
-                PanelAction::OpenMissionTo { target, kind, .. } => {
-                    missions_panel_state.selected_target = Some(*target);
-                    missions_panel_state.selected_kind = Some(*kind);
-                    missions_panel_state.tab =
-                        rebellion_render::panels::missions::MissionsTab::Dispatch;
-                    show_missions = true;
+            match action {
+                PanelAction::SaveGame { slot, name } => {
+                    let state = LiveCampaign {
+                        world: &mut world,
+                        clock: &mut clock,
+                        manufacturing: &mut mfg_state,
+                        missions: &mut mission_state,
+                        events: &mut event_state,
+                        ai: &mut ai_state,
+                        movement: &mut movement_state,
+                        fog_alliance: &mut fog_alliance_state,
+                        fog_empire: &mut fog_empire_state,
+                        player_faction: &mut player_faction,
+                        blockade: &mut blockade_state,
+                        uprising: &mut uprising_state,
+                        death_star: &mut death_star_state,
+                        research: &mut research_state,
+                        jedi: &mut jedi_state,
+                        victory: &mut victory_state,
+                        betrayal: &mut betrayal_state,
+                        economy: &mut economy_state,
+                    }
+                    .snapshot();
+                    let active_mods = mod_runtime.enabled_mod_list();
+                    match rebellion_data::save::save_slot(
+                        &saves_dir,
+                        slot,
+                        &name,
+                        &state,
+                        &active_mods,
+                    ) {
+                        Ok(()) => {
+                            save_load_panel_state.error_message = None;
+                            save_slots = read_save_slots(&saves_dir);
+                            msg_log.push(GameMessage::new(
+                                clock.tick,
+                                format!("Saved game to slot {}", slot + 1),
+                                MessageCategory::Event,
+                            ));
+                        }
+                        Err(error) => {
+                            save_load_panel_state.error_message = Some(error.to_string());
+                        }
+                    }
+                    continue;
                 }
-                PanelAction::InitiateFleetMove { destination } => {
-                    fleets_state.pending_move_destination = Some(*destination);
-                    show_fleets = true;
+                PanelAction::LoadGame { slot } => {
+                    match rebellion_data::save::load_slot(&saves_dir, slot) {
+                        Ok((meta, state)) => {
+                            LiveCampaign {
+                                world: &mut world,
+                                clock: &mut clock,
+                                manufacturing: &mut mfg_state,
+                                missions: &mut mission_state,
+                                events: &mut event_state,
+                                ai: &mut ai_state,
+                                movement: &mut movement_state,
+                                fog_alliance: &mut fog_alliance_state,
+                                fog_empire: &mut fog_empire_state,
+                                player_faction: &mut player_faction,
+                                blockade: &mut blockade_state,
+                                uprising: &mut uprising_state,
+                                death_star: &mut death_star_state,
+                                research: &mut research_state,
+                                jedi: &mut jedi_state,
+                                victory: &mut victory_state,
+                                betrayal: &mut betrayal_state,
+                                economy: &mut economy_state,
+                            }
+                            .restore(state);
+
+                            cockpit_state.faction = if player_faction == MissionFaction::Alliance {
+                                CockpitFaction::Alliance
+                            } else {
+                                CockpitFaction::Empire
+                            };
+                            advisor_state.faction = AdvisorFaction::from(cockpit_state.faction);
+                            map_state = GalaxyMapState::default();
+                            officers_state = OfficersState::default();
+                            fleets_state = FleetsState::default();
+                            mfg_panel_state = ManufacturingPanelState::default();
+                            missions_panel_state = MissionsPanelState::default();
+                            research_panel_state = ResearchPanelState::default();
+                            jedi_panel_state = JediPanelState::default();
+                            bombardment_panel_state = BombardmentPanelState::default();
+                            enc_state = EncyclopediaState::new();
+                            enc_state.set_edata_path(gdata_path.join("EData"));
+                            enc_state.set_hd_path(
+                                gdata_path
+                                    .parent()
+                                    .unwrap_or(Path::new("."))
+                                    .join("hd")
+                                    .join("EData"),
+                            );
+                            show_officers = false;
+                            show_fleets = false;
+                            show_manufacturing = false;
+                            show_missions = false;
+                            show_research = false;
+                            show_jedi = false;
+                            show_bombardment = false;
+                            show_death_star = false;
+                            show_loyalty = false;
+                            show_save_load = false;
+                            save_load_panel_state.close();
+                            event_screen_state = EventScreenState::new();
+                            tactical_state = TacticalState::new();
+                            ground_combat_state = None;
+                            dual_ai_mode = false;
+                            ai2_state = None;
+                            combat_cooldowns.clear();
+                            repair_state = RepairState::default();
+                            msg_log = MessageLog::default();
+                            msg_log.push(GameMessage::new(
+                                clock.tick,
+                                format!("Loaded save ‘{}’ from slot {}", meta.name, slot + 1),
+                                MessageCategory::Event,
+                            ));
+                            game_mode = GameMode::Galaxy;
+                        }
+                        Err(error) => {
+                            save_load_panel_state.error_message = Some(error.to_string());
+                        }
+                    }
+                    continue;
                 }
-                _ => {}
+                PanelAction::DeleteSave { slot } => {
+                    match rebellion_data::save::delete_slot(&saves_dir, slot) {
+                        Ok(()) => {
+                            save_load_panel_state.selected_slot = None;
+                            save_load_panel_state.error_message = None;
+                            save_slots = read_save_slots(&saves_dir);
+                            msg_log.push(GameMessage::new(
+                                clock.tick,
+                                format!("Deleted save in slot {}", slot + 1),
+                                MessageCategory::Event,
+                            ));
+                        }
+                        Err(error) => {
+                            save_load_panel_state.error_message = Some(error.to_string());
+                        }
+                    }
+                    continue;
+                }
+                PanelAction::CloseSaveLoadPanel => {
+                    save_load_panel_state.close();
+                    show_save_load = false;
+                    if game_mode == GameMode::LoadGame {
+                        game_mode = GameMode::MainMenu;
+                    }
+                    continue;
+                }
+                action => {
+                    // Handle actions that need local UI state not available in apply_panel_action.
+                    match &action {
+                        PanelAction::OpenMissionTo { target, kind, .. } => {
+                            missions_panel_state.selected_target = Some(*target);
+                            missions_panel_state.selected_kind = Some(*kind);
+                            missions_panel_state.tab =
+                                rebellion_render::panels::missions::MissionsTab::Dispatch;
+                            show_missions = true;
+                        }
+                        PanelAction::InitiateFleetMove { destination } => {
+                            fleets_state.pending_move_destination = Some(*destination);
+                            show_fleets = true;
+                        }
+                        _ => {}
+                    }
+                    let active_fog_state = if player_faction == MissionFaction::Alliance {
+                        &mut fog_alliance_state
+                    } else {
+                        &mut fog_empire_state
+                    };
+                    apply_panel_action(
+                        action,
+                        &mut world,
+                        &mut map_state,
+                        &mut mfg_state,
+                        &mut mission_state,
+                        &mut movement_state,
+                        active_fog_state,
+                        &mut ai_state,
+                        &mut research_state,
+                        &mut jedi_state,
+                        &mut death_star_state,
+                        &mut msg_log,
+                        &mut player_faction,
+                        &mut clock,
+                        &mut dual_ai_mode,
+                        &mut ai2_state,
+                        &mut victory_state,
+                        &mut blockade_state,
+                        &event_state,
+                        &mut mod_runtime,
+                        #[cfg(not(target_arch = "wasm32"))]
+                        &mut audio_engine,
+                        #[cfg(not(target_arch = "wasm32"))]
+                        &audio_vol,
+                        #[cfg(not(target_arch = "wasm32"))]
+                        &sounds_dir,
+                    );
+                }
             }
-            apply_panel_action(
-                action,
-                &mut world,
-                &mut map_state,
-                &mut mfg_state,
-                &mut mission_state,
-                &mut movement_state,
-                &mut fog_state,
-                &mut ai_state,
-                &mut research_state,
-                &mut jedi_state,
-                &mut death_star_state,
-                &mut msg_log,
-                &mut player_faction,
-                &mut clock,
-                &mut dual_ai_mode,
-                &mut ai2_state,
-                &mut victory_state,
-                &mut blockade_state,
-                &event_state,
-                &mut mod_runtime,
-                #[cfg(not(target_arch = "wasm32"))]
-                &mut audio_engine,
-                #[cfg(not(target_arch = "wasm32"))]
-                &audio_vol,
-                #[cfg(not(target_arch = "wasm32"))]
-                &sounds_dir,
-            );
         }
 
         // 6. Apply audio volume changes

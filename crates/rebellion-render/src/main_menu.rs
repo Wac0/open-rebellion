@@ -5,6 +5,7 @@
 
 use egui_macroquad::egui::{self, Align, Color32, Layout, RichText};
 
+use crate::bmp_cache::{resources, BmpCache, DllSource};
 use crate::theme;
 
 /// Actions the main menu can produce.
@@ -19,13 +20,24 @@ pub enum MainMenuAction {
 }
 
 /// Render the main menu screen. Returns an action when the player clicks a button.
-pub fn draw_main_menu(ctx: &egui::Context) -> Option<MainMenuAction> {
+pub fn draw_main_menu(ctx: &egui::Context, cache: &mut BmpCache) -> Option<MainMenuAction> {
     let mut action = None;
 
     egui::CentralPanel::default()
         .frame(egui::Frame::default().fill(theme::BG_SPACE))
         .show(ctx, |ui| {
             let available = ui.available_size();
+            let background_rect = ui.max_rect();
+            if let Some(texture) =
+                cache.get(ctx, DllSource::Common, resources::common::MAIN_MENU_BG)
+            {
+                ui.painter().image(
+                    texture.id(),
+                    background_rect,
+                    egui::Rect::from_min_max(egui::Pos2::ZERO, egui::pos2(1.0, 1.0)),
+                    Color32::from_rgb(145, 145, 155),
+                );
+            }
 
             ui.with_layout(Layout::top_down(Align::Center), |ui| {
                 // Push title down ~30% from top

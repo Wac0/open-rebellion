@@ -75,13 +75,15 @@ Main menu and global UI elements — buttons, sliders, panel chrome used across 
 | ID Range | Count | Dimensions | Content |
 |----------|-------|-----------|---------|
 | 10000-10999 | 101 | Various (4x4 to 47x47) | **Core UI toolkit**: scrollbar tracks, slider thumbs, checkbox sprites, radio buttons, progress bars, panel dividers, scroll arrows |
-| 11000-11999 | 215 | Various (33x28 to 63x64) | **Button sprites**: every clickable button in the game across all screens (pressed/unpressed/disabled × all functions). Galaxy map buttons, fleet management, manufacturing, mission dispatch |
+| 11000-11999 | 215 | Various (33x28 to 63x64) | **Animated cockpit/control sequences**: faction emblems, spacecraft, planets, starfields, insignia, and disc controls. These are grouped animations, not one three-frame triplet per logical command. |
 | 15000-15999 | 3 | 29x26, 30x26 | **Miscellaneous icons** |
 | 20000-20999 | 2 | 640x480 | **Main menu backgrounds** — the title screen |
 
 **Key assets:**
 - 20001: Main menu background (640x480) — the iconic Rebellion title screen
-- 11001-11215: 215 button sprites — this is the complete UI button library
+- 11001-11275 (with gaps): 215 animated cockpit/control frames. `FUN_00405560`
+  uses bases including 11001, 11031, 11061, 11091, 11121, 11151, 11181, and
+  11241; the logical command mapping still requires handler-level validation.
 - 10001-10101: Core widgets (scrollbars, checkboxes, sliders)
 
 ## TACTICAL.DLL (7.5MB) — 288 BMPs + 1 BIN

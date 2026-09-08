@@ -25,9 +25,10 @@
 //!
 //! # WASM
 //!
-//! File IO is gated with `#[cfg(not(target_arch = "wasm32"))]`. On WASM the
-//! module still compiles (for type-checking) but all IO functions are stubs
-//! that return `Err("not supported on WASM")`.
+//! File IO is gated with `#[cfg(not(target_arch = "wasm32"))]`. On WASM,
+//! saves are stored in browser localStorage through three small imports exposed
+//! by the vendored miniquad `gl.js` loader. This keeps the binary compatible
+//! with miniquad's raw WASM loader without requiring wasm-bindgen glue.
 //!
 //! # Save slots
 //!
@@ -433,13 +434,30 @@ pub use native::{
 };
 
 // ---------------------------------------------------------------------------
-// WASM stubs
+// WASM browser storage
 // ---------------------------------------------------------------------------
 
 #[cfg(target_arch = "wasm32")]
 pub mod wasm_impl {
     use super::*;
     use std::path::{Path, PathBuf};
+
+    #[link(wasm_import_module = "env")]
+    extern "C" {
+        fn rebellion_storage_set(
+            key_ptr: *const u8,
+            key_len: usize,
+            value_ptr: *const u8,
+            value_len: usize,
+        ) -> i32;
+        fn rebellion_storage_get(
+            key_ptr: *const u8,
+            key_len: usize,
+            output_ptr: *mut u8,
+            output_capacity: usize,
+        ) -> i32;
+        fn rebellion_storage_remove(key_ptr: *const u8, key_len: usize) -> i32;
+    }
 
     /// Base64 encode (standard alphabet, no padding).
     fn b64_encode(data: &[u8]) -> String {
@@ -487,13 +505,54 @@ pub mod wasm_impl {
         Ok(out)
     }
 
-    /// Get the browser's localStorage.
-    fn local_storage() -> anyhow::Result<web_sys::Storage> {
-        let window = web_sys::window().ok_or_else(|| anyhow::anyhow!("no global window"))?;
-        window
-            .local_storage()
-            .map_err(|_| anyhow::anyhow!("localStorage access denied"))?
-            .ok_or_else(|| anyhow::anyhow!("localStorage not available"))
+    fn storage_set(key: &str, value: &str) -> anyhow::Result<()> {
+        let status = unsafe {
+            rebellion_storage_set(
+                key.as_ptr(),
+                key.len(),
+                value.as_ptr(),
+                value.len(),
+            )
+        };
+        if status == 0 {
+            Ok(())
+        } else {
+            anyhow::bail!("localStorage.setItem failed (access denied or quota exceeded)")
+        }
+    }
+
+    fn storage_get(key: &str) -> anyhow::Result<Option<String>> {
+        let required = unsafe {
+            rebellion_storage_get(key.as_ptr(), key.len(), std::ptr::null_mut(), 0)
+        };
+        match required {
+            -1 => return Ok(None),
+            n if n < 0 => anyhow::bail!("localStorage.getItem failed"),
+            _ => {}
+        }
+
+        let mut bytes = vec![0; required as usize];
+        let written = unsafe {
+            rebellion_storage_get(
+                key.as_ptr(),
+                key.len(),
+                bytes.as_mut_ptr(),
+                bytes.len(),
+            )
+        };
+        if written < 0 || written as usize != bytes.len() {
+            anyhow::bail!("localStorage value changed while being read")
+        }
+        Ok(Some(String::from_utf8(bytes)?))
+    }
+
+    fn storage_remove(key: &str) -> anyhow::Result<()> {
+        let status = unsafe { rebellion_storage_remove(key.as_ptr(), key.len()) };
+        if status == 0 {
+            Ok(())
+        } else {
+            anyhow::bail!("localStorage.removeItem failed")
+        }
     }
 
     /// localStorage key for a save slot.
@@ -523,19 +582,14 @@ pub mod wasm_impl {
         state: &SaveState,
         _active_mods: &[(String, String)],
     ) -> anyhow::Result<()> {
-        let storage = local_storage()?;
         let encoded = bincode::serialize(state)?;
         let b64 = b64_encode(&encoded);
 
-        storage
-            .set_item(&slot_key(slot), &b64)
-            .map_err(|_| anyhow::anyhow!("localStorage.setItem failed (quota exceeded?)"))?;
+        storage_set(&slot_key(slot), &b64)?;
 
         // Store metadata separately (lightweight, for list_saves).
         let meta = format!("{}|{}", name, state.clock.tick);
-        storage
-            .set_item(&meta_key(slot), &meta)
-            .map_err(|_| anyhow::anyhow!("localStorage.setItem failed for metadata"))?;
+        storage_set(&meta_key(slot), &meta)?;
 
         Ok(())
     }
@@ -553,22 +607,14 @@ pub mod wasm_impl {
         _saves_dir: &Path,
         slot: usize,
     ) -> anyhow::Result<(SaveMeta, SaveState)> {
-        let storage = local_storage()?;
-
-        let b64 = storage
-            .get_item(&slot_key(slot))
-            .map_err(|_| anyhow::anyhow!("localStorage.getItem failed"))?
+        let b64 = storage_get(&slot_key(slot))?
             .ok_or_else(|| anyhow::anyhow!("no save in slot {}", slot))?;
 
         let bytes = b64_decode(&b64)?;
         let state: SaveState = bincode::deserialize(&bytes)?;
 
         // Read metadata.
-        let meta_str = storage
-            .get_item(&meta_key(slot))
-            .ok()
-            .flatten()
-            .unwrap_or_default();
+        let meta_str = storage_get(&meta_key(slot))?.unwrap_or_default();
         let (name, _tick) = meta_str.split_once('|').unwrap_or(("Unnamed", "0"));
 
         let meta = SaveMeta {
@@ -584,15 +630,10 @@ pub mod wasm_impl {
     }
 
     pub fn list_saves(_saves_dir: &Path) -> Vec<anyhow::Result<SaveMeta>> {
-        let storage = match local_storage() {
-            Ok(s) => s,
-            Err(_) => return Vec::new(),
-        };
-
         (0..MAX_SAVE_SLOTS)
             .filter_map(|slot| {
                 // Check if metadata exists for this slot.
-                let meta_str = storage.get_item(&meta_key(slot)).ok()??;
+                let meta_str = storage_get(&meta_key(slot)).ok()??;
                 let (name, tick_str) = meta_str.split_once('|').unwrap_or(("Unnamed", "0"));
                 let tick: u64 = tick_str.parse().unwrap_or(0);
                 Some(Ok(SaveMeta {
@@ -608,9 +649,8 @@ pub mod wasm_impl {
     }
 
     pub fn delete_slot(_saves_dir: &Path, slot: usize) -> anyhow::Result<()> {
-        let storage = local_storage()?;
-        let _ = storage.remove_item(&slot_key(slot));
-        let _ = storage.remove_item(&meta_key(slot));
+        storage_remove(&slot_key(slot))?;
+        storage_remove(&meta_key(slot))?;
         Ok(())
     }
 }

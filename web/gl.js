@@ -649,6 +649,50 @@ var importObject = {
         now: function () {
             return Date.now() / 1000.0;
         },
+        rebellion_storage_set: function (key_ptr, key_len, value_ptr, value_len) {
+            try {
+                const key = UTF8ToString(key_ptr, key_len);
+                const value = UTF8ToString(value_ptr, value_len);
+                window.localStorage.setItem(key, value);
+                return 0;
+            } catch (error) {
+                console.error("Open Rebellion save failed:", error);
+                return -1;
+            }
+        },
+        rebellion_storage_get: function (key_ptr, key_len, output_ptr, output_capacity) {
+            try {
+                const key = UTF8ToString(key_ptr, key_len);
+                const value = window.localStorage.getItem(key);
+                if (value === null) {
+                    return -1;
+                }
+
+                const encoded = new TextEncoder().encode(value);
+                if (output_capacity === 0) {
+                    return encoded.length;
+                }
+                if (output_capacity < encoded.length) {
+                    return -2;
+                }
+
+                const output = new Uint8Array(wasm_memory.buffer, output_ptr, output_capacity);
+                output.set(encoded);
+                return encoded.length;
+            } catch (error) {
+                console.error("Open Rebellion load failed:", error);
+                return -2;
+            }
+        },
+        rebellion_storage_remove: function (key_ptr, key_len) {
+            try {
+                window.localStorage.removeItem(UTF8ToString(key_ptr, key_len));
+                return 0;
+            } catch (error) {
+                console.error("Open Rebellion save deletion failed:", error);
+                return -1;
+            }
+        },
         canvas_width: function () {
             return Math.floor(canvas.width);
         },

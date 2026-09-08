@@ -199,7 +199,15 @@ the run as formally degenerate.
 - Severity: P1
 - Status: open acceptance gap
 - Evidence: all staged files decode, but no current resource ledger connects
-  every consumer to a runtime cache hit and screenshot.
+  every consumer to a runtime cache hit and screenshot. On 2026-09-08, an
+  Astra-medium browser check proved that the proposed Strategy 11016–11027
+  cockpit mapping loads successfully but displays character portraits rather
+  than the intended control art. Common 11001–11275 are grouped cockpit
+  animations, not sequential logical-button triplets. The unverified mapping
+  was therefore rejected; controls retain explicit labels while the authentic
+  command-to-animation table remains open.
+- Evidence bundle: `evidence/2026-09-08-cockpit-pr-audit.md` retains the
+  resource adjudication, package hash, Astra R7 results, and screenshots.
 - Acceptance: complete the bitmap proof protocol below for every image-bearing
   surface on every claimed platform.
 
