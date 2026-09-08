@@ -15,7 +15,7 @@ functional. Do not repeat historical parity percentages as verified results.
 ## Current Workflow
 
 - Read `progress.json` first. It is the ignored live recovery record; the older
-  native-video record is `progress.archived-2026-04-07-native-video.json`.
+  native-video record is `archive/progress.archived-2026-04-07-native-video.json`.
 - Work one audit feature at a time and keep its JSON, Markdown, roadmap, and
   progress evidence synchronized.
 - After a feature passes its required gates, commit and push it before starting

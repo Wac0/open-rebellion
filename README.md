@@ -43,7 +43,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/INDEX.md); the former `progress.json` is retained as [`progress.archived-2026-04-07-native-video.json`](progress.archived-2026-04-07-native-video.json).
+> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/INDEX.md); the former `progress.json` is retained in the [project archive](archive/INDEX.md).
 >
 > GitHub Actions workflow definitions are intentionally local and untracked as of 2026-09-08. Release gates remain manual until M5 restores a reviewed CI provider.
 

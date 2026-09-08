@@ -449,7 +449,7 @@
         "add at least 20 app-level integration tests",
         "verify clean package boot, screenshot fingerprints, and data hashes in SaveMeta"
       ],
-      "exit": "Every supported P00-P39 pass is green from a release artifact with retained evidence."
+      "exit": "Every supported P00-P40 pass is green from a release artifact with retained evidence."
     },
     {
       "id": "V1.0",
@@ -520,7 +520,8 @@
     {"id":"P36","name":"Bitmap sweep","status":"pending"},
     {"id":"P37","name":"Campaign acceptance","status":"pending"},
     {"id":"P38","name":"Release artifacts","status":"pending"},
-    {"id":"P39","name":"Protected Cloudflare deployment","status":"pending"}
+    {"id":"P39","name":"Protected Cloudflare deployment","status":"pending"},
+    {"id":"P40","name":"GitHub Pages documentation","status":"pending"}
   ],
   "evidence_contract": [
     "feature_id_and_commit_sha",
@@ -567,7 +568,7 @@
     ]
   },
   "definition_of_done": {
-    "all_supported_feature_passes_through_p39_are_pass": true,
+    "all_supported_feature_passes_through_p40_are_pass": true,
     "all_p0_and_p1_findings_closed": true,
     "no_required_failures_or_unexplained_skips": true,
     "format_check_passes": true,

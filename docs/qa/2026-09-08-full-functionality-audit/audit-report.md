@@ -46,7 +46,7 @@ acceptance record:
 | Record | Actual status |
 |--------|---------------|
 | `README.md` | Advertises Core 100%, Combat 100%, UI 99%; these are claims rather than reproduced acceptance results. |
-| `progress.archived-2026-04-07-native-video.json` | Archived record of the April 7 native-video task; it reports lint as false and is superseded by this audit. |
+| `archive/progress.archived-2026-04-07-native-video.json` | Archived record of the April 7 native-video task; it reports lint as false and is superseded by this audit. |
 | April 12 Tammuz plan | Described as completed elsewhere, but its functional and quality acceptance checkboxes remain open. |
 | April 6 test-infrastructure plan | Baseline investigation is complete; implementation milestones remain open. |
 | March 24 QA inventory | Historical v0.15 browser observations, not acceptance evidence for the current build. |
@@ -290,7 +290,7 @@ later work must not hide failures in an earlier invariant.
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Create a Brotli-compressed indexed `ui.pak`; lazy-decode and LRU-cache textures; ship HD entries; enable high DPI; use one egui pass; cache geometry; move saves to IndexedDB; unlock audio after gesture; stage advisor frames; run real-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |
 | M4 — Multiplayer | Introduce validated, tick-stamped commands; authoritative host simulation; faction-filtered fog-safe deltas and snapshots; secure WSS transport; prediction/reconciliation; reconnect; persistence and observability. | Two clients run 5,000 ticks with matching server checkpoints every 250 ticks; at 200 ms RTT there are no input stalls and ≤1 reconciliation per 100 commands; reconnect within 60 s; all illegal commands rejected; hidden state absent from client memory. |
-| M5 — Continuous proof | Enforce format/clippy/build/browser checks; short and long campaign gates; resource and screenshot ledgers; app integration tests; package boot and data/save hashes. | Every supported P00–P39 pass is green from release artifacts, with reproducible evidence retained by CI. |
+| M5 — Continuous proof | Enforce format/clippy/build/browser checks; short and long campaign gates; resource and screenshot ledgers; app integration tests; package boot and data/save hashes. | Every supported P00–P40 pass is green from release artifacts, with reproducible evidence retained by CI. |
 | v1.0 — Protected Cloudflare release | Deploy the self-contained browser build to Cloudflare Pages with Functions middleware, `SITE_PASSWORD` and `SESSION_SECRET` secrets, signed secure cookies, asset headers, preview/production environments, and rollback instructions. | Anonymous requests cannot retrieve HTML, WASM, DAT, bitmap, save, or multiplayer endpoints; valid login survives navigation; invalid/expired/tampered sessions fail closed; logout works; Astra medium verifies gameplay and bitmap evidence through the deployed URL in current Chrome, Firefox, and Safari. |
 
 ### Browser performance budgets
@@ -364,6 +364,7 @@ and underlying state mutation are both demonstrated.
 | P37 | Campaign acceptance | Short smoke runs and long multi-seed campaigns for both factions/difficulties with bounded fleet/event growth, balance, diversity, victory, and full parity reports. |
 | P38 | Release artifacts | Fresh native install and deployed browser package, exact artifact contents, startup/storage/media/input tests, and documentation generated from results. |
 | P39 | Protected Cloudflare deployment | Preview and production Pages deployments, secret-backed password gate, signed session cookie, logout/expiry/tamper tests, cache/security headers, asset/API access denial before authentication, deployed single-player/multiplayer smoke tests, rollback, and retained Astra evidence. |
+| P40 | GitHub Pages documentation | Publish the maintained project documentation from `main`; verify Jekyll-safe Markdown, working internal links, current README/audit/roadmap content, successful deployment, and a public smoke test. |
 
 ## Bitmap proof protocol
 
@@ -436,7 +437,7 @@ After an authorized fix:
 
 The claim is permitted only when:
 
-- Every supported feature ID through P39 is `pass` on every claimed platform.
+- Every supported feature ID through P40 is `pass` on every claimed platform.
 - All P0 and P1 findings are closed.
 - Required tests have no failures or unexplained skips.
 - Format, warning-free check, strict clippy, native build, and packaged WASM

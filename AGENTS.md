@@ -73,7 +73,7 @@ dedicated findings close.
   save, DAT, or network formats.
 - Never: Run `gh auth setup-git` or switch the active `gh` account to repair a
   push; use the macOS keychain and repository-scoped credential username.
-- Never: Claim 100% functionality until every supported P00–P39 pass is green
+- Never: Claim 100% functionality until every supported P00–P40 pass is green
   and all P0/P1 findings are closed with release-artifact evidence.
 
 ## Troubleshooting

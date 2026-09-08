@@ -26,7 +26,7 @@ The current measured baseline from the checked-out binary is important context. 
 - [x] (2026-03-21 15:02Z) Inspected the current headless pipeline in `crates/rebellion-playtest/src/main.rs`, `crates/rebellion-playtest/src/logger.rs`, `crates/rebellion-core/src/game_events.rs`, `crates/rebellion-data/src/simulation.rs`, `crates/rebellion-core/src/ai.rs`, `crates/rebellion-core/src/movement.rs`, and `scripts/eval_game_quality.py`.
 - [x] (2026-03-21 15:02Z) Verified the current seed-42 dual-AI 5000-tick baseline from `./target/debug/rebellion-playtest`: 11,991 total events, 991 space battles, 677 fleet arrivals, 6 manufacturing completions, 10 attack orders, 1,348 reinforce orders, no victory.
 - [x] (2026-03-21 15:02Z) Compared seeds 41, 42, and 43 and confirmed that combat count, fleet arrivals, manufacturing completions, control counts, and attack-versus-reinforce mix are effectively identical.
-- [x] (2026-03-21 15:02Z) Confirmed that committed sample artifacts such as `playtest-seed42.jsonl` and `playtest-dual-sample.jsonl` are older than the current binary behavior and should not be treated as the present balance baseline.
+- [x] (2026-03-21 15:02Z) Confirmed that committed sample artifacts such as `archive/playtest-seed42.jsonl` and `playtest-dual-sample.jsonl` are older than the current binary behavior and should not be treated as the present balance baseline.
 - [x] (2026-03-21 15:02Z) Identified concrete missing metrics and scoring flaws, including absent control-change telemetry, absent research activity, missing character and faction fields on mission events, and a faulty faction-balance calculation in `scripts/eval_game_quality.py`.
 - [ ] Implement richer telemetry and a per-seed summary sidecar that expose control changes, fleet-strength comparisons, mission diversity, character utilization, research progress, uprising frequency, and battle concentration.
 - [ ] Externalize autoresearch knobs into a JSON config file and thread those knobs through AI evaluation, movement timing, production policy, research policy, telemetry, and scoring.
@@ -37,7 +37,7 @@ The current measured baseline from the checked-out binary is important context. 
 ## Surprises & Discoveries
 
 - Observation: The committed JSONL samples in the repository do not reflect the current checked-out binary.
-  Evidence: `playtest-seed42.jsonl` contains only 6 event types and 0 combat events, while `./target/debug/rebellion-playtest data/base --seed 42 --ticks 5000 --dual-ai --summary` on 2026-03-21 reported 991 `combat_space` events and 10 total event types.
+  Evidence: `archive/playtest-seed42.jsonl` contains only 6 event types and 0 combat events, while `./target/debug/rebellion-playtest data/base --seed 42 --ticks 5000 --dual-ai --summary` on 2026-03-21 reported 991 `combat_space` events and 10 total event types.
 
 - Observation: The current strategic outcome is nearly seed-invariant even though total event count wiggles slightly.
   Evidence: Seeds 41, 42, and 43 all produced 991 `combat_space`, 677 `fleet_arrived`, 6 `manufacturing_complete`, 10 attack orders, 1,348 reinforce orders, 3 Alliance-controlled systems, 9 Empire-controlled systems, and no victory.

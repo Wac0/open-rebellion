@@ -34,7 +34,7 @@ The primary gameplay diagnosis target is the current reproduction: `cargo run -q
 ## Surprises & Discoveries
 
 - Observation: The current documentation already describes friendly JSON event payloads, but the actual JSONL output still uses `Debug` formatting.
-  Evidence: `docs/mechanics/play-testing.md` shows examples like `"system_name":"Coruscant"`, while `playtest-seed42.jsonl` begins with lines such as `{"event_type":"fog_revealed","details":{"system":"SystemKey(3v1)"}}`.
+  Evidence: `docs/mechanics/play-testing.md` shows examples like `"system_name":"Coruscant"`, while `archive/playtest-seed42.jsonl` begins with lines such as `{"event_type":"fog_revealed","details":{"system":"SystemKey(3v1)"}}`.
 
 - Observation: The user-reported dual-AI reproduction is accurate.
   Evidence: `cargo run -q -p rebellion-playtest -- data/base --seed 42 --ticks 3000 --dual-ai --summary` printed `Total events: 8013`, `fleet_arrived 642`, and no `combat_space` line.

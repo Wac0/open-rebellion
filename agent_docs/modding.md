@@ -109,7 +109,7 @@ On WASM targets, `ModWatcher` is a no-op stub. Browser mod loading would use a f
 3. **Save**: `ModRuntime::enabled_mod_list()` provides (name, version) pairs for save metadata
 4. **Hot reload**: `ModRuntime::check_reload(&watcher)` checked each tick (native only)
 
-For full runtime details see `@agent_docs/mod-runtime.md`.
+For full runtime details see `agent_docs/mod-runtime.md`.
 
 ## Creating a Mod
 

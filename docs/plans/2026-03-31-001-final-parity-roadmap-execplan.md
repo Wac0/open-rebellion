@@ -48,7 +48,7 @@ instead of a frame-cycling fallback.
 - [ ] M5: continuously gate format, clippy, release builds, app/browser integration, campaign bounds, bitmap screenshots, and performance budgets.
 - [ ] v1.0: deploy the complete browser build to Cloudflare Pages behind secret-backed password middleware and signed sessions, then pass Astra-medium authentication, single-player, multiplayer, performance, and bitmap acceptance against the deployed URL.
 
-The stable finding IDs, exact exit metrics, P00–P39 feature ledger, and browser
+The stable finding IDs, exact exit metrics, P00–P40 feature ledger, and browser
 budgets live in the audit JSON. Parameter autoresearch remains paused until M1
 closes so it does not tune around known simulation defects.
 

@@ -360,6 +360,7 @@ site_description: "Reverse engineering documentation for Star Wars Rebellion (19
 **Files**: `ghidra-site/overrides/main.html` (NEW), `ghidra-site/mkdocs.yml` (add `custom_dir: overrides`)
 **Change**: Inject Open Graph and Twitter Card meta tags for social sharing previews. Template:
 
+{% raw %}
 ```html
 {% extends "base.html" %}
 
@@ -409,6 +410,7 @@ site_description: "Reverse engineering documentation for Star Wars Rebellion (19
   </script>
 {% endblock %}
 ```
+{% endraw %}
 
 Also add `custom_dir: overrides` under `theme:` in `mkdocs.yml`.
 

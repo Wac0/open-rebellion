@@ -19,7 +19,7 @@ acceptance plan required before the project can claim 100% functionality.
 |------|---------|
 | [Audit report](audit-report.md) | Human-readable findings, verification results, Astra/Fable reviews, optimization roadmap, feature matrix, and bitmap protocol. |
 | [Audit data](audit-report.json) | Machine-readable baseline, findings, optimization milestones, feature passes, and release gates. |
-| [`progress.archived-2026-04-07-native-video.json`](../../../progress.archived-2026-04-07-native-video.json) | Archived progress record for the superseded native-video task. |
+| [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
 ## Current conclusion
 

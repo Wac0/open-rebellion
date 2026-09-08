@@ -235,7 +235,7 @@ When `MovementSystem::advance` returns an `ArrivalEvent`:
 3. `dest_system.fleets.push(fleet)` — add to destination
 All systems that query `System.fleets` (combat, fog, blockade, victory) see correct positions.
 
-See `@agent_docs/simulation.md` for full API reference on the advance() pattern.
+See `agent_docs/simulation.md` for full API reference on the advance() pattern.
 
 ### Loading Order (rebellion-data/src/lib.rs)
 1. Sectors (SECTORSD.DAT) -- must come first, systems reference sectors

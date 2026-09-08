@@ -60,7 +60,7 @@ Delivered:
 2. Ground combat: regiment engagement, orbital bombardment
 3. Blockade mechanics, Death Star construction/destruction
 4. Victory conditions (capture enemy HQ, destroy Death Star / find Rebel base)
-5. 3D tactical models: nano-banana-pro concept art → Hunyuan3D Pro/Meshy → Blender sprite sheets. Pipeline proven in World War Watcher (14 models). See `@agent_docs/assets.md`.
+5. 3D tactical models: nano-banana-pro concept art → Hunyuan3D Pro/Meshy → Blender sprite sheets. Pipeline proven in World War Watcher (14 models). See `agent_docs/assets.md`.
 
 Ghidra RE of REBEXE.EXE complete: 5,127 functions decompiled, combat call chain fully traced, bombardment formula decoded, 111 GNPRTB parameters mapped, C++ class hierarchy reconstructed. See `ghidra/notes/` for 7 scholar docs (4,179 lines) and 5,127 decompiled C files.
 
@@ -404,7 +404,8 @@ would tune around known simulation feedback defects.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
 - [ ] Generate the bitmap resource ledger from the entity map; fail on unexplained misses.
 - [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
-- [ ] Close every supported P00–P39 pass from release artifacts before claiming 100% functionality.
+- [ ] Publish current project documentation from `main` through GitHub Pages and verify the public site (P40).
+- [ ] Close every supported P00–P40 pass from release artifacts before claiming 100% functionality.
 
 ### v1.0: Password-Protected Cloudflare Release
 
@@ -416,8 +417,8 @@ would tune around known simulation feedback defects.
 - [ ] Maintain preview and production environments, commit-linked deploys, smoke checks, retained artifacts, and documented rollback.
 - [ ] Have `/codex-orchestrator` run Astra at medium effort against the deployed URL for authentication, single-player, multiplayer, input, performance, and bitmap screenshot acceptance in Chrome, Firefox, and Safari.
 
-v1.0 exits only when the protected Cloudflare deployment passes P39 and every
-supported earlier pass. This follows the local Pages `functions/_middleware`
+v1.0 exits only when the protected Cloudflare deployment passes P39, the
+GitHub Pages documentation passes P40, and every supported earlier pass. This follows the local Pages `functions/_middleware`
 pattern while replacing hardcoded passwords/cookie values with encrypted
 secrets and signed sessions.
 
