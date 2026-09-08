@@ -399,6 +399,7 @@ would tune around known simulation feedback defects.
 
 ### M5: Continuous Release Proof — parallel from M0
 
+- [ ] Restore a reviewed CI provider; GitHub Actions workflow definitions are intentionally local/untracked as of 2026-09-08, so current gates are manual.
 - [ ] Enforce format, strict clippy, native, packaged-WASM, and clean-package boot gates.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
 - [ ] Generate the bitmap resource ledger from the entity map; fail on unexplained misses.

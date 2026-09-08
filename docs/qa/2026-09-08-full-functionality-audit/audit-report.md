@@ -186,9 +186,11 @@ the run as formally degenerate.
 
 - Severity: P1
 - Status: confirmed
-- Evidence: current CI runs native check/tests and raw WASM compilation only.
-  Formatting, strict clippy, packaging, browser execution, screenshots, parity,
-  coverage, and asset integrity are absent.
+- Evidence: the former CI ran native check/tests and raw WASM compilation only.
+  Its GitHub Actions definitions were intentionally removed from tracking on
+  2026-09-08, so all gates are currently manual. Formatting, strict clippy,
+  packaging, browser execution, screenshots, parity, coverage, and asset
+  integrity are not enforced by a hosted pipeline.
 - Acceptance: the release pipeline runs the same versioned commands and fixtures
   used by local acceptance, retains artifacts, and blocks regressions.
 

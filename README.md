@@ -31,19 +31,21 @@ If you ever stayed up past midnight watching your fleet crawl across the galaxy 
 
 If you spent hours on TheForce.Net debating whether Vergere was secretly Sith or whether the Force has no dark side as Jacen learned in *Traitor*, or ran play-by-post RPGs on private InvisionFree boards set in the Outer Rim—this project is for you.
 
-If you modded Star Wars Galaxies until the servers shut down, dueled and roleplayed with sabers down on Jedi Academy honor servers, ran Rebellion tournaments on mIRC, or still have your GOG copy installed just to hear that Imperial March fanfare one more time—this project is *especially* for you.
+If you modded Star Wars Galaxies until the servers shut down, roleplayed with lightsabers holstered on Jedi Academy multiplayer servers, ran Rebellion tournaments on mIRC, or still have your GOG copy installed just to hear that Imperial March fanfare one more time—this project is *especially* for you.
 
 **Open Rebellion** is a from-scratch Rust reimplementation of [Star Wars Rebellion](https://www.gog.com/en/game/star_wars_rebellion) (Coolhand/LucasArts, 1998), the 4X galactic strategy game that never got a sequel, never got a Mac port, and never got the love it deserved. We're fixing all three.
 
 ## What It Does
 
-Rebellion was a game about grand strategy in the Star Wars universe—not the lightsaber duels or the trench runs, but the *logistics*. Who controls the shipyards at Fondor? Can you flip Sullust before the Empire garrisons it? Is Luke ready to go to Dagobah? You managed officers, research trees, espionage networks, fleet deployments, and planetary economies across 200 star systems.
+Rebellion is grand strategy set in the Star Wars universe. Its focus is not lightsaber duels or trench runs, but the decisions that make them possible: controlling Fondor’s shipyards, winning over Sullust before the Empire can fortify it, and deciding when Luke is ready for Dagobah. Across 200 star systems, you direct officers, research, espionage, fleets, and planetary economies.
 
 Open Rebellion reads the original game data files, converts them to clean JSON, and reimplements the simulation from the ground up in Rust. It runs natively on macOS and in the browser via WebAssembly.
 
 ### Current State: v0.23.0
 
 > **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/INDEX.md); the former `progress.json` is retained as [`progress.archived-2026-04-07-native-video.json`](progress.archived-2026-04-07-native-video.json).
+>
+> GitHub Actions workflow definitions are intentionally local and untracked as of 2026-09-08. Release gates remain manual until M5 restores a reviewed CI provider.
 
 | Layer | Parity | What's Done |
 |-------|--------|-------------|
@@ -201,6 +203,7 @@ We're one developer and one AI collaborator, building in public. If you want to 
 - **Story events**: 15+ scripted story beats are documented in `ghidra/notes/` but only 4 major chains are implemented—help add the rest
 - **Art and audio**: All 2,441 original BMPs + 285 voice WAVs + 15 videos are extracted. Help upscale, generate HD replacements, or create total conversion assets (see `agent_docs/assets.md`)
 - **Distribution**: Homebrew formula, itch.io packaging, WASM optimization
+- **AI-assisted development**: See the [agent tooling guide](agent_docs/agent-tooling.md) for the project-specific Codex, Fable, Ghidra, QA, asset, and Cloudflare workflows
 
 ## License
 

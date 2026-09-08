@@ -1,4 +1,5 @@
 /target
+.osgrep/
 *.swp
 *.swo
 *~
@@ -54,6 +55,10 @@ progress.json
 # Subdaimon outputs
 .subdaimon-output/
 
+# Local-only automation definitions and machine-local test links
+.github/workflows/
+sharpen-test
+
 # Claude Code project files
 .claude/
 
@@ -66,7 +71,6 @@ assets/references/ref-illustrated-books/
 # Misc generated/local files
 clippy.toml
 rustfmt.toml
-AGENTS.md
 data/character-portrait-art-sources.md
 data/reference-selections.json
 playtest-dual-sample.jsonl
@@ -90,3 +94,4 @@ scripts/download-ot-portraits*.py
 # Python bytecode
 __pycache__/
 *.pyc
+.osgrep
