@@ -1,0 +1,45 @@
+{
+  "task": "Implement Task #131 (U2): native video playback for already-decoded WebM cutscenes",
+  "status": "done",
+  "started_at": "2026-04-07T00:00:00Z",
+  "features": [
+    {
+      "name": "Video player module",
+      "status": "completed",
+      "files": [
+        "crates/rebellion-render/src/video_player.rs",
+        "crates/rebellion-render/src/lib.rs",
+        "crates/rebellion-render/Cargo.toml"
+      ],
+      "started_at": "2026-04-07T00:00:00Z",
+      "completed_at": "2026-04-07T00:00:00Z"
+    },
+    {
+      "name": "App cutscene integration",
+      "status": "completed",
+      "files": [
+        "crates/rebellion-app/src/main.rs"
+      ],
+      "completed_at": "2026-04-07T00:00:00Z"
+    },
+    {
+      "name": "Decode tooling and docs",
+      "status": "completed",
+      "files": [
+        "scripts/decode-cutscenes.sh",
+        ".gitignore",
+        "agent_docs/architecture.md",
+        "CLAUDE.md"
+      ],
+      "completed_at": "2026-04-07T00:00:00Z"
+    }
+  ],
+  "verification": {
+    "build": true,
+    "tests": true,
+    "lint": false
+  },
+  "archived": true,
+  "archived_at": "2026-09-08T00:00:00Z",
+  "archive_reason": "Superseded by the repository-wide full-functionality audit and feature acceptance ledger."
+}

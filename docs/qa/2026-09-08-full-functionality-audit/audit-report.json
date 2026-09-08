@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "audit": {
+    "name": "Open Rebellion Full Functionality Audit",
+    "date": "2026-09-08",
+    "commit": "fc25634be905839dfa6fb477d5fff0faa49d8ae9",
+    "branch": "main",
+    "origin_synchronized": true,
+    "overall_status": "not_100_percent_functional",
+    "phase": "post_implementation_integration_and_acceptance_closeout",
+    "independent_reviews": [
+      {
+        "model": "gpt-6-astra",
+        "profile": "researcher",
+        "reasoning_effort": "medium",
+        "sandbox": "read-only",
+        "orchestrator": "codex-orchestrator"
+      },
+      {
+        "model": "claude-fable-5-1",
+        "model_identity_verified": true,
+        "profile": "repository auditor and browser/multiplayer optimizer",
+        "sandbox": "read-only",
+        "execution_lane": "fable CLI"
+      }
+    ],
+    "tracked_source_files_modified_by_audit": false,
+    "preexisting_untracked_files": [
+      "EVALUATE.md",
+      "edd.config.json",
+      "program.md",
+      "run-eval.sh"
+    ]
+  },
+  "baseline": {
+    "workspace_tests": {
+      "status": "pass",
+      "passed": 465,
+      "failed": 0,
+      "ignored": 17,
+      "app_direct_tests": 0,
+      "playtest_direct_tests": 0
+    },
+    "format": {
+      "status": "fail",
+      "approximate_files_with_drift": 83
+    },
+    "strict_clippy": {
+      "status": "fail",
+      "minimum_confirmed_errors_in_rebellion_core": 98,
+      "additional_workspace_findings": true
+    },
+    "wasm_release_compile": {
+      "status": "pass_with_warnings",
+      "warnings": 30,
+      "packaged_browser_execution_verified": false
+    },
+    "assets": {
+      "native_bmp_files": 2231,
+      "native_bmp_decode_failures": 0,
+      "hd_png_files": 234,
+      "hd_png_decode_failures": 0,
+      "production_hd_replacements": 74,
+      "production_hd_by_dll": {
+        "common-dll": 53,
+        "gokres-dll": 13,
+        "strategy-dll": 7,
+        "tactical-dll": 1
+      },
+      "bitmap_display_correctness_verified": false
+    },
+    "toolchain_note": {
+      "problem": "/Users/tomdimino/.local/bin/cc shadows the system C compiler with a tmux/Claude launcher",
+      "required_path": "/Users/tomdimino/.cargo/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    }
+  },
+  "campaign_seed_42": {
+    "ticks": 5000,
+    "dual_ai": true,
+    "quality_score": 0.2851,
+    "evaluator_degenerate": false,
+    "parity": {
+      "overall": "fail",
+      "pass": 19,
+      "fail": 5,
+      "skip": 1
+    },
+    "victory": false,
+    "total_events": 2001963,
+    "initial_fleets": 5,
+    "fleets_in_transit_at_end": 980,
+    "attack_orders": 306012,
+    "faction_actions": {
+      "Empire": 326092,
+      "Alliance": 6332
+    },
+    "combat": {
+      "space": 655,
+      "ground": 2,
+      "bombardment": 1,
+      "events_at_yavin": 655,
+      "total_combat_events": 658
+    },
+    "missing_troop_class_fallbacks_observed": true,
+    "failed_checks": [
+      "ai.interval_vs_original",
+      "death_star.death_star_construction",
+      "death_star.death_star_fired",
+      "death_star.death_star_shield_status",
+      "research.completion_event_ids"
+    ],
+    "skipped_checks": [
+      "victory.first_tick"
+    ],
+    "fable_interpretation": {
+      "practically_degenerate": true,
+      "evaluator_false_negative_reason": "The evaluator treats any combat as non-degenerate despite overwhelming event concentration and runaway order volume.",
+      "failed_check_classes": {
+        "documented_augmentation": ["ai.interval_vs_original"],
+        "structural_ai_or_event_gaps": [
+          "death_star.death_star_construction",
+          "death_star.death_star_fired",
+          "death_star.death_star_shield_status"
+        ],
+        "probable_oracle_id_mismatch": ["research.completion_event_ids"]
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "P0",
+      "status": "confirmed",
+      "title": "Save, Load, and Delete commands are discarded",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:2893"
+      ],
+      "acceptance": "UI-driven save, restart, full-state load comparison, delete, and storage verification pass on each supported platform."
+    },
+    {
+      "id": "F-002",
+      "severity": "P1",
+      "status": "confirmed",
+      "title": "Native HD bitmap root does not match the asset layout",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:561",
+        "crates/rebellion-render/src/bmp_cache.rs:837"
+      ],
+      "acceptance": "A known HD override renders from the production path and falls back to the original BMP when removed."
+    },
+    {
+      "id": "F-003",
+      "severity": "P1",
+      "status": "confirmed",
+      "title": "WASM never prefetches HD override bytes",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:332",
+        "crates/rebellion-render/src/bmp_cache.rs:872",
+        "scripts/build-wasm.sh:80"
+      ],
+      "acceptance": "A browser requests, caches, decodes, and renders a known hd/{dll}/{id} resource with verified dimensions."
+    },
+    {
+      "id": "F-004",
+      "severity": "P1",
+      "status": "confirmed",
+      "title": "WASM omits troop data prefetch",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:167",
+        "crates/rebellion-data/src/lib.rs:406"
+      ],
+      "acceptance": "Native and browser troop-class inventories match and emit no fallback diagnostics."
+    },
+    {
+      "id": "F-005",
+      "severity": "P1",
+      "status": "confirmed",
+      "title": "Victory modal is unreachable in normal play",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:73",
+        "crates/rebellion-app/src/main.rs:1714"
+      ],
+      "acceptance": "Every win/loss route reaches the accepted result UI and clean transition sequence."
+    },
+    {
+      "id": "F-006",
+      "severity": "P1",
+      "status": "confirmed_design_divergence",
+      "title": "Interactive combat does not establish core combat parity",
+      "evidence": [
+        "crates/rebellion-render/src/tactical_view.rs:550",
+        "crates/rebellion-render/src/ground_combat.rs:139"
+      ],
+      "acceptance": "Deterministic fixtures prove accepted mechanics and identical permanent result application in all combat entry paths."
+    },
+    {
+      "id": "F-007",
+      "severity": "P0",
+      "status": "reproduced",
+      "title": "Long-running AI simulation exhibits runaway fleet behavior",
+      "evidence": [
+        "/tmp/open-rebellion-parity-42.jsonl",
+        "crates/rebellion-core/src/ai.rs:459",
+        "crates/rebellion-core/src/ai.rs:1957",
+        "crates/rebellion-core/src/integrator.rs:423",
+        "crates/rebellion-core/src/integrator.rs:1515",
+        "crates/rebellion-core/src/movement.rs:216",
+        "crates/rebellion-core/src/simulation.rs:129"
+      ],
+      "root_causes": [
+        "In-transit fleets remain eligible for AI dispatch and replacement orders reset travel progress.",
+        "Production creates replacement one-ship fleets at shipyards vacated by in-transit fleets.",
+        "Arriving fleets do not merge.",
+        "Only one opposing fleet pair per system resolves on a five-tick cadence, creating a combat backlog."
+      ],
+      "acceptance": "Multi-seed bounds for fleet count, orders, event volume, targeting, balance, combat spread, and victory timing all pass."
+    },
+    {
+      "id": "F-008",
+      "severity": "P1_if_browser_parity_claimed",
+      "status": "confirmed_platform_gap",
+      "title": "Browser media and mods are incomplete",
+      "evidence": [
+        "crates/rebellion-render/src/advisor.rs:830",
+        "crates/rebellion-render/src/encyclopedia.rs:486",
+        "crates/rebellion-render/src/video_player.rs:404",
+        "crates/rebellion-data/src/mods.rs:584"
+      ],
+      "acceptance": "Each feature works in browser or is explicitly excluded from the supported browser contract."
+    },
+    {
+      "id": "F-009",
+      "severity": "P1",
+      "status": "confirmed",
+      "title": "Release quality gates are not enforced",
+      "evidence": [
+        ".github/workflows/ci.yml:1",
+        "docs/plans/2026-04-06-001-test-lint-build-infrastructure-execplan.md:13"
+      ],
+      "acceptance": "CI enforces the versioned local acceptance commands and retains reproducible artifacts."
+    },
+    {
+      "id": "F-010",
+      "severity": "P1",
+      "status": "open_acceptance_gap",
+      "title": "Bitmap files decode, but display correctness is unproven",
+      "evidence": [
+        "data/base/ui",
+        "data/hd",
+        "docs/qa/defect-inventory.md"
+      ],
+      "acceptance": "Every image consumer has resource identity, runtime load, screenshot, interaction, and fallback evidence on each claimed platform."
+    },
+    {
+      "id": "F-011",
+      "severity": "P0_for_multiplayer_P1_for_reproducible_single_player",
+      "status": "confirmed_architecture_gap",
+      "title": "Deterministic replay is not established",
+      "evidence": [
+        "unordered map iteration affects movement and AI tie-breaking",
+        "headless and app paths consume random values differently",
+        "interactive seeds are wall-clock-derived",
+        "save state omits RNG, AI runtime, combat cooldown, configuration, and data hashes"
+      ],
+      "acceptance": "Repeated native and native-versus-WASM runs produce identical versioned fingerprints from the same seed and command stream, including across save/load."
+    },
+    {
+      "id": "F-012",
+      "severity": "P0",
+      "status": "confirmed_design_divergence",
+      "title": "Interactive and headless simulation loops diverge",
+      "evidence": [
+        "crates/rebellion-app/src/main.rs:3628",
+        "crates/rebellion-app/src/main.rs:3764",
+        "crates/rebellion-core/src/simulation.rs"
+      ],
+      "acceptance": "One authoritative simulation entry point produces identical results for the same seed and commands in app, playtest, native, and WASM."
+    },
+    {
+      "id": "F-013",
+      "severity": "P0_for_browser_release",
+      "status": "confirmed",
+      "title": "The packaged browser artifact omits runtime data",
+      "evidence": [
+        "scripts/package-web.sh"
+      ],
+      "acceptance": "A clean unpacked browser artifact boots from its own contents, loads expected data hashes, and passes browser smoke tests."
+    },
+    {
+      "id": "F-014",
+      "severity": "P1",
+      "status": "confirmed_optimization_gap",
+      "title": "Browser startup, memory, and rendering are not release-scaled",
+      "evidence": [
+        "approximately 2231 BMP and 40 DAT resources are fetched serially",
+        "raw bytes and decoded textures are retained without eviction",
+        "high-DPI rendering is not enabled",
+        "the Galaxy path can perform two egui passes per frame",
+        "sector hull geometry is recomputed each frame"
+      ],
+      "acceptance": "Indexed asset packing, lazy decode, bounded LRU caches, one UI pass, cached geometry, and cross-browser tests meet the recorded performance budgets."
+    },
+    {
+      "id": "F-015",
+      "severity": "P1",
+      "status": "confirmed_design_gap",
+      "title": "Browser persistence is not production-safe",
+      "evidence": [
+        "synchronous base64 bincode localStorage path",
+        "save schema does not preserve all deterministic continuation state"
+      ],
+      "acceptance": "Versioned compressed IndexedDB saves round-trip complete state asynchronously, surface quota/corruption errors, and preserve fingerprints."
+    }
+  ],
+  "fable_review": {
+    "verdict": "original blockers confirmed and expanded",
+    "material_corrections": [
+      "Load Game from the main menu enters a default Alliance world without slot selection or faction restoration.",
+      "Browser audio is wholly unavailable because AudioEngine is excluded on WASM.",
+      "Native advisor frames depend on a gitignored reference-art directory and are not guaranteed in release artifacts.",
+      "Interactive combat result application omits officer capture and can disagree with core auto-resolution.",
+      "Autoresearch parameter tuning should pause until simulation feedback defects and determinism are corrected."
+    ],
+    "browser_asset_strategy": {
+      "format": "Brotli-compressed indexed ui.pak",
+      "target_initial_requests": 4,
+      "loading": "fetch pack once, lazy-decode requested resources, retain decoded textures in a bounded LRU",
+      "include_hd_overrides": true
+    },
+    "multiplayer_architecture": {
+      "authority": "server-authoritative simulation",
+      "command_envelope": ["player", "tick", "sequence"],
+      "state_delivery": "per-faction fog-filtered deltas and snapshots",
+      "initial_transports": ["in_process_for_tests", "secure_websocket"],
+      "optional_later_transport": "trusted WebRTC lockstep",
+      "recommended_crates": ["rebellion-net", "rebellion-server"],
+      "security": [
+        "server-side command validation",
+        "rate limiting",
+        "authenticated sessions",
+        "TLS",
+        "no hidden GameWorld state in client memory"
+      ]
+    }
+  },
+  "optimization_roadmap": [
+    {
+      "id": "M0",
+      "name": "Truth and bleeding",
+      "estimate": "1 week",
+      "depends_on": [],
+      "work": [
+        "wire save/load/delete and a real Load Game picker",
+        "persist complete native and WASM state",
+        "correct the native HD root",
+        "add TROOPSD.DAT to WASM startup",
+        "package runtime browser data and boot it in CI",
+        "link public completion claims to evidence",
+        "add an informational two-run state fingerprint check"
+      ],
+      "exit": "Persistence works on native and WASM, a clean packaged site boots, and completion claims link to current evidence."
+    },
+    {
+      "id": "M1",
+      "name": "Simulation correctness and determinism",
+      "estimate": "2-3 weeks",
+      "depends_on": ["M0"],
+      "work": [
+        "exclude in-transit fleets from dispatch and prevent travel resets",
+        "model fleet position, merge arrivals, and attach production without unbounded fleet creation",
+        "use stable iteration and deterministic per-tick random streams",
+        "aggregate combat at system level",
+        "enable Death Star construction, fire, and cleanup paths",
+        "repair parity oracles and degeneracy detection"
+      ],
+      "exit_metrics": {
+        "seeds": 5,
+        "ticks_per_seed": 5000,
+        "maximum_transit_fraction": 0.1,
+        "maximum_move_orders_per_arrival": 1.5,
+        "maximum_fleet_arena_multiple": 3,
+        "battle_count_range": [50, 400],
+        "minimum_battle_systems": 8,
+        "maximum_top_system_battle_fraction": 0.4,
+        "death_star_victory_when_fixture_permits": true
+      }
+    },
+    {
+      "id": "M2",
+      "name": "One game engine",
+      "estimate": "3 weeks",
+      "depends_on": ["M1"],
+      "work": [
+        "route app and playtest through one simulation tick API and EventSink",
+        "make combat resumable core state rendered by the UI",
+        "construct and route the victory modal",
+        "remove or correctly simulate AdvanceTicks"
+      ],
+      "exit": "The same seed and command stream produces identical checkpoints and final state across app, playtest, native, WASM, auto, and tactical paths."
+    },
+    {
+      "id": "M3",
+      "name": "Browser excellence",
+      "estimate": "3 weeks",
+      "depends_on": ["M2"],
+      "work": [
+        "ship indexed compressed bitmap and HD assets with lazy decode and LRU caching",
+        "enable high-DPI rendering and one egui pass",
+        "cache static sector geometry",
+        "move saves to compressed asynchronous IndexedDB",
+        "enable audio after a browser user gesture",
+        "stage owned advisor frames",
+        "publish the supported browser contract",
+        "run input and visual tests in Chrome, Firefox, and Safari"
+      ],
+      "exit": "All browser budgets and cross-browser acceptance suites pass."
+    },
+    {
+      "id": "M4",
+      "name": "Authoritative multiplayer",
+      "estimate": "6-8 weeks after M1-M3",
+      "depends_on": ["M1", "M2", "M3"],
+      "work": [
+        "introduce Command and validation boundaries and use them in single-player",
+        "add server-authoritative simulation and fog-filtered deltas/snapshots",
+        "add prediction and reconciliation",
+        "add reconnect, persistence, security, and observability",
+        "optionally add trusted lockstep WebRTC after determinism is proven"
+      ],
+      "exit_metrics": {
+        "two_client_ticks": 5000,
+        "hash_checkpoint_interval_ticks": 250,
+        "simulated_rtt_ms": 200,
+        "maximum_reconciliations_per_100_commands": 1,
+        "maximum_reconnect_seconds": 60,
+        "illegal_command_rejection_rate": 1.0,
+        "hidden_state_present_in_client_memory": false
+      }
+    },
+    {
+      "id": "M5",
+      "name": "Continuous proof",
+      "estimate": "parallel from M0",
+      "depends_on": [],
+      "work": [
+        "enforce format, strict clippy, native, and packaged browser gates",
+        "promote short and multi-seed campaigns to blocking acceptance",
+        "instrument resource misses and maintain a screenshot ledger",
+        "add at least 20 app-level integration tests",
+        "verify clean package boot, screenshot fingerprints, and data hashes in SaveMeta"
+      ],
+      "exit": "Every supported P00-P38 pass is green from a release artifact with retained evidence."
+    }
+  ],
+  "performance_budgets": {
+    "browser_cold_start_seconds": 3,
+    "network_profile": "50 Mbps, 30 ms RTT",
+    "maximum_requests_before_menu": 4,
+    "native_tick_ms_at_1000_fleets": 4,
+    "wasm_tick_ms_at_1000_fleets": 12,
+    "frame_ms_at_1280x800": 8,
+    "maximum_optimized_wasm_mb": 5,
+    "maximum_heap_plus_wasm_mb_after_10_minutes": 256,
+    "maximum_regression_fraction": 0.1
+  },
+  "feature_passes": [
+    {"id":"P00","name":"Supported scope","status":"pending"},
+    {"id":"P01","name":"Build infrastructure","status":"pending"},
+    {"id":"P02","name":"Data and startup","status":"pending"},
+    {"id":"P03","name":"Main menu","status":"pending"},
+    {"id":"P04","name":"Game setup","status":"pending"},
+    {"id":"P05","name":"Clock","status":"pending"},
+    {"id":"P06","name":"Galaxy navigation","status":"pending"},
+    {"id":"P07","name":"Fog and overlays","status":"pending"},
+    {"id":"P08","name":"Officers","status":"pending"},
+    {"id":"P09","name":"Fleets","status":"pending"},
+    {"id":"P10","name":"Economy","status":"pending"},
+    {"id":"P11","name":"Manufacturing","status":"pending"},
+    {"id":"P12","name":"Diplomacy","status":"pending"},
+    {"id":"P13","name":"Recruitment","status":"pending"},
+    {"id":"P14","name":"Espionage","status":"pending"},
+    {"id":"P15","name":"Sabotage","status":"pending"},
+    {"id":"P16","name":"Character operations","status":"pending"},
+    {"id":"P17","name":"Uprisings and betrayal","status":"pending"},
+    {"id":"P18","name":"Research","status":"pending"},
+    {"id":"P19","name":"Jedi","status":"pending"},
+    {"id":"P20","name":"Movement","status":"pending"},
+    {"id":"P21","name":"Blockade and repair","status":"pending"},
+    {"id":"P22","name":"AI","status":"pending"},
+    {"id":"P23","name":"Core space combat","status":"pending"},
+    {"id":"P24","name":"Tactical space combat","status":"pending"},
+    {"id":"P25","name":"Ground combat","status":"pending"},
+    {"id":"P26","name":"Bombardment","status":"pending"},
+    {"id":"P27","name":"Death Star","status":"pending"},
+    {"id":"P28","name":"Generic events","status":"pending"},
+    {"id":"P29","name":"Story and cutscenes","status":"pending"},
+    {"id":"P30","name":"Victory and defeat","status":"pending"},
+    {"id":"P31","name":"Save/load/delete","status":"pending"},
+    {"id":"P32","name":"Mods","status":"pending"},
+    {"id":"P33","name":"Audio","status":"pending"},
+    {"id":"P34","name":"Droid advisors","status":"pending"},
+    {"id":"P35","name":"Encyclopedia and EData","status":"pending"},
+    {"id":"P36","name":"Bitmap sweep","status":"pending"},
+    {"id":"P37","name":"Campaign acceptance","status":"pending"},
+    {"id":"P38","name":"Release artifacts","status":"pending"}
+  ],
+  "evidence_contract": [
+    "feature_id_and_commit_sha",
+    "platform_and_build_identity",
+    "data_and_asset_hashes",
+    "faction_difficulty_size_seed_fixture",
+    "initial_state_and_exact_inputs",
+    "expected_and_observed_state_mutation",
+    "command_output_and_exit_status",
+    "browser_console_and_network_logs_when_applicable",
+    "screenshot_or_recording_for_visual_behavior",
+    "negative_and_error_path",
+    "explicit_disposition"
+  ],
+  "bitmap_protocol": [
+    "resource_ledger_entry",
+    "manifest_file_reconciliation",
+    "successful_decode_and_dimension_check",
+    "runtime_path_or_http_request_and_cache_hit",
+    "correct_in_game_screenshot",
+    "related_interaction_or_state_transition",
+    "original_valid_hd_missing_hd_and_corrupt_hd_cases"
+  ],
+  "astra_loop": {
+    "routine_review": {
+      "profile": "reviewer",
+      "reasoning": "low",
+      "sandbox": "read-only"
+    },
+    "failure_diagnosis": {
+      "profile": "debugger",
+      "reasoning": "medium",
+      "sandbox": "read-only"
+    },
+    "close_sequence": [
+      "reproduce",
+      "diagnose",
+      "authorize_and_apply_fix",
+      "rerun_original_reproduction",
+      "run_adjacent_regressions",
+      "independent_astra_review",
+      "update_ledger",
+      "close_feature_id"
+    ]
+  },
+  "definition_of_done": {
+    "all_supported_feature_passes_are_pass": true,
+    "all_p0_and_p1_findings_closed": true,
+    "no_required_failures_or_unexplained_skips": true,
+    "format_check_passes": true,
+    "warning_free_check_passes": true,
+    "strict_clippy_passes": true,
+    "native_build_passes": true,
+    "packaged_wasm_build_and_browser_run_pass": true,
+    "bitmap_resource_misses": 0,
+    "multi_seed_campaign_acceptance_passes": true,
+    "release_artifact_reproduction_passes": true,
+    "unsupported_features_explicitly_excluded": true
+  }
+}

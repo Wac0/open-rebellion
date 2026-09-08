@@ -1,5 +1,12 @@
 # Close The Final 3 Percent To Original Rebellion Parity
 
+> **Status update (2026-09-08):** This plan is retained as implementation
+> history, but its narrow “final 3 percent” conclusion is superseded for release
+> acceptance by the [full-functionality audit](../qa/2026-09-08-full-functionality-audit/INDEX.md).
+> Independent Astra and verified Fable 5.1 reviews found additional persistence,
+> simulation, deterministic replay, browser packaging/performance, visual proof,
+> and multiplayer-foundation work.
+
 This ExecPlan is a living document. Sections Progress, Surprises &
 Discoveries, Decision Log, and Outcomes & Retrospective must be
 kept up to date as work proceeds.
@@ -30,6 +37,19 @@ instead of a frame-cycling fallback.
 - [ ] Implement Milestone 3: remaining UI and media parity.
 - [ ] Implement Milestone 4: residual combat and Death Star fidelity cleanup.
 - [ ] Decide whether to stop at "original feature parity" or add an optional strict legacy-behavior mode for existing augmentations.
+
+### Current continuation milestones
+
+- [ ] M0: wire complete save/load/delete, fix HD and troop-data paths, and boot a self-contained browser package.
+- [ ] M1: stop fleet redispatch/spawn/backlog feedback loops and prove deterministic native/WASM replay across five 5,000-tick seeds.
+- [ ] M2: converge app, playtest, automatic combat, and tactical combat on one authoritative simulation/event path.
+- [ ] M3: ship indexed lazy-loaded assets, bounded caches, IndexedDB saves, high-DPI rendering, browser audio/advisors, and Chrome/Firefox/Safari acceptance.
+- [ ] M4: build validated commands, an authoritative fog-safe server, prediction/reconciliation, reconnect, and multiplayer security after determinism passes.
+- [ ] M5: continuously gate format, clippy, release builds, app/browser integration, campaign bounds, bitmap screenshots, and performance budgets.
+
+The stable finding IDs, exact exit metrics, P00–P38 feature ledger, and browser
+budgets live in the audit JSON. Parameter autoresearch remains paused until M1
+closes so it does not tune around known simulation defects.
 
 ## Surprises & Discoveries
 

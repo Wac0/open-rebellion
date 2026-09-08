@@ -43,6 +43,8 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
+> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/INDEX.md); the former `progress.json` is retained as [`progress.archived-2026-04-07-native-video.json`](progress.archived-2026-04-07-native-video.json).
+
 | Layer | Parity | What's Done |
 |-------|--------|-------------|
 | **Core** | 100% | 15 simulation systems, 18/18 AI dispatch validators, config-driven AI, PerceptionIntegrator, WASM BmpCache pipeline |

@@ -3,7 +3,7 @@ title: "Roadmap"
 description: "Development milestones from Galaxy Viewer through Release packaging"
 category: "agent-docs"
 created: 2026-03-11
-updated: 2026-04-06
+updated: 2026-09-08
 tags: [roadmap, planning, milestones, parity]
 ---
 
@@ -343,6 +343,67 @@ Based on 3-agent review + 23-function GhidraMCP session (2026-03-23) + TheArchit
 - [x] 2 accepted mutations: distance_scale 2→3, mfg_target 50→55
 - [x] Results at `autoresearch/run-001/`, best config at `configs/autoresearch/best_game_config.json`
 - [x] Finding: parameter space is narrow — most mutations cause degenerate games
+
+---
+
+## Audit-Driven Parity, Browser, and Multiplayer Roadmap
+
+The completed milestones above describe implementation delivery, not final
+release acceptance. The September 2026 [full-functionality audit](../docs/qa/2026-09-08-full-functionality-audit/INDEX.md), including independent Astra and verified Fable 5.1 reviews, is the current acceptance source of truth. Its JSON ledger owns stable finding and feature IDs.
+
+### M0: Truth and Critical Integration — 1 week
+
+- [ ] Wire Save, Load, Delete, and the main-menu save picker on native and WASM.
+- [ ] Persist complete deterministic campaign state and surface corruption/quota errors.
+- [ ] Correct the native HD root; prefetch `TROOPSD.DAT`; package browser runtime data.
+- [ ] Make a clean packaged browser artifact boot in CI.
+- [ ] Link README parity claims to acceptance evidence and add two-run fingerprints.
+
+### M1: Simulation Correctness and Determinism — 2–3 weeks
+
+- [ ] Prevent in-transit fleet redispatch and travel-progress resets.
+- [ ] Model fleet position explicitly; merge arrivals; stop unbounded production fleets.
+- [ ] Replace iteration-order randomness with versioned deterministic streams.
+- [ ] Resolve combat at system scope so queued fleets cannot create a permanent backlog.
+- [ ] Enable AI Death Star construction/fire/cleanup and repair parity oracles.
+- [ ] Pass five 5,000-tick seeds: transit ≤10%, orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles across ≥8 systems, busiest system ≤40%.
+
+Parameter autoresearch remains paused until this milestone closes; otherwise it
+would tune around known simulation feedback defects.
+
+### M2: One Authoritative Game Engine — 3 weeks
+
+- [ ] Route the app and playtest through one simulation tick API and event sink.
+- [ ] Make automatic, tactical, and ground combat share resumable core state and result application, including officer capture.
+- [ ] Construct the victory modal and unify win/loss transitions.
+- [ ] Remove `AdvanceTicks` or make it execute the real simulation.
+- [ ] Prove identical fingerprints for the same seed and command stream across app/playtest, native/WASM, and auto/tactical paths.
+
+### M3: Exceptional Browser Runtime — 3 weeks
+
+- [ ] Replace thousands of serial requests with a Brotli-compressed indexed `ui.pak`, lazy decode, and bounded texture LRU.
+- [ ] Include HD assets; enable high DPI; use one egui pass; cache sector geometry.
+- [ ] Move saves from synchronous base64 `localStorage` to compressed asynchronous IndexedDB.
+- [ ] Start audio after user gesture and stage owned advisor assets in release packages.
+- [ ] Exercise real mouse/keyboard input and bitmap screenshots in Chrome, Firefox, and Safari.
+- [ ] Meet budgets: ≤3 s cold start at 50 Mbps/30 ms, ≤4 pre-menu requests, ≤8 ms frame, ≤12 ms WASM tick at 1,000 fleets, ≤5 MB optimized WASM, and ≤256 MB combined memory after 10 minutes.
+
+### M4: Authoritative Multiplayer — 6–8 weeks after M1–M3
+
+- [ ] Add validated `{player, tick, sequence}` commands and route single-player through the same boundary.
+- [ ] Add `rebellion-net` and `rebellion-server` responsibilities for authoritative simulation and fog-filtered faction deltas/snapshots.
+- [ ] Start with in-process test transport and secure WebSockets; never expose the hidden full `GameWorld` to clients.
+- [ ] Add prediction/reconciliation, reconnect snapshots plus command log, persistence, authentication, rate limits, TLS, and observability.
+- [ ] Pass two clients for 5,000 ticks with hashes matching every 250 ticks; no 200 ms RTT input stalls; ≤1 reconcile per 100 commands; reconnect ≤60 s; reject 100% of illegal commands.
+- [ ] Consider trusted lockstep/WebRTC only after deterministic replay is proven.
+
+### M5: Continuous Release Proof — parallel from M0
+
+- [ ] Enforce format, strict clippy, native, packaged-WASM, and clean-package boot gates.
+- [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
+- [ ] Generate the bitmap resource ledger from the entity map; fail on unexplained misses.
+- [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
+- [ ] Close every supported P00–P38 pass from release artifacts before claiming 100% functionality.
 
 ---
 
