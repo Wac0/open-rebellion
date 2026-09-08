@@ -403,7 +403,22 @@ would tune around known simulation feedback defects.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
 - [ ] Generate the bitmap resource ledger from the entity map; fail on unexplained misses.
 - [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
-- [ ] Close every supported P00–P38 pass from release artifacts before claiming 100% functionality.
+- [ ] Close every supported P00–P39 pass from release artifacts before claiming 100% functionality.
+
+### v1.0: Password-Protected Cloudflare Release
+
+- [ ] Deploy the self-contained browser artifact to Cloudflare Pages with Pages Functions middleware.
+- [ ] Keep `SITE_PASSWORD` and `SESSION_SECRET` in encrypted Wrangler/Pages secrets; commit no credentials or reusable auth token.
+- [ ] Sign an expiring `HttpOnly; Secure; SameSite=Lax` session cookie and provide logout; reject missing, expired, or tampered sessions.
+- [ ] Gate HTML, WASM, DAT, bitmap/HD packs, save endpoints, WebSockets, and multiplayer APIs—not only the landing page.
+- [ ] Add CSP and security headers plus immutable caching for hashed public assets; never publicly cache authenticated HTML or auth responses.
+- [ ] Maintain preview and production environments, commit-linked deploys, smoke checks, retained artifacts, and documented rollback.
+- [ ] Have `/codex-orchestrator` run Astra at medium effort against the deployed URL for authentication, single-player, multiplayer, input, performance, and bitmap screenshot acceptance in Chrome, Firefox, and Safari.
+
+v1.0 exits only when the protected Cloudflare deployment passes P39 and every
+supported earlier pass. This follows the local Pages `functions/_middleware`
+pattern while replacing hardcoded passwords/cookie values with encrypted
+secrets and signed sessions.
 
 ---
 

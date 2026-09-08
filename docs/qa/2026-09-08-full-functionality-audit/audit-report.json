@@ -449,7 +449,24 @@
         "add at least 20 app-level integration tests",
         "verify clean package boot, screenshot fingerprints, and data hashes in SaveMeta"
       ],
-      "exit": "Every supported P00-P38 pass is green from a release artifact with retained evidence."
+      "exit": "Every supported P00-P39 pass is green from a release artifact with retained evidence."
+    },
+    {
+      "id": "V1.0",
+      "name": "Password-protected Cloudflare release",
+      "version": "1.0.0",
+      "estimate": "after M0-M5",
+      "depends_on": ["M0", "M1", "M2", "M3", "M4", "M5"],
+      "work": [
+        "deploy the self-contained browser artifact to Cloudflare Pages",
+        "gate every HTML, WASM, DAT, bitmap, save, and multiplayer route with Pages Functions middleware",
+        "store SITE_PASSWORD and SESSION_SECRET as encrypted Cloudflare secrets, never in source",
+        "issue signed HttpOnly Secure SameSite=Lax session cookies with expiry and logout",
+        "configure cache and security headers without caching authenticated HTML or auth responses",
+        "support preview and production environments with documented rollback",
+        "run Astra medium browser acceptance against the deployed URL"
+      ],
+      "exit": "Unauthenticated asset and API access fails closed; login, navigation, expiry, tamper rejection, and logout pass; deployed single-player and multiplayer smoke tests and bitmap screenshots pass in Chrome, Firefox, and Safari."
     }
   ],
   "performance_budgets": {
@@ -502,7 +519,8 @@
     {"id":"P35","name":"Encyclopedia and EData","status":"pending"},
     {"id":"P36","name":"Bitmap sweep","status":"pending"},
     {"id":"P37","name":"Campaign acceptance","status":"pending"},
-    {"id":"P38","name":"Release artifacts","status":"pending"}
+    {"id":"P38","name":"Release artifacts","status":"pending"},
+    {"id":"P39","name":"Protected Cloudflare deployment","status":"pending"}
   ],
   "evidence_contract": [
     "feature_id_and_commit_sha",
@@ -549,7 +567,7 @@
     ]
   },
   "definition_of_done": {
-    "all_supported_feature_passes_are_pass": true,
+    "all_supported_feature_passes_through_p39_are_pass": true,
     "all_p0_and_p1_findings_closed": true,
     "no_required_failures_or_unexplained_skips": true,
     "format_check_passes": true,
