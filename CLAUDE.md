@@ -20,6 +20,8 @@ functional. Do not repeat historical parity percentages as verified results.
   progress evidence synchronized.
 - After a feature passes its required gates, commit and push it before starting
   the next feature. Never mark a partial or inferred result complete.
+- Work directly on `main`; the repository intentionally carries no other local
+  or origin branches during this audit.
 - Run browser acceptance through `codex-orchestrator` with Astra at medium
   effort and retain screenshots, network logs, console logs, and artifact hashes.
 - v1.0 is the complete browser build deployed through password-protected

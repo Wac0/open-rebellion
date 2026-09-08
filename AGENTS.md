@@ -19,6 +19,8 @@ functional; historical parity percentages are estimates, not acceptance proof.
   Markdown, and roadmap evidence together.
 - Once a feature passes its stated gates, commit and push it before starting the
   next feature. Never check off a partial or inferred result.
+- Work directly on `main`; do not create or retain side branches unless the
+  user explicitly changes the main-only policy.
 - Browser acceptance must use `codex-orchestrator` with Astra at medium effort.
   Retain inspected screenshots, console/network logs, and artifact hashes.
 - GitHub Actions workflow definitions are intentionally local and untracked as
