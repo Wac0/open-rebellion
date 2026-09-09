@@ -17,7 +17,7 @@ built, uploaded, and deployed documentation from `main` at commit
 Public HTTP smoke tests returned 200 for:
 
 - [Project landing page](https://tdimino.github.io/open-rebellion/)
-- [Full-functionality audit index](https://tdimino.github.io/open-rebellion/docs/qa/2026-09-08-full-functionality-audit/INDEX.html)
+- [Full-functionality audit index](https://tdimino.github.io/open-rebellion/docs/qa/2026-09-08-full-functionality-audit/)
 - [Fleet miniature browser proof](https://tdimino.github.io/open-rebellion/docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.html)
 
 The first run for the documentation commit built successfully but GitHub

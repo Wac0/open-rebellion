@@ -43,7 +43,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/INDEX.md); the former `progress.json` is retained in the [project archive](archive/INDEX.md).
+> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/); the former `progress.json` is retained in the [project archive](archive/INDEX.md).
 >
 > The current packaged browser build now loads 52 game-data files and 2,231 bitmaps through one deterministic runtime pack. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md) four-request startup, both factions, fleet artwork and interactions, and zoom rendering without browser errors; remaining browser and release gates are still open.
 >

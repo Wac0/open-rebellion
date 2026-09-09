@@ -349,7 +349,7 @@ Based on 3-agent review + 23-function GhidraMCP session (2026-03-23) + TheArchit
 ## Audit-Driven Parity, Browser, and Multiplayer Roadmap
 
 The completed milestones above describe implementation delivery, not final
-release acceptance. The September 2026 [full-functionality audit](../docs/qa/2026-09-08-full-functionality-audit/INDEX.md), including independent Astra and verified Fable 5.1 reviews, is the current acceptance source of truth. Its JSON ledger owns stable finding and feature IDs.
+release acceptance. The September 2026 [full-functionality audit](../docs/qa/2026-09-08-full-functionality-audit/), including independent Astra and verified Fable 5.1 reviews, is the current acceptance source of truth. Its JSON ledger owns stable finding and feature IDs.
 
 ### M0: Truth and Critical Integration — 1 week
 

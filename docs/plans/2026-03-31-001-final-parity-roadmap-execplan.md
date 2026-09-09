@@ -2,7 +2,7 @@
 
 > **Status update (2026-09-08):** This plan is retained as implementation
 > history, but its narrow “final 3 percent” conclusion is superseded for release
-> acceptance by the [full-functionality audit](../qa/2026-09-08-full-functionality-audit/INDEX.md).
+> acceptance by the [full-functionality audit](../qa/2026-09-08-full-functionality-audit/).
 > Independent Astra and verified Fable 5.1 reviews found additional persistence,
 > simulation, deterministic replay, browser packaging/performance, visual proof,
 > and multiplayer-foundation work.

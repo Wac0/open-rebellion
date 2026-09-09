@@ -78,7 +78,7 @@ green until their dedicated findings close.
 
 ## Detailed Guides
 
-- `docs/qa/2026-09-08-full-functionality-audit/INDEX.md` — audit entry point,
+- `docs/qa/2026-09-08-full-functionality-audit/index.md` — audit entry point,
   evidence contract, feature ledger, and definition of done. Read for all work.
 - `agent_docs/roadmap.md` — active milestones and v1.0 release sequence. Read when
   choosing or checking off work.
