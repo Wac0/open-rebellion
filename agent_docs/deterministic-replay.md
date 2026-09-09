@@ -26,7 +26,7 @@ it does not yet make the app and playtest simulation loops equivalent.
 | Replay executor and recorder | F-011B3 complete | Per-command state checkpoints |
 | Fresh-process native replay | F-011B3 complete | Stable 25-tick original-data golden |
 | App/playtest tick convergence | Open | F-012 and M2 |
-| Native/WASM checkpoint equality | Open | Final F-011 acceptance gate |
+| Native/WASM checkpoint equality | F-011B4 complete | Exact seed-42 artifact, nine checkpoints |
 | Automatic/tactical combat equality | Open | M2 |
 
 ## Format v1
@@ -58,6 +58,8 @@ fingerprint after every command. `execute_replay()` independently validates the
 engine version, seed, data manifest, active configuration, initial state,
 command position, and each checkpoint. Playback stops at the first mismatch
 with the checkpoint index, tick, command prefix, and expected/observed hashes.
+`execute_replay_observed()` also reports the actual failing checkpoint to a
+diagnostic caller without weakening fail-fast behavior.
 
 Format v1 reserves exactly 1,024 Xoshiro256++ rolls per simulated tick and
 limits one advance command to 1,000,000 ticks. The runtime supports speed
@@ -86,12 +88,27 @@ hex strings so JavaScript cannot lose integer precision.
 The local original-data fixture contains 51 inputs and 50,597 bytes. Its
 aggregate fingerprint is `5facb1c7ba0e81ad`.
 
+## Cross-runtime fixture
+
+`crates/rebellion-data/tests/fixtures/replay_seed42_v1.json` is the single
+reviewed artifact used by both runtimes. It contains nine commands and nine
+checkpoints through tick 25. Native `replay-gate` and the query-gated WASM
+runner both embed and decode those exact 13,482 bytes, rebuild the seed-42
+campaign independently, and echo the original text into their reports.
+
+The browser gate runs only at `?replay-check=seed42-v1`. It strictly loads
+`runtime.orpk`, publishes `window.__openRebellionReplay`, and never falls into
+normal gameplay. Invalid query values and a missing pack fail before any
+partial replay state is reported. Without the query, ordinary startup still
+uses four requests and reaches the authentic bitmap menu.
+
 ## Validation
 
 ```bash
 cargo test -p rebellion-data replay --lib
 cargo test -p rebellion-data --test replay_manifest -- --ignored
 cargo check -p rebellion-app --target wasm32-unknown-unknown
+python3 scripts/check-replay-equivalence.py --skip-build --json
 ```
 
 The ignored fixture test requires the locally supplied original `.DAT` files.
@@ -103,7 +120,7 @@ repository test passes.
 
 ## Next implementation boundary
 
-F-011B4 must execute the same artifact in native and WASM and compare every
-checkpoint. Do not claim cross-runtime equivalence until the interactive app
-calls the same tick entry point as `rebellion-playtest`;
-`rebellion-app/src/main.rs` still duplicates the simulation sequence.
+F-011B4 proves replay-executor equivalence for one 25-tick campaign. F-012 must
+now converge the interactive app and `rebellion-playtest` on the same command,
+tick, event, and combat paths. Long-running multi-seed replay remains an M1
+gate, so this result is not a claim of full interactive game parity.

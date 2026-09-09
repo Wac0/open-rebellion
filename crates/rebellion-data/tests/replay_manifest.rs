@@ -2,32 +2,16 @@
 
 use std::path::PathBuf;
 
-use rand::SeedableRng;
-use rand_xoshiro::Xoshiro256PlusPlus;
-use rebellion_core::ai::{AIState, AiFaction};
-use rebellion_core::betrayal::BetrayalState;
-use rebellion_core::blockade::BlockadeState;
-use rebellion_core::dat::Faction;
-use rebellion_core::death_star::DeathStarState;
-use rebellion_core::economy::EconomyState;
-use rebellion_core::events::EventState;
-use rebellion_core::fog::{FogState, FogSystem};
-use rebellion_core::jedi::JediState;
-use rebellion_core::manufacturing::ManufacturingState;
-use rebellion_core::missions::MissionState;
-use rebellion_core::movement::MovementState;
-use rebellion_core::repair::RepairState;
-use rebellion_core::research::ResearchState;
-use rebellion_core::tick::{GameClock, GameSpeed};
-use rebellion_core::tuning::GameConfig;
-use rebellion_core::uprising::UprisingState;
-use rebellion_core::victory::VictoryState;
-use rebellion_core::world::{CampaignConfig, SeedOptions, VictoryConditions};
 use rebellion_data::replay::{
-    compute_simulation_data_manifest_from_dir, execute_replay, record_replay, ReplayActor,
-    ReplayCommand, ReplayEnvironment,
+    compute_simulation_data_manifest_from_dir, execute_replay, record_replay, ReplayEnvironment,
+    ReplayManifest,
 };
-use rebellion_data::save::{compute_state_fingerprint, load_slot, save_slot, SaveState};
+use rebellion_data::replay_fixture::{
+    seed42_commands, seed42_initial_state, validate_seed42_artifact, SEED42_ARTIFACT_BYTES,
+    SEED42_ENGINE_VERSION, SEED42_FINAL_FINGERPRINT, SEED42_FINAL_TICK, SEED42_INITIAL_FINGERPRINT,
+    SEED42_SEED,
+};
+use rebellion_data::save::{compute_state_fingerprint, load_slot, save_slot};
 
 fn data_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -36,64 +20,6 @@ fn data_dir() -> PathBuf {
         .parent()
         .expect("repository root")
         .join("data/base")
-}
-
-fn original_save_state(seed: u64) -> SaveState {
-    let options = SeedOptions {
-        rng_seed: Some(seed),
-        ..SeedOptions::default()
-    };
-    let world = rebellion_data::load_game_data_with_options(&data_dir(), &options)
-        .expect("load original campaign data");
-    let alliance_hq = world
-        .systems
-        .iter()
-        .find(|(_, system)| {
-            system.is_headquarters && system.control.is_controlled_by(Faction::Alliance)
-        })
-        .map(|(key, _)| key)
-        .expect("alliance headquarters");
-    let empire_hq = world
-        .systems
-        .iter()
-        .find(|(_, system)| {
-            system.is_headquarters && system.control.is_controlled_by(Faction::Empire)
-        })
-        .map(|(key, _)| key)
-        .expect("empire headquarters");
-    let mut fog_alliance = FogState::new(Faction::Alliance);
-    let mut fog_empire = FogState::new(Faction::Empire);
-    FogSystem::seed(&mut fog_alliance, &world);
-    FogSystem::seed(&mut fog_empire, &world);
-    let mut events = EventState::new();
-    rebellion_core::story_events::define_story_events(&mut events, &world);
-
-    SaveState {
-        world,
-        clock: GameClock::new(),
-        manufacturing: ManufacturingState::new(),
-        missions: MissionState::new(),
-        events,
-        ai: AIState::new(AiFaction::Empire),
-        movement: MovementState::new(),
-        fog_alliance,
-        fog_empire,
-        player_is_alliance: true,
-        blockade: BlockadeState::new(),
-        uprising: UprisingState::new(),
-        death_star: DeathStarState::default(),
-        research: ResearchState::new(),
-        jedi: JediState::new(),
-        victory: VictoryState::new(alliance_hq, empire_hq),
-        betrayal: BetrayalState::new(),
-        economy: EconomyState::default(),
-        sim_rng: Xoshiro256PlusPlus::seed_from_u64(seed),
-        ai2: None,
-        repair: RepairState,
-        combat_cooldowns: std::collections::HashMap::new(),
-        game_config: GameConfig::default(),
-        campaign_config: CampaignConfig::from_seed_options(options, VictoryConditions::Standard),
-    }
 }
 
 #[test]
@@ -112,42 +38,37 @@ fn original_simulation_data_has_canonical_identity() {
 #[test]
 #[ignore = "requires original data/base DAT files"]
 fn original_campaign_replay_matches_after_save_v11_reload() {
-    let seed = 42;
+    let seed = SEED42_SEED;
     let data =
         compute_simulation_data_manifest_from_dir(&data_dir()).expect("fingerprint original DATs");
     let environment = ReplayEnvironment {
-        engine_version: "0.1.0-test",
+        engine_version: SEED42_ENGINE_VERSION,
         seed,
         data: &data,
     };
-    let initial = original_save_state(seed);
+    let world = rebellion_data::load_game_data_with_options(
+        &data_dir(),
+        &rebellion_core::world::SeedOptions {
+            rng_seed: Some(seed),
+            ..rebellion_core::world::SeedOptions::default()
+        },
+    )
+    .expect("load original campaign data");
+    let initial = seed42_initial_state(world).expect("build seed-42 initial state");
     let initial_fingerprint = compute_state_fingerprint(&initial).unwrap();
-    let mut commands = vec![
-        (
-            ReplayActor::Alliance,
-            ReplayCommand::SetSpeed {
-                speed: GameSpeed::Faster,
-            },
-        ),
-        (ReplayActor::Engine, ReplayCommand::ToggleDualAi),
-    ];
-    commands.extend((0..5).map(|_| {
-        (
-            ReplayActor::Engine,
-            ReplayCommand::AdvanceTicks { count: 5 },
-        )
-    }));
-    commands.extend([
-        (ReplayActor::Engine, ReplayCommand::RevealAllSystems),
-        (ReplayActor::Engine, ReplayCommand::ForceVictoryCheck),
-    ]);
-    let recording = record_replay(environment, initial.clone(), commands).expect("record replay");
+    let recording =
+        record_replay(environment, initial.clone(), seed42_commands()).expect("record replay");
+    validate_seed42_artifact(&recording.manifest).expect("validate reviewed replay profile");
+    let artifact = ReplayManifest::from_json(SEED42_ARTIFACT_BYTES)
+        .expect("decode exact committed replay artifact bytes");
+    validate_seed42_artifact(&artifact).expect("validate committed replay artifact");
+    assert_eq!(artifact, recording.manifest);
 
     let saves = tempfile::tempdir().expect("temporary save directory");
     save_slot(saves.path(), 0, "Replay Start", &initial, &[]).expect("save initial state");
     let (_, restored) = load_slot(saves.path(), 0).expect("reload initial state");
-    let executed =
-        execute_replay(environment, &recording.manifest, restored).expect("execute replay");
+    let executed = execute_replay(environment, &artifact, restored)
+        .expect("execute exact committed replay artifact");
     let executed_fingerprint = compute_state_fingerprint(&executed.final_state).unwrap();
     let recorded_fingerprint = compute_state_fingerprint(&recording.execution.final_state).unwrap();
 
@@ -156,8 +77,8 @@ fn original_campaign_replay_matches_after_save_v11_reload() {
         recording.manifest.checkpoints
     );
     assert_eq!(executed_fingerprint, recorded_fingerprint);
-    assert_eq!(executed.final_state.clock.tick, 25);
-    assert_eq!(initial_fingerprint.to_string(), "v1:765c9318acb5cb50");
+    assert_eq!(executed.final_state.clock.tick, SEED42_FINAL_TICK);
+    assert_eq!(initial_fingerprint.to_string(), SEED42_INITIAL_FINGERPRINT);
     let observed_fingerprints: Vec<_> = recording
         .manifest
         .checkpoints
@@ -184,5 +105,5 @@ fn original_campaign_replay_matches_after_save_v11_reload() {
             (9, 25, "v1:f512773b607069ee".into()),
         ]
     );
-    assert_eq!(executed_fingerprint.to_string(), "v1:f512773b607069ee");
+    assert_eq!(executed_fingerprint.to_string(), SEED42_FINAL_FINGERPRINT);
 }

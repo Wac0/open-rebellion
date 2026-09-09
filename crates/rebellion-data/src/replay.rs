@@ -507,6 +507,23 @@ pub fn execute_replay(
     manifest: &ReplayManifest,
     initial_state: SaveState,
 ) -> anyhow::Result<ReplayExecutionResult> {
+    execute_replay_observed(environment, manifest, initial_state, |_| {})
+}
+
+/// Execute a replay while reporting each actual checkpoint before comparison.
+///
+/// The observer preserves the checkpoint that caused a failure, which lets a
+/// native or browser gate explain the first divergent prefix without changing
+/// strict fail-fast execution semantics.
+pub fn execute_replay_observed<F>(
+    environment: ReplayEnvironment<'_>,
+    manifest: &ReplayManifest,
+    initial_state: SaveState,
+    mut observe: F,
+) -> anyhow::Result<ReplayExecutionResult>
+where
+    F: FnMut(&ReplayCheckpoint),
+{
     validate_execution_environment(environment, manifest, &initial_state)?;
 
     let mut runtime = ReplayRuntime::from_save_state(initial_state);
@@ -518,6 +535,7 @@ pub fn execute_replay(
         0,
         &mut checkpoint_index,
         &mut observed_checkpoints,
+        &mut observe,
     )?;
 
     for (index, record) in manifest.commands.iter().enumerate() {
@@ -536,6 +554,7 @@ pub fn execute_replay(
             (index + 1) as u64,
             &mut checkpoint_index,
             &mut observed_checkpoints,
+            &mut observe,
         )?;
     }
 
@@ -602,13 +621,17 @@ fn validate_execution_environment(
     Ok(())
 }
 
-fn verify_checkpoints_at_prefix(
+fn verify_checkpoints_at_prefix<F>(
     manifest: &ReplayManifest,
     runtime: &ReplayRuntime,
     command_count: u64,
     checkpoint_index: &mut usize,
     observed: &mut Vec<ReplayCheckpoint>,
-) -> anyhow::Result<()> {
+    observe: &mut F,
+) -> anyhow::Result<()>
+where
+    F: FnMut(&ReplayCheckpoint),
+{
     let Some(checkpoint) = manifest.checkpoints.get(*checkpoint_index) else {
         return Ok(());
     };
@@ -622,32 +645,34 @@ fn verify_checkpoints_at_prefix(
     if checkpoint.command_count != command_count {
         return Ok(());
     }
-    if checkpoint.tick != runtime.current_tick() {
+    let actual = ReplayCheckpoint {
+        tick: runtime.current_tick(),
+        command_count,
+        state_fingerprint: compute_state_fingerprint(&runtime.snapshot())?.to_string(),
+    };
+    observe(&actual);
+
+    if checkpoint.tick != actual.tick {
         bail!(
             "replay checkpoint {} tick mismatch after {} commands: artifact {}, runtime {}",
             *checkpoint_index,
             command_count,
             checkpoint.tick,
-            runtime.current_tick()
+            actual.tick
         );
     }
 
-    let fingerprint = compute_state_fingerprint(&runtime.snapshot())?.to_string();
-    if checkpoint.state_fingerprint != fingerprint {
+    if checkpoint.state_fingerprint != actual.state_fingerprint {
         bail!(
             "replay checkpoint {} state mismatch at tick {} after {} commands: artifact {}, runtime {}",
             *checkpoint_index,
             checkpoint.tick,
             command_count,
             checkpoint.state_fingerprint,
-            fingerprint
+            actual.state_fingerprint
         );
     }
-    observed.push(ReplayCheckpoint {
-        tick: runtime.current_tick(),
-        command_count,
-        state_fingerprint: fingerprint,
-    });
+    observed.push(actual);
     *checkpoint_index += 1;
     Ok(())
 }
@@ -1517,6 +1542,42 @@ mod tests {
             .unwrap_err()
             .to_string()
             .contains("checkpoint 0 state mismatch"));
+    }
+
+    #[test]
+    fn observed_executor_retains_the_failing_actual_checkpoint() {
+        let data = sample_data();
+        let environment = ReplayEnvironment {
+            engine_version: "0.1.0-test",
+            seed: 42,
+            data: &data,
+        };
+        let initial = sample_save_state(environment.seed);
+        let recording = record_replay(
+            environment,
+            initial.clone(),
+            [
+                (ReplayActor::Engine, ReplayCommand::ToggleDualAi),
+                (
+                    ReplayActor::Engine,
+                    ReplayCommand::AdvanceTicks { count: 1 },
+                ),
+            ],
+        )
+        .unwrap();
+        let expected_actual = recording.manifest.checkpoints[1].clone();
+        let mut changed = recording.manifest;
+        changed.checkpoints[1].state_fingerprint = "v1:0000000000000000".into();
+        let mut observed = Vec::new();
+
+        let error = execute_replay_observed(environment, &changed, initial, |checkpoint| {
+            observed.push(checkpoint.clone());
+        })
+        .unwrap_err();
+
+        assert!(error.to_string().contains("checkpoint 1 state mismatch"));
+        assert_eq!(observed.len(), 2);
+        assert_eq!(observed[1], expected_actual);
     }
 
     #[test]

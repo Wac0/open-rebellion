@@ -3,6 +3,8 @@ mod audio;
 mod runtime_pack;
 #[cfg(target_arch = "wasm32")]
 mod web_accessibility;
+#[cfg(target_arch = "wasm32")]
+mod web_replay;
 
 use ::rand::Rng;
 use ::rand::SeedableRng;
@@ -569,6 +571,11 @@ async fn main() {
     };
     #[cfg(target_arch = "wasm32")]
     let gdata_path = PathBuf::from("data/base");
+
+    #[cfg(target_arch = "wasm32")]
+    if web_replay::requested() {
+        web_replay::run(&gdata_path).await;
+    }
 
     // ── Load game data ─────────────────────────────────────────────────────
     // Native: filesystem read via load_game_data()

@@ -230,12 +230,12 @@ the run as formally degenerate.
 ### F-011: Deterministic replay is not established
 
 - Severity: P0 for multiplayer; P1 for reproducible single-player acceptance
-- Status: partially remediated; F-011A, F-011B1, F-011B2, and F-011B3 pass
+- Status: partially remediated; F-011A and F-011B1 through F-011B4 pass
 - Evidence: replay format v1 now records and executes command streams with
-  per-command state checkpoints. Native fresh-process execution is stable, but
-  headless and interactive paths still consume randomness differently,
-  interactive seeds are wall-clock-derived, and native/WASM, automatic, and
-  tactical execution paths are not yet proven equivalent.
+  per-command state checkpoints. Exact-artifact native/WASM execution now
+  matches for the seed-42 fixture, but headless and interactive paths still
+  consume randomness differently, interactive seeds are wall-clock-derived,
+  and automatic and tactical execution paths are not yet proven equivalent.
 - Verified tranche F-011A: save format v9 persists a versioned canonical
   logical-state fingerprint, rejects mismatches, preserves native v8 saves as
   explicitly unverified, and stores lossless browser metadata. The seeded
@@ -269,6 +269,15 @@ the run as formally degenerate.
   final fingerprint `v1:f512773b607069ee`. All 518 workspace tests and the
   supported WASM compile gate pass. Evidence is retained in
   `evidence/2026-09-09-replay-execution.md`.
+- Verified tranche F-011B4: native and packaged browser WASM decode the same
+  13,482-byte replay artifact and independently reconstruct its 51-DAT seed-42
+  campaign. The initial fingerprint, all nine ordered checkpoints, tick-25
+  final fingerprint, and original artifact text match exactly. The automated
+  gate also proves invalid queries and missing packs fail without partial
+  state, while normal startup retains four requests and reaches the semantic
+  bitmap menu. Astra medium independently passed the gate with zero browser
+  errors. All 521 workspace tests pass. Evidence is retained in
+  `evidence/2026-09-09-replay-wasm-equivalence.md`.
 - Acceptance: repeated native runs and native-versus-WASM runs produce the same
   versioned state fingerprints for the same seed and command stream, including
   after save/load.
@@ -406,7 +415,7 @@ later work must not hide failures in an earlier invariant.
 
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
-| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add deterministic replay gates. Browser Save/Load/Delete, paths, a self-contained four-request package, F-011A fingerprints, the F-011B1 continuation envelope, the F-011B2 replay/data contract, and F-011B3 native execution are verified. Native GUI restart, persistence hardening, and cross-runtime equivalence remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
+| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add deterministic replay gates. Browser Save/Load/Delete, paths, a self-contained four-request package, F-011A fingerprints, the F-011B1 continuation envelope, the F-011B2/B3 replay pipeline, and F-011B4 native/WASM fixture equivalence are verified. Native GUI restart and persistence hardening remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
 | M1 — Simulation correctness | Prevent in-transit redispatch; model fleet position; merge arrivals; attach production correctly; impose stable ordering/RNG; aggregate system combat; enable Death Star production/fire; repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |

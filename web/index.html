@@ -165,6 +165,51 @@
             });
         }());
     </script>
+    <script>
+        (function registerReplayEquivalenceGate() {
+            "use strict";
+
+            const params = new URLSearchParams(window.location.search);
+            const values = params.getAll("replay-check");
+            const mode = values.length === 0
+                ? 0
+                : values.length === 1 && values[0] === "seed42-v1"
+                    ? 1
+                    : 2;
+
+            function register(imports) {
+                imports.env.open_rebellion_replay_mode = function () {
+                    return mode;
+                };
+                imports.env.open_rebellion_replay_emit = function (ptr, len) {
+                    try {
+                        const bytes = new Uint8Array(wasm_memory.buffer, ptr, len);
+                        const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+                        window.__openRebellionReplay = JSON.parse(text);
+                    } catch (error) {
+                        window.__openRebellionReplay = {
+                            schema_version: 1,
+                            fixture_id: "seed42-v1",
+                            platform: "javascript-bridge",
+                            status: "failed",
+                            failure_phase: "bridge",
+                            error: String(error),
+                        };
+                    }
+                    window.dispatchEvent(new CustomEvent(
+                        "open-rebellion-replay-complete",
+                        { detail: window.__openRebellionReplay },
+                    ));
+                };
+            }
+
+            miniquad_add_plugin({
+                register_plugin: register,
+                version: 1,
+                name: "open_rebellion_replay",
+            });
+        }());
+    </script>
     <script>load("open-rebellion.wasm");</script>
 </body>
 </html>

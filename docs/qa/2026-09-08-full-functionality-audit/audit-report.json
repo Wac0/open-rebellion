@@ -2,6 +2,7 @@
   "schema_version": 1,
   "reference_documents": {
     "main_menu": "agent_docs/main-menu-parity.md",
+    "deterministic_replay": "agent_docs/deterministic-replay.md",
     "victory_rules": "agent_docs/systems/victory.md",
     "original_game_flow": "docs/GAME-FLOW.md#21-victory--defeat"
   },
@@ -351,10 +352,12 @@
         "F-011B2 defines replay format v1 with strict command ordering, checkpoints, configuration identity, and canonical hashes for all 51 simulation DAT inputs",
         "F-011B3 records and executes format-v1 commands with fail-fast state checkpoints and save-v11 continuation",
         "five fresh native processes reproduced the same nine original-data checkpoints and final fingerprint v1:f512773b607069ee",
+        "F-011B4 executes the exact 13482-byte seed-42 artifact in native and browser WASM with nine identical checkpoints",
+        "Astra medium independently passed exact-artifact, fail-closed, and normal four-request browser gates with zero errors",
         "state-affecting manufacturing, movement, blockade, and AI tie iteration is now stable",
         "headless and app paths consume random values differently",
         "interactive seeds are wall-clock-derived",
-        "native-WASM, automatic-combat, and tactical checkpoint equivalence remain absent"
+        "automatic-combat, tactical, and interactive-app checkpoint equivalence remain absent"
       ],
       "verified_tranches": [
         {
@@ -555,10 +558,60 @@
             "repository_rustfmt": "preexisting_baseline_fail"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md"
+        },
+        {
+          "id": "F-011B4",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "artifact": {
+            "path": "crates/rebellion-data/tests/fixtures/replay_seed42_v1.json",
+            "bytes": 13482,
+            "sha256": "0e83c6d020fd80de5ac8991a5b777c373a009df0436193848cde93b492307d00",
+            "embedded_exactly_in_native_and_wasm": true
+          },
+          "equivalence": {
+            "seed": 42,
+            "systems": 200,
+            "data_inputs": 51,
+            "data_bytes": 50597,
+            "data_fingerprint": "5facb1c7ba0e81ad",
+            "initial_fingerprint": "v1:765c9318acb5cb50",
+            "checkpoints_compared": 9,
+            "final_tick": 25,
+            "final_fingerprint": "v1:f512773b607069ee",
+            "artifact_text_equal": true
+          },
+          "browser": {
+            "query": "replay-check=seed42-v1",
+            "success_requests": 4,
+            "normal_startup_requests": 4,
+            "normal_menu_active": true,
+            "invalid_query_failure_phase": "query",
+            "missing_pack_failure_phase": "runtime_pack_fetch",
+            "partial_state_on_failure": false,
+            "errors": 0
+          },
+          "automated": {
+            "focused_replay_tests_passed": 14,
+            "original_data_fixture_tests_passed": 2,
+            "workspace_tests_passed": 521,
+            "workspace_tests_ignored": 4,
+            "failures": 0,
+            "go_ui_extractor_tests": "pass",
+            "web_package": "pass_with_hash_manifest",
+            "strict_clippy": "preexisting_baseline_fail"
+          },
+          "build": {
+            "wasm_bytes": 4930910,
+            "wasm_sha256": "126e487eb472d3b51cc6c494d6944d87c762e96a95dd5c78e95bf691bda7545c",
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-wasm-equivalence.md"
         }
       ],
       "remaining": [
-        "prove native and WASM execution produce identical checkpoints",
         "extend deterministic ordering through five 5000-tick campaign seeds",
         "converge headless and interactive tick paths",
         "compare native, WASM, automatic, and tactical checkpoints",
@@ -1005,7 +1058,8 @@
         "add TROOPSD.DAT to WASM startup",
         "package runtime browser data and boot it in CI",
         "link public completion claims to evidence",
-        "add an informational two-run state fingerprint check"
+        "add an informational two-run state fingerprint check",
+        "execute one exact replay artifact in native and browser WASM"
       ],
       "exit": "Persistence works on native and WASM, a clean packaged site boots, and completion claims link to current evidence."
     },

@@ -372,7 +372,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [x] Link README parity claims to current acceptance evidence.
 - [x] Add F-011B2 replay format v1: strict JSON, typed `{tick, sequence, actor}` commands, checkpoint positions, configuration identity, and canonical per-file/aggregate hashes for all 51 simulation DATs ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md)).
 - [x] Add the F-011B3 recorder/executor with fail-fast checkpoints, save-v11 continuation, stable state-affecting iteration, and a five-process native original-data golden ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md)).
-- [ ] Execute one F-011B3 artifact in native and WASM and prove checkpoint equivalence, including across save/load.
+- [x] Execute one exact F-011B4 artifact in native and WASM. All nine checkpoints, initial/final fingerprints, and artifact text match; Astra medium passed success, fail-closed, and normal four-request startup gates ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-wasm-equivalence.md)).
 
 ### M1: Simulation Correctness and Determinism — 2–3 weeks
 

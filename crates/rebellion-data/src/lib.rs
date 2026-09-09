@@ -26,6 +26,7 @@ use rebellion_core::world::*;
 pub mod integrator;
 pub mod mods;
 pub mod replay;
+pub mod replay_fixture;
 pub mod save;
 pub mod seeds;
 pub mod simulation;

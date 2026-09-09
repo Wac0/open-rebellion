@@ -1,0 +1,611 @@
+{
+  "format": "open-rebellion-replay",
+  "format_version": 1,
+  "engine_version": "0.1.0",
+  "seed": 42,
+  "rng": "xoshiro256++/0.6",
+  "rolls_per_tick": 1024,
+  "data": {
+    "format_version": 1,
+    "total_bytes": 50597,
+    "aggregate_fingerprint": {
+      "algorithm": "fnv1a64",
+      "version": 1,
+      "value": "5facb1c7ba0e81ad"
+    },
+    "inputs": [
+      {
+        "name": "ABDCMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "c5ce1f6b32e025be"
+        }
+      },
+      {
+        "name": "ABODESD.DAT",
+        "byte_length": 136,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "82d079a003913c9d"
+        }
+      },
+      {
+        "name": "ALLFACSD.DAT",
+        "byte_length": 68,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "12640e1df21a21f3"
+        }
+      },
+      {
+        "name": "ASSNMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "6698bca962a17670"
+        }
+      },
+      {
+        "name": "BASICSD.DAT",
+        "byte_length": 400,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "7a3da49040db9fcd"
+        }
+      },
+      {
+        "name": "CAPSHPSD.DAT",
+        "byte_length": 6016,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "1b0c1f8dfc650114"
+        }
+      },
+      {
+        "name": "CMUNAFTB.DAT",
+        "byte_length": 128,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "b0bce9a163b8fb4b"
+        }
+      },
+      {
+        "name": "CMUNALTB.DAT",
+        "byte_length": 512,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "7c4e6de9b51afb18"
+        }
+      },
+      {
+        "name": "CMUNCRTB.DAT",
+        "byte_length": 260,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "deafb826832f0a69"
+        }
+      },
+      {
+        "name": "CMUNEFTB.DAT",
+        "byte_length": 176,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "d63ebbd8519d4d89"
+        }
+      },
+      {
+        "name": "CMUNEMTB.DAT",
+        "byte_length": 584,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "9109db2ed2e87994"
+        }
+      },
+      {
+        "name": "CMUNHQTB.DAT",
+        "byte_length": 176,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "2529af95fbb239e3"
+        }
+      },
+      {
+        "name": "CMUNYVTB.DAT",
+        "byte_length": 116,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "af7c529310564877"
+        }
+      },
+      {
+        "name": "CSCRHTTB.DAT",
+        "byte_length": 105,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "19c4e8ceaf390932"
+        }
+      },
+      {
+        "name": "DEFFACSD.DAT",
+        "byte_length": 376,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "7517c9baec51c74f"
+        }
+      },
+      {
+        "name": "DIPLMSTB.DAT",
+        "byte_length": 185,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "d72fb773a404d81f"
+        }
+      },
+      {
+        "name": "DSSBMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "c1483ff4e52cf208"
+        }
+      },
+      {
+        "name": "ESCAPETB.DAT",
+        "byte_length": 169,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "d4ed4635c4407e00"
+        }
+      },
+      {
+        "name": "ESPIMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "a9a7d03392d78899"
+        }
+      },
+      {
+        "name": "FACLCRTB.DAT",
+        "byte_length": 80,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "7faddd629de7e7ec"
+        }
+      },
+      {
+        "name": "FACLHQTB.DAT",
+        "byte_length": 164,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "5abfb0a84af2286a"
+        }
+      },
+      {
+        "name": "FDECOYTB.DAT",
+        "byte_length": 249,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "cee2a3759f7a5c56"
+        }
+      },
+      {
+        "name": "FIGHTSD.DAT",
+        "byte_length": 1360,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "b342f9f026a77138"
+        }
+      },
+      {
+        "name": "FLEETSD.DAT",
+        "byte_length": 64,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "c36f22b3cf0eac14"
+        }
+      },
+      {
+        "name": "FOILTB.DAT",
+        "byte_length": 249,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "96f0267c2b0dd965"
+        }
+      },
+      {
+        "name": "GNPRTB.DAT",
+        "byte_length": 9406,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "84f1db4c9cd13e6b"
+        }
+      },
+      {
+        "name": "INCTMSTB.DAT",
+        "byte_length": 233,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "2cc59f01eee8187f"
+        }
+      },
+      {
+        "name": "INFORMTB.DAT",
+        "byte_length": 153,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "da890881fc454281"
+        }
+      },
+      {
+        "name": "MANFACSD.DAT",
+        "byte_length": 352,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "32134797fa92502c"
+        }
+      },
+      {
+        "name": "MANMGRSD.DAT",
+        "byte_length": 88,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "263cb61c2a9a6a6c"
+        }
+      },
+      {
+        "name": "MISSNSD.DAT",
+        "byte_length": 2816,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "fe5a6fba5fe8c99b"
+        }
+      },
+      {
+        "name": "MJCHARSD.DAT",
+        "byte_length": 904,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "a93a46175dc49353"
+        }
+      },
+      {
+        "name": "MNCHARSD.DAT",
+        "byte_length": 8008,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "015629b06070228f"
+        }
+      },
+      {
+        "name": "PROFACSD.DAT",
+        "byte_length": 128,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "e8f6ce470e18bbe3"
+        }
+      },
+      {
+        "name": "RCRTMSTB.DAT",
+        "byte_length": 201,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "2b2463a8dd458fd6"
+        }
+      },
+      {
+        "name": "RESCMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "b981a1dff610fc51"
+        }
+      },
+      {
+        "name": "RESRCTB.DAT",
+        "byte_length": 89,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "08f38a2776337018"
+        }
+      },
+      {
+        "name": "RLEVADTB.DAT",
+        "byte_length": 249,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "6bb59e0b20b0758c"
+        }
+      },
+      {
+        "name": "SBTGMSTB.DAT",
+        "byte_length": 217,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "aad169d36a5bbb00"
+        }
+      },
+      {
+        "name": "SDPRTB.DAT",
+        "byte_length": 2691,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "8e7f19cbbb1aa027"
+        }
+      },
+      {
+        "name": "SECTORSD.DAT",
+        "byte_length": 736,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "29dced0913f23dac"
+        }
+      },
+      {
+        "name": "SPECFCSD.DAT",
+        "byte_length": 1060,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "ed3c1734ccfea848"
+        }
+      },
+      {
+        "name": "SUBDMSTB.DAT",
+        "byte_length": 233,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "5bf423f4d8fed91d"
+        }
+      },
+      {
+        "name": "SYFCCRTB.DAT",
+        "byte_length": 154,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "bc9ccae14ee4695e"
+        }
+      },
+      {
+        "name": "SYFCRMTB.DAT",
+        "byte_length": 138,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "759a77bed965f39f"
+        }
+      },
+      {
+        "name": "SYSTEMSD.DAT",
+        "byte_length": 8816,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "459142e1da7380f8"
+        }
+      },
+      {
+        "name": "TDECOYTB.DAT",
+        "byte_length": 249,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "27cda91ad0dfaf9c"
+        }
+      },
+      {
+        "name": "TROOPSD.DAT",
+        "byte_length": 696,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "5d47bad927d44773"
+        }
+      },
+      {
+        "name": "UNIQUESD.DAT",
+        "byte_length": 160,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "b0eb0255672c2567"
+        }
+      },
+      {
+        "name": "UPRIS1TB.DAT",
+        "byte_length": 73,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "425e01a9069d2b24"
+        }
+      },
+      {
+        "name": "UPRIS2TB.DAT",
+        "byte_length": 89,
+        "fingerprint": {
+          "algorithm": "fnv1a64",
+          "version": 1,
+          "value": "482e3e41981f4ff4"
+        }
+      }
+    ]
+  },
+  "config_fingerprint": {
+    "algorithm": "fnv1a64",
+    "version": 1,
+    "value": "38459aaae1a4a43a"
+  },
+  "initial_state_fingerprint": "v1:765c9318acb5cb50",
+  "commands": [
+    {
+      "tick": 0,
+      "sequence": 0,
+      "actor": "alliance",
+      "command": {
+        "type": "set_speed",
+        "speed": "Faster"
+      }
+    },
+    {
+      "tick": 0,
+      "sequence": 1,
+      "actor": "engine",
+      "command": {
+        "type": "toggle_dual_ai"
+      }
+    },
+    {
+      "tick": 0,
+      "sequence": 2,
+      "actor": "engine",
+      "command": {
+        "type": "advance_ticks",
+        "count": 5
+      }
+    },
+    {
+      "tick": 5,
+      "sequence": 3,
+      "actor": "engine",
+      "command": {
+        "type": "advance_ticks",
+        "count": 5
+      }
+    },
+    {
+      "tick": 10,
+      "sequence": 4,
+      "actor": "engine",
+      "command": {
+        "type": "advance_ticks",
+        "count": 5
+      }
+    },
+    {
+      "tick": 15,
+      "sequence": 5,
+      "actor": "engine",
+      "command": {
+        "type": "advance_ticks",
+        "count": 5
+      }
+    },
+    {
+      "tick": 20,
+      "sequence": 6,
+      "actor": "engine",
+      "command": {
+        "type": "advance_ticks",
+        "count": 5
+      }
+    },
+    {
+      "tick": 25,
+      "sequence": 7,
+      "actor": "engine",
+      "command": {
+        "type": "reveal_all_systems"
+      }
+    },
+    {
+      "tick": 25,
+      "sequence": 8,
+      "actor": "engine",
+      "command": {
+        "type": "force_victory_check"
+      }
+    }
+  ],
+  "checkpoints": [
+    {
+      "tick": 0,
+      "command_count": 1,
+      "state_fingerprint": "v1:48f9a97ca6dec269"
+    },
+    {
+      "tick": 0,
+      "command_count": 2,
+      "state_fingerprint": "v1:357708f65600307b"
+    },
+    {
+      "tick": 5,
+      "command_count": 3,
+      "state_fingerprint": "v1:c3782c7f2ba38f9d"
+    },
+    {
+      "tick": 10,
+      "command_count": 4,
+      "state_fingerprint": "v1:772525cf399636af"
+    },
+    {
+      "tick": 15,
+      "command_count": 5,
+      "state_fingerprint": "v1:f0131ad2a2d7a2c1"
+    },
+    {
+      "tick": 20,
+      "command_count": 6,
+      "state_fingerprint": "v1:54316ab6da548898"
+    },
+    {
+      "tick": 25,
+      "command_count": 7,
+      "state_fingerprint": "v1:bc68cc7ac27bd974"
+    },
+    {
+      "tick": 25,
+      "command_count": 8,
+      "state_fingerprint": "v1:f512773b607069ee"
+    },
+    {
+      "tick": 25,
+      "command_count": 9,
+      "state_fingerprint": "v1:f512773b607069ee"
+    }
+  ]
+}
