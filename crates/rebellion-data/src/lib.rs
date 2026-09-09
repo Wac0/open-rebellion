@@ -16,9 +16,9 @@ use dat_dumper::types::minor_characters::MinorCharactersFile;
 use dat_dumper::types::sectors::SectorsFile;
 use dat_dumper::types::side_params::SideParamsFile;
 use dat_dumper::types::systems::SystemsFile;
-use dat_dumper::types::troops::TroopsFile;
 #[cfg(not(target_arch = "wasm32"))]
 use dat_dumper::types::textstra;
+use dat_dumper::types::troops::TroopsFile;
 use rebellion_core::dat::{ExplorationStatus, SectorGroup};
 use rebellion_core::ids::*;
 use rebellion_core::world::*;
@@ -28,6 +28,15 @@ pub mod mods;
 pub mod save;
 pub mod seeds;
 pub mod simulation;
+
+/// Load selected named `WAVE` resources from an original Win32 DLL.
+#[cfg(not(target_arch = "wasm32"))]
+pub fn load_wave_resources(
+    dll_path: &Path,
+    resource_ids: &[u32],
+) -> anyhow::Result<HashMap<u32, Vec<u8>>> {
+    dat_dumper::types::wave_resources::load_waves(dll_path, resource_ids)
+}
 
 /// Load all game data from a GData directory into a GameWorld.
 ///
@@ -98,7 +107,8 @@ pub fn load_game_data_with_options(
     let sectors_file: SectorsFile = read_dat_file(&gdata_path.join("SECTORSD.DAT"))?;
 
     // sector dat id → SectorKey (populated after inserting into the arena)
-    let mut sector_key_map: HashMap<u32, SectorKey> = HashMap::with_capacity(sectors_file.sectors.len());
+    let mut sector_key_map: HashMap<u32, SectorKey> =
+        HashMap::with_capacity(sectors_file.sectors.len());
 
     for dat in &sectors_file.sectors {
         let group = match dat.group {
@@ -123,15 +133,16 @@ pub fn load_game_data_with_options(
     let systems_file: SystemsFile = read_dat_file(&gdata_path.join("SYSTEMSD.DAT"))?;
 
     // system dat id → SystemKey (stored for callers that need cross-referencing later)
-    let mut system_key_map: HashMap<u32, SystemKey> = HashMap::with_capacity(systems_file.systems.len());
+    let mut system_key_map: HashMap<u32, SystemKey> =
+        HashMap::with_capacity(systems_file.systems.len());
 
     for dat in &systems_file.systems {
-        let sector_key = *sector_key_map
-            .get(&dat.sector_id)
-            .with_context(|| format!(
+        let sector_key = *sector_key_map.get(&dat.sector_id).with_context(|| {
+            format!(
                 "system {} references unknown sector_id {}",
                 dat.id, dat.sector_id
-            ))?;
+            )
+        })?;
 
         // family_id 0x90 (144) = Explored, 0x92 (146) = Unexplored (per SYSTEMSD.DAT format).
         let exploration_status = if dat.family_id == 0x90 {
@@ -284,42 +295,50 @@ pub fn load_game_data_with_options(
     let gnprtb_path = gdata_path.join("GNPRTB.DAT");
     if file_available(&gnprtb_path) {
         let gnprtb_file: GeneralParamsFile = read_dat_file(&gnprtb_path)?;
-        let entries = gnprtb_file.entries.into_iter().map(|e| GnprtbEntry {
-            parameter_id: e.parameter_id,
-            development: e.development,
-            alliance_sp_easy: e.alliance_sp_easy,
-            alliance_sp_medium: e.alliance_sp_medium,
-            alliance_sp_hard: e.alliance_sp_hard,
-            empire_sp_easy: e.empire_sp_easy,
-            empire_sp_medium: e.empire_sp_medium,
-            empire_sp_hard: e.empire_sp_hard,
-            multiplayer: e.multiplayer,
-        }).collect();
+        let entries = gnprtb_file
+            .entries
+            .into_iter()
+            .map(|e| GnprtbEntry {
+                parameter_id: e.parameter_id,
+                development: e.development,
+                alliance_sp_easy: e.alliance_sp_easy,
+                alliance_sp_medium: e.alliance_sp_medium,
+                alliance_sp_hard: e.alliance_sp_hard,
+                empire_sp_easy: e.empire_sp_easy,
+                empire_sp_medium: e.empire_sp_medium,
+                empire_sp_hard: e.empire_sp_hard,
+                multiplayer: e.multiplayer,
+            })
+            .collect();
         world.gnprtb = GnprtbParams::new(entries);
     }
 
     let sdprtb_path = gdata_path.join("SDPRTB.DAT");
     if file_available(&sdprtb_path) {
         let sdprtb_file: SideParamsFile = read_dat_file(&sdprtb_path)?;
-        let entries = sdprtb_file.entries.into_iter().map(|e| SdprtbEntry {
-            parameter_id: e.parameter_id,
-            dev_alliance: e.dev_alliance,
-            dev_empire: e.dev_empire,
-            alliance_sp_easy_alliance: e.alliance_sp_easy_alliance,
-            alliance_sp_easy_empire: e.alliance_sp_easy_empire,
-            alliance_sp_medium_alliance: e.alliance_sp_medium_alliance,
-            alliance_sp_medium_empire: e.alliance_sp_medium_empire,
-            alliance_sp_hard_alliance: e.alliance_sp_hard_alliance,
-            alliance_sp_hard_empire: e.alliance_sp_hard_empire,
-            empire_sp_easy_alliance: e.empire_sp_easy_alliance,
-            empire_sp_easy_empire: e.empire_sp_easy_empire,
-            empire_sp_medium_alliance: e.empire_sp_medium_alliance,
-            empire_sp_medium_empire: e.empire_sp_medium_empire,
-            empire_sp_hard_alliance: e.empire_sp_hard_alliance,
-            empire_sp_hard_empire: e.empire_sp_hard_empire,
-            multiplayer_alliance: e.multiplayer_alliance,
-            multiplayer_empire: e.multiplayer_empire,
-        }).collect();
+        let entries = sdprtb_file
+            .entries
+            .into_iter()
+            .map(|e| SdprtbEntry {
+                parameter_id: e.parameter_id,
+                dev_alliance: e.dev_alliance,
+                dev_empire: e.dev_empire,
+                alliance_sp_easy_alliance: e.alliance_sp_easy_alliance,
+                alliance_sp_easy_empire: e.alliance_sp_easy_empire,
+                alliance_sp_medium_alliance: e.alliance_sp_medium_alliance,
+                alliance_sp_medium_empire: e.alliance_sp_medium_empire,
+                alliance_sp_hard_alliance: e.alliance_sp_hard_alliance,
+                alliance_sp_hard_empire: e.alliance_sp_hard_empire,
+                empire_sp_easy_alliance: e.empire_sp_easy_alliance,
+                empire_sp_easy_empire: e.empire_sp_easy_empire,
+                empire_sp_medium_alliance: e.empire_sp_medium_alliance,
+                empire_sp_medium_empire: e.empire_sp_medium_empire,
+                empire_sp_hard_alliance: e.empire_sp_hard_alliance,
+                empire_sp_hard_empire: e.empire_sp_hard_empire,
+                multiplayer_alliance: e.multiplayer_alliance,
+                multiplayer_empire: e.multiplayer_empire,
+            })
+            .collect();
         world.sdprtb = SdprtbParams::new(entries);
     }
 
@@ -334,7 +353,9 @@ pub fn load_game_data_with_options(
     // assigned control by the seed pipeline (special systems, bucket assignment)
     // are left untouched.
     {
-        let fleet_factions: Vec<(SystemKey, bool)> = world.fleets.values()
+        let fleet_factions: Vec<(SystemKey, bool)> = world
+            .fleets
+            .values()
             .map(|f| (f.location, f.is_alliance))
             .collect();
 
@@ -375,10 +396,22 @@ pub fn load_game_data_with_options(
             let mut has_alliance = false;
             let mut has_empire = false;
             for &(fk, is_a) in &fleet_factions {
-                if fk == sys_key { if is_a { has_alliance = true; } else { has_empire = true; } }
+                if fk == sys_key {
+                    if is_a {
+                        has_alliance = true;
+                    } else {
+                        has_empire = true;
+                    }
+                }
             }
             for &(fk, is_a) in &asset_factions {
-                if fk == sys_key { if is_a { has_alliance = true; } else { has_empire = true; } }
+                if fk == sys_key {
+                    if is_a {
+                        has_alliance = true;
+                    } else {
+                        has_empire = true;
+                    }
+                }
             }
             if has_alliance && !has_empire {
                 sys.control = ControlKind::Controlled(rebellion_core::dat::Faction::Alliance);
@@ -435,20 +468,39 @@ pub fn load_game_data_with_options(
     // ── 10. Mission probability tables (*MSTB.DAT and *TB.DAT) ──────────────
     // All 19 IntTableFile tables. Missing files are silently skipped.
     const MSTB_FILES: &[&str] = &[
-        "DIPLMSTB.DAT", "ESPIMSTB.DAT", "ASSNMSTB.DAT", "INCTMSTB.DAT",
-        "DSSBMSTB.DAT", "ABDCMSTB.DAT", "RCRTMSTB.DAT", "RESCMSTB.DAT",
-        "SBTGMSTB.DAT", "SUBDMSTB.DAT", "ESCAPETB.DAT", "FDECOYTB.DAT",
-        "FOILTB.DAT",   "INFORMTB.DAT", "CSCRHTTB.DAT", "UPRIS1TB.DAT",
-        "UPRIS2TB.DAT", "RLEVADTB.DAT", "RESRCTB.DAT",  "TDECOYTB.DAT",
+        "DIPLMSTB.DAT",
+        "ESPIMSTB.DAT",
+        "ASSNMSTB.DAT",
+        "INCTMSTB.DAT",
+        "DSSBMSTB.DAT",
+        "ABDCMSTB.DAT",
+        "RCRTMSTB.DAT",
+        "RESCMSTB.DAT",
+        "SBTGMSTB.DAT",
+        "SUBDMSTB.DAT",
+        "ESCAPETB.DAT",
+        "FDECOYTB.DAT",
+        "FOILTB.DAT",
+        "INFORMTB.DAT",
+        "CSCRHTTB.DAT",
+        "UPRIS1TB.DAT",
+        "UPRIS2TB.DAT",
+        "RLEVADTB.DAT",
+        "RESRCTB.DAT",
+        "TDECOYTB.DAT",
     ];
     for filename in MSTB_FILES {
         let path = gdata_path.join(filename);
         if file_available(&path) {
             let table_file: IntTableFile = read_dat_file(&path)?;
-            let entries = table_file.entries.into_iter().map(|e| MstbEntry {
-                threshold: e.threshold,
-                value: e.value,
-            }).collect();
+            let entries = table_file
+                .entries
+                .into_iter()
+                .map(|e| MstbEntry {
+                    threshold: e.threshold,
+                    value: e.value,
+                })
+                .collect();
             // Key = file stem without extension, uppercase (e.g. "DIPLMSTB")
             let stem = filename.trim_end_matches(".DAT").to_string();
             world.mission_tables.insert(stem, MstbTable::new(entries));
@@ -458,7 +510,11 @@ pub fn load_game_data_with_options(
     // ── 11. Apply enabled mods ──────────────────────────────────────────────
     #[cfg(not(target_arch = "wasm32"))]
     {
-        let mods_dir = gdata_path.parent().and_then(|p| p.parent()).unwrap_or(Path::new(".")).join("mods");
+        let mods_dir = gdata_path
+            .parent()
+            .and_then(|p| p.parent())
+            .unwrap_or(Path::new("."))
+            .join("mods");
         if mods_dir.exists() {
             let runtime = crate::mods::ModRuntime::discover(&mods_dir);
             let errors = runtime.apply_enabled(&mut world);
@@ -479,7 +535,11 @@ pub fn load_game_data_with_options(
 /// directory does not exist (common for first-time players).
 #[cfg(not(target_arch = "wasm32"))]
 pub fn init_mod_runtime(gdata_path: &Path) -> Option<crate::mods::ModRuntime> {
-    let mods_dir = gdata_path.parent().and_then(|p| p.parent()).unwrap_or(Path::new(".")).join("mods");
+    let mods_dir = gdata_path
+        .parent()
+        .and_then(|p| p.parent())
+        .unwrap_or(Path::new("."))
+        .join("mods");
     if mods_dir.exists() {
         Some(crate::mods::ModRuntime::discover(&mods_dir))
     } else {
@@ -495,20 +555,51 @@ fn convert_character(dat: &CharacterEntry, is_major: bool, name: String) -> Char
         is_alliance: dat.is_alliance != 0,
         is_empire: dat.is_empire != 0,
         is_major,
-        diplomacy: SkillPair { base: dat.diplomacy_base, variance: dat.diplomacy_variance },
-        espionage: SkillPair { base: dat.espionage_base, variance: dat.espionage_variance },
-        ship_design: SkillPair { base: dat.ship_design_base, variance: dat.ship_design_variance },
-        troop_training: SkillPair { base: dat.troop_training_base, variance: dat.troop_training_variance },
-        facility_design: SkillPair { base: dat.facility_design_base, variance: dat.facility_design_variance },
-        combat: SkillPair { base: dat.combat_base, variance: dat.combat_variance },
-        leadership: SkillPair { base: dat.leadership_base, variance: dat.leadership_variance },
-        loyalty: SkillPair { base: dat.loyalty_base, variance: dat.loyalty_variance },
+        diplomacy: SkillPair {
+            base: dat.diplomacy_base,
+            variance: dat.diplomacy_variance,
+        },
+        espionage: SkillPair {
+            base: dat.espionage_base,
+            variance: dat.espionage_variance,
+        },
+        ship_design: SkillPair {
+            base: dat.ship_design_base,
+            variance: dat.ship_design_variance,
+        },
+        troop_training: SkillPair {
+            base: dat.troop_training_base,
+            variance: dat.troop_training_variance,
+        },
+        facility_design: SkillPair {
+            base: dat.facility_design_base,
+            variance: dat.facility_design_variance,
+        },
+        combat: SkillPair {
+            base: dat.combat_base,
+            variance: dat.combat_variance,
+        },
+        leadership: SkillPair {
+            base: dat.leadership_base,
+            variance: dat.leadership_variance,
+        },
+        loyalty: SkillPair {
+            base: dat.loyalty_base,
+            variance: dat.loyalty_variance,
+        },
         jedi_probability: dat.jedi_probability,
-        jedi_level: SkillPair { base: dat.jedi_level_base, variance: dat.jedi_level_variance },
+        jedi_level: SkillPair {
+            base: dat.jedi_level_base,
+            variance: dat.jedi_level_variance,
+        },
         can_be_admiral: dat.can_be_admiral != 0,
         can_be_commander: dat.can_be_commander != 0,
         can_be_general: dat.can_be_general != 0,
-        force_tier: if dat.is_known_jedi != 0 { rebellion_core::world::ForceTier::Aware } else { rebellion_core::world::ForceTier::None },
+        force_tier: if dat.is_known_jedi != 0 {
+            rebellion_core::world::ForceTier::Aware
+        } else {
+            rebellion_core::world::ForceTier::None
+        },
         force_experience: 0,
         is_discovered_jedi: false,
         is_unable_to_betray: dat.is_unable_to_betray != 0,
@@ -532,20 +623,22 @@ fn convert_character(dat: &CharacterEntry, is_major: bool, name: String) -> Char
 /// Read and parse a single .DAT file into type `T` from the filesystem.
 #[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn read_dat_file<T: DatRecord>(path: &Path) -> anyhow::Result<T> {
-    let data = std::fs::read(path)
-        .with_context(|| format!("reading {}", path.display()))?;
+    let data = std::fs::read(path).with_context(|| format!("reading {}", path.display()))?;
     parse_dat_bytes::<T>(&data, &path.display().to_string())
 }
 
 /// WASM variant: reads from the pre-loaded file cache set by `set_file_cache`.
 #[cfg(target_arch = "wasm32")]
 pub(crate) fn read_dat_file<T: DatRecord>(path: &Path) -> anyhow::Result<T> {
-    let filename = path.file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("");
+    let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
     let cache = WASM_FILE_CACHE.lock().unwrap();
-    let data = cache.get(filename)
-        .with_context(|| format!("file not in WASM cache: {} (have: {:?})", filename, cache.keys().collect::<Vec<_>>()))?;
+    let data = cache.get(filename).with_context(|| {
+        format!(
+            "file not in WASM cache: {} (have: {:?})",
+            filename,
+            cache.keys().collect::<Vec<_>>()
+        )
+    })?;
     parse_dat_bytes::<T>(data, filename)
 }
 
@@ -563,17 +656,21 @@ pub fn set_string_table(strings: std::collections::HashMap<u16, String>) {
 }
 
 #[cfg(target_arch = "wasm32")]
-static WASM_FILE_CACHE: std::sync::LazyLock<std::sync::Mutex<std::collections::HashMap<String, Vec<u8>>>> =
-    std::sync::LazyLock::new(|| std::sync::Mutex::new(std::collections::HashMap::new()));
+static WASM_FILE_CACHE: std::sync::LazyLock<
+    std::sync::Mutex<std::collections::HashMap<String, Vec<u8>>>,
+> = std::sync::LazyLock::new(|| std::sync::Mutex::new(std::collections::HashMap::new()));
 
 #[cfg(target_arch = "wasm32")]
-static WASM_STRING_TABLE: std::sync::LazyLock<std::sync::Mutex<std::collections::HashMap<u16, String>>> =
-    std::sync::LazyLock::new(|| std::sync::Mutex::new(std::collections::HashMap::new()));
+static WASM_STRING_TABLE: std::sync::LazyLock<
+    std::sync::Mutex<std::collections::HashMap<u16, String>>,
+> = std::sync::LazyLock::new(|| std::sync::Mutex::new(std::collections::HashMap::new()));
 
 /// Check if a file exists. On native: filesystem. On WASM: checks the file cache.
 pub(crate) fn file_available(path: &Path) -> bool {
     #[cfg(not(target_arch = "wasm32"))]
-    { path.exists() }
+    {
+        path.exists()
+    }
     #[cfg(target_arch = "wasm32")]
     {
         let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");

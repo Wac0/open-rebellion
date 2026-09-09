@@ -11,6 +11,7 @@ use egui_macroquad::egui::{
 use rebellion_core::dat::GalaxySize;
 use rebellion_core::missions::MissionFaction;
 
+use crate::audio::SfxKind;
 use crate::bmp_cache::{resources, BmpCache, DllSource};
 use crate::panels::game_setup::Difficulty;
 
@@ -129,6 +130,8 @@ pub struct MainMenuState {
     pub headquarters_only: bool,
     hovered: Option<MainMenuControl>,
     hover_started_at: f64,
+    keyboard_focus: Option<MainMenuControl>,
+    pending_sfx: Option<SfxKind>,
 }
 
 impl Default for MainMenuState {
@@ -139,7 +142,16 @@ impl Default for MainMenuState {
             headquarters_only: false,
             hovered: None,
             hover_started_at: 0.0,
+            keyboard_focus: None,
+            pending_sfx: None,
         }
+    }
+}
+
+impl MainMenuState {
+    /// Take the sound assigned by the original COMMON.DLL control constructor.
+    pub fn take_sfx(&mut self) -> Option<SfxKind> {
+        self.pending_sfx.take()
     }
 }
 
@@ -362,6 +374,35 @@ fn activate(control: MainMenuControl, state: &mut MainMenuState) -> Option<MainM
     None
 }
 
+fn sfx_for(control: MainMenuControl) -> SfxKind {
+    match control {
+        MainMenuControl::GalaxyLever
+        | MainMenuControl::SmallGalaxy
+        | MainMenuControl::MediumGalaxy
+        | MainMenuControl::LargeGalaxy => SfxKind::MenuGalaxySize,
+        MainMenuControl::LoadOptions => SfxKind::MenuLoadOptions,
+        MainMenuControl::Quit => SfxKind::MenuQuit,
+        _ => SfxKind::MenuSelect,
+    }
+}
+
+fn adjacent_control(current: Option<MainMenuControl>, backwards: bool) -> MainMenuControl {
+    let len = CONTROL_RECTS.len();
+    let index = current
+        .and_then(|focused| {
+            CONTROL_RECTS
+                .iter()
+                .position(|(control, _)| *control == focused)
+        })
+        .unwrap_or(if backwards { 0 } else { len - 1 });
+    let next = if backwards {
+        (index + len - 1) % len
+    } else {
+        (index + 1) % len
+    };
+    CONTROL_RECTS[next].0
+}
+
 /// Draw the assembled cockpit and return an action when a control activates.
 pub fn draw_main_menu(
     ctx: &egui::Context,
@@ -374,6 +415,26 @@ pub fn draw_main_menu(
         .show(ctx, |ui| {
             let canvas = main_menu_canvas_rect(ui.max_rect());
             let now = ctx.input(|input| input.time);
+            // egui owns Tab/Shift+Tab traversal for these focusable controls.
+            // Handling Tab here as well advances twice in the browser.
+            let focus_direction = ui.input(|input| {
+                if input.key_pressed(egui::Key::ArrowLeft)
+                    || input.key_pressed(egui::Key::ArrowUp)
+                {
+                    Some(true)
+                } else if input.key_pressed(egui::Key::ArrowRight)
+                    || input.key_pressed(egui::Key::ArrowDown)
+                {
+                    Some(false)
+                } else {
+                    None
+                }
+            });
+            if let Some(backwards) = focus_direction {
+                let focused = adjacent_control(state.keyboard_focus, backwards);
+                state.keyboard_focus = Some(focused);
+                ui.memory_mut(|memory| memory.request_focus(ui.id().with(focused as u8)));
+            }
             let hovered = ctx
                 .input(|input| input.pointer.hover_pos())
                 .and_then(|pointer| hit_test(canvas, pointer));
@@ -419,6 +480,10 @@ pub fn draw_main_menu(
                         input.key_pressed(egui::Key::Enter) || input.key_pressed(egui::Key::Space)
                     });
 
+                if response.has_focus() {
+                    state.keyboard_focus = Some(*control);
+                }
+
                 if draw_control {
                     let resource_id = texture_for(
                         *control,
@@ -442,6 +507,7 @@ pub fn draw_main_menu(
                 let exact_pointer_activation =
                     response.clicked() && state.hovered == Some(*control);
                 if exact_pointer_activation || keyboard_activation {
+                    state.pending_sfx = Some(sfx_for(*control));
                     action = activate(*control, state);
                 }
             }
@@ -555,5 +621,41 @@ mod tests {
             11031
         );
         assert_eq!(texture_for(MainMenuControl::Quit, &state, true, 1.0), 11196);
+    }
+
+    #[test]
+    fn keyboard_focus_wraps_through_every_original_control() {
+        assert_eq!(adjacent_control(None, false), MainMenuControl::Easy);
+        assert_eq!(
+            adjacent_control(Some(MainMenuControl::Easy), true),
+            MainMenuControl::Quit
+        );
+        assert_eq!(
+            adjacent_control(Some(MainMenuControl::Quit), false),
+            MainMenuControl::Easy
+        );
+        assert_eq!(
+            adjacent_control(Some(MainMenuControl::Credits), false),
+            MainMenuControl::Multiplayer
+        );
+    }
+
+    #[test]
+    fn sound_assignments_match_common_dll_constructor() {
+        assert_eq!(
+            sfx_for(MainMenuControl::GalaxyLever),
+            SfxKind::MenuGalaxySize
+        );
+        assert_eq!(
+            sfx_for(MainMenuControl::SmallGalaxy),
+            SfxKind::MenuGalaxySize
+        );
+        assert_eq!(
+            sfx_for(MainMenuControl::LoadOptions),
+            SfxKind::MenuLoadOptions
+        );
+        assert_eq!(sfx_for(MainMenuControl::Quit), SfxKind::MenuQuit);
+        assert_eq!(sfx_for(MainMenuControl::Credits), SfxKind::MenuSelect);
+        assert_eq!(sfx_for(MainMenuControl::Alliance), SfxKind::MenuSelect);
     }
 }

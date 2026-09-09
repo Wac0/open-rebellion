@@ -1,0 +1,461 @@
+{
+  "candidate": "Open Rebellion F-016C corrected audio",
+  "scope": "Browser-artifact acceptance only; no native acceptance",
+  "url": "http://127.0.0.1:8770/",
+  "viewport": [
+    640,
+    480
+  ],
+  "repository_source_read": false,
+  "repository_modified": false,
+  "committed": false,
+  "safe_to_commit": false,
+  "assertions": [
+    {
+      "gate": 1,
+      "assertion": "cold_clear_viewport",
+      "status": "pass",
+      "evidence": "Fresh isolated Chromium context; localStorage.clear before navigation; innerWidth=640 innerHeight=480; screenshots 640x480; no reloads."
+    },
+    {
+      "gate": 1,
+      "assertion": "four_successful_GETs",
+      "status": "pass",
+      "evidence": [
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/gl.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/data/runtime.orpk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "gate": 1,
+      "assertion": "zero_request_failures",
+      "status": "pass",
+      "evidence": "0 failed requests; 0 HTTP errors"
+    },
+    {
+      "gate": 1,
+      "assertion": "cold_runtime_counts",
+      "status": "fail",
+      "evidence": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=5 bytes=29096058; required game_files=52"
+    },
+    {
+      "gate": 1,
+      "assertion": "cockpit_apertures_populated",
+      "status": "pass",
+      "evidence": "01-cold.png: original cockpit and all control apertures visibly populated, including dark difficulty aperture artwork."
+    },
+    {
+      "gate": 1,
+      "assertion": "zero_application_bridge_bitmap_texture_errors",
+      "status": "pass",
+      "evidence": "No page errors or console errors; only four Chromium readPixels GPU stall warnings."
+    },
+    {
+      "gate": 2,
+      "assertion": "all_14_gold_focus_outlines",
+      "status": "pass",
+      "evidence": {
+        "Easy": "29-focus-before-space.png",
+        "Medium difficulty": "02-focus.png",
+        "Expert": "31-held-tab.png",
+        "Galaxy lever": "focus-2.png",
+        "Small Galaxy": "focus-alternate-0.png",
+        "Medium Galaxy": "focus-3.png",
+        "Large Galaxy": "focus-alternate-1.png",
+        "Game type": "focus-4.png",
+        "Empire": "focus-alternate-2.png",
+        "Alliance": "focus-5.png",
+        "Load/Options": "focus-alternate-3.png",
+        "Credits": "focus-6.png",
+        "Multiplayer": "focus-alternate-4.png",
+        "Quit": "focus-7.png"
+      }
+    },
+    {
+      "gate": 2,
+      "assertion": "outline_preserves_art",
+      "status": "pass",
+      "evidence": "Outlines border each control without filling or obscuring its artwork."
+    },
+    {
+      "gate": 2,
+      "assertion": "accessible_names",
+      "status": "fail",
+      "evidence": "Browser DOM exposes only CANVAS tabindex=1; no role, aria-label, named controls, or fallback control text. All 14 canvas controls lack browser-exposed accessible names."
+    },
+    {
+      "gate": 2,
+      "assertion": "Enter_single_shot",
+      "status": "pass",
+      "evidence": "ArrowRight then Enter produced one MenuGalaxySize resource=8000 dispatch/start; focused Credits Enter produced one MenuSelect resource=8004 and one destination=credits."
+    },
+    {
+      "gate": 2,
+      "assertion": "Space_single_shot",
+      "status": "pass",
+      "evidence": "29-focus-before-space.png Easy focused; Space produced exactly one MenuSelect resource=8004 and one 0.3571875-second source."
+    },
+    {
+      "gate": 3,
+      "assertion": "correct_actual_music_buffer",
+      "status": "pass",
+      "evidence": [
+        {
+          "type": "start",
+          "wall": 21014.699999928474,
+          "id": 2,
+          "time": 0,
+          "duration": 35.34077083333333,
+          "loop": true,
+          "args": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "gate": 3,
+      "assertion": "old_110_second_payload_absent",
+      "status": "pass",
+      "evidence": "No source duration near 110.608 seconds. Duration fingerprint matches specified MDATA.300 cue; track identity not independently decoded."
+    },
+    {
+      "gate": 3,
+      "assertion": "actual_sfx_8000",
+      "status": "pass",
+      "evidence": {
+        "console": "[audio] menu_sfx=MenuGalaxySize resource=8000",
+        "duration_seconds": 0.3340416666666667,
+        "loop": false,
+        "tolerance": "within 1/48000 second of requested approximate duration"
+      }
+    },
+    {
+      "gate": 3,
+      "assertion": "actual_sfx_8001",
+      "status": "pass",
+      "evidence": {
+        "console": "[audio] menu_sfx=MenuLoadOptions resource=8001",
+        "duration_seconds": 0.36035416666666664,
+        "loop": false,
+        "tolerance": "within 1/48000 second of requested approximate duration"
+      }
+    },
+    {
+      "gate": 3,
+      "assertion": "actual_sfx_8004",
+      "status": "pass",
+      "evidence": {
+        "console": "[audio] menu_sfx=MenuSelect resource=8004",
+        "duration_seconds": 0.3571875,
+        "loop": false,
+        "tolerance": "within 1/48000 second of requested approximate duration"
+      }
+    },
+    {
+      "gate": 3,
+      "assertion": "SFX_gain_and_mute",
+      "status": "pass",
+      "evidence": "Source 17 galaxy and 19 Load/Options gains=0.44999998807907104 vs original 1.0. Between music mute at wall=221121.69999992847 and unmute=222756 ms, galaxy and Load/Options dispatches occur but no source starts. Subsequent select source 21 gain=0.44999998807907104."
+    },
+    {
+      "gate": 4,
+      "assertion": "keyboard_Credits_activation",
+      "status": "pass",
+      "evidence": "33-credits-keyboard-focus.png -> Enter -> 34-keyboard-credits.png; [main_menu] destination=credits"
+    },
+    {
+      "gate": 4,
+      "assertion": "credits_populated_scrolling_titles",
+      "status": "pass",
+      "evidence": "10-credits.png and 11-credits-scroll.png show upward movement and STAR WARS REBELLION / OPEN REBELLION."
+    },
+    {
+      "gate": 4,
+      "assertion": "keyboard_Back_and_cockpit_return",
+      "status": "pass",
+      "evidence": "12-credits-focus.png Tab reaches Back to Main Menu; Enter returns populated cockpit in 13-return.png; repeated before Quit."
+    },
+    {
+      "gate": 5,
+      "assertion": "multiplayer_populated_destination",
+      "status": "pass",
+      "evidence": "05-destination.png shows HEAD-TO-HEAD SETUP, Player name, LAN/Modem/Internet, Start Session, Back to Main Menu."
+    },
+    {
+      "gate": 5,
+      "assertion": "Internet_unavailable",
+      "status": "pass",
+      "evidence": "07-credits.png (historical filename; actually multiplayer) shows Internet sessions are not available in this build; authoritative multiplayer is tracked for M4. [multiplayer] status=unavailable transport=Internet player=Player"
+    },
+    {
+      "gate": 5,
+      "assertion": "Back_to_cockpit",
+      "status": "pass",
+      "evidence": "Back clicked at (165,333), then Credits opened from cockpit. Menu destination only; M4 networking not accepted."
+    },
+    {
+      "gate": 6,
+      "assertion": "Audio_mute_Mus_SFX_visible",
+      "status": "pass",
+      "evidence": "04-audio.png, 16-audio-gain.png"
+    },
+    {
+      "gate": 6,
+      "assertion": "effective_volume_console_and_actual_gain",
+      "status": "pass",
+      "evidence": {
+        "console": [
+          "[audio] music_volume=0.00 muted=true",
+          "[audio] music_volume=0.80 muted=false",
+          "[audio] music_volume=0.28 muted=false"
+        ],
+        "music_actual_gain": [
+          0.800000011920929,
+          0,
+          0.800000011920929,
+          0.2800000011920929,
+          0,
+          0.2800000011920929
+        ],
+        "sfx_actual_gain": [
+          1,
+          0.44999998807907104
+        ],
+        "note": "SFX slider changes emit another music_volume=0.28 muted=false record, not a separate SFX-volume console field. Slider drags used timed synthetic browser MouseEvents."
+      }
+    },
+    {
+      "gate": 6,
+      "assertion": "one_music_loop_no_overlap",
+      "status": "pass",
+      "evidence": {
+        "loop_starts": 1,
+        "maximum_concurrent_loops": 1,
+        "note": "Same music source persists through campaigns and returns; no replacement loops."
+      }
+    },
+    {
+      "gate": 7,
+      "assertion": "Alliance_configuration",
+      "status": "pass",
+      "evidence": "[campaign] faction=Rebel Alliance configuration=Expert, Large Galaxy, Headquarters Only"
+    },
+    {
+      "gate": 7,
+      "assertion": "speed4x_day_positive",
+      "status": "pass",
+      "evidence": "4x clicked at (267,325); event popup dismissed, paused; 21-alliance-progress.png displays Day 73. First Escape was intercepted by event popup; Escape after dismissal returned to menu."
+    },
+    {
+      "gate": 7,
+      "assertion": "generation1_return_and_audio",
+      "status": "pass",
+      "evidence": "[main_menu] returned_from_campaign generation=1 audio_context=main_menu; 22-return.png populated; original source id=2 loop=true duration=35.34077083333333 still active, no other music source."
+    },
+    {
+      "gate": 8,
+      "assertion": "same_cockpit_Empire_configuration",
+      "status": "pass",
+      "evidence": "No reload. [campaign] faction=Galactic Empire configuration=Easy, Small Galaxy, Standard Game"
+    },
+    {
+      "gate": 8,
+      "assertion": "generation2_exact_clean_reset",
+      "status": "pass",
+      "evidence": "[campaign] reset generation=2 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34"
+    },
+    {
+      "gate": 8,
+      "assertion": "Empire_galaxy_populated",
+      "status": "pass",
+      "evidence": "24-empire-galaxy.png shows populated Empire galaxy at Day 0."
+    },
+    {
+      "gate": 8,
+      "assertion": "save_slot1_v11_namespace",
+      "status": "pass",
+      "evidence": {
+        "screenshot": "27-save-result.png",
+        "keys": [
+          "rebellion_save_v11_0",
+          "rebellion_meta_v11_0"
+        ],
+        "encoded_payload_characters": 103352,
+        "metadata": {
+          "schema_version": 1,
+          "name": "R2",
+          "game_tick": 0,
+          "state_fingerprint": {
+            "version": 1,
+            "value": "11417802963974042544"
+          }
+        },
+        "console": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:9e742f4d371333b0"
+      }
+    },
+    {
+      "gate": 8,
+      "assertion": "internal_save_schema11_and_configuration_keys",
+      "status": "fail",
+      "evidence": "Unverified optional check: payload is binary in encoded storage; no repository decoder read. v11 namespace confirmed, internal schema/configuration fields not independently decoded. Metadata schema_version=1 is a separate metadata format."
+    },
+    {
+      "gate": 9,
+      "assertion": "Quit_last_dispatch_actual_oneshot_exit",
+      "status": "pass",
+      "evidence": {
+        "console": "[audio] menu_sfx=MenuQuit resource=8002",
+        "source": [
+          {
+            "type": "start",
+            "wall": 425114,
+            "id": 41,
+            "time": 404.07466666666664,
+            "duration": 1.036,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ],
+        "music_stop": [
+          {
+            "type": "stop",
+            "wall": 425114.5,
+            "id": 2,
+            "time": 404.07466666666664,
+            "args": []
+          }
+        ],
+        "screenshot": "36-quit.png",
+        "behavior": "Quit was last activation; black application surface; music stopped. Exit behavior not intercepted or delayed."
+      }
+    },
+    {
+      "gate": 10,
+      "assertion": "final_error_network_scan",
+      "status": "pass",
+      "evidence": {
+        "page_errors": [],
+        "other_console_warnings_errors": [],
+        "ignored_readPixels_warnings": 4,
+        "requests": 4
+      }
+    },
+    {
+      "gate": 10,
+      "assertion": "final_audio_overlap_scan",
+      "status": "pass",
+      "evidence": {
+        "maximum_music_loops": 1,
+        "sfx_pair_overlaps": [],
+        "intentional_music_plus_SFX": "expected mixing, not duplicate music overlap",
+        "loop_active_after_Quit": 0,
+        "Quit_ended": [
+          {
+            "type": "ended",
+            "wall": 426153.39999997616,
+            "id": 41,
+            "time": 405.11466666666666
+          }
+        ]
+      }
+    }
+  ],
+  "additional_findings": [
+    "Tab/Shift-Tab advances by two original controls, producing a seven-control cycle. Combined arrow navigation and both Tab parity passes reached all 14; see focus screenshots."
+  ],
+  "raw_evidence": "evidence.json",
+  "screenshots": [
+    "01-cold.png",
+    "02-focus.png",
+    "03-destination.png",
+    "04-audio.png",
+    "05-destination.png",
+    "06-multiplayer-unavailable.png",
+    "07-credits.png",
+    "08-credits-scroll.png",
+    "09-credits-back-focus.png",
+    "10-credits.png",
+    "11-credits-scroll.png",
+    "12-credits-focus.png",
+    "13-return.png",
+    "14-arrow.png",
+    "15-audio-adjust.png",
+    "16-audio-gain.png",
+    "17-alliance-config.png",
+    "18-alliance-campaign.png",
+    "19-alliance-day.png",
+    "20-return-generation1.png",
+    "21-alliance-progress.png",
+    "22-return.png",
+    "23-empire-config.png",
+    "24-empire-galaxy.png",
+    "25-save.png",
+    "26-saved.png",
+    "27-save-result.png",
+    "28-final-cockpit.png",
+    "29-focus-before-space.png",
+    "30-after-space.png",
+    "31-held-tab.png",
+    "32-arrow-left.png",
+    "33-credits-keyboard-focus.png",
+    "34-keyboard-credits.png",
+    "35-pre-quit.png",
+    "36-quit.png",
+    "arrow-0.png",
+    "arrow-1.png",
+    "arrow-10.png",
+    "arrow-11.png",
+    "arrow-12.png",
+    "arrow-13.png",
+    "arrow-2.png",
+    "arrow-3.png",
+    "arrow-4.png",
+    "arrow-5.png",
+    "arrow-6.png",
+    "arrow-7.png",
+    "arrow-8.png",
+    "arrow-9.png",
+    "focus-10.png",
+    "focus-11.png",
+    "focus-12.png",
+    "focus-13.png",
+    "focus-14.png",
+    "focus-2.png",
+    "focus-3.png",
+    "focus-4.png",
+    "focus-5.png",
+    "focus-6.png",
+    "focus-7.png",
+    "focus-8.png",
+    "focus-9.png",
+    "focus-alternate-0.png",
+    "focus-alternate-1.png",
+    "focus-alternate-2.png",
+    "focus-alternate-3.png",
+    "focus-alternate-4.png",
+    "focus-alternate-5.png",
+    "focus-reverse.png",
+    "focus-wrap.png"
+  ]
+}

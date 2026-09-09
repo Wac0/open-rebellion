@@ -158,7 +158,8 @@ Campaign results: VICTORY at tick 1188, 211 battles, eval score 0.59
 
 ### Remaining UI — HD Visual Polish (IN PROGRESS)
 
-- [x] Reconstruct the browser's original 640x480 shuttle-cockpit composition, exact pointer regions, visible settings, direct faction start, and single-loop MDATA.302 music. Astra-medium R3 passed 11/11 after finding two R2 defects ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md)); native, accessibility, endpoints, and downstream setup propagation remain open in P03/P04.
+- [x] Reconstruct the browser's original 640x480 shuttle-cockpit composition, exact pointer regions, visible settings, direct faction start, and single-loop menu music. Astra-medium R3 passed 11/11 after finding two R2 defects ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md)).
+- [x] Complete the cockpit endpoints and lifecycle: Credits, explicit M4 multiplayer status, gain/mute, return-to-menu, clean second-campaign reset, exact `MDATA.300` menu cue, and original `COMMON.DLL` button sounds. All 500 tests pass; Astra-medium completion evidence is recorded in [F-016C](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md). Native interactive visual acceptance and semantic canvas accessibility remain release-hardening work.
 
 8-model shootout completed (2026-04-14). **UltraSharp V2** (DAT2, Spandrel+MPS) won all 5 categories (portraits, ships, sprites, UI, events). Batch pipeline built. 235/2,231 DLL BMPs upscaled so far.
 
@@ -362,7 +363,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [x] Add the F-011B1 v10 continuation envelope for simulation RNG, second AI, repair, combat cooldowns, and active configuration; preserve real v9 artifacts and pass the Astra-medium 40/40 browser continuation gate ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md)).
 - [x] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence, implement it without inferred sequential mappings, and pass the Astra-medium browser bitmap/hotspot/audio tranche ([reference](main-menu-parity.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md)).
 - [x] Persist the original cockpit's faction, difficulty, galaxy size, and game type through save v11; enforce Standard principal-leader capture versus Headquarters Only rules. All 495 workspace tests passed and Astra-medium R2 passed 18/18 browser state, bitmap, storage, network, and error gates ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md)).
-- [ ] Close the remaining P03/P04 gates: Credits and Multiplayer destinations, native parity, accessibility, gain/mute, return-to-menu audio, and clean second-campaign reset.
+- [x] Close P04 and the remaining P03 functional gates: Credits and Multiplayer destinations, gain/mute, return-to-menu audio, original menu SFX, and clean second-campaign reset. Native build/startup passes; native interactive visual and semantic canvas accessibility acceptance remain explicit P03 release-hardening gates ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md)).
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [x] Link README parity claims to current acceptance evidence.
 - [ ] Extend F-011B1 to versioned command streams, data-input hashes, stable execution ordering, and native/WASM checkpoint equivalence.

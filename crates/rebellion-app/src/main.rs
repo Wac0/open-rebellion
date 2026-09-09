@@ -42,19 +42,21 @@ use rebellion_render::panels::loyalty::draw_loyalty;
 use rebellion_render::panels::research::{draw_research, ResearchPanelState};
 use rebellion_render::{
     advisor_combat_result, advisor_death_star, advisor_greet, advisor_manufacturing_complete,
-    advisor_mission_result, advisor_uprising, draw_advisor, draw_blockade_indicators,
-    draw_cockpit_background, draw_cockpit_chrome, draw_cockpit_egui_layer, draw_encyclopedia,
-    draw_event_screen, draw_facility_icons, draw_fleet_context_menu, draw_fleet_overlays,
-    draw_fleets, draw_fog_overlay, draw_galaxy_map, draw_game_setup, draw_ground_combat,
-    draw_main_menu, draw_manufacturing, draw_message_log, draw_missions, draw_officers,
+    advisor_mission_result, advisor_uprising, draw_advisor, draw_audio_controls,
+    draw_blockade_indicators, draw_cockpit_background, draw_cockpit_chrome,
+    draw_cockpit_egui_layer, draw_credits, draw_encyclopedia, draw_event_screen,
+    draw_facility_icons, draw_fleet_context_menu, draw_fleet_overlays, draw_fleets,
+    draw_fog_overlay, draw_galaxy_map, draw_game_setup, draw_ground_combat, draw_main_menu,
+    draw_manufacturing, draw_message_log, draw_missions, draw_multiplayer_setup, draw_officers,
     draw_save_load, draw_sector_boundaries, draw_status_bar, draw_system_context_menu,
     draw_system_info_panel, draw_tactical_view, hovered_fleet, show_event_screen,
     update_event_screen, AdvisorFaction, AdvisorState, AudioVolumeState, BmpCache, CockpitButton,
-    CockpitFaction, CockpitState, EncyclopediaState, EventScreenState, FleetsState, GalaxyMapState,
-    GameMessage, GameSetupAction, GameSetupState, GroundAction, GroundCombatState, MainMenuAction,
-    MainMenuState, ManufacturingPanelState, MessageCategory, MessageLog, MessageLogState,
-    MissionsPanelState, MusicContext, OfficersState, PanelAction, SfxKind, TacticalAction,
-    TacticalState, VideoError, VideoPlayer, VoiceLine,
+    CockpitFaction, CockpitState, CreditsState, EncyclopediaState, EventScreenState, FleetsState,
+    GalaxyMapState, GameMessage, GameSetupAction, GameSetupState, GroundAction, GroundCombatState,
+    MainMenuAction, MainMenuState, ManufacturingPanelState, MenuDestinationAction, MessageCategory,
+    MessageLog, MessageLogState, MissionsPanelState, MultiplayerSetupAction, MultiplayerSetupState,
+    MusicContext, OfficersState, PanelAction, SfxKind, TacticalAction, TacticalState, VideoError,
+    VideoPlayer, VoiceLine,
 };
 
 /// Top-level game mode state machine.
@@ -69,6 +71,10 @@ enum GameMode {
     MainMenu,
     /// Save-slot picker entered from the main menu.
     LoadGame,
+    /// Scrolling original-game and Open Rebellion credits.
+    Credits,
+    /// Historical head-to-head setup destination.
+    MultiplayerSetup,
     /// Campaign configuration: galaxy size, difficulty, faction.
     GameSetup,
     /// The main strategy game: galaxy map + War Room panels.
@@ -127,6 +133,18 @@ fn window_conf() -> Conf {
         window_resizable: true,
         ..Default::default()
     }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn original_game_dir() -> PathBuf {
+    std::env::var_os("REBELLION_GAME_DIR")
+        .map(PathBuf::from)
+        .or_else(|| {
+            std::env::var_os("REBELLION_MDATA_DIR")
+                .map(PathBuf::from)
+                .and_then(|directory| directory.parent().map(Path::to_path_buf))
+        })
+        .unwrap_or_else(|| PathBuf::from("../star-wars-rebellion"))
 }
 
 fn read_save_slots(saves_dir: &Path) -> Vec<rebellion_render::SaveSlotInfo> {
@@ -327,12 +345,12 @@ fn install_runtime_pack(
         }
     }
 
+    let game_file_count = pack.game_files.len();
     let string_table: std::collections::HashMap<u16, String> = pack
         .game_files
         .remove("textstra.json")
         .and_then(|data| serde_json::from_slice(&data).ok())
         .unwrap_or_default();
-    let game_file_count = pack.game_files.len();
     let bitmap_count = pack.bitmaps.len();
     let audio_file_count = pack.audio_files.len();
     if bitmap_count == 0 {
@@ -607,8 +625,11 @@ async fn main() {
     let mut game_mode = GameMode::MainMenu;
     let mut main_menu_state = MainMenuState::default();
     let mut game_setup_state = GameSetupState::default();
+    let mut credits_state = CreditsState::default();
+    let mut multiplayer_setup_state = MultiplayerSetupState::default();
     let mut pending_cockpit_start: Option<GameSetupAction> = None;
     let mut pending_victory_conditions = VictoryConditions::Standard;
+    let mut campaign_generation = 0_u32;
 
     // ── Simulation state ────────────────────────────────────────────────────
     // Seedable RNG for deterministic simulation
@@ -763,6 +784,10 @@ async fn main() {
         if sounds_dir.exists() {
             engine.load_all(&sounds_dir);
         }
+        let common_dll = original_game_dir().join("COMMON.DLL");
+        if common_dll.exists() {
+            engine.load_original_menu_sfx(&common_dll);
+        }
         audio_vol.backend_available = engine.is_available();
         engine
     };
@@ -770,18 +795,30 @@ async fn main() {
     #[cfg(target_arch = "wasm32")]
     let browser_main_theme = browser_audio_files.remove("music/main_theme.wav");
     #[cfg(target_arch = "wasm32")]
-    let mut browser_menu_audio = browser_main_theme.as_deref().map(|bytes| {
+    let browser_menu_sfx: Vec<_> = audio::MENU_SFX_ASSETS
+        .iter()
+        .filter_map(|&(kind, path, _)| browser_audio_files.remove(path).map(|bytes| (kind, bytes)))
+        .collect();
+    #[cfg(target_arch = "wasm32")]
+    let mut browser_menu_audio = if browser_main_theme.is_some() || !browser_menu_sfx.is_empty() {
         // Initialise WebAudio and begin decoding before the first interaction.
         // Its resume handlers are then ready for the first user gesture.
         let mut engine = audio::AudioEngine::new();
-        engine.load_music_bytes(rebellion_render::MusicTrack::MainTheme, bytes);
-        engine
-    });
+        if let Some(bytes) = browser_main_theme.as_deref() {
+            engine.load_music_bytes(rebellion_render::MusicTrack::MainTheme, bytes);
+        }
+        for (kind, bytes) in &browser_menu_sfx {
+            engine.load_sfx_bytes(*kind, bytes);
+        }
+        Some(engine)
+    } else {
+        None
+    };
     #[cfg(target_arch = "wasm32")]
     let mut browser_menu_audio_requested = false;
     #[cfg(target_arch = "wasm32")]
     {
-        audio_vol.backend_available = browser_main_theme.is_some();
+        audio_vol.backend_available = browser_menu_audio.is_some();
     }
 
     let mut cutscene_player = open_cutscene(
@@ -831,9 +868,26 @@ async fn main() {
             if game_mode == GameMode::LoadGame {
                 save_load_panel_state.close();
                 game_mode = GameMode::MainMenu;
+            } else if matches!(game_mode, GameMode::Credits | GameMode::MultiplayerSetup) {
+                game_mode = GameMode::MainMenu;
+            } else if game_mode == GameMode::Galaxy {
+                show_officers = false;
+                show_fleets = false;
+                show_manufacturing = false;
+                show_missions = false;
+                show_research = false;
+                show_jedi = false;
+                show_bombardment = false;
+                show_death_star = false;
+                show_loyalty = false;
+                show_save_load = false;
+                save_load_panel_state.close();
+                game_mode = GameMode::MainMenu;
+                macroquad::logging::info!(
+                    "[main_menu] returned_from_campaign generation={} audio_context=main_menu",
+                    campaign_generation
+                );
             } else {
-                // In Galaxy mode, Escape could open a menu later.
-                // For now, Escape quits from any other mode.
                 break;
             }
         }
@@ -2034,6 +2088,24 @@ async fn main() {
                 });
                 egui_macroquad::draw();
 
+                if let Some(sfx) = main_menu_state.take_sfx() {
+                    #[cfg(not(target_arch = "wasm32"))]
+                    audio_engine.play_sfx(sfx, &audio_vol);
+                    #[cfg(target_arch = "wasm32")]
+                    if let Some(engine) = browser_menu_audio.as_mut() {
+                        engine.play_sfx(sfx, &audio_vol);
+                    }
+                    let resource_id = audio::MENU_SFX_ASSETS
+                        .iter()
+                        .find_map(|&(kind, _, resource_id)| (kind == sfx).then_some(resource_id))
+                        .unwrap_or_default();
+                    macroquad::logging::info!(
+                        "[audio] menu_sfx={:?} resource={}",
+                        sfx,
+                        resource_id
+                    );
+                }
+
                 #[cfg(target_arch = "wasm32")]
                 if !browser_menu_audio_requested
                     && (is_mouse_button_pressed(macroquad::input::MouseButton::Left)
@@ -2044,7 +2116,7 @@ async fn main() {
                     browser_menu_audio_requested = true;
                     if browser_menu_audio.is_none() {
                         eprintln!(
-                            "[audio] menu music unavailable: runtime pack has no music/main_theme.wav"
+                            "[audio] menu music unavailable: runtime pack has no MDATA.300 cue"
                         );
                     }
                 }
@@ -2087,10 +2159,14 @@ async fn main() {
                             game_mode = GameMode::LoadGame;
                         }
                         MainMenuAction::Credits => {
-                            eprintln!("[main_menu] credits endpoint is not implemented yet");
+                            credits_state.reset();
+                            game_mode = GameMode::Credits;
+                            macroquad::logging::info!("[main_menu] destination=credits");
                         }
                         MainMenuAction::Multiplayer => {
-                            eprintln!("[main_menu] multiplayer endpoint is not implemented yet");
+                            multiplayer_setup_state.status_message = None;
+                            game_mode = GameMode::MultiplayerSetup;
+                            macroquad::logging::info!("[main_menu] destination=multiplayer_setup");
                         }
                         MainMenuAction::Quit => {
                             #[cfg(not(target_arch = "wasm32"))]
@@ -2105,9 +2181,54 @@ async fn main() {
                 }
             }
 
+            GameMode::Credits => {
+                clear_background(BLACK);
+                let mut destination_action = None;
+                egui_macroquad::ui(|ctx| {
+                    destination_action = draw_credits(ctx, &mut credits_state);
+                });
+                egui_macroquad::draw();
+                if destination_action == Some(MenuDestinationAction::Back) {
+                    game_mode = GameMode::MainMenu;
+                }
+            }
+
+            GameMode::MultiplayerSetup => {
+                clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
+                let mut multiplayer_action = None;
+                egui_macroquad::ui(|ctx| {
+                    multiplayer_action = draw_multiplayer_setup(ctx, &mut multiplayer_setup_state);
+                });
+                egui_macroquad::draw();
+                match multiplayer_action {
+                    Some(MultiplayerSetupAction::Back) => {
+                        game_mode = GameMode::MainMenu;
+                    }
+                    Some(MultiplayerSetupAction::StartRequested) => {
+                        let message = multiplayer_setup_state.unavailable_message();
+                        multiplayer_setup_state.status_message = Some(message.clone());
+                        macroquad::logging::info!(
+                            "[multiplayer] status=unavailable transport={:?} player={}",
+                            multiplayer_setup_state.transport,
+                            multiplayer_setup_state.player_name
+                        );
+                    }
+                    None => {}
+                }
+            }
+
             GameMode::LoadGame => {
                 clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
                 egui_macroquad::ui(|ctx| {
+                    egui_macroquad::egui::TopBottomPanel::bottom("main_menu_audio_options").show(
+                        ctx,
+                        |ui| {
+                            ui.horizontal(|ui| {
+                                ui.label("Audio");
+                                draw_audio_controls(ui, &mut audio_vol);
+                            });
+                        },
+                    );
                     if let Some(action) =
                         draw_save_load(ctx, &save_slots, &mut save_load_panel_state)
                     {
@@ -2157,13 +2278,81 @@ async fn main() {
                                 pending_victory_conditions,
                             );
                             pending_victory_conditions = VictoryConditions::Standard;
-                            match rebellion_data::load_game_data_with_options(
+                            let campaign_loaded = match rebellion_data::load_game_data_with_options(
                                 &gdata_path,
                                 &seed_options,
                             ) {
-                                Ok(w) => {
+                                Ok(mut w) => {
+                                    for error in mod_runtime.apply_enabled(&mut w) {
+                                        macroquad::logging::error!(
+                                            "[campaign] mod_reapply_error={:?}",
+                                            error
+                                        );
+                                    }
                                     world = w;
+                                    campaign_generation += 1;
+                                    sim_rng = Xoshiro256PlusPlus::seed_from_u64(
+                                        rng_seed.wrapping_add(campaign_generation as u64),
+                                    );
+                                    clock = GameClock::new();
+                                    mfg_state = ManufacturingState::new();
+                                    mission_state = MissionState::new();
+                                    event_state = EventState::new();
+                                    rebellion_core::story_events::define_story_events(
+                                        &mut event_state,
+                                        &world,
+                                    );
+                                    movement_state = MovementState::new();
+                                    combat_cooldowns.clear();
+                                    blockade_state = BlockadeState::new();
+                                    uprising_state = UprisingState::new();
+                                    death_star_state = DeathStarState::default();
+                                    research_state = ResearchState::new();
+                                    jedi_state = JediState::new();
+                                    betrayal_state = BetrayalState::new();
+                                    repair_state = RepairState::default();
+                                    economy_state = EconomyState::default();
+                                    game_config = rebellion_core::tuning::GameConfig::default();
+                                    dual_ai_mode = false;
+                                    ai2_state = None;
+
+                                    map_state = GalaxyMapState::default();
                                     warmed_galaxy_font_sizes.clear();
+                                    msg_log = MessageLog::default();
+                                    log_state = MessageLogState::default();
+                                    officers_state = OfficersState::default();
+                                    fleets_state = FleetsState::default();
+                                    mfg_panel_state = ManufacturingPanelState::default();
+                                    missions_panel_state = MissionsPanelState::default();
+                                    research_panel_state = ResearchPanelState::default();
+                                    jedi_panel_state = JediPanelState::default();
+                                    bombardment_panel_state = BombardmentPanelState::default();
+                                    enc_state = EncyclopediaState::new();
+                                    enc_state.set_edata_path(gdata_path.join("EData"));
+                                    enc_state.set_hd_path(
+                                        gdata_path
+                                            .parent()
+                                            .unwrap_or(Path::new("."))
+                                            .join("hd")
+                                            .join("EData"),
+                                    );
+                                    show_officers = false;
+                                    show_fleets = false;
+                                    show_manufacturing = false;
+                                    show_missions = false;
+                                    show_research = false;
+                                    show_jedi = false;
+                                    show_bombardment = false;
+                                    show_death_star = false;
+                                    show_loyalty = false;
+                                    show_save_load = false;
+                                    save_load_panel_state =
+                                        rebellion_render::SaveLoadPanelState::default();
+                                    save_slots = read_save_slots(&saves_dir);
+                                    event_screen_state = EventScreenState::new();
+                                    tactical_state = TacticalState::new();
+                                    ground_combat_state = None;
+
                                     let alliance_hq = world
                                         .systems
                                         .iter()
@@ -2197,74 +2386,102 @@ async fn main() {
                                             VictoryState::new(alliance, empire)
                                         }
                                     };
+                                    true
                                 }
                                 Err(e) => {
-                                    eprintln!(
+                                    macroquad::logging::error!(
                                         "Failed to reload game data with seed options: {}",
                                         e
                                     );
+                                    false
                                 }
-                            }
-
-                            // Sync cockpit chrome to player faction
-                            cockpit_state.faction = if faction == MissionFaction::Alliance {
-                                CockpitFaction::Alliance
-                            } else {
-                                CockpitFaction::Empire
                             };
 
-                            // Initialize game state for chosen faction
-                            fog_alliance_state = FogState::new(Faction::Alliance);
-                            fog_empire_state = FogState::new(Faction::Empire);
-                            FogSystem::seed(&mut fog_alliance_state, &world);
-                            FogSystem::seed(&mut fog_empire_state, &world);
-                            economy_state = EconomyState::default();
+                            if campaign_loaded {
+                                // Sync cockpit chrome to player faction
+                                cockpit_state =
+                                    CockpitState::new(if faction == MissionFaction::Alliance {
+                                        CockpitFaction::Alliance
+                                    } else {
+                                        CockpitFaction::Empire
+                                    });
 
-                            // AI controls the opposite faction
-                            if faction == MissionFaction::Empire {
-                                ai_state = AIState::new(AiFaction::Alliance);
-                            } else {
-                                ai_state = AIState::new(AiFaction::Empire);
-                            }
+                                // Initialize game state for chosen faction
+                                fog_alliance_state = FogState::new(Faction::Alliance);
+                                fog_empire_state = FogState::new(Faction::Empire);
+                                FogSystem::seed(&mut fog_alliance_state, &world);
+                                FogSystem::seed(&mut fog_empire_state, &world);
+                                economy_state = EconomyState::default();
 
-                            let faction_name = if faction == MissionFaction::Alliance {
-                                "Rebel Alliance"
-                            } else {
-                                "Galactic Empire"
-                            };
-                            let campaign_summary = campaign_config.summary();
-                            macroquad::logging::info!(
-                                "[campaign] faction={} configuration={}",
-                                faction_name, campaign_summary
-                            );
-                            msg_log.push(GameMessage::new(
-                                clock.tick,
-                                format!("You command the {} — {}.", faction_name, campaign_summary),
-                                MessageCategory::Event,
-                            ));
-
-                            // Start galaxy map music and play faction voice greeting.
-                            #[cfg(not(target_arch = "wasm32"))]
-                            {
-                                audio_engine.play_music_for_context(
-                                    MusicContext::GalaxyMap,
-                                    &sounds_dir,
-                                    &audio_vol,
-                                );
-                                // Play the appropriate faction voice line for game start.
-                                let greeting = if faction == MissionFaction::Alliance {
-                                    VoiceLine::AllianceMissionSuccess
+                                // AI controls the opposite faction
+                                if faction == MissionFaction::Empire {
+                                    ai_state = AIState::new(AiFaction::Alliance);
                                 } else {
-                                    VoiceLine::EmpireMissionSuccess
+                                    ai_state = AIState::new(AiFaction::Empire);
+                                }
+
+                                let faction_name = if faction == MissionFaction::Alliance {
+                                    "Rebel Alliance"
+                                } else {
+                                    "Galactic Empire"
                                 };
-                                audio_engine.play_voice(greeting, &audio_vol);
+                                let campaign_summary = campaign_config.summary();
+                                macroquad::logging::info!(
+                                    "[campaign] faction={} configuration={}",
+                                    faction_name,
+                                    campaign_summary
+                                );
+                                macroquad::logging::info!(
+                                "[campaign] reset generation={} tick={} missions={} movements={} cooldowns={} dual_ai={} second_ai={} event_definitions={}",
+                                campaign_generation,
+                                clock.tick,
+                                mission_state.len(),
+                                movement_state.len(),
+                                combat_cooldowns.len(),
+                                dual_ai_mode,
+                                ai2_state.is_some(),
+                                event_state.events().len()
+                            );
+                                msg_log.push(GameMessage::new(
+                                    clock.tick,
+                                    format!(
+                                        "You command the {} — {}.",
+                                        faction_name, campaign_summary
+                                    ),
+                                    MessageCategory::Event,
+                                ));
+
+                                // Start galaxy map music and play faction voice greeting.
+                                #[cfg(not(target_arch = "wasm32"))]
+                                {
+                                    audio_engine.play_music_for_context(
+                                        MusicContext::GalaxyMap,
+                                        &sounds_dir,
+                                        &audio_vol,
+                                    );
+                                    // Play the appropriate faction voice line for game start.
+                                    let greeting = if faction == MissionFaction::Alliance {
+                                        VoiceLine::AllianceMissionSuccess
+                                    } else {
+                                        VoiceLine::EmpireMissionSuccess
+                                    };
+                                    audio_engine.play_voice(greeting, &audio_vol);
+                                }
+
+                                // Sync advisor faction and send greeting
+                                advisor_state =
+                                    AdvisorState::new(AdvisorFaction::from(cockpit_state.faction));
+                                let sprite_dir =
+                                    PathBuf::from("assets/references/ref-ui/07-droid-advisors");
+                                if sprite_dir.exists() {
+                                    advisor_state.set_sprite_dir(&sprite_dir);
+                                }
+                                advisor_greet(&mut advisor_state);
+
+                                game_mode = GameMode::Galaxy;
+                            } else {
+                                game_mode = GameMode::MainMenu;
                             }
-
-                            // Sync advisor faction and send greeting
-                            advisor_state.faction = AdvisorFaction::from(cockpit_state.faction);
-                            advisor_greet(&mut advisor_state);
-
-                            game_mode = GameMode::Galaxy;
                         }
                         GameSetupAction::Back => {
                             game_mode = GameMode::MainMenu;
@@ -3215,10 +3432,19 @@ async fn main() {
             }
         }
 
-        // 6. Apply audio volume changes
-        #[cfg(not(target_arch = "wasm32"))]
+        // 6. Apply audio volume changes on both native and WebAudio backends.
         if audio_vol.dirty {
+            #[cfg(not(target_arch = "wasm32"))]
             audio_engine.apply_volume(&audio_vol);
+            #[cfg(target_arch = "wasm32")]
+            if let Some(engine) = browser_menu_audio.as_mut() {
+                engine.apply_volume(&audio_vol);
+            }
+            macroquad::logging::info!(
+                "[audio] music_volume={:.2} muted={}",
+                audio_vol.effective_music_volume(),
+                audio_vol.muted
+            );
             audio_vol.dirty = false;
         }
 

@@ -29,7 +29,7 @@ the repository reference screenshot:
 | `COMMON.DLL` | `33bfbc7593f25971d63fe53b0122b8a9ae30823982e921584ce0cd34892671b8` | Resting, selected, pressed, and animation frames |
 | [`data/base/ui/common-dll/BMP/20001.bmp`](../data/base/ui/common-dll/BMP/20001.bmp) | `3e5b89c0745596d2850f25b7c5d4008e1d77662f0e9966593ed192b61242fc2d` | Empty cockpit shell |
 | [`assets/rebellion-menu.jpg`](../assets/rebellion-menu.jpg) | `069bb9ff9d3f3c99337e4a04a8b917bc255d433723972c203273da7697a266e8` | Fully assembled reference appearance |
-| `star-wars-rebellion/MDATA/MDATA.302` (owned install, not tracked) | `fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3` | Original main-title/Tatooine soundtrack used for the cockpit menu |
+| `star-wars-rebellion/MDATA/MDATA.300` (owned install, not tracked) | `7d1212e1a91eb8d88ebaf0ce59000753561e4066425a24177baf1b04d07447f5` | 35.34-second *Return of the Jedi* / Battle of Endor cue used by the shuttle menu |
 
 Relevant decompiled functions are `FUN_00405560` (control construction),
 `FUN_00405050` (window and galaxy-size pointer handling), `FUN_00406000`
@@ -115,17 +115,17 @@ Death Star outcome to supersede that rule.
 ## Feature boundaries
 
 - **P03 — Main menu:** cockpit assembly, animation, save/options, credits,
-  multiplayer, quit, accessibility, and responsive hit testing.
+  multiplayer, quit, keyboard operation, and responsive hit testing.
 - **P04 — Game setup:** difficulty, galaxy size, game type, faction start,
   state propagation, and clean subsequent-campaign reset.
 
 F-016B verifies that all four setup values reach active configuration, save v11,
-reload, and `VictorySystem` in the browser. P04 remains open until starting a
-subsequent campaign cleanly replaces every campaign subsystem.
+reload, and `VictorySystem` in the browser. F-016C verifies that a subsequent
+campaign cleanly replaces every campaign subsystem.
 
 ## Music contract
 
-The cockpit menu uses `MDATA.302`, already named `MusicTrack::MainTheme` by
+The cockpit menu uses `MDATA.300`, named `MusicTrack::MainTheme` by
 the audio layer. The licensed source is staged locally as
 `data/sounds/music/main_theme.wav` and remains ignored by Git. The native menu
 starts it when the cockpit becomes visible. The browser may preload it only
@@ -134,6 +134,17 @@ pointer or keyboard gesture, as required by browser autoplay policy. Returning
 to the menu restarts the same context; leaving for a campaign changes context
 without overlapping tracks. A missing or undecodable file emits one bounded
 diagnostic and leaves the menu usable.
+
+`FUN_00405560` also binds original `COMMON.DLL` WAVE resources to the cockpit
+controls. The build extracts only these licensed resources at packaging time;
+they remain ignored by Git.
+
+| WAVE resource | Staged file | Original control family | Duration | SHA-256 |
+|---:|---|---|---:|---|
+| `8000` | `menu_galaxy_size.wav` | galaxy lever and size screens | 0.334 s | `c54c5be5081943b35f41fd5be268b211e895cbd3c26fcad840823968df5d4905` |
+| `8001` | `menu_load_options.wav` | Load/Options | 0.360 s | `14963ae2154a8caa3a6fc6492ad742c21ff4957fe5c28b6eaa61dd11b842a420` |
+| `8002` | `menu_quit.wav` | Quit | 1.036 s | `4482e8415f306480e2a5ddbf73cef943202ff2aa2b99c7096511559a55338ffa` |
+| `8004` | `menu_select.wav` | difficulty, faction, game type, Credits, Multiplayer | 0.357 s | `791165a1ad0cc579357e2248e5d71e463fd77e75634db70deb3bbec09653063f` |
 
 ## Astra acceptance matrix
 
@@ -149,12 +160,15 @@ screenshots and a JSON result for every run.
 | Campaign start | Both factions initialize selected settings without the custom setup screen |
 | Navigation | Load/options, credits, multiplayer, and quit reach the correct destination or remain explicit failures |
 | Pointer geometry | Center and edge clicks pass at 640x480, 1280x960, 1280x800, 1440x900, and a narrow supported viewport |
-| Accessibility | Every control is keyboard reachable, named, single-activation, and visibly focused without covering art |
+| Keyboard access | Every control is keyboard reachable, single-activation, and visibly focused without covering art |
 | Visual quality | No blank aperture, blue matte, stretch, clip, wrong sprite family, or text-button overlay |
 | Runtime quality | Zero page, console, request, WebGL, missing-asset, or panic errors |
-| Music | MDATA.302 loads once, begins after the browser gesture, loops without overlap, obeys gain/mute, and resumes correctly on return to menu |
+| Audio | MDATA.300 loads once, begins after the browser gesture, loops without overlap, obeys gain/mute, resumes on return, and the mapped WAVE effects play without overlap |
 
-The browser setup/state rows are verified in
-[F-016B evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md).
-P03 and P04 remain open until all applicable rows pass in native and browser
-release artifacts, including a clean second-campaign reset.
+The setup/state rows are verified in
+[F-016B evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md),
+and the endpoint/audio/reset rows in
+[F-016C evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md).
+P04 is complete. P03 functional acceptance passes in the browser and native
+build/startup paths; native interactive visual acceptance and a per-control
+browser semantic accessibility layer remain separate release-hardening gates.

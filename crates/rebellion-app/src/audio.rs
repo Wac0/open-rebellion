@@ -19,7 +19,7 @@
 //! ```text
 //! data/sounds/
 //!   music/
-//!     main_theme.wav      (MDATA.302 — Main Title + Tatooine)
+//!     main_theme.wav      (MDATA.300 — Return of the Jedi/Battle of Endor cue)
 //!     battle.wav          (MDATA.307 — Attacking a Star Destroyer)
 //!     victory.wav         (MDATA.201 extraction)
 //!     defeat.wav          (MDATA.202 extraction)
@@ -35,6 +35,10 @@
 //!     combat_start.wav
 //!     ui_click.wav
 //!     ui_close.wav
+//!     menu_galaxy_size.wav (COMMON.DLL WAVE 8000)
+//!     menu_load_options.wav (COMMON.DLL WAVE 8001)
+//!     menu_quit.wav        (COMMON.DLL WAVE 8002)
+//!     menu_select.wav      (COMMON.DLL WAVE 8004)
 //!   voice/
 //!     alliance/
 //!       14001-voicefxa.wav   (through 15163-voicefxa.wav — from VOICEFXA.DLL)
@@ -128,36 +132,48 @@ fn audio_base_path(path: &Path) -> PathBuf {
 fn sfx_file(kind: SfxKind) -> &'static str {
     match kind {
         SfxKind::MissionSuccess => "mission_success.wav",
-        SfxKind::MissionFail    => "mission_fail.wav",
-        SfxKind::BuildComplete  => "build_complete.wav",
+        SfxKind::MissionFail => "mission_fail.wav",
+        SfxKind::BuildComplete => "build_complete.wav",
         SfxKind::FleetDeparture => "fleet_departure.wav",
-        SfxKind::FleetArrival   => "fleet_arrival.wav",
-        SfxKind::CombatStart    => "combat_start.wav",
-        SfxKind::UiClick        => "ui_click.wav",
-        SfxKind::UiClose        => "ui_close.wav",
+        SfxKind::FleetArrival => "fleet_arrival.wav",
+        SfxKind::CombatStart => "combat_start.wav",
+        SfxKind::UiClick => "ui_click.wav",
+        SfxKind::UiClose => "ui_close.wav",
+        SfxKind::MenuGalaxySize => "menu_galaxy_size.wav",
+        SfxKind::MenuLoadOptions => "menu_load_options.wav",
+        SfxKind::MenuQuit => "menu_quit.wav",
+        SfxKind::MenuSelect => "menu_select.wav",
     }
 }
+
+/// Browser-pack filenames and COMMON.DLL resource identities for cockpit SFX.
+pub const MENU_SFX_ASSETS: &[(SfxKind, &str, u32)] = &[
+    (SfxKind::MenuGalaxySize, "sfx/menu_galaxy_size.wav", 8000),
+    (SfxKind::MenuLoadOptions, "sfx/menu_load_options.wav", 8001),
+    (SfxKind::MenuQuit, "sfx/menu_quit.wav", 8002),
+    (SfxKind::MenuSelect, "sfx/menu_select.wav", 8004),
+];
 
 fn music_file(track: MusicTrack) -> &'static str {
     match track {
         MusicTrack::MainTheme => "main_theme.wav",
-        MusicTrack::Battle    => "battle.wav",
-        MusicTrack::Victory   => "victory.wav",
-        MusicTrack::Defeat    => "defeat.wav",
-        MusicTrack::Imperial  => "imperial.wav",
-        MusicTrack::Hoth      => "hoth.wav",
-        MusicTrack::Endor     => "endor.wav",
+        MusicTrack::Battle => "battle.wav",
+        MusicTrack::Victory => "victory.wav",
+        MusicTrack::Defeat => "defeat.wav",
+        MusicTrack::Imperial => "imperial.wav",
+        MusicTrack::Hoth => "hoth.wav",
+        MusicTrack::Endor => "endor.wav",
     }
 }
 
 /// Select a `MusicTrack` for a given `MusicContext`.
 pub fn track_for_context(ctx: MusicContext) -> MusicTrack {
     match ctx {
-        MusicContext::MainMenu  => MusicTrack::MainTheme,
+        MusicContext::MainMenu => MusicTrack::MainTheme,
         MusicContext::GalaxyMap => MusicTrack::MainTheme,
-        MusicContext::Combat    => MusicTrack::Battle,
-        MusicContext::Victory   => MusicTrack::Victory,
-        MusicContext::Defeat    => MusicTrack::Defeat,
+        MusicContext::Combat => MusicTrack::Battle,
+        MusicContext::Victory => MusicTrack::Victory,
+        MusicContext::Defeat => MusicTrack::Defeat,
     }
 }
 
@@ -173,14 +189,14 @@ fn voice_path(line: VoiceLine) -> (&'static str, u32) {
     match line {
         // Alliance voice lines (VOICEFXA.DLL, resource IDs 14001–15163)
         VoiceLine::AllianceMissionSuccess => ("alliance", 14001),
-        VoiceLine::AllianceMissionFail    => ("alliance", 14002),
-        VoiceLine::AllianceFleetDeparts   => ("alliance", 14003),
-        VoiceLine::AllianceBuildComplete  => ("alliance", 14004),
+        VoiceLine::AllianceMissionFail => ("alliance", 14002),
+        VoiceLine::AllianceFleetDeparts => ("alliance", 14003),
+        VoiceLine::AllianceBuildComplete => ("alliance", 14004),
         // Empire voice lines (VOICEFXE.DLL, resource IDs 15001–15132)
-        VoiceLine::EmpireMissionSuccess   => ("empire",   15001),
-        VoiceLine::EmpireMissionFail      => ("empire",   15002),
-        VoiceLine::EmpireFleetDeparts     => ("empire",   15003),
-        VoiceLine::EmpireBuildComplete    => ("empire",   15004),
+        VoiceLine::EmpireMissionSuccess => ("empire", 15001),
+        VoiceLine::EmpireMissionFail => ("empire", 15002),
+        VoiceLine::EmpireFleetDeparts => ("empire", 15003),
+        VoiceLine::EmpireBuildComplete => ("empire", 15004),
     }
 }
 
@@ -188,7 +204,11 @@ fn voice_path(line: VoiceLine) -> (&'static str, u32) {
 ///
 /// Alliance: `{id}-voicefxa.wav`, Empire: `{id}-voicefxe.wav`.
 fn voice_filename(faction: &str, id: u32) -> String {
-    let suffix = if faction == "empire" { "voicefxe" } else { "voicefxa" };
+    let suffix = if faction == "empire" {
+        "voicefxe"
+    } else {
+        "voicefxa"
+    };
     format!("{}-{}.wav", id, suffix)
 }
 
@@ -248,6 +268,10 @@ impl AudioEngine {
             SfxKind::CombatStart,
             SfxKind::UiClick,
             SfxKind::UiClose,
+            SfxKind::MenuGalaxySize,
+            SfxKind::MenuLoadOptions,
+            SfxKind::MenuQuit,
+            SfxKind::MenuSelect,
         ];
         for kind in kinds {
             let path = sfx_dir.join(sfx_file(kind));
@@ -305,6 +329,33 @@ impl AudioEngine {
     pub fn load_all(&mut self, sounds_dir: &Path) {
         self.load_sfx(sounds_dir);
         self.load_voice(sounds_dir);
+    }
+
+    /// Load the binary-mapped cockpit sounds directly from an owned COMMON.DLL.
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn load_original_menu_sfx(&mut self, common_dll: &Path) {
+        let resource_ids: Vec<u32> = MENU_SFX_ASSETS
+            .iter()
+            .map(|(_, _, resource_id)| *resource_id)
+            .collect();
+        match rebellion_data::load_wave_resources(common_dll, &resource_ids) {
+            Ok(waves) => {
+                for &(kind, _, resource_id) in MENU_SFX_ASSETS {
+                    if let Some(bytes) = waves.get(&resource_id) {
+                        self.load_sfx_bytes(kind, bytes);
+                    }
+                }
+                eprintln!(
+                    "[audio] loaded {} original cockpit SFX from {}",
+                    waves.len(),
+                    common_dll.display()
+                );
+            }
+            Err(error) => eprintln!(
+                "[audio] original cockpit SFX unavailable path={} error={error}",
+                common_dll.display()
+            ),
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -376,10 +427,13 @@ impl AudioEngine {
             return;
         }
         if let Some(sound) = self.sfx.get(&kind) {
-            sound.play(&self.ctx, quad_snd::PlaySoundParams {
-                looped: false,
-                volume: vol,
-            });
+            sound.play(
+                &self.ctx,
+                quad_snd::PlaySoundParams {
+                    looped: false,
+                    volume: vol,
+                },
+            );
         }
     }
 
@@ -392,10 +446,13 @@ impl AudioEngine {
             return;
         }
         if let Some(sound) = self.voice.get(&line) {
-            sound.play(&self.ctx, quad_snd::PlaySoundParams {
-                looped: false,
-                volume: vol,
-            });
+            sound.play(
+                &self.ctx,
+                quad_snd::PlaySoundParams {
+                    looped: false,
+                    volume: vol,
+                },
+            );
         }
     }
 
@@ -420,16 +477,18 @@ impl AudioEngine {
 
         self.stop_music();
 
-        let staged_path = audio_base_path(sounds_dir).join("music").join(music_file(track));
+        let staged_path = audio_base_path(sounds_dir)
+            .join("music")
+            .join(music_file(track));
         let path = if staged_path.exists() {
             staged_path
         } else if track == MusicTrack::MainTheme {
             let configured = std::env::var_os("REBELLION_MDATA_DIR")
                 .map(PathBuf::from)
-                .map(|directory| directory.join("MDATA.302"));
+                .map(|directory| directory.join("MDATA.300"));
             configured
                 .filter(|candidate| candidate.exists())
-                .unwrap_or_else(|| PathBuf::from("../star-wars-rebellion/MDATA/MDATA.302"))
+                .unwrap_or_else(|| PathBuf::from("../star-wars-rebellion/MDATA/MDATA.300"))
         } else {
             staged_path
         };
@@ -452,10 +511,13 @@ impl AudioEngine {
         };
 
         let sound = Sound::load(&self.ctx, &bytes);
-        sound.play(&self.ctx, quad_snd::PlaySoundParams {
-            looped: true,
-            volume: vol,
-        });
+        sound.play(
+            &self.ctx,
+            quad_snd::PlaySoundParams {
+                looped: true,
+                volume: vol,
+            },
+        );
         self.music = Some((sound, track));
         self.music_playing = true;
     }

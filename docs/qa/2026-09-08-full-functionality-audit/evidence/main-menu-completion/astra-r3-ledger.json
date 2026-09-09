@@ -1,0 +1,782 @@
+{
+  "candidate": "Open Rebellion F-016C",
+  "scope": "Focused browser remediation acceptance; original canvas menu parity",
+  "url": "http://127.0.0.1:8770/",
+  "viewport": [
+    640,
+    480
+  ],
+  "repository_source_read": false,
+  "repository_modified": false,
+  "committed": false,
+  "safe_to_commit": false,
+  "assertions": [
+    {
+      "assertion": "fresh_isolated_context_localStorage_clear_exact_640x480",
+      "status": "pass",
+      "evidence": {
+        "browser": "Fresh Playwright Chromium context, no reloads; native WebAudio methods observed without replacing playback",
+        "storage_after_clear": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "screenshots": "All individual screenshots are 640x480; contact sheets are labeled derivatives."
+      }
+    },
+    {
+      "assertion": "exactly_four_successful_GETs",
+      "status": "pass",
+      "evidence": [
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/gl.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/data/runtime.orpk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "assertion": "cold_startup_exact_counts",
+      "status": "pass",
+      "evidence": [
+        "runtime_asset_pack loaded game_files=52 ui_bitmaps=2231 audio_files=5 bytes=29096058"
+      ]
+    },
+    {
+      "assertion": "original_cockpit_populated",
+      "status": "pass",
+      "evidence": "01-cold.png: original cockpit, planet background, instruments, difficulty apertures, galaxy controls, faction controls, and destination artwork populated."
+    },
+    {
+      "assertion": "no_application_page_network_errors",
+      "status": "pass",
+      "evidence": {
+        "console_errors": [],
+        "page_errors": [],
+        "request_failures": [],
+        "browser_warnings": [
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "Tab_one_control_each_press_all14_documented_order",
+      "status": "fail",
+      "evidence": {
+        "expected_order": [
+          "Easy",
+          "Medium difficulty (Intermediate)",
+          "Expert",
+          "Galaxy lever",
+          "Small Galaxy",
+          "Medium Galaxy",
+          "Large Galaxy",
+          "Game type",
+          "Empire",
+          "Alliance",
+          "Load/Options",
+          "Credits",
+          "Multiplayer",
+          "Quit"
+        ],
+        "observed_first_15_presses": [
+          "Medium difficulty (Intermediate)",
+          "Galaxy lever",
+          "Medium Galaxy",
+          "Game type",
+          "Alliance",
+          "Credits",
+          "Quit",
+          "Medium difficulty (Intermediate)",
+          "Galaxy lever",
+          "Medium Galaxy",
+          "Game type",
+          "Alliance",
+          "Credits",
+          "Quit",
+          "Medium difficulty (Intermediate)"
+        ],
+        "screenshots": "tab-01.png through tab-15.png",
+        "quick_tap_confirmation": [
+          "quick-tab-01.png: Easy",
+          "quick-tab-02.png: Expert"
+        ],
+        "quick_cycle": [
+          "Small Galaxy",
+          "Large Galaxy",
+          "Empire",
+          "Load/Options",
+          "Multiplayer",
+          "Easy",
+          "Expert"
+        ],
+        "detail": "Both 100ms presses and zero-delay Playwright taps advance two original controls; each cycle visits seven controls. Raw browser key events record one non-repeating keydown and one keyup per Tab."
+      }
+    },
+    {
+      "assertion": "Shift_Tab_reverses_exactly_one",
+      "status": "fail",
+      "evidence": {
+        "observed_first_15_presses": [
+          "Quit",
+          "Credits",
+          "Alliance",
+          "Game type",
+          "Medium Galaxy",
+          "Galaxy lever",
+          "Medium difficulty (Intermediate)",
+          "Quit",
+          "Credits",
+          "Alliance",
+          "Game type",
+          "Medium Galaxy",
+          "Galaxy lever",
+          "Medium difficulty (Intermediate)",
+          "Quit"
+        ],
+        "screenshots": "reverse-01.png through reverse-15.png",
+        "detail": "From Medium difficulty, Shift+Tab goes to Quit, then Credits, Alliance, Game type, Medium Galaxy, Galaxy lever, Medium difficulty; skips one control each press."
+      }
+    },
+    {
+      "assertion": "forward_and_reverse_wrap_correctly",
+      "status": "fail",
+      "evidence": {
+        "forward": "tab-07 Quit -> tab-08 Medium difficulty; expected Easy",
+        "reverse": "tab-15 Medium difficulty -> reverse-01 Quit; expected Easy before Quit",
+        "cycle_length": 7,
+        "required_cycle_length": 14
+      }
+    },
+    {
+      "assertion": "all14_focus_visibly_gold_preserves_artwork",
+      "status": "pass",
+      "evidence": {
+        "screenshots_by_control": {
+          "Easy": "quick-tab-01.png",
+          "Medium difficulty (Intermediate)": "tab-01.png",
+          "Expert": "quick-tab-02.png",
+          "Galaxy lever": "tab-02.png",
+          "Small Galaxy": "quick-cycle-00.png",
+          "Medium Galaxy": "tab-03.png",
+          "Large Galaxy": "quick-cycle-01.png",
+          "Game type": "tab-04.png",
+          "Empire": "quick-cycle-02.png",
+          "Alliance": "tab-05.png",
+          "Load/Options": "quick-cycle-03.png",
+          "Credits": "tab-06.png",
+          "Multiplayer": "quick-cycle-04.png",
+          "Quit": "tab-07.png"
+        },
+        "detail": "Both navigation parity cycles collectively expose all 14 gold borders; border overlays preserve the original artwork. This does not waive the traversal failures."
+      }
+    },
+    {
+      "assertion": "Space_activates_exactly_once",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "arrow-start.png",
+          "space.png"
+        ],
+        "console": "One MenuSelect resource=8004 dispatch",
+        "actual_source": [
+          {
+            "type": "start",
+            "id": 2,
+            "time": 42612.200000047684,
+            "contextTime": 29.488,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "Enter_activates_exactly_once",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "space.png",
+          "enter.png"
+        ],
+        "console": "One MenuSelect resource=8004 dispatch",
+        "actual_source": [
+          {
+            "type": "start",
+            "id": 3,
+            "time": 43028.300000071526,
+            "contextTime": 29.904,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "actual_WebAudio_one_correct_loop",
+      "status": "pass",
+      "evidence": {
+        "loop_starts": [
+          {
+            "type": "start",
+            "id": 1,
+            "time": 13096.700000047684,
+            "contextTime": 0,
+            "state": "suspended",
+            "duration": 35.34077083333333,
+            "loop": true,
+            "args": [
+              0
+            ]
+          }
+        ],
+        "maximum_concurrent_music_loops": 1,
+        "detail": "Source persists through destinations and campaign return. Context time advances; subsequent original SFX execute with context state running. Music stops at Quit."
+      }
+    },
+    {
+      "assertion": "old_110_608_second_payload_absent",
+      "status": "pass",
+      "evidence": {
+        "observed_start_durations": [
+          0.3340416666666667,
+          0.3571875,
+          0.36035416666666664,
+          1.036,
+          35.34077083333333
+        ]
+      }
+    },
+    {
+      "assertion": "original_one_shot_SFX_8000",
+      "status": "pass",
+      "evidence": {
+        "console": [
+          "[audio] menu_sfx=MenuGalaxySize resource=8000"
+        ],
+        "actual_sources": [
+          {
+            "type": "start",
+            "id": 7,
+            "time": 131991.80000007153,
+            "contextTime": 118.864,
+            "state": "running",
+            "duration": 0.3340416666666667,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "original_one_shot_SFX_8001",
+      "status": "pass",
+      "evidence": {
+        "console": [
+          "[audio] menu_sfx=MenuLoadOptions resource=8001"
+        ],
+        "actual_sources": [
+          {
+            "type": "start",
+            "id": 6,
+            "time": 96843.30000007153,
+            "contextTime": 83.71733333333333,
+            "state": "running",
+            "duration": 0.36035416666666664,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "original_one_shot_SFX_8004",
+      "status": "pass",
+      "evidence": {
+        "console": [
+          "[audio] menu_sfx=MenuSelect resource=8004",
+          "[audio] menu_sfx=MenuSelect resource=8004",
+          "[audio] menu_sfx=MenuSelect resource=8004",
+          "[audio] menu_sfx=MenuSelect resource=8004",
+          "[audio] menu_sfx=MenuSelect resource=8004"
+        ],
+        "actual_sources": [
+          {
+            "type": "start",
+            "id": 2,
+            "time": 42612.200000047684,
+            "contextTime": 29.488,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 3,
+            "time": 43028.300000071526,
+            "contextTime": 29.904,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 4,
+            "time": 64627.40000009537,
+            "contextTime": 51.504,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 5,
+            "time": 78459.90000009537,
+            "contextTime": 65.33333333333333,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 8,
+            "time": 132441.90000009537,
+            "contextTime": 119.31733333333334,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "original_one_shot_SFX_8002",
+      "status": "pass",
+      "evidence": {
+        "console": [
+          "[audio] menu_sfx=MenuQuit resource=8002"
+        ],
+        "actual_sources": [
+          {
+            "type": "start",
+            "id": 9,
+            "time": 155340.90000009537,
+            "contextTime": 142.21333333333334,
+            "state": "running",
+            "duration": 1.036,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "Credits_smoke_and_return",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "credits.png",
+          "credits-scroll.png",
+          "credits-back-focus.png",
+          "credits-return.png"
+        ],
+        "detail": "Populated original and Open Rebellion credit titles, scrolling text, Tab/Enter Back to Main Menu returns cockpit.",
+        "console": [
+          "[main_menu] destination=credits"
+        ]
+      }
+    },
+    {
+      "assertion": "Multiplayer_unavailable_M4_destination_and_return",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "multiplayer.png",
+          "multiplayer-unavailable.png",
+          "multiplayer-return.png"
+        ],
+        "console": [
+          "[main_menu] destination=multiplayer_setup",
+          "[multiplayer] status=unavailable transport=Internet player=Player"
+        ],
+        "detail": "Internet Start Session reports unavailable and explicitly tracks authoritative multiplayer for M4; Back returns cockpit."
+      }
+    },
+    {
+      "assertion": "Audio_panel_smoke",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "audio-panel.png",
+          "audio-muted.png",
+          "audio-adjusted.png",
+          "audio-return.png"
+        ],
+        "console": [
+          "[audio] music_volume=0.00 muted=true",
+          "[audio] music_volume=0.80 muted=false",
+          "[audio] music_volume=0.22 muted=false",
+          "[audio] music_volume=0.22 muted=false"
+        ],
+        "detail": "Audio mute and Mus/SFX sliders visible; mute/unmute and sliders respond. Actual gain values were not separately instrumented in this focused smoke pass."
+      }
+    },
+    {
+      "assertion": "one_campaign_setup_reset_and_return",
+      "status": "pass",
+      "evidence": {
+        "screenshots": [
+          "campaign.png",
+          "campaign-return.png"
+        ],
+        "console": [
+          "[campaign] faction=Galactic Empire configuration=Intermediate, Small Galaxy, Standard Game",
+          "[campaign] reset generation=1 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34",
+          "[main_menu] returned_from_campaign generation=1 audio_context=main_menu"
+        ]
+      }
+    },
+    {
+      "assertion": "prior_reset_and_v11_namespace_sufficient",
+      "status": "pass",
+      "evidence": {
+        "source": "/tmp/open-rebellion-f016c-astra-r2/ledger.json",
+        "prior_assertions": [
+          {
+            "gate": 8,
+            "assertion": "generation2_exact_clean_reset",
+            "status": "pass",
+            "evidence": "[campaign] reset generation=2 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34"
+          },
+          {
+            "gate": 8,
+            "assertion": "save_slot1_v11_namespace",
+            "status": "pass",
+            "evidence": {
+              "screenshot": "27-save-result.png",
+              "keys": [
+                "rebellion_save_v11_0",
+                "rebellion_meta_v11_0"
+              ],
+              "encoded_payload_characters": 103352,
+              "metadata": {
+                "schema_version": 1,
+                "name": "R2",
+                "game_tick": 0,
+                "state_fingerprint": {
+                  "version": 1,
+                  "value": "11417802963974042544"
+                }
+              },
+              "console": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:9e742f4d371333b0"
+            }
+          }
+        ],
+        "detail": "Accepted prior evidence as instructed; no save binary decoding or new save required."
+      }
+    },
+    {
+      "assertion": "Quit_last_single_SFX_black_surface_music_stopped",
+      "status": "pass",
+      "evidence": {
+        "screenshot": "quit.png",
+        "last_action": {
+          "click": [
+            574,
+            424
+          ],
+          "console_before": 22
+        },
+        "audio_final_events": [
+          {
+            "type": "start",
+            "id": 9,
+            "time": 155340.90000009537,
+            "contextTime": 142.21333333333334,
+            "state": "running",
+            "duration": 1.036,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "stop",
+            "id": 1,
+            "time": 155341.40000009537,
+            "contextTime": 142.21333333333334,
+            "state": "running",
+            "duration": 35.34077083333333,
+            "loop": true,
+            "args": []
+          },
+          {
+            "type": "ended",
+            "id": 1,
+            "time": 155346.80000007153
+          },
+          {
+            "type": "ended",
+            "id": 9,
+            "time": 156376.70000004768
+          }
+        ],
+        "detail": "Quit was last application activation. Original 1.036-second one-shot ended; music source stopped; black application surface."
+      }
+    }
+  ],
+  "exact_failures": [
+    {
+      "assertion": "Tab_one_control_each_press_all14_documented_order",
+      "evidence": {
+        "expected_order": [
+          "Easy",
+          "Medium difficulty (Intermediate)",
+          "Expert",
+          "Galaxy lever",
+          "Small Galaxy",
+          "Medium Galaxy",
+          "Large Galaxy",
+          "Game type",
+          "Empire",
+          "Alliance",
+          "Load/Options",
+          "Credits",
+          "Multiplayer",
+          "Quit"
+        ],
+        "observed_first_15_presses": [
+          "Medium difficulty (Intermediate)",
+          "Galaxy lever",
+          "Medium Galaxy",
+          "Game type",
+          "Alliance",
+          "Credits",
+          "Quit",
+          "Medium difficulty (Intermediate)",
+          "Galaxy lever",
+          "Medium Galaxy",
+          "Game type",
+          "Alliance",
+          "Credits",
+          "Quit",
+          "Medium difficulty (Intermediate)"
+        ],
+        "screenshots": "tab-01.png through tab-15.png",
+        "quick_tap_confirmation": [
+          "quick-tab-01.png: Easy",
+          "quick-tab-02.png: Expert"
+        ],
+        "quick_cycle": [
+          "Small Galaxy",
+          "Large Galaxy",
+          "Empire",
+          "Load/Options",
+          "Multiplayer",
+          "Easy",
+          "Expert"
+        ],
+        "detail": "Both 100ms presses and zero-delay Playwright taps advance two original controls; each cycle visits seven controls. Raw browser key events record one non-repeating keydown and one keyup per Tab."
+      }
+    },
+    {
+      "assertion": "Shift_Tab_reverses_exactly_one",
+      "evidence": {
+        "observed_first_15_presses": [
+          "Quit",
+          "Credits",
+          "Alliance",
+          "Game type",
+          "Medium Galaxy",
+          "Galaxy lever",
+          "Medium difficulty (Intermediate)",
+          "Quit",
+          "Credits",
+          "Alliance",
+          "Game type",
+          "Medium Galaxy",
+          "Galaxy lever",
+          "Medium difficulty (Intermediate)",
+          "Quit"
+        ],
+        "screenshots": "reverse-01.png through reverse-15.png",
+        "detail": "From Medium difficulty, Shift+Tab goes to Quit, then Credits, Alliance, Game type, Medium Galaxy, Galaxy lever, Medium difficulty; skips one control each press."
+      }
+    },
+    {
+      "assertion": "forward_and_reverse_wrap_correctly",
+      "evidence": {
+        "forward": "tab-07 Quit -> tab-08 Medium difficulty; expected Easy",
+        "reverse": "tab-15 Medium difficulty -> reverse-01 Quit; expected Easy before Quit",
+        "cycle_length": 7,
+        "required_cycle_length": 14
+      }
+    }
+  ],
+  "separate_recommendations": [
+    {
+      "topic": "Browser per-control accessibility",
+      "observation": [
+        {
+          "tag": "CANVAS",
+          "role": null,
+          "name": null,
+          "tabindex": 1
+        }
+      ],
+      "recommendation": "Consider browser-exposed named controls for assistive technology. Explicitly outside this original single-canvas parity gate; not an acceptance failure."
+    }
+  ],
+  "exclusions": [
+    "Internal binary save payload decoding; prior reset log and v11 namespace accepted.",
+    "No repository source inspected or modified; no commits."
+  ],
+  "raw_evidence": "evidence.json",
+  "screenshots": [
+    "01-cold.png",
+    "after-reverse.png",
+    "arrow-start.png",
+    "audio-adjusted.png",
+    "audio-muted.png",
+    "audio-panel.png",
+    "audio-return.png",
+    "campaign-return.png",
+    "campaign.png",
+    "control-00.png",
+    "control-01.png",
+    "control-02.png",
+    "control-03.png",
+    "control-04.png",
+    "control-05.png",
+    "control-06.png",
+    "control-07.png",
+    "control-08.png",
+    "control-09.png",
+    "control-10.png",
+    "control-11.png",
+    "control-12.png",
+    "control-13.png",
+    "control-contact.png",
+    "credits-back-focus.png",
+    "credits-return.png",
+    "credits-scroll.png",
+    "credits.png",
+    "enter.png",
+    "multiplayer-return.png",
+    "multiplayer-unavailable.png",
+    "multiplayer.png",
+    "pre-quit.png",
+    "quick-contact.png",
+    "quick-cycle-00.png",
+    "quick-cycle-01.png",
+    "quick-cycle-02.png",
+    "quick-cycle-03.png",
+    "quick-cycle-04.png",
+    "quick-cycle-05.png",
+    "quick-cycle-06.png",
+    "quick-cycle-07.png",
+    "quick-cycle-08.png",
+    "quick-cycle-09.png",
+    "quick-cycle-10.png",
+    "quick-cycle-11.png",
+    "quick-cycle-12.png",
+    "quick-cycle-13.png",
+    "quick-cycle-14.png",
+    "quick-tab-01.png",
+    "quick-tab-02.png",
+    "quit.png",
+    "reverse-01.png",
+    "reverse-02.png",
+    "reverse-03.png",
+    "reverse-04.png",
+    "reverse-05.png",
+    "reverse-06.png",
+    "reverse-07.png",
+    "reverse-08.png",
+    "reverse-09.png",
+    "reverse-10.png",
+    "reverse-11.png",
+    "reverse-12.png",
+    "reverse-13.png",
+    "reverse-14.png",
+    "reverse-15.png",
+    "reverse-contact.png",
+    "space.png",
+    "tab-01.png",
+    "tab-02.png",
+    "tab-03.png",
+    "tab-04.png",
+    "tab-05.png",
+    "tab-06.png",
+    "tab-07.png",
+    "tab-08.png",
+    "tab-09.png",
+    "tab-10.png",
+    "tab-11.png",
+    "tab-12.png",
+    "tab-13.png",
+    "tab-14.png",
+    "tab-15.png",
+    "tab-contact.png"
+  ]
+}

@@ -1,0 +1,720 @@
+{
+  "candidate": "Open Rebellion F-016C rebuilt candidate",
+  "scope": "R4 final focused browser acceptance; R3 broad endpoint/campaign/audio/Quit passes inherited as requested",
+  "url": "http://127.0.0.1:8770/",
+  "viewport": [
+    640,
+    480
+  ],
+  "repository_source_read": false,
+  "repository_modified": false,
+  "committed": false,
+  "safe_to_commit": true,
+  "assertions": [
+    {
+      "assertion": "fresh_isolated_context_localStorage_clear_exact_640x480",
+      "status": "pass",
+      "evidence": {
+        "browser": "Fresh Playwright Chromium process and nonpersistent context; no reload; device_scale_factor=1",
+        "storage_after_clear": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "screenshots_exact_size": true
+      }
+    },
+    {
+      "assertion": "exactly_four_successful_GETs",
+      "status": "pass",
+      "evidence": [
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/gl.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:8770/data/runtime.orpk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "assertion": "cold_startup_exact_counts",
+      "status": "pass",
+      "evidence": [
+        "runtime_asset_pack loaded game_files=52 ui_bitmaps=2231 audio_files=5 bytes=29096058"
+      ]
+    },
+    {
+      "assertion": "original_cockpit_populated",
+      "status": "pass",
+      "evidence": "01-cold.png visually inspected: planet, cockpit instruments, difficulty, galaxy, faction and destination art populated."
+    },
+    {
+      "assertion": "Tab_one_control_each_press_all14_documented_order",
+      "status": "pass",
+      "evidence": {
+        "expected": [
+          "Easy",
+          "Medium difficulty",
+          "Expert",
+          "Galaxy lever",
+          "Small Galaxy",
+          "Medium Galaxy",
+          "Large Galaxy",
+          "Game type",
+          "Empire",
+          "Alliance",
+          "Load/Options",
+          "Credits",
+          "Multiplayer",
+          "Quit"
+        ],
+        "observed_first_15_presses": [
+          "Easy",
+          "Medium difficulty",
+          "Expert",
+          "Galaxy lever",
+          "Small Galaxy",
+          "Medium Galaxy",
+          "Large Galaxy",
+          "Game type",
+          "Empire",
+          "Alliance",
+          "Load/Options",
+          "Credits",
+          "Multiplayer",
+          "Quit",
+          "Easy"
+        ],
+        "screenshots": "tab-01.png through tab-15.png; tab-contact.png",
+        "method": "Visual inspection of gold focus borders after each single 100ms key press; raw nonrepeating keydown/keyup recorded in evidence.json."
+      }
+    },
+    {
+      "assertion": "Shift_Tab_reverses_exactly_one",
+      "status": "pass",
+      "evidence": {
+        "starting_focus": "Easy",
+        "observed_first_15_presses": [
+          "Quit",
+          "Multiplayer",
+          "Credits",
+          "Load/Options",
+          "Alliance",
+          "Empire",
+          "Game type",
+          "Large Galaxy",
+          "Medium Galaxy",
+          "Small Galaxy",
+          "Galaxy lever",
+          "Expert",
+          "Medium difficulty",
+          "Easy",
+          "Quit"
+        ],
+        "screenshots": "reverse-01.png through reverse-15.png; reverse-contact.png"
+      }
+    },
+    {
+      "assertion": "forward_and_reverse_wrap_correctly",
+      "status": "pass",
+      "evidence": {
+        "forward": "tab-14 Quit -> tab-15 Easy",
+        "reverse": "Easy -> reverse-01 Quit; reverse-14 Easy -> reverse-15 Quit",
+        "cycle_length": 14
+      }
+    },
+    {
+      "assertion": "all14_focus_visibly_gold_preserves_artwork",
+      "status": "pass",
+      "evidence": {
+        "detail": "Visually inspected all 14 forward and reverse positions: thin gold outline around each original control, artwork remains visible.",
+        "screenshots_by_control": {
+          "Easy": "tab-01.png",
+          "Medium difficulty": "tab-02.png",
+          "Expert": "tab-03.png",
+          "Galaxy lever": "tab-04.png",
+          "Small Galaxy": "tab-05.png",
+          "Medium Galaxy": "tab-06.png",
+          "Large Galaxy": "tab-07.png",
+          "Game type": "tab-08.png",
+          "Empire": "tab-09.png",
+          "Alliance": "tab-10.png",
+          "Load/Options": "tab-11.png",
+          "Credits": "tab-12.png",
+          "Multiplayer": "tab-13.png",
+          "Quit": "tab-14.png"
+        }
+      }
+    },
+    {
+      "assertion": "Space_activates_exactly_once",
+      "status": "pass",
+      "evidence": {
+        "before": "Standard Game",
+        "after": "Headquarters Only",
+        "screenshots": [
+          "activation-before.png",
+          "space.png",
+          "enter.png"
+        ],
+        "dispatch": "[audio] menu_sfx=MenuSelect resource=8004",
+        "actual_native_source": {
+          "type": "start",
+          "id": 2,
+          "time": 49550.10000002384,
+          "contextTime": 34.91733333333333,
+          "state": "running",
+          "duration": 0.3571875,
+          "loop": false,
+          "args": [
+            0
+          ]
+        },
+        "detail": "Each key changes Game type once; one MenuSelect resource=8004 dispatch and one native nonlooping source per key."
+      }
+    },
+    {
+      "assertion": "Enter_activates_exactly_once",
+      "status": "pass",
+      "evidence": {
+        "before": "Headquarters Only",
+        "after": "Standard Game",
+        "screenshots": [
+          "activation-before.png",
+          "space.png",
+          "enter.png"
+        ],
+        "dispatch": "[audio] menu_sfx=MenuSelect resource=8004",
+        "actual_native_source": {
+          "type": "start",
+          "id": 3,
+          "time": 49966.800000071526,
+          "contextTime": 35.333333333333336,
+          "state": "running",
+          "duration": 0.3571875,
+          "loop": false,
+          "args": [
+            0
+          ]
+        },
+        "detail": "Each key changes Game type once; one MenuSelect resource=8004 dispatch and one native nonlooping source per key."
+      }
+    },
+    {
+      "assertion": "actual_WebAudio_one_correct_loop",
+      "status": "pass",
+      "evidence": {
+        "loop_starts": [
+          {
+            "type": "start",
+            "id": 1,
+            "time": 14637.200000047684,
+            "contextTime": 0.005333333333333333,
+            "state": "suspended",
+            "duration": 35.34077083333333,
+            "loop": true,
+            "args": [
+              0
+            ]
+          }
+        ],
+        "method": "AudioBufferSourceNode.start/stop observed with original native methods called unchanged; no playback mocks.",
+        "running_context_evidence": [
+          {
+            "type": "start",
+            "id": 2,
+            "time": 49550.10000002384,
+            "contextTime": 34.91733333333333,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 3,
+            "time": 49966.800000071526,
+            "contextTime": 35.333333333333336,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ],
+        "detail": "Context advances to 35.333 seconds; no duplicate loop starts or loop stop/ended events during pass. Headless output is muted by Chromium; assertion is actual WebAudio execution, not subjective listening."
+      }
+    },
+    {
+      "assertion": "original_non_looping_SFX",
+      "status": "pass",
+      "evidence": {
+        "resource": 8004,
+        "starts": [
+          {
+            "type": "start",
+            "id": 2,
+            "time": 49550.10000002384,
+            "contextTime": 34.91733333333333,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          },
+          {
+            "type": "start",
+            "id": 3,
+            "time": 49966.800000071526,
+            "contextTime": 35.333333333333336,
+            "state": "running",
+            "duration": 0.3571875,
+            "loop": false,
+            "args": [
+              0
+            ]
+          }
+        ],
+        "ended": [
+          {
+            "type": "ended",
+            "id": 2,
+            "time": 49907.10000002384
+          },
+          {
+            "type": "ended",
+            "id": 3,
+            "time": 50322.200000047684
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "no_application_page_network_errors",
+      "status": "pass",
+      "evidence": {
+        "console_errors": [],
+        "page_errors": [],
+        "request_failures": [],
+        "browser_warnings": [
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+          },
+          {
+            "type": "warning",
+            "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+          }
+        ]
+      }
+    },
+    {
+      "assertion": "single_nonrepeating_browser_key_events",
+      "status": "pass",
+      "evidence": {
+        "tab_keydown_count": 38,
+        "tab_keyup_count": 38,
+        "detail": "15 forward, 15 reverse, 8 positioning Tabs; one Space and one Enter keydown/keyup pair. Shift modifier events also retained."
+      }
+    }
+  ],
+  "exact_failures": [],
+  "inherited_evidence": {
+    "source": "/tmp/open-rebellion-f016c-astra-r3/ledger.json",
+    "assertions": [
+      {
+        "assertion": "old_110_608_second_payload_absent",
+        "status": "pass",
+        "evidence": {
+          "observed_start_durations": [
+            0.3340416666666667,
+            0.3571875,
+            0.36035416666666664,
+            1.036,
+            35.34077083333333
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "original_one_shot_SFX_8000",
+        "status": "pass",
+        "evidence": {
+          "console": [
+            "[audio] menu_sfx=MenuGalaxySize resource=8000"
+          ],
+          "actual_sources": [
+            {
+              "type": "start",
+              "id": 7,
+              "time": 131991.80000007153,
+              "contextTime": 118.864,
+              "state": "running",
+              "duration": 0.3340416666666667,
+              "loop": false,
+              "args": [
+                0
+              ]
+            }
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "original_one_shot_SFX_8001",
+        "status": "pass",
+        "evidence": {
+          "console": [
+            "[audio] menu_sfx=MenuLoadOptions resource=8001"
+          ],
+          "actual_sources": [
+            {
+              "type": "start",
+              "id": 6,
+              "time": 96843.30000007153,
+              "contextTime": 83.71733333333333,
+              "state": "running",
+              "duration": 0.36035416666666664,
+              "loop": false,
+              "args": [
+                0
+              ]
+            }
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "original_one_shot_SFX_8004",
+        "status": "pass",
+        "evidence": {
+          "console": [
+            "[audio] menu_sfx=MenuSelect resource=8004",
+            "[audio] menu_sfx=MenuSelect resource=8004",
+            "[audio] menu_sfx=MenuSelect resource=8004",
+            "[audio] menu_sfx=MenuSelect resource=8004",
+            "[audio] menu_sfx=MenuSelect resource=8004"
+          ],
+          "actual_sources": [
+            {
+              "type": "start",
+              "id": 2,
+              "time": 42612.200000047684,
+              "contextTime": 29.488,
+              "state": "running",
+              "duration": 0.3571875,
+              "loop": false,
+              "args": [
+                0
+              ]
+            },
+            {
+              "type": "start",
+              "id": 3,
+              "time": 43028.300000071526,
+              "contextTime": 29.904,
+              "state": "running",
+              "duration": 0.3571875,
+              "loop": false,
+              "args": [
+                0
+              ]
+            },
+            {
+              "type": "start",
+              "id": 4,
+              "time": 64627.40000009537,
+              "contextTime": 51.504,
+              "state": "running",
+              "duration": 0.3571875,
+              "loop": false,
+              "args": [
+                0
+              ]
+            },
+            {
+              "type": "start",
+              "id": 5,
+              "time": 78459.90000009537,
+              "contextTime": 65.33333333333333,
+              "state": "running",
+              "duration": 0.3571875,
+              "loop": false,
+              "args": [
+                0
+              ]
+            },
+            {
+              "type": "start",
+              "id": 8,
+              "time": 132441.90000009537,
+              "contextTime": 119.31733333333334,
+              "state": "running",
+              "duration": 0.3571875,
+              "loop": false,
+              "args": [
+                0
+              ]
+            }
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "original_one_shot_SFX_8002",
+        "status": "pass",
+        "evidence": {
+          "console": [
+            "[audio] menu_sfx=MenuQuit resource=8002"
+          ],
+          "actual_sources": [
+            {
+              "type": "start",
+              "id": 9,
+              "time": 155340.90000009537,
+              "contextTime": 142.21333333333334,
+              "state": "running",
+              "duration": 1.036,
+              "loop": false,
+              "args": [
+                0
+              ]
+            }
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "Credits_smoke_and_return",
+        "status": "pass",
+        "evidence": {
+          "screenshots": [
+            "credits.png",
+            "credits-scroll.png",
+            "credits-back-focus.png",
+            "credits-return.png"
+          ],
+          "detail": "Populated original and Open Rebellion credit titles, scrolling text, Tab/Enter Back to Main Menu returns cockpit.",
+          "console": [
+            "[main_menu] destination=credits"
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "Multiplayer_unavailable_M4_destination_and_return",
+        "status": "pass",
+        "evidence": {
+          "screenshots": [
+            "multiplayer.png",
+            "multiplayer-unavailable.png",
+            "multiplayer-return.png"
+          ],
+          "console": [
+            "[main_menu] destination=multiplayer_setup",
+            "[multiplayer] status=unavailable transport=Internet player=Player"
+          ],
+          "detail": "Internet Start Session reports unavailable and explicitly tracks authoritative multiplayer for M4; Back returns cockpit."
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "Audio_panel_smoke",
+        "status": "pass",
+        "evidence": {
+          "screenshots": [
+            "audio-panel.png",
+            "audio-muted.png",
+            "audio-adjusted.png",
+            "audio-return.png"
+          ],
+          "console": [
+            "[audio] music_volume=0.00 muted=true",
+            "[audio] music_volume=0.80 muted=false",
+            "[audio] music_volume=0.22 muted=false",
+            "[audio] music_volume=0.22 muted=false"
+          ],
+          "detail": "Audio mute and Mus/SFX sliders visible; mute/unmute and sliders respond. Actual gain values were not separately instrumented in this focused smoke pass."
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "one_campaign_setup_reset_and_return",
+        "status": "pass",
+        "evidence": {
+          "screenshots": [
+            "campaign.png",
+            "campaign-return.png"
+          ],
+          "console": [
+            "[campaign] faction=Galactic Empire configuration=Intermediate, Small Galaxy, Standard Game",
+            "[campaign] reset generation=1 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34",
+            "[main_menu] returned_from_campaign generation=1 audio_context=main_menu"
+          ]
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "prior_reset_and_v11_namespace_sufficient",
+        "status": "pass",
+        "evidence": {
+          "source": "/tmp/open-rebellion-f016c-astra-r2/ledger.json",
+          "prior_assertions": [
+            {
+              "gate": 8,
+              "assertion": "generation2_exact_clean_reset",
+              "status": "pass",
+              "evidence": "[campaign] reset generation=2 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34"
+            },
+            {
+              "gate": 8,
+              "assertion": "save_slot1_v11_namespace",
+              "status": "pass",
+              "evidence": {
+                "screenshot": "27-save-result.png",
+                "keys": [
+                  "rebellion_save_v11_0",
+                  "rebellion_meta_v11_0"
+                ],
+                "encoded_payload_characters": 103352,
+                "metadata": {
+                  "schema_version": 1,
+                  "name": "R2",
+                  "game_tick": 0,
+                  "state_fingerprint": {
+                    "version": 1,
+                    "value": "11417802963974042544"
+                  }
+                },
+                "console": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:9e742f4d371333b0"
+              }
+            }
+          ],
+          "detail": "Accepted prior evidence as instructed; no save binary decoding or new save required."
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      },
+      {
+        "assertion": "Quit_last_single_SFX_black_surface_music_stopped",
+        "status": "pass",
+        "evidence": {
+          "screenshot": "quit.png",
+          "last_action": {
+            "click": [
+              574,
+              424
+            ],
+            "console_before": 22
+          },
+          "audio_final_events": [
+            {
+              "type": "start",
+              "id": 9,
+              "time": 155340.90000009537,
+              "contextTime": 142.21333333333334,
+              "state": "running",
+              "duration": 1.036,
+              "loop": false,
+              "args": [
+                0
+              ]
+            },
+            {
+              "type": "stop",
+              "id": 1,
+              "time": 155341.40000009537,
+              "contextTime": 142.21333333333334,
+              "state": "running",
+              "duration": 35.34077083333333,
+              "loop": true,
+              "args": []
+            },
+            {
+              "type": "ended",
+              "id": 1,
+              "time": 155346.80000007153
+            },
+            {
+              "type": "ended",
+              "id": 9,
+              "time": 156376.70000004768
+            }
+          ],
+          "detail": "Quit was last application activation. Original 1.036-second one-shot ended; music source stopped; black application surface."
+        },
+        "provenance": "Inherited R3 evidence, not rerun in R4"
+      }
+    ]
+  },
+  "excluded_recommendations": [
+    "Per-control DOM semantics / assistive-technology named controls remain a separate excluded recommendation."
+  ],
+  "harness_notes": [
+    "Initial sandbox Chromium launch failed before any page navigation with macOS MachPort permission denial. Approved escalated launch succeeded; all evidence is from that single fresh context."
+  ],
+  "raw_evidence": "evidence.json",
+  "screenshots": [
+    "01-cold.png",
+    "activation-before.png",
+    "enter.png",
+    "reverse-01.png",
+    "reverse-02.png",
+    "reverse-03.png",
+    "reverse-04.png",
+    "reverse-05.png",
+    "reverse-06.png",
+    "reverse-07.png",
+    "reverse-08.png",
+    "reverse-09.png",
+    "reverse-10.png",
+    "reverse-11.png",
+    "reverse-12.png",
+    "reverse-13.png",
+    "reverse-14.png",
+    "reverse-15.png",
+    "reverse-contact.png",
+    "space.png",
+    "tab-01.png",
+    "tab-02.png",
+    "tab-03.png",
+    "tab-04.png",
+    "tab-05.png",
+    "tab-06.png",
+    "tab-07.png",
+    "tab-08.png",
+    "tab-09.png",
+    "tab-10.png",
+    "tab-11.png",
+    "tab-12.png",
+    "tab-13.png",
+    "tab-14.png",
+    "tab-15.png",
+    "tab-contact.png"
+  ]
+}

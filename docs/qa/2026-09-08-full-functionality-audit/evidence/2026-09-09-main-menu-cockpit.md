@@ -1,6 +1,6 @@
 ---
 title: "Original Main-Menu Cockpit Browser Proof"
-description: "Binary-mapped controls, responsive bitmaps, direct faction starts, and MDATA.302 WebAudio evidence"
+description: "Binary-mapped controls, responsive bitmaps, direct faction starts, and the provisional browser-audio tranche"
 category: qa
 created: 2026-09-09
 updated: 2026-09-09
@@ -23,9 +23,9 @@ This is a verified tranche of P03/P04, not closure of either pass.
 - Difficulty, galaxy size, and game type visibly transition through the mapped
   resources. Alliance and Empire start directly without showing the custom
   setup page; Load/Options opens the slot picker and Quit exits.
-- The deterministic runtime pack now contains the original owned MDATA.302
-  bytes. WebAudio decodes it once, begins one loop after a user gesture, avoids
-  overlap, and stops the source on Quit.
+- This tranche first staged `MDATA.302`; later executable/resource research
+  established that the cockpit cue is `MDATA.300`. F-016C corrects the track,
+  retains the single-loop lifecycle, and adds the original button effects.
 
 ## Verification
 
@@ -44,7 +44,7 @@ confirmed both corrections and ran boundary and Alliance-start smoke tests.
 
 The browser cold-start contract remains four successful requests: document,
 `gl.js`, optimized WASM, and one `runtime.orpk`. The pack contains 52 game-data
-files, 2,231 bitmaps, and one audio file. The MDATA.302 payload is 2,438,956
+files, 2,231 bitmaps, and one audio file. The provisional MDATA.302 payload was 2,438,956
 bytes with SHA-256
 `fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3`.
 The runtime pack SHA-256 is
@@ -52,13 +52,14 @@ The runtime pack SHA-256 is
 the optimized 4,612,625-byte WASM SHA-256 is
 `63f984a77002edb29692660da0bb65b1d8fbf495452a18cc88c04584a28029d7`.
 
-## Remaining P03/P04 gates
+## Subsequent closure work
 
-- Credits and Multiplayer still have no destinations.
+- Credits and Multiplayer destinations, audio controls, and reset behavior are
+  completed in [F-016C](2026-09-09-main-menu-completion.md).
 - Headquarters Only rules and setup persistence were subsequently verified in
   [F-016B](2026-09-09-game-setup-propagation.md).
-- Native parity, keyboard/accessibility acceptance, gain/mute behavior,
-  return-to-menu audio lifecycle, and clean second-campaign reset remain open.
+- Native interactive visual acceptance and per-control browser semantics remain
+  release-hardening gates; the functional browser rows and P04 now pass.
 
 ## Retained evidence
 

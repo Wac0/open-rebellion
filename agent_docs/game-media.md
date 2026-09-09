@@ -91,7 +91,7 @@ Locale `1033` = English (US). All extractions are English-locale.
 
 | File | Content |
 |------|---------|
-| MDATA.300 | Battle of Endor medley (0:35) |
+| MDATA.300 | *Return of the Jedi* / Battle of Endor shuttle-menu cue (0:35) |
 | MDATA.302 | Main Title + approaching Death Star + Tatooine |
 | MDATA.306 | Emperor Arrives / Death of Yoda / Obi-Wan Revelation |
 | MDATA.307 | Attacking a Star Destroyer |

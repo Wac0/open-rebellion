@@ -1,0 +1,1898 @@
+{
+  "console": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x114004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x114004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x114004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x114004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=5 bytes=29096058"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuLoadOptions resource=8001"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.80 muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[main_menu] destination=multiplayer_setup"
+    },
+    {
+      "type": "info",
+      "text": "[multiplayer] status=unavailable transport=Internet player=Player"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[main_menu] destination=credits"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuLoadOptions resource=8001"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.28 muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.28 muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuLoadOptions resource=8001"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuLoadOptions resource=8001"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.28 muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[campaign] faction=Rebel Alliance configuration=Expert, Large Galaxy, Headquarters Only"
+    },
+    {
+      "type": "info",
+      "text": "[campaign] reset generation=1 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34"
+    },
+    {
+      "type": "info",
+      "text": "[main_menu] returned_from_campaign generation=1 audio_context=main_menu"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuGalaxySize resource=8000"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[campaign] faction=Galactic Empire configuration=Easy, Small Galaxy, Standard Game"
+    },
+    {
+      "type": "info",
+      "text": "[campaign] reset generation=2 tick=0 missions=0 movements=0 cooldowns=0 dual_ai=false second_ai=false event_definitions=34"
+    },
+    {
+      "type": "info",
+      "text": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:9e742f4d371333b0"
+    },
+    {
+      "type": "info",
+      "text": "[main_menu] returned_from_campaign generation=2 audio_context=main_menu"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[main_menu] destination=credits"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuQuit resource=8002"
+    }
+  ],
+  "network": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/gl.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/data/runtime.orpk",
+      "status": 200
+    }
+  ],
+  "pageerrors": [],
+  "audio": [
+    {
+      "type": "gain/value",
+      "wall": 21014.199999928474,
+      "id": 1,
+      "value": 0.800000011920929
+    },
+    {
+      "type": "connect",
+      "wall": 21014.699999928474,
+      "id": 2,
+      "dest": 1,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 21014.699999928474,
+      "id": 1,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 21014.699999928474,
+      "id": 2,
+      "time": 0,
+      "duration": 35.34077083333333,
+      "loop": true,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "gain/value",
+      "wall": 68427.79999995232,
+      "id": 4,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 68427.79999995232,
+      "id": 5,
+      "dest": 4,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 68427.79999995232,
+      "id": 4,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 68427.79999995232,
+      "id": 5,
+      "time": 47.38666666666666,
+      "duration": 0.3340416666666667,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 68764,
+      "id": 5,
+      "time": 47.72266666666667
+    },
+    {
+      "type": "gain/value",
+      "wall": 69643.79999995232,
+      "id": 6,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 69643.79999995232,
+      "id": 7,
+      "dest": 6,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 69643.79999995232,
+      "id": 6,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 69643.79999995232,
+      "id": 7,
+      "time": 48.602666666666664,
+      "duration": 0.36035416666666664,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 70004.29999995232,
+      "id": 7,
+      "time": 48.965333333333334
+    },
+    {
+      "type": "gain/value",
+      "wall": 95143.39999997616,
+      "id": 1,
+      "value": 0
+    },
+    {
+      "type": "gain/value",
+      "wall": 96359.89999997616,
+      "id": 1,
+      "value": 0.800000011920929
+    },
+    {
+      "type": "gain/value",
+      "wall": 97209.89999997616,
+      "id": 8,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 97209.89999997616,
+      "id": 9,
+      "dest": 8,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 97210,
+      "id": 8,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 97210,
+      "id": 9,
+      "time": 76.17066666666666,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 97567,
+      "id": 9,
+      "time": 76.528
+    },
+    {
+      "type": "gain/value",
+      "wall": 144091.09999990463,
+      "id": 10,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 144091.09999990463,
+      "id": 11,
+      "dest": 10,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 144091.19999992847,
+      "id": 10,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 144091.29999995232,
+      "id": 11,
+      "time": 123.05066666666667,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 144446.89999997616,
+      "id": 11,
+      "time": 123.408
+    },
+    {
+      "type": "gain/value",
+      "wall": 159124.09999990463,
+      "id": 12,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 159124.19999992847,
+      "id": 13,
+      "dest": 12,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 159124.19999992847,
+      "id": 12,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 159124.19999992847,
+      "id": 13,
+      "time": 138.08,
+      "duration": 0.3340416666666667,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 159454.89999997616,
+      "id": 13,
+      "time": 138.416
+    },
+    {
+      "type": "gain/value",
+      "wall": 184073.79999995232,
+      "id": 14,
+      "value": 1
+    },
+    {
+      "type": "connect",
+      "wall": 184073.79999995232,
+      "id": 15,
+      "dest": 14,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 184073.79999995232,
+      "id": 14,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 184073.89999997616,
+      "id": 15,
+      "time": 163.03466666666668,
+      "duration": 0.36035416666666664,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 184436.19999992847,
+      "id": 15,
+      "time": 163.39733333333334
+    },
+    {
+      "type": "gain/value",
+      "wall": 207988.59999990463,
+      "id": 1,
+      "value": 0.2800000011920929
+    },
+    {
+      "type": "gain/value",
+      "wall": 208205.09999990463,
+      "id": 1,
+      "value": 0.2800000011920929
+    },
+    {
+      "type": "gain/value",
+      "wall": 220304.09999990463,
+      "id": 16,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 220304.09999990463,
+      "id": 17,
+      "dest": 16,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 220304.09999990463,
+      "id": 16,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 220304.09999990463,
+      "id": 17,
+      "time": 199.264,
+      "duration": 0.3340416666666667,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 220643.39999997616,
+      "id": 17,
+      "time": 199.6
+    },
+    {
+      "type": "gain/value",
+      "wall": 220721.69999992847,
+      "id": 18,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 220721.69999992847,
+      "id": 19,
+      "dest": 18,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 220721.69999992847,
+      "id": 18,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 220721.79999995232,
+      "id": 19,
+      "time": 199.68,
+      "duration": 0.36035416666666664,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 221081.5,
+      "id": 19,
+      "time": 200.04266666666666
+    },
+    {
+      "type": "gain/value",
+      "wall": 221121.69999992847,
+      "id": 1,
+      "value": 0
+    },
+    {
+      "type": "gain/value",
+      "wall": 222756,
+      "id": 1,
+      "value": 0.2800000011920929
+    },
+    {
+      "type": "gain/value",
+      "wall": 223571.19999992847,
+      "id": 20,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 223571.19999992847,
+      "id": 21,
+      "dest": 20,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 223571.19999992847,
+      "id": 20,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 223571.19999992847,
+      "id": 21,
+      "time": 202.528,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 223925.39999997616,
+      "id": 21,
+      "time": 202.88533333333334
+    },
+    {
+      "type": "gain/value",
+      "wall": 223972.59999990463,
+      "id": 22,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 223972.59999990463,
+      "id": 23,
+      "dest": 22,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 223972.59999990463,
+      "id": 22,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 223972.59999990463,
+      "id": 23,
+      "time": 202.93333333333334,
+      "duration": 0.3340416666666667,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 224308.29999995232,
+      "id": 23,
+      "time": 203.26933333333332
+    },
+    {
+      "type": "gain/value",
+      "wall": 224372.29999995232,
+      "id": 24,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 224372.29999995232,
+      "id": 25,
+      "dest": 24,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 224372.39999997616,
+      "id": 24,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 224372.39999997616,
+      "id": 25,
+      "time": 203.33333333333334,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 224729.59999990463,
+      "id": 25,
+      "time": 203.69066666666666
+    },
+    {
+      "type": "gain/value",
+      "wall": 224854.69999992847,
+      "id": 26,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 224854.69999992847,
+      "id": 27,
+      "dest": 26,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 224854.69999992847,
+      "id": 26,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 224854.69999992847,
+      "id": 27,
+      "time": 203.81333333333333,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 225212,
+      "id": 27,
+      "time": 204.17066666666668
+    },
+    {
+      "type": "gain/value",
+      "wall": 276870.5,
+      "id": 28,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 276870.5,
+      "id": 29,
+      "dest": 28,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 276870.59999990463,
+      "id": 28,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 276870.59999990463,
+      "id": 29,
+      "time": 255.82933333333332,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 277225.5,
+      "id": 29,
+      "time": 256.18666666666667
+    },
+    {
+      "type": "gain/value",
+      "wall": 277270.5,
+      "id": 30,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 277270.5,
+      "id": 31,
+      "dest": 30,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 277270.5,
+      "id": 30,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 277270.5,
+      "id": 31,
+      "time": 256.22933333333333,
+      "duration": 0.3340416666666667,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 277607.7999999523,
+      "id": 31,
+      "time": 256.56533333333334
+    },
+    {
+      "type": "gain/value",
+      "wall": 277686.6999999285,
+      "id": 32,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 277686.6999999285,
+      "id": 33,
+      "dest": 32,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 277686.6999999285,
+      "id": 32,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 277686.6999999285,
+      "id": 33,
+      "time": 256.6453333333333,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 278041.6999999285,
+      "id": 33,
+      "time": 257.00266666666664
+    },
+    {
+      "type": "gain/value",
+      "wall": 278153.6999999285,
+      "id": 34,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 278153.6999999285,
+      "id": 35,
+      "dest": 34,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 278153.6999999285,
+      "id": 34,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 278153.6999999285,
+      "id": 35,
+      "time": 257.11466666666666,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 278511.1999999285,
+      "id": 35,
+      "time": 257.472
+    },
+    {
+      "type": "gain/value",
+      "wall": 346250.59999990463,
+      "id": 36,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 346250.59999990463,
+      "id": 37,
+      "dest": 36,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 346250.59999990463,
+      "id": 36,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 346250.6999999285,
+      "id": 37,
+      "time": 325.21066666666667,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 346606.7999999523,
+      "id": 37,
+      "time": 325.568
+    },
+    {
+      "type": "gain/value",
+      "wall": 412664.09999990463,
+      "id": 38,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 412664.09999990463,
+      "id": 39,
+      "dest": 38,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 412664.09999990463,
+      "id": 38,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 412664.09999990463,
+      "id": 39,
+      "time": 391.6213333333333,
+      "duration": 0.3571875,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "ended",
+      "wall": 413018.59999990463,
+      "id": 39,
+      "time": 391.97866666666664
+    },
+    {
+      "type": "gain/value",
+      "wall": 425113.89999997616,
+      "id": 40,
+      "value": 0.44999998807907104
+    },
+    {
+      "type": "connect",
+      "wall": 425114,
+      "id": 41,
+      "dest": 40,
+      "kind": "AudioBufferSourceNode",
+      "destKind": "GainNode"
+    },
+    {
+      "type": "connect",
+      "wall": 425114,
+      "id": 40,
+      "dest": 3,
+      "kind": "GainNode",
+      "destKind": "AudioDestinationNode"
+    },
+    {
+      "type": "start",
+      "wall": 425114,
+      "id": 41,
+      "time": 404.07466666666664,
+      "duration": 1.036,
+      "loop": false,
+      "args": [
+        0
+      ]
+    },
+    {
+      "type": "stop",
+      "wall": 425114.5,
+      "id": 2,
+      "time": 404.07466666666664,
+      "args": []
+    },
+    {
+      "type": "ended",
+      "wall": 425119,
+      "id": 2,
+      "time": 404.08
+    },
+    {
+      "type": "ended",
+      "wall": 426153.39999997616,
+      "id": 41,
+      "time": 405.11466666666666
+    }
+  ],
+  "steps": [
+    {
+      "action": "dom"
+    },
+    {
+      "action": "logs"
+    },
+    {
+      "action": "shot",
+      "name": "01-cold.png"
+    },
+    {
+      "action": "click",
+      "x": 320,
+      "y": 180
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "02-focus.png"
+    },
+    {
+      "action": "logs"
+    },
+    {
+      "action": "eval",
+      "js": "window.audioEvidence"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-2.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-3.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-4.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-5.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-6.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-7.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-8.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-9.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-10.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-11.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-12.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-13.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-14.png"
+    },
+    {
+      "action": "key",
+      "key": "Shift+Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-reverse.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-wrap.png"
+    },
+    {
+      "action": "click",
+      "x": 301,
+      "y": 303
+    },
+    {
+      "action": "key",
+      "key": "Enter"
+    },
+    {
+      "action": "key",
+      "key": "Space"
+    },
+    {
+      "action": "logs",
+      "from": 5
+    },
+    {
+      "action": "click",
+      "x": 92,
+      "y": 415
+    },
+    {
+      "action": "shot",
+      "name": "03-destination.png"
+    },
+    {
+      "action": "logs",
+      "from": 5
+    },
+    {
+      "action": "click",
+      "x": 78,
+      "y": 466
+    },
+    {
+      "action": "click",
+      "x": 300,
+      "y": 467
+    },
+    {
+      "action": "click",
+      "x": 170,
+      "y": 467
+    },
+    {
+      "action": "click",
+      "x": 78,
+      "y": 466
+    },
+    {
+      "action": "shot",
+      "name": "04-audio.png"
+    },
+    {
+      "action": "logs",
+      "from": 5
+    },
+    {
+      "action": "click",
+      "x": 227,
+      "y": 411
+    },
+    {
+      "action": "click",
+      "x": 477,
+      "y": 257
+    },
+    {
+      "action": "shot",
+      "name": "05-destination.png"
+    },
+    {
+      "action": "click",
+      "x": 124,
+      "y": 223
+    },
+    {
+      "action": "click",
+      "x": 45,
+      "y": 306
+    },
+    {
+      "action": "shot",
+      "name": "06-multiplayer-unavailable.png"
+    },
+    {
+      "action": "logs",
+      "from": 5
+    },
+    {
+      "action": "click",
+      "x": 164,
+      "y": 306
+    },
+    {
+      "action": "click",
+      "x": 427,
+      "y": 251
+    },
+    {
+      "action": "shot",
+      "name": "07-credits.png"
+    },
+    {
+      "action": "wait",
+      "ms": 2000
+    },
+    {
+      "action": "shot",
+      "name": "08-credits-scroll.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "09-credits-back-focus.png"
+    },
+    {
+      "action": "click",
+      "x": 165,
+      "y": 333
+    },
+    {
+      "action": "click",
+      "x": 427,
+      "y": 251
+    },
+    {
+      "action": "shot",
+      "name": "10-credits.png"
+    },
+    {
+      "action": "wait",
+      "ms": 2500
+    },
+    {
+      "action": "shot",
+      "name": "11-credits-scroll.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "12-credits-focus.png"
+    },
+    {
+      "action": "key",
+      "key": "Enter"
+    },
+    {
+      "action": "shot",
+      "name": "13-return.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "14-arrow.png"
+    },
+    {
+      "action": "key",
+      "key": "Enter"
+    },
+    {
+      "action": "logs",
+      "from": 10
+    },
+    {
+      "action": "shot",
+      "name": "arrow-0.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-1.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-2.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-3.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-4.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-5.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-6.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-7.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-8.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-9.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-10.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-11.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-12.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "shot",
+      "name": "arrow-13.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowRight"
+    },
+    {
+      "action": "click",
+      "x": 92,
+      "y": 415
+    },
+    {
+      "action": "click",
+      "x": 204,
+      "y": 468
+    },
+    {
+      "action": "key",
+      "key": "ArrowLeft"
+    },
+    {
+      "action": "key",
+      "key": "ArrowLeft"
+    },
+    {
+      "action": "click",
+      "x": 353,
+      "y": 468
+    },
+    {
+      "action": "key",
+      "key": "ArrowLeft"
+    },
+    {
+      "action": "key",
+      "key": "ArrowLeft"
+    },
+    {
+      "action": "shot",
+      "name": "15-audio-adjust.png"
+    },
+    {
+      "action": "logs",
+      "from": 14
+    },
+    {
+      "action": "eval",
+      "js": "async()=>{const c=document.querySelector('canvas'); const e=(t,x,y,b)=>c.dispatchEvent(new MouseEvent(t,{clientX:x,clientY:y,button:0,buttons:b,bubbles:true}));e('mousemove',204,468,0);e('mousedown',204,468,1);await new Promise(r=>setTimeout(r,100));e('mousemove',160,468,1);await new Promise(r=>setTimeout(r,100));e('mouseup',160,468,0);return 'music drag';}"
+    },
+    {
+      "action": "eval",
+      "js": "async()=>{const c=document.querySelector('canvas'); const e=(t,x,y,b)=>c.dispatchEvent(new MouseEvent(t,{clientX:x,clientY:y,button:0,buttons:b,bubbles:true}));e('mousemove',353,468,0);e('mousedown',353,468,1);await new Promise(r=>setTimeout(r,100));e('mousemove',305,468,1);await new Promise(r=>setTimeout(r,100));e('mouseup',305,468,0);return 'sfx drag';}"
+    },
+    {
+      "action": "shot",
+      "name": "16-audio-gain.png"
+    },
+    {
+      "action": "logs",
+      "from": 15
+    },
+    {
+      "action": "click",
+      "x": 227,
+      "y": 411
+    },
+    {
+      "action": "click",
+      "x": 301,
+      "y": 303
+    },
+    {
+      "action": "click",
+      "x": 92,
+      "y": 415
+    },
+    {
+      "action": "click",
+      "x": 78,
+      "y": 466
+    },
+    {
+      "action": "click",
+      "x": 227,
+      "y": 411
+    },
+    {
+      "action": "click",
+      "x": 339,
+      "y": 303
+    },
+    {
+      "action": "click",
+      "x": 92,
+      "y": 415
+    },
+    {
+      "action": "click",
+      "x": 78,
+      "y": 466
+    },
+    {
+      "action": "click",
+      "x": 227,
+      "y": 411
+    },
+    {
+      "action": "click",
+      "x": 211,
+      "y": 57
+    },
+    {
+      "action": "click",
+      "x": 373,
+      "y": 303
+    },
+    {
+      "action": "click",
+      "x": 326,
+      "y": 348
+    },
+    {
+      "action": "shot",
+      "name": "17-alliance-config.png"
+    },
+    {
+      "action": "click",
+      "x": 469,
+      "y": 337,
+      "wait": 2000
+    },
+    {
+      "action": "shot",
+      "name": "18-alliance-campaign.png"
+    },
+    {
+      "action": "logs",
+      "from": 16
+    },
+    {
+      "action": "click",
+      "x": 267,
+      "y": 325,
+      "wait": 4000
+    },
+    {
+      "action": "shot",
+      "name": "19-alliance-day.png"
+    },
+    {
+      "action": "key",
+      "key": "Escape",
+      "wait": 1000
+    },
+    {
+      "action": "shot",
+      "name": "20-return-generation1.png"
+    },
+    {
+      "action": "logs",
+      "from": 28
+    },
+    {
+      "action": "click",
+      "x": 320,
+      "y": 360
+    },
+    {
+      "action": "click",
+      "x": 43,
+      "y": 325
+    },
+    {
+      "action": "shot",
+      "name": "21-alliance-progress.png"
+    },
+    {
+      "action": "key",
+      "key": "Escape",
+      "wait": 1000
+    },
+    {
+      "action": "shot",
+      "name": "22-return.png"
+    },
+    {
+      "action": "logs",
+      "from": 30
+    },
+    {
+      "action": "click",
+      "x": 85,
+      "y": 57
+    },
+    {
+      "action": "click",
+      "x": 301,
+      "y": 303
+    },
+    {
+      "action": "click",
+      "x": 326,
+      "y": 348
+    },
+    {
+      "action": "shot",
+      "name": "23-empire-config.png"
+    },
+    {
+      "action": "click",
+      "x": 185,
+      "y": 337,
+      "wait": 1000
+    },
+    {
+      "action": "shot",
+      "name": "24-empire-galaxy.png"
+    },
+    {
+      "action": "logs",
+      "from": 30
+    },
+    {
+      "action": "click",
+      "x": 460,
+      "y": 461
+    },
+    {
+      "action": "shot",
+      "name": "25-save.png"
+    },
+    {
+      "action": "click",
+      "x": 200,
+      "y": 123
+    },
+    {
+      "action": "click",
+      "x": 155,
+      "y": 425
+    },
+    {
+      "action": "eval",
+      "js": "Object.fromEntries(Object.entries(localStorage))"
+    },
+    {
+      "action": "shot",
+      "name": "26-saved.png"
+    },
+    {
+      "action": "logs",
+      "from": 37
+    },
+    {
+      "action": "click",
+      "x": 280,
+      "y": 394
+    },
+    {
+      "action": "key",
+      "key": "R"
+    },
+    {
+      "action": "key",
+      "key": "2"
+    },
+    {
+      "action": "click",
+      "x": 155,
+      "y": 425
+    },
+    {
+      "action": "shot",
+      "name": "27-save-result.png"
+    },
+    {
+      "action": "eval",
+      "js": "Object.keys(localStorage)"
+    },
+    {
+      "action": "logs",
+      "from": 37
+    },
+    {
+      "action": "eval",
+      "js": "Object.fromEntries(Object.entries(localStorage).map(([k,v])=>[k,{bytes:v.length,preview:v.slice(0,1400)}]))"
+    },
+    {
+      "action": "click",
+      "x": 226,
+      "y": 425
+    },
+    {
+      "action": "key",
+      "key": "Escape"
+    },
+    {
+      "action": "shot",
+      "name": "28-final-cockpit.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "29-focus-before-space.png"
+    },
+    {
+      "action": "key",
+      "key": "Space"
+    },
+    {
+      "action": "logs",
+      "from": 38
+    },
+    {
+      "action": "shot",
+      "name": "30-after-space.png"
+    },
+    {
+      "action": "eval",
+      "js": "({viewport:{width:innerWidth,height:innerHeight},elements:[...document.querySelectorAll(\"*\")].filter(e=>e.getAttribute(\"aria-label\")||e.getAttribute(\"role\")||e.tabIndex>=0).map(e=>({tag:e.tagName,role:e.getAttribute(\"role\"),name:e.getAttribute(\"aria-label\"),tab:e.tabIndex}))})"
+    },
+    {
+      "action": "eval",
+      "js": "async()=>{const c=document.querySelector('canvas');c.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',code:'Tab',keyCode:9,which:9,bubbles:true}));await new Promise(r=>setTimeout(r,80));c.dispatchEvent(new KeyboardEvent('keyup',{key:'Tab',code:'Tab',keyCode:9,which:9,bubbles:true}));return 'held Tab 80ms'}"
+    },
+    {
+      "action": "shot",
+      "name": "31-held-tab.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-0.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-1.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-2.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-3.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-4.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "focus-alternate-5.png"
+    },
+    {
+      "action": "key",
+      "key": "ArrowLeft"
+    },
+    {
+      "action": "shot",
+      "name": "32-arrow-left.png"
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "shot",
+      "name": "33-credits-keyboard-focus.png"
+    },
+    {
+      "action": "key",
+      "key": "Enter"
+    },
+    {
+      "action": "shot",
+      "name": "34-keyboard-credits.png"
+    },
+    {
+      "action": "logs",
+      "from": 39
+    },
+    {
+      "action": "key",
+      "key": "Tab"
+    },
+    {
+      "action": "key",
+      "key": "Enter"
+    },
+    {
+      "action": "shot",
+      "name": "35-pre-quit.png"
+    },
+    {
+      "action": "click",
+      "x": 567,
+      "y": 422,
+      "wait": 1800
+    },
+    {
+      "action": "shot",
+      "name": "36-quit.png"
+    },
+    {
+      "action": "logs",
+      "from": 40
+    },
+    {
+      "action": "eval",
+      "js": "({audio:window.audioEvidence.filter(e=>e.type===\"start\"||e.type===\"stop\"),storage:Object.fromEntries(Object.entries(localStorage).map(([k,v])=>[k,k.includes(\"meta\")?JSON.parse(v):{encodedCharacters:v.length}]))})"
+    }
+  ]
+}

@@ -307,31 +307,37 @@ the run as formally degenerate.
 - Acceptance: versioned, compressed, asynchronous IndexedDB saves round-trip
   complete state, expose quota/corruption errors, and preserve fingerprints.
 
-### F-016: Original main-menu cockpit parity is only partially accepted
+### F-016: Original main-menu functional parity passes; release hardening remains
 
 - Severity: P1
-- Status: partially remediated; browser cockpit/audio tranche passes
+- Status: functionally remediated; native visual and semantic accessibility acceptance remain
 - Evidence: the former stretched, dimmed bitmap and replacement text buttons
   are gone. The browser now composes COMMON 20001 with the binary-mapped control
   resources, exact logical hit regions, 4:3 scaling, direct faction starts, and
-  the original MDATA.302 bytes. Astra-medium R2 exercised the full matrix and
+  the original menu audio. Astra-medium R2 exercised the full matrix and
   exposed a URL-plugin ABI diagnostic plus audio surviving Quit; after both
   fixes, R3 passed 11/11 focused assertions with zero console/page/request/
   texture errors and zero active audio loops after Quit. F-016B then persisted
   faction, difficulty, galaxy size, and victory mode through save v11 and wired
   Standard principal-leader capture versus Headquarters Only rules. Workspace
-  tests pass 495/495; Astra-medium R2 passed 18/18 setup, reload, bitmap,
-  storage, network, and error gates. See
+  F-016C adds Credits, the explicit M4 multiplayer destination, gain/mute,
+  return-to-menu audio, clean second-campaign reset, the correct 35.34-second
+  `MDATA.300` *Return of the Jedi* cue, and four original `COMMON.DLL` button
+  effects. Workspace tests pass 500/500; Astra-medium verified the actual
+  WebAudio buffers, navigation, reset, and error-free packaged artifact; the
+  final focused R4 passed 14/14 and marked the candidate safe to commit. See
   `evidence/2026-09-09-main-menu-cockpit.md` and
-  `evidence/2026-09-09-game-setup-propagation.md`.
+  `evidence/2026-09-09-game-setup-propagation.md`, and
+  `evidence/2026-09-09-main-menu-completion.md`.
 - Reference: [`agent_docs/main-menu-parity.md`](../../../agent_docs/main-menu-parity.md)
   records the binary-confirmed geometry, resources, commands, settings, music,
   responsive transform, and Astra matrix.
 - Acceptance: native and browser reproduce the assembled cockpit, every mapped
   hover/click/keyboard behavior and selection, direct faction start, menu music,
   4:3 scaling, and all navigation with no blank aperture or missing resource.
-  Credits, Multiplayer, native/accessibility, gain/mute, return-to-menu, and
-  clean second-campaign reset remain open; P03/P04 therefore remain in progress.
+  P04 is complete. Native build/startup and original-resource loading pass;
+  native interactive visual acceptance and per-control browser semantics remain
+  explicit P03 release-hardening work and are not claimed complete here.
 
 ## Fable 5.1 audit synthesis
 
@@ -403,7 +409,7 @@ and underlying state mutation are both demonstrated.
 | P00 | Supported scope | Define native and WASM contracts. Explicitly include or exclude browser audio, video, advisor, EData, and mods. |
 | P01 | Build infrastructure | Formatting, warning-free all-target check, strict clippy, all required tests, native build, actual WASM packaging, and artifact inspection. |
 | P02 | Data and startup | Every required/optional DAT table, string names, entity counts, troop classes, clean boot, and missing/corrupt-data errors. |
-| P03 | Main menu | Assemble and operate the original cockpit controls, animation, navigation, keyboard access, MDATA.302 music, and responsive 4:3 hit testing per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). |
+| P03 | Main menu | Assemble and operate the original cockpit controls, animation, navigation, keyboard access, `MDATA.300` music, original button effects, and responsive 4:3 hit testing per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). Functional browser acceptance passes; native visual and semantic accessibility hardening remain. |
 | P04 | Game setup | Use the cockpit controls for both factions, three difficulties, three original galaxy sizes, both game types, direct campaign start, correct state propagation, and clean second-campaign reset per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). |
 | P05 | Clock | Pause and every speed, focus loss, browser background/resume, modal/combat/cutscene tick behavior. |
 | P06 | Galaxy navigation | Pan, wheel zoom, reset, system selection, right-click menu, resizing, high-DPI scale, and cockpit input boundaries. |

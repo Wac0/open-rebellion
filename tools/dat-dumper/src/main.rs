@@ -2,15 +2,18 @@
 
 mod codec;
 mod dat_record;
-mod validate;
-mod types;
 mod registry;
+mod types;
+mod validate;
 
 use clap::Parser;
 use std::path::PathBuf;
 
 #[derive(Parser)]
-#[command(name = "dat-dumper", about = "Parse Star Wars Rebellion .DAT files to JSON")]
+#[command(
+    name = "dat-dumper",
+    about = "Parse Star Wars Rebellion .DAT files to JSON"
+)]
 struct Cli {
     /// Path to GData directory containing .DAT files
     #[arg(short, long)]
@@ -28,6 +31,11 @@ struct Cli {
     /// or stdout if --output is not set. Requires TEXTSTRA.DLL in the --gdata directory.
     #[arg(long)]
     extract_strings: bool,
+
+    /// Extract the four main-menu sound effects from COMMON.DLL. Outputs
+    /// named WAV files beneath --output, which is required for this mode.
+    #[arg(long)]
+    extract_menu_sfx: bool,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -48,11 +56,51 @@ fn main() -> anyhow::Result<()> {
                 std::fs::create_dir_all(out_dir)?;
                 let out_path = out_dir.join("textstra.json");
                 std::fs::write(&out_path, &json)?;
-                eprintln!("OK   TEXTSTRA.DLL -> {} ({} strings)", out_path.display(), strings.len());
+                eprintln!(
+                    "OK   TEXTSTRA.DLL -> {} ({} strings)",
+                    out_path.display(),
+                    strings.len()
+                );
             }
             None => {
                 println!("{}", json);
             }
+        }
+        return Ok(());
+    }
+
+    // ── COMMON.DLL menu SFX extraction (separate path) ───────────────────────
+    if cli.extract_menu_sfx {
+        let dll_path = cli.gdata.join("COMMON.DLL");
+        if !dll_path.exists() {
+            anyhow::bail!("COMMON.DLL not found in {}", cli.gdata.display());
+        }
+        let out_dir = cli
+            .output
+            .as_ref()
+            .ok_or_else(|| anyhow::anyhow!("--output is required with --extract-menu-sfx"))?;
+        std::fs::create_dir_all(out_dir)?;
+
+        let mapping = [
+            (8000, "menu_galaxy_size.wav"),
+            (8001, "menu_load_options.wav"),
+            (8002, "menu_quit.wav"),
+            (8004, "menu_select.wav"),
+        ];
+        let resource_ids: Vec<u32> = mapping.iter().map(|(id, _)| *id).collect();
+        let waves = types::wave_resources::load_waves(&dll_path, &resource_ids)?;
+        for (resource_id, filename) in mapping {
+            let bytes = waves
+                .get(&resource_id)
+                .ok_or_else(|| anyhow::anyhow!("missing extracted resource {resource_id}"))?;
+            let out_path = out_dir.join(filename);
+            std::fs::write(&out_path, bytes)?;
+            eprintln!(
+                "OK   COMMON.DLL WAVE {} -> {} ({} bytes)",
+                resource_id,
+                out_path.display(),
+                bytes.len()
+            );
         }
         return Ok(());
     }
@@ -70,11 +118,7 @@ fn main() -> anyhow::Result<()> {
             .ok_or_else(|| {
                 let mut known: Vec<_> = registry.keys().copied().collect();
                 known.sort_unstable();
-                anyhow::anyhow!(
-                    "Unknown DAT file: {}. Known files: {:?}",
-                    name,
-                    known
-                )
+                anyhow::anyhow!("Unknown DAT file: {}. Known files: {:?}", name, known)
             })?;
         vec![(key, cli.gdata.join(key))]
     } else {
@@ -129,9 +173,7 @@ fn main() -> anyhow::Result<()> {
     if total > 1 {
         eprintln!(
             "\n{} succeeded, {} failed out of {} files",
-            success,
-            failed,
-            total
+            success, failed, total
         );
     }
 

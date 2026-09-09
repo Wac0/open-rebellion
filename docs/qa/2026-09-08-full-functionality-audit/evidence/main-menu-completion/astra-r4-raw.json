@@ -1,0 +1,961 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/gl.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/open-rebellion.wasm"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/data/runtime.orpk"
+    }
+  ],
+  "responses": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/gl.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8770/data/runtime.orpk",
+      "status": 200
+    }
+  ],
+  "console": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=52 ui_bitmaps=2231 audio_files=5 bytes=29096058"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    }
+  ],
+  "page_errors": [],
+  "request_failures": [],
+  "actions": [
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Shift+Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Tab",
+      "console_before": 5
+    },
+    {
+      "key": "Space",
+      "console_before": 5
+    },
+    {
+      "key": "Enter",
+      "console_before": 6
+    }
+  ],
+  "browser": {
+    "width": 640,
+    "height": 480,
+    "audit": {
+      "storageAfterClear": 0,
+      "audio": [
+        {
+          "type": "start",
+          "id": 1,
+          "time": 14637.200000047684,
+          "contextTime": 0.005333333333333333,
+          "state": "suspended",
+          "duration": 35.34077083333333,
+          "loop": true,
+          "args": [
+            0
+          ]
+        },
+        {
+          "type": "start",
+          "id": 2,
+          "time": 49550.10000002384,
+          "contextTime": 34.91733333333333,
+          "state": "running",
+          "duration": 0.3571875,
+          "loop": false,
+          "args": [
+            0
+          ]
+        },
+        {
+          "type": "ended",
+          "id": 2,
+          "time": 49907.10000002384
+        },
+        {
+          "type": "start",
+          "id": 3,
+          "time": 49966.800000071526,
+          "contextTime": 35.333333333333336,
+          "state": "running",
+          "duration": 0.3571875,
+          "loop": false,
+          "args": [
+            0
+          ]
+        },
+        {
+          "type": "ended",
+          "id": 3,
+          "time": 50322.200000047684
+        }
+      ],
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 14623.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 14726.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15043.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15143.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15456.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15557.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15873.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 15973.300000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 16295.700000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 16397.399999976158
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 16726.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 16828
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 17140.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 17241.100000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 17559.800000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 17661.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 17977.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 18078.700000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 18393.100000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 18494
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 18807.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 18908
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 19226.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 19327.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 19643.700000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 19745.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 20059.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 20161.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 20478.5
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 20579.600000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28028.800000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28029.800000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28131.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28131.600000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28458.800000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28459
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28560.5
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28560.600000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28876.399999976158
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28876.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 28977.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 28977.5
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 29290.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 29290.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 29391.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 29391.600000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 29709.700000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 29709.899999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 29811.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 29811.700000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 30126.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 30126.700000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 30228.5
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 30228.700000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 30543.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 30543.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 30645.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 30645.5
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 30960.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 30960.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 31061.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 31061.5
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 31373.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 31373.700000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 31474.399999976158
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 31474.600000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 31792.899999976158
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 31793
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 31894.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 31894.800000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 32212.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 32212.600000023842
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 32313.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 32313.399999976158
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 32644.100000023842
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 32644.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 32745.700000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 32745.899999976158
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 33077.300000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 33077.5
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 33177.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 33177.39999997616
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 33494.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 33494.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 33595.89999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 33596
+        },
+        {
+          "type": "keydown",
+          "key": "Shift",
+          "repeat": false,
+          "time": 33910.5
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 33910.60000002384
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 34011.89999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Shift",
+          "repeat": false,
+          "time": 34012.10000002384
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 46625.39999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 46726
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 46979.39999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 47080.200000047684
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 47332.89999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 47439.89999997616
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 47693.10000002384
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 47794.800000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48047.300000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48148
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48405.200000047684
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48506
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48758.89999997616
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 48860.300000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "time": 49113.60000002384
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "time": 49215
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": false,
+          "time": 49543.39999997616
+        },
+        {
+          "type": "keyup",
+          "key": " ",
+          "repeat": false,
+          "time": 49643.300000071526
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "time": 49960.800000071526
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "time": 50062.5
+        }
+      ]
+    },
+    "dom": [
+      {
+        "tag": "CANVAS",
+        "role": null,
+        "name": null,
+        "tabindex": 1
+      }
+    ]
+  }
+}

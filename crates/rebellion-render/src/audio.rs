@@ -44,6 +44,14 @@ pub enum SfxKind {
     UiClick,
     /// Closed a panel or dismissed a dialog.
     UiClose,
+    /// Original COMMON.DLL WAVE 8000, assigned to galaxy-size controls.
+    MenuGalaxySize,
+    /// Original COMMON.DLL WAVE 8001, assigned to Load/Options.
+    MenuLoadOptions,
+    /// Original COMMON.DLL WAVE 8002, assigned to Quit.
+    MenuQuit,
+    /// Original COMMON.DLL WAVE 8004, assigned to the remaining cockpit controls.
+    MenuSelect,
 }
 
 // ---------------------------------------------------------------------------
@@ -64,7 +72,7 @@ pub enum MusicTrack {
     Imperial,
     /// Battle of Hoth medley (MDATA.312)
     Hoth,
-    /// Battle of Endor medley (MDATA.300)
+    /// Battle of Endor III medley (MDATA.315)
     Endor,
 }
 
@@ -165,12 +173,20 @@ impl AudioVolumeState {
 
     /// Effective music volume: 0.0 when muted, otherwise `music_volume`.
     pub fn effective_music_volume(&self) -> f64 {
-        if self.muted { 0.0 } else { self.music_volume as f64 }
+        if self.muted {
+            0.0
+        } else {
+            self.music_volume as f64
+        }
     }
 
     /// Effective SFX volume: 0.0 when muted, otherwise `sfx_volume`.
     pub fn effective_sfx_volume(&self) -> f64 {
-        if self.muted { 0.0 } else { self.sfx_volume as f64 }
+        if self.muted {
+            0.0
+        } else {
+            self.sfx_volume as f64
+        }
     }
 }
 
@@ -199,16 +215,11 @@ pub fn draw_audio_controls(ui: &mut egui::Ui, state: &mut AudioVolumeState) {
     }
 
     // ── Music volume ──────────────────────────────────────────────────────────
-    ui.label(
-        RichText::new("Mus")
-            .color(Color32::from_gray(160))
-            .small(),
-    );
+    ui.label(RichText::new("Mus").color(Color32::from_gray(160)).small());
     let music_changed = ui
         .add_sized(
             [50.0, 16.0],
-            egui::Slider::new(&mut state.music_volume, 0.0_f32..=1.0_f32)
-                .show_value(false),
+            egui::Slider::new(&mut state.music_volume, 0.0_f32..=1.0_f32).show_value(false),
         )
         .changed();
     if music_changed {
@@ -216,16 +227,11 @@ pub fn draw_audio_controls(ui: &mut egui::Ui, state: &mut AudioVolumeState) {
     }
 
     // ── SFX volume ────────────────────────────────────────────────────────────
-    ui.label(
-        RichText::new("SFX")
-            .color(Color32::from_gray(160))
-            .small(),
-    );
+    ui.label(RichText::new("SFX").color(Color32::from_gray(160)).small());
     let sfx_changed = ui
         .add_sized(
             [50.0, 16.0],
-            egui::Slider::new(&mut state.sfx_volume, 0.0_f32..=1.0_f32)
-                .show_value(false),
+            egui::Slider::new(&mut state.sfx_volume, 0.0_f32..=1.0_f32).show_value(false),
         )
         .changed();
     if sfx_changed {
@@ -239,5 +245,23 @@ pub fn draw_audio_controls(ui: &mut egui::Ui, state: &mut AudioVolumeState) {
                 .small()
                 .color(Color32::from_gray(80)),
         );
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mute_and_gain_produce_exact_effective_levels() {
+        let mut state = AudioVolumeState::default();
+        state.music_volume = 0.35;
+        state.sfx_volume = 0.6;
+        assert_eq!(state.effective_music_volume(), 0.35_f32 as f64);
+        assert_eq!(state.effective_sfx_volume(), 0.6_f32 as f64);
+
+        state.muted = true;
+        assert_eq!(state.effective_music_volume(), 0.0);
+        assert_eq!(state.effective_sfx_volume(), 0.0);
     }
 }

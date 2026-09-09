@@ -11,6 +11,7 @@ pub mod fleet_movement;
 pub mod fog;
 pub mod ground_combat;
 pub mod main_menu;
+pub mod main_menu_destinations;
 pub mod message_log;
 pub mod panels;
 pub mod tactical_view;
@@ -35,9 +36,9 @@ pub use advisor::{
 pub use audio::{
     draw_audio_controls, AudioVolumeState, MusicContext, MusicTrack, SfxKind, VoiceLine,
 };
-pub use bmp_cache::{BmpCache, DllSource};
 #[cfg(target_arch = "wasm32")]
 pub use bmp_cache::set_bmp_cache;
+pub use bmp_cache::{BmpCache, DllSource};
 pub use cockpit::{
     draw_cockpit_background, draw_cockpit_chrome, draw_cockpit_egui_layer, CockpitButton,
     CockpitFaction, CockpitState, CockpitViewport,
@@ -52,6 +53,10 @@ pub use fleet_movement::{draw_fleet_overlays, hovered_fleet};
 pub use fog::draw_fog_overlay;
 pub use ground_combat::{draw_ground_combat, GroundAction, GroundCombatState, GroundWinner};
 pub use main_menu::{draw_main_menu, MainMenuAction, MainMenuState};
+pub use main_menu_destinations::{
+    draw_credits, draw_multiplayer_setup, CreditsState, MenuDestinationAction,
+    MultiplayerSetupAction, MultiplayerSetupState, MultiplayerTransport,
+};
 pub use message_log::{
     draw_message_log, GameMessage, MessageCategory, MessageLog, MessageLogState,
 };

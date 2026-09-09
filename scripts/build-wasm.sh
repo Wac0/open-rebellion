@@ -8,6 +8,7 @@ GDATA="$ROOT/data/base"
 WEB_DATA="$ROOT/web/data/base"
 WEB_AUDIO="$ROOT/web/data/sounds"
 MDATA_DIR="${REBELLION_MDATA_DIR:-$ROOT/../star-wars-rebellion/MDATA}"
+ORIGINAL_GAME_DIR="${REBELLION_GAME_DIR:-$(dirname "$MDATA_DIR")}"
 
 echo "Building rebellion-app for wasm32…"
 PATH="/usr/bin:$PATH" cargo build --manifest-path "$ROOT/Cargo.toml" \
@@ -65,10 +66,8 @@ cp "$GDATA"/*.DLL "$WEB_DATA/" 2>/dev/null || true
 # Extract TEXTSTRA strings to JSON for WASM (pelite can't target WASM)
 echo "Extracting TEXTSTRA.DLL strings to textstra.json…"
 DAT_DUMPER="${ROOT}/target/release/dat-dumper"
-if [ ! -f "$DAT_DUMPER" ]; then
-    echo "Building dat-dumper for string extraction…"
-    PATH="/usr/bin:$PATH" cargo build --manifest-path "$ROOT/Cargo.toml" -p dat-dumper --release
-fi
+echo "Building dat-dumper for resource extraction…"
+PATH="/usr/bin:$PATH" cargo build --manifest-path "$ROOT/Cargo.toml" -p dat-dumper --release
 if [ -f "$GDATA/TEXTSTRA.DLL" ]; then
     "$DAT_DUMPER" --gdata "$GDATA" --extract-strings --output "$WEB_DATA"
 else
@@ -82,12 +81,23 @@ echo "Staged $DAT_COUNT DAT files + textstra.json in web/data/base/"
 # Stage the licensed main-menu music without adding it to version control.
 # REBELLION_MDATA_DIR may point at an original installation's MDATA directory.
 mkdir -p "$WEB_AUDIO/music"
-if [ -f "$MDATA_DIR/MDATA.302" ]; then
-    cp "$MDATA_DIR/MDATA.302" "$WEB_AUDIO/music/main_theme.wav"
-    echo "Staged MDATA.302 as the shuttle-cockpit main theme."
+if [ -f "$MDATA_DIR/MDATA.300" ]; then
+    cp "$MDATA_DIR/MDATA.300" "$WEB_AUDIO/music/main_theme.wav"
+    echo "Staged MDATA.300 (Return of the Jedi/Battle of Endor cue) as the shuttle-cockpit main theme."
 else
     rm -f "$WEB_AUDIO/music/main_theme.wav"
-    echo "WARNING: MDATA.302 not found in $MDATA_DIR; the menu will remain silent."
+    echo "WARNING: MDATA.300 not found in $MDATA_DIR; the menu will remain silent."
+fi
+
+mkdir -p "$WEB_AUDIO/sfx"
+if [ -f "$ORIGINAL_GAME_DIR/COMMON.DLL" ]; then
+    "$DAT_DUMPER" --gdata "$ORIGINAL_GAME_DIR" --extract-menu-sfx --output "$WEB_AUDIO/sfx"
+else
+    rm -f "$WEB_AUDIO/sfx/menu_galaxy_size.wav" \
+        "$WEB_AUDIO/sfx/menu_load_options.wav" \
+        "$WEB_AUDIO/sfx/menu_quit.wav" \
+        "$WEB_AUDIO/sfx/menu_select.wav"
+    echo "WARNING: COMMON.DLL not found in $ORIGINAL_GAME_DIR; cockpit SFX will remain silent."
 fi
 
 # ── Stage UI BMPs into web/data/ui/ ─────────────────────────────────────────

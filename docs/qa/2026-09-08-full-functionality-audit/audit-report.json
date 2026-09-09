@@ -577,15 +577,16 @@
     {
       "id": "F-016",
       "severity": "P1",
-      "status": "partially_remediated",
-      "title": "Original main-menu cockpit parity is only partially accepted",
+      "status": "functionally_remediated_release_hardening_open",
+      "title": "Original main-menu functional parity passes; release hardening remains",
       "evidence": [
         "The browser composes COMMON 20001 with binary-mapped control resources instead of stretching and dimming the empty shell or overlaying replacement text buttons",
-        "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented MDATA.302 WebAudio",
+        "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented menu WebAudio",
         "Astra medium R3 passed 11 of 11 assertions after correcting the R2 URL-plugin ABI diagnostic and stopping music on Quit",
         "F-016B persists faction, difficulty, galaxy size, and game type through save v11 and enforces Standard principal-leader capture versus Headquarters Only rules",
         "Astra medium F-016B R2 passed 18 of 18 setup, reload, bitmap, storage, network, and error assertions",
-        "Credits, Multiplayer, native parity, accessibility, gain/mute, return-to-menu, and second-campaign reset remain open"
+        "F-016C adds Credits, explicit M4 multiplayer status, gain/mute, return-to-menu audio, a clean second-campaign reset, the exact MDATA.300 menu cue, and original COMMON.DLL button effects",
+        "All 500 workspace tests and native build/startup pass; native interactive visual acceptance and browser semantic accessibility remain release-hardening gates"
       ],
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
@@ -688,9 +689,66 @@
             "runtime_pack_sha256": "472c3c8ce7968e34e250bbd97ae1e1cc5830a3d2e08b21ee5dd1d5ce2d4c5a18"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md"
+        },
+        {
+          "id": "F-016C",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "scope": "main-menu destinations, keyboard traversal, audio identity and effects, volume lifecycle, return-to-menu, and clean second-campaign reset",
+          "workspace_tests": {
+            "passed": 500,
+            "failed": 0,
+            "ignored": 2
+          },
+          "native": {
+            "build": "pass",
+            "startup": "pass",
+            "systems_loaded": 200,
+            "original_menu_sfx_loaded": 4,
+            "interactive_visual_acceptance": "open"
+          },
+          "browser": {
+            "broad_r2_assertions": 37,
+            "broad_r2_functional_failures": 1,
+            "r3_passed": 20,
+            "r3_failed": 3,
+            "r3_defect": "manual and egui Tab handlers both advanced focus",
+            "r4_passed": 14,
+            "r4_failed": 0,
+            "r4_safe_to_commit": true,
+            "requests_per_cold_load": 4,
+            "viewports": ["640x480"],
+            "original_controls": 14,
+            "console_errors": 0,
+            "page_errors": 0,
+            "failed_requests": 0,
+            "bitmap_ui": "pass"
+          },
+          "audio": {
+            "music_source": "MDATA.300",
+            "music_sha256": "7d1212e1a91eb8d88ebaf0ce59000753561e4066425a24177baf1b04d07447f5",
+            "decoded_duration_seconds": 35.34077083333333,
+            "overlapping_music_sources": 0,
+            "menu_sfx_resources": [8000, 8001, 8002, 8004],
+            "gain_mute": "pass",
+            "active_loops_after_quit": 0
+          },
+          "artifact": {
+            "wasm_bytes": 4676410,
+            "wasm_sha256": "b26c242ed1df3848f01367517e53b56e15a54df2fb9aca64cd9103beb5ef97c7",
+            "runtime_pack_entries": {
+              "game_data": 52,
+              "bitmaps": 2231,
+              "audio": 5
+            },
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md"
         }
       ],
-      "acceptance": "Native and browser reproduce the assembled cockpit, every mapped hover/click/keyboard behavior and selection, direct faction start, MDATA.302 menu music, 4:3 scaling, and all navigation with no blank aperture or missing resource."
+      "acceptance": "Browser functional acceptance reproduces the assembled cockpit, every mapped hover/click/keyboard behavior and selection, direct faction start, MDATA.300 menu music, original button effects, 4:3 scaling, destinations, audio lifecycle, and clean campaign reset with no blank aperture or missing resource. Native interactive visual and semantic canvas accessibility acceptance remain open."
     }
   ],
   "fable_review": {
@@ -871,31 +929,32 @@
       "status": "in_progress",
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
-        "F-016A browser cockpit composition, exact pointer regions, direct faction start, Load/Options, Quit, and MDATA.302 single-loop playback"
+        "F-016A browser cockpit composition, exact pointer regions, direct faction start, Load/Options, and responsive scaling",
+        "F-016C Credits, explicit M4 multiplayer status, keyboard traversal, gain/mute, return lifecycle, MDATA.300 music, and original button effects"
       ],
       "subpasses": [
         "browser cockpit assembly and original hotspot behavior: pass",
-        "browser Load/Options, Quit, and MDATA.302 playback: pass",
-        "Credits and Multiplayer destinations: open",
-        "responsive browser acceptance: pass; native and accessibility acceptance: open",
-        "gain/mute and return-to-menu audio lifecycle: open"
+        "browser destinations, audio, keyboard, reset, and Quit behavior: pass",
+        "responsive browser acceptance: pass",
+        "native build, startup, and original resource loading: pass",
+        "native interactive visual acceptance: open",
+        "per-control browser semantic accessibility: open"
       ],
-      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md"
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md"
     },
     {
       "id": "P04",
       "name": "Game setup",
-      "status": "in_progress",
+      "status": "pass",
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
         "visible difficulty, galaxy-size, and game-type selections",
         "direct Alliance and Empire starts without the replacement setup page",
-        "F-016B save v11 propagation and Standard versus Headquarters Only victory rules"
+        "F-016B save v11 propagation and Standard versus Headquarters Only victory rules",
+        "F-016C clean second-campaign reset"
       ],
-      "remaining": [
-        "clean second-campaign reset"
-      ],
-      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md",
+      "remaining": [],
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md",
       "acceptance": "Three difficulties, three original galaxy sizes, both game types, both faction starts, settings propagation, and clean second-campaign reset pass from the cockpit."
     },
     {"id":"P05","name":"Clock","status":"pending"},
