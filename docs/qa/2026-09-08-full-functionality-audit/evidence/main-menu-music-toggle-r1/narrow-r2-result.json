@@ -1,0 +1,408 @@
+{
+  "requests": [
+    "http://127.0.0.1:8770/",
+    "http://127.0.0.1:8770/gl.js",
+    "http://127.0.0.1:8770/open-rebellion.wasm",
+    "http://127.0.0.1:8770/data/runtime.orpk"
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:8770/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8770/gl.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8770/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8770/data/runtime.orpk",
+      "status": 200
+    }
+  ],
+  "failures": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=52 ui_bitmaps=2231 audio_files=5 bytes=29096058"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=false music_muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.80 muted=false music_muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=false music_muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.80 muted=false music_muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=false music_muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.80 muted=false music_muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=false music_muted=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=true"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.80 muted=false music_muted=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_sfx=MenuSelect resource=8004"
+    },
+    {
+      "type": "info",
+      "text": "[audio] menu_music_enabled=false"
+    },
+    {
+      "type": "info",
+      "text": "[audio] music_volume=0.00 muted=false music_muted=true"
+    }
+  ],
+  "page_errors": [],
+  "viewports": [
+    {
+      "viewport": [
+        320,
+        240
+      ],
+      "hit_bounds_xyxy": [
+        297,
+        5,
+        312,
+        16
+      ],
+      "outside": [
+        {
+          "action": "outside 296,10",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 313,10",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 304,4",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 304,17",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        }
+      ],
+      "activations": [
+        {
+          "action": "center pointer",
+          "before": "false",
+          "after": "true",
+          "toggles": 1
+        },
+        {
+          "action": "restore muted",
+          "before": "true",
+          "after": "false",
+          "toggles": 1
+        },
+        {
+          "action": "keyboard Enter",
+          "before": "false",
+          "after": "true",
+          "toggles": 1
+        },
+        {
+          "action": "restore muted",
+          "before": "true",
+          "after": "false",
+          "toggles": 1
+        }
+      ],
+      "semantics": {
+        "name": "Menu music",
+        "aria_pressed": "false",
+        "count": 15
+      }
+    },
+    {
+      "viewport": [
+        480,
+        360
+      ],
+      "hit_bounds_xyxy": [
+        446,
+        8,
+        468,
+        24
+      ],
+      "outside": [
+        {
+          "action": "outside 445,16",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 469,16",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 457,7",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        },
+        {
+          "action": "outside 457,25",
+          "before": "false",
+          "after": "false",
+          "toggles": 0
+        }
+      ],
+      "activations": [
+        {
+          "action": "center pointer",
+          "before": "false",
+          "after": "true",
+          "toggles": 1
+        },
+        {
+          "action": "restore muted",
+          "before": "true",
+          "after": "false",
+          "toggles": 1
+        },
+        {
+          "action": "keyboard Enter",
+          "before": "false",
+          "after": "true",
+          "toggles": 1
+        },
+        {
+          "action": "restore muted",
+          "before": "true",
+          "after": "false",
+          "toggles": 1
+        }
+      ],
+      "semantics": {
+        "name": "Menu music",
+        "aria_pressed": "false",
+        "count": 15
+      }
+    }
+  ],
+  "initial": {
+    "aria_pressed": "true",
+    "name": "Menu music"
+  },
+  "initial_mute": {
+    "action": "initial mute",
+    "before": "true",
+    "after": "false",
+    "toggles": 1
+  },
+  "final": {
+    "aria_pressed": "false",
+    "gains": [
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "browser_output_muted": true
+  },
+  "browser": "141.0.7390.37",
+  "status": "PASS",
+  "verdict": "SAFE_TO_COMMIT",
+  "passed": 10,
+  "failed": 0,
+  "unverified": 0,
+  "checks": {
+    "housing_containment": "PASS: full housing pixels inside shared hit bounds; previous overflow removed.",
+    "internal_art_and_led": "PASS: inset projection and green/red LED pixels contained.",
+    "outside_edges": "PASS: 8/8 one-device-pixel outside probes inert.",
+    "pointer": "PASS: exactly one toggle at each viewport; muted restored.",
+    "keyboard": "PASS: Enter toggles exactly once at each viewport; muted restored.",
+    "semantics": "PASS: Menu music at index 14, 15 buttons, correct aria-pressed.",
+    "cockpit": "PASS: proportional and populated at 320x240 and 480x360.",
+    "cold_load_requests": "PASS: exactly four requests, all HTTP 200.",
+    "runtime_errors": "PASS: zero runtime/console/page/request errors.",
+    "enabled_default_and_final_mute": "PASS: enabled default recorded once; final aria-pressed=false and music gain=0; browser closed muted."
+  },
+  "pixel_evidence": [
+    {
+      "screenshot": "enabled-320x240.png",
+      "housing_pixel_bounds_xyxy_exclusive": [
+        297,
+        5,
+        312,
+        16
+      ],
+      "outer_ring_pixels_tested": 56,
+      "outer_ring_bright_device_pixels": 0,
+      "led_bounds_xyxy_inclusive": [
+        308,
+        7,
+        309,
+        8
+      ]
+    },
+    {
+      "screenshot": "muted-320x240.png",
+      "housing_pixel_bounds_xyxy_exclusive": [
+        297,
+        5,
+        312,
+        16
+      ],
+      "outer_ring_pixels_tested": 56,
+      "outer_ring_bright_device_pixels": 0,
+      "led_bounds_xyxy_inclusive": [
+        308,
+        7,
+        309,
+        8
+      ]
+    },
+    {
+      "screenshot": "muted-480x360.png",
+      "housing_pixel_bounds_xyxy_exclusive": [
+        446,
+        8,
+        468,
+        24
+      ],
+      "outer_ring_pixels_tested": 80,
+      "outer_ring_bright_device_pixels": 0,
+      "led_bounds_xyxy_inclusive": [
+        462,
+        11,
+        464,
+        12
+      ]
+    }
+  ],
+  "warnings": "4 Chromium ReadPixels performance warnings",
+  "repo_modified": false,
+  "artifact": {
+    "wasm_bytes": 4682288,
+    "wasm_sha256": "3619ff51bf4b3a5137b8672204b454b632b040a1d2fa2bd642e02ff07957a9fa",
+    "runtime_pack_bytes": 29096058,
+    "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+  },
+  "screenshots": [
+    "enabled-320x240.png",
+    "muted-320x240.png",
+    "focused-480x360.png"
+  ]
+}

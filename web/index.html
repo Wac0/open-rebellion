@@ -40,6 +40,7 @@
         <button type="button" data-menu-index="11">Credits</button>
         <button type="button" data-menu-index="12">Multiplayer</button>
         <button type="button" data-menu-index="13">Quit</button>
+        <button type="button" data-menu-index="14">Menu music</button>
     </nav>
     <!-- macroquad/miniquad JS glue — provides load() and WebGL bindings -->
     <script src="gl.js"></script>
@@ -70,6 +71,7 @@
                     difficulty,
                     galaxySize,
                     headquartersOnly,
+                    musicEnabled,
                 ) {
                     const nextActive = Boolean(isActive);
                     const ownedFocus = buttons.includes(document.activeElement);
@@ -88,6 +90,7 @@
                         buttons[index].setAttribute("aria-pressed", String(index === galaxySize));
                     }
                     buttons[7].setAttribute("aria-pressed", String(Boolean(headquartersOnly)));
+                    buttons[14].setAttribute("aria-pressed", String(Boolean(musicEnabled)));
 
                     const galaxyLabel = buttons[galaxySize].textContent;
                     buttons[3].setAttribute(

@@ -891,7 +891,7 @@ async fn main() {
                 );
             } else {
                 #[cfg(target_arch = "wasm32")]
-                web_accessibility::sync_menu(false, &main_menu_state);
+                web_accessibility::sync_menu(false, &main_menu_state, audio_vol.music_enabled());
                 break;
             }
         }
@@ -2101,7 +2101,12 @@ async fn main() {
                 #[cfg(not(target_arch = "wasm32"))]
                 let mut menu_action = None;
                 egui_macroquad::ui(|ctx| {
-                    let canvas_action = draw_main_menu(ctx, &mut bmp_cache, &mut main_menu_state);
+                    let canvas_action = draw_main_menu(
+                        ctx,
+                        &mut bmp_cache,
+                        &mut main_menu_state,
+                        audio_vol.music_enabled(),
+                    );
                     if menu_action.is_none() {
                         menu_action = canvas_action;
                     }
@@ -2189,6 +2194,13 @@ async fn main() {
                             game_mode = GameMode::MultiplayerSetup;
                             macroquad::logging::info!("[main_menu] destination=multiplayer_setup");
                         }
+                        MainMenuAction::ToggleMusic => {
+                            audio_vol.toggle_music();
+                            macroquad::logging::info!(
+                                "[audio] menu_music_enabled={}",
+                                audio_vol.music_enabled()
+                            );
+                        }
                         MainMenuAction::Quit => {
                             #[cfg(not(target_arch = "wasm32"))]
                             audio_engine.stop_music();
@@ -2197,7 +2209,11 @@ async fn main() {
                                 engine.stop_music();
                             }
                             #[cfg(target_arch = "wasm32")]
-                            web_accessibility::sync_menu(false, &main_menu_state);
+                            web_accessibility::sync_menu(
+                                false,
+                                &main_menu_state,
+                                audio_vol.music_enabled(),
+                            );
                             break;
                         }
                     }
@@ -3464,9 +3480,10 @@ async fn main() {
                 engine.apply_volume(&audio_vol);
             }
             macroquad::logging::info!(
-                "[audio] music_volume={:.2} muted={}",
+                "[audio] music_volume={:.2} muted={} music_muted={}",
                 audio_vol.effective_music_volume(),
-                audio_vol.muted
+                audio_vol.muted,
+                audio_vol.music_muted
             );
             audio_vol.dirty = false;
         }
@@ -3476,7 +3493,11 @@ async fn main() {
             if game_mode != GameMode::MainMenu {
                 main_menu_state.set_semantic_focus(None);
             }
-            web_accessibility::sync_menu(game_mode == GameMode::MainMenu, &main_menu_state);
+            web_accessibility::sync_menu(
+                game_mode == GameMode::MainMenu,
+                &main_menu_state,
+                audio_vol.music_enabled(),
+            );
         }
 
         // 7. Handle focus requests from message log + encyclopedia

@@ -146,6 +146,8 @@ pub struct AudioVolumeState {
     pub sfx_volume: f32,
     /// If true, all audio output is silenced.
     pub muted: bool,
+    /// If true, music is silenced while sound effects remain audible.
+    pub music_muted: bool,
     /// Set when the user changes a control.  The app layer clears this after
     /// applying the change to the audio engine.
     pub dirty: bool,
@@ -160,6 +162,7 @@ impl Default for AudioVolumeState {
             music_volume: 0.8,
             sfx_volume: 1.0,
             muted: false,
+            music_muted: false,
             dirty: false,
             backend_available: true,
         }
@@ -171,9 +174,9 @@ impl AudioVolumeState {
         Self::default()
     }
 
-    /// Effective music volume: 0.0 when muted, otherwise `music_volume`.
+    /// Effective music volume: 0.0 when globally or music-only muted.
     pub fn effective_music_volume(&self) -> f64 {
-        if self.muted {
+        if self.muted || self.music_muted {
             0.0
         } else {
             self.music_volume as f64
@@ -187,6 +190,17 @@ impl AudioVolumeState {
         } else {
             self.sfx_volume as f64
         }
+    }
+
+    /// Toggle music independently of sound effects.
+    pub fn toggle_music(&mut self) {
+        self.music_muted = !self.music_muted;
+        self.dirty = true;
+    }
+
+    /// Whether the dedicated music path is enabled.
+    pub fn music_enabled(&self) -> bool {
+        !self.music_muted
     }
 }
 
@@ -263,5 +277,20 @@ mod tests {
         state.muted = true;
         assert_eq!(state.effective_music_volume(), 0.0);
         assert_eq!(state.effective_sfx_volume(), 0.0);
+    }
+
+    #[test]
+    fn music_toggle_preserves_sound_effects() {
+        let mut state = AudioVolumeState::default();
+        state.toggle_music();
+
+        assert!(state.music_muted);
+        assert!(state.dirty);
+        assert_eq!(state.effective_music_volume(), 0.0);
+        assert_eq!(state.effective_sfx_volume(), 1.0);
+
+        state.toggle_music();
+        assert!(state.music_enabled());
+        assert_eq!(state.effective_music_volume(), 0.8_f32 as f64);
     }
 }

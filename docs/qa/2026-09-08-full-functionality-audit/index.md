@@ -29,6 +29,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Campaign setup proof](evidence/2026-09-09-game-setup-propagation.md) | Save v11 setup persistence, Standard/Headquarters Only victory rules, and Astra 18/18 bitmap/browser proof. |
 | [Main-menu completion proof](evidence/2026-09-09-main-menu-completion.md) | Credits, explicit multiplayer status, audio controls, campaign reset, corrected `MDATA.300` cue, original button effects, and Astra completion acceptance. |
 | [Main-menu semantics proof](evidence/2026-09-09-main-menu-semantics.md) | Fourteen authentic semantic hotspots, selection state, cyclic keyboard focus, shared actions/SFX, destination lifecycle, and Astra browser acceptance. |
+| [Main-menu music and final visual proof](evidence/2026-09-09-main-menu-music-toggle.md) | Original-button absence proof, documented holographic extension, native acceptance, and Astra 10/10 browser evidence. |
 | [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
@@ -37,8 +38,8 @@ acceptance plan required before the project can claim 100% functionality.
 The project is substantially implemented, but it is not yet demonstrably 100%
 functional. Fleet-miniature acceptance, deterministic four-request browser
 startup, F-001 browser Save/Load/Delete, the F-011A fingerprint primitive,
-F-011B1 save continuation and F-016A/B/C/D cockpit/setup functionality now pass;
-P04 is complete. P03 retains only native interactive visual acceptance.
+F-011B1 save continuation and F-016A/B/C/D/E cockpit/setup functionality now
+pass; P03 and P04 are complete.
 Long-running command replay, native/WASM checkpoint parity, tactical parity, remaining browser
 memory/media work, cross-browser performance, formatting, lint, and
 release-level visual acceptance remain incomplete.

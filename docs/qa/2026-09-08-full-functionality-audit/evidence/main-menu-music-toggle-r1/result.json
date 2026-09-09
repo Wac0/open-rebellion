@@ -1,0 +1,77 @@
+{
+  "verdict": "SAFE_TO_COMMIT",
+  "passed": 10,
+  "failed": 0,
+  "unverified": 0,
+  "url": "http://127.0.0.1:8770/",
+  "browser": "Chromium 141.0.7390.37",
+  "requests": {
+    "total": 4,
+    "successful": 4,
+    "failed": 0
+  },
+  "errors": {
+    "console": 0,
+    "page": 0,
+    "WebGL": 0,
+    "missing_asset": 0,
+    "deleted_texture": 0,
+    "panic": 0,
+    "plugin": 0,
+    "import": 0
+  },
+  "warnings": {
+    "count": 4,
+    "detail": "Chromium GPU stall due to ReadPixels performance warnings"
+  },
+  "gates": {
+    "1": "PASS: fresh Chromium context; document, gl.js, WASM and runtime.orpk each HTTP 200; no console/page/WebGL/asset/texture/panic/plugin/import errors.",
+    "2": "PASS: inspected populated authentic cockpit at 640x480, 1280x960, 1280x800 and 1440x900; uniform scales 1, 2, 5/3 and 1.875; horizontal offsets 0, 0, 106.667 and 120.",
+    "3": "PASS: 15 semantic buttons; original 14 labels/order and visible cockpit controls match canonical menu reference; stable Menu music index 14.",
+    "4": "PASS: nominal logical housing [594,10,30,22]; no original hotspot overlap; 24 clicks one device pixel outside housing produced zero toggles.",
+    "5": "PASS: initial aria-pressed=true, solid inset green LED RGB(72,232,96), 4x3 pixels at [616,14]; screenshot recorded before immediate mute.",
+    "6": "PASS: aria-pressed=false; inset red LED RGB(232,92,72), complete rectangular pixel regions at all sizes; muted speaker/slash art visibly unclipped.",
+    "7": "PASS: pointer center and Enter each produced exactly one state transition and one toggle log; restored muted after each; yellow focus outline outside art.",
+    "8": "PASS: real WebAudio looping 35.340771s music gain zero while muted; original MenuSelect resource 8004 logged and 0.357188s SFX starts at gain 1.",
+    "9": "PASS: paint and hit bounds agree at device-pixel resolution at every viewport; inside probes activate; outside probes do not; housing visibly clears canopy strut.",
+    "10": "PASS: pointer selected Intermediate difficulty (aria-pressed=true); Credits opened; Escape returned to cockpit with music still muted."
+  },
+  "geometry_note": "Noninteger scales round housing edges to device pixels. Fractional Playwright clicks can truncate clientX/clientY onto an inclusive border and do not establish an outside-paint activation. All 24 integer outside-border probes were inert.",
+  "housing_device_bounds_xyxy": [
+    [
+      594,
+      10,
+      624,
+      32
+    ],
+    [
+      1188,
+      20,
+      1248,
+      64
+    ],
+    [
+      1097,
+      17,
+      1147,
+      53
+    ],
+    [
+      1234,
+      19,
+      1290,
+      60
+    ]
+  ],
+  "screenshots": [
+    "enabled-640x480.png",
+    "muted-640x480.png",
+    "focused-1440x900.png"
+  ],
+  "final_state": {
+    "aria_pressed": false,
+    "music_gain": 0,
+    "browser_output_muted": true
+  },
+  "repo_modified": false
+}

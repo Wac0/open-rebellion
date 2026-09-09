@@ -577,8 +577,8 @@
     {
       "id": "F-016",
       "severity": "P1",
-      "status": "browser_remediated_native_visual_open",
-      "title": "Original main-menu browser parity passes; native visual acceptance remains",
+      "status": "remediated",
+      "title": "Original main-menu parity and documented extension pass",
       "evidence": [
         "The browser composes COMMON 20001 with binary-mapped control resources instead of stretching and dimming the empty shell or overlaying replacement text buttons",
         "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented menu WebAudio",
@@ -587,8 +587,9 @@
         "Astra medium F-016B R2 passed 18 of 18 setup, reload, bitmap, storage, network, and error assertions",
         "F-016C adds Credits, explicit M4 multiplayer status, gain/mute, return-to-menu audio, a clean second-campaign reset, the exact MDATA.300 menu cue, and original COMMON.DLL button effects",
         "F-016D exposes all 14 authentic hotspots through clipped browser semantics and the same Rust action, focus, state, destination, and original-effect paths",
-        "All 502 workspace tests pass; Astra medium F-016D passed 9 of 9 browser gates and 84 of 84 focus transitions with four startup requests and zero runtime errors",
-        "Native build/startup passes; native interactive visual acceptance remains the final P03 release-hardening gate"
+        "F-016D passed 9 of 9 browser gates and 84 of 84 focus transitions for the 14 authentic controls",
+        "F-016E documents that the original had no standalone music control and adds one non-original 30x22 music-only extension based on the Jiff Gorda/SWG Project Thorn reference and verified Fable 5.1 guidance",
+        "All 504 workspace tests pass; the user accepted native presentation and Astra medium F-016E passed 10 of 10 browser gates across four viewports with four startup requests and zero runtime errors"
       ],
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
@@ -798,9 +799,66 @@
             "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md"
+        },
+        {
+          "id": "F-016E",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "scope": "documented menu-music extension and final native/browser main-menu presentation",
+          "workspace_tests": {
+            "passed": 504,
+            "failed": 0,
+            "ignored": 2
+          },
+          "native": {
+            "build": "pass",
+            "original_menu_sfx_loaded": 4,
+            "interactive_visual_acceptance": "pass_user_confirmed"
+          },
+          "browser": {
+            "assertions_passed": 10,
+            "assertions_failed": 0,
+            "assertions_unverified": 0,
+            "engine": "Chromium 141.0.7390.37",
+            "viewports": ["640x480", "1280x960", "1280x800", "1440x900"],
+            "requests_per_cold_load": 4,
+            "original_controls": 14,
+            "documented_extensions": 1,
+            "outside_edge_clicks_passed": 24,
+            "narrow_r1_defect": "centered bevel strokes painted one pixel outside the hitbox below native size",
+            "narrow_r2_assertions_passed": 10,
+            "narrow_r2_assertions_failed": 0,
+            "narrow_r2_viewports": ["320x240", "480x360"],
+            "narrow_r2_outside_edge_clicks_passed": 8,
+            "console_errors": 0,
+            "page_errors": 0,
+            "failed_requests": 0,
+            "bitmap_ui": "pass",
+            "final_music_state": "muted"
+          },
+          "audio": {
+            "default_player_state": "enabled",
+            "test_state_after_initial_assertion": "muted",
+            "muted_music_gain": 0,
+            "menu_select_resource": 8004,
+            "menu_select_sfx_gain": 1
+          },
+          "artifact": {
+            "wasm_bytes": 4682288,
+            "wasm_sha256": "3619ff51bf4b3a5137b8672204b454b632b040a1d2fa2bd642e02ff07957a9fa",
+            "runtime_pack_entries": {
+              "game_data": 52,
+              "bitmaps": 2231,
+              "audio": 5
+            },
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-music-toggle.md"
         }
       ],
-      "acceptance": "Browser functional and semantic acceptance reproduces the assembled cockpit, every mapped hover/click/keyboard/screen-reader behavior and selection, direct faction start, MDATA.300 menu music, original button effects, 4:3 scaling, destinations, audio lifecycle, and clean campaign reset with no blank aperture, visible replacement control, or missing resource. Native interactive visual acceptance remains open."
+      "acceptance": "Native and browser acceptance reproduces the assembled cockpit, every mapped hover/click/keyboard/screen-reader behavior and selection, direct faction start, MDATA.300 menu music, original button effects, 4:3 scaling, destinations, audio lifecycle, and clean campaign reset with no blank aperture, visible replacement control, or missing resource. The original 14-control contract remains intact and the optional music-only control is documented as an Open Rebellion extension."
     }
   ],
   "fable_review": {
@@ -812,6 +870,19 @@
       "Interactive combat result application omits officer capture and can disagree with core auto-resolution.",
       "Autoresearch parameter tuning should pause until simulation feedback defects and determinism are corrected."
     ],
+    "main_menu_extension_review": {
+      "verdict": "functionally shippable after one-function visual corrections",
+      "reference_direction": "Jiff Gorda/SWG Project Thorn cyan projection inside the original Rebellion physical cockpit language",
+      "requirements_applied": [
+        "move the housing to logical y=10 for six-pixel canopy clearance",
+        "confine cyan bloom and scanlines to the projected speaker",
+        "use monochrome cyan projection art and reserve red/green for a rectangular inset state lamp",
+        "keep rest static, use restrained 5 Hz hover interference, and displace/collapse the pressed projection",
+        "reserve gold for external focus and clamp strokes to at least one logical pixel",
+        "keep the stable Menu music name, pressed state, paint rect, and hit rect congruent",
+        "document the control as an Open Rebellion extension rather than original parity"
+      ]
+    },
     "browser_asset_strategy": {
       "format": "Brotli-compressed indexed ui.pak",
       "target_initial_requests": 4,
@@ -978,22 +1049,23 @@
     {
       "id": "P03",
       "name": "Main menu",
-      "status": "in_progress",
+      "status": "completed",
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
         "F-016A browser cockpit composition, exact pointer regions, direct faction start, Load/Options, and responsive scaling",
         "F-016C Credits, explicit M4 multiplayer status, keyboard traversal, gain/mute, return lifecycle, MDATA.300 music, and original button effects",
-        "F-016D all 14 browser-semantic controls, selection state, cyclic focus, shared action/SFX routing, and destination lifecycle"
+        "F-016D all 14 browser-semantic controls, selection state, cyclic focus, shared action/SFX routing, and destination lifecycle",
+        "F-016E documented music-only extension, native visual acceptance, and four-viewport Astra browser acceptance"
       ],
       "subpasses": [
         "browser cockpit assembly and original hotspot behavior: pass",
         "browser destinations, audio, keyboard, reset, and Quit behavior: pass",
         "responsive browser acceptance: pass",
         "native build, startup, and original resource loading: pass",
-        "native interactive visual acceptance: open",
+        "native interactive visual acceptance: pass",
         "per-control browser semantic accessibility: pass"
       ],
-      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md"
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-music-toggle.md"
     },
     {
       "id": "P04",

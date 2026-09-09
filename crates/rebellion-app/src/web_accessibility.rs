@@ -19,6 +19,7 @@ extern "C" {
         difficulty: u32,
         galaxy_size: u32,
         headquarters_only: u32,
+        music_enabled: u32,
     );
 }
 
@@ -64,7 +65,7 @@ pub fn take_user_interaction() -> bool {
     USER_INTERACTION.swap(false, Ordering::AcqRel)
 }
 
-pub fn sync_menu(active: bool, state: &MainMenuState) {
+pub fn sync_menu(active: bool, state: &MainMenuState, music_enabled: bool) {
     let difficulty = match state.difficulty {
         rebellion_render::Difficulty::Easy => MainMenuControl::Easy,
         rebellion_render::Difficulty::Medium => MainMenuControl::Intermediate,
@@ -85,6 +86,7 @@ pub fn sync_menu(active: bool, state: &MainMenuState) {
             difficulty.index() as u32,
             galaxy_size.index() as u32,
             state.headquarters_only as u32,
+            music_enabled as u32,
         );
     }
 }

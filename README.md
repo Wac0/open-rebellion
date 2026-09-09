@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-macroquad-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Browser-blue.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Tests-502%20passing-green.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-504%20passing-green.svg" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
   <a href="https://tdimino.github.io/open-rebellion/"><img src="https://img.shields.io/badge/Docs-Ghidra%20RE-blueviolet.svg" alt="Ghidra RE Docs"></a>
 </p>
@@ -40,7 +40,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification (2026-09-09):** The original cockpit passes browser functional and accessibility acceptance: 14 authentic bitmap controls, all setup and destination paths, keyboard/screen-reader semantics, `MDATA.300` music, and recovered button effects. All 502 workspace tests pass. Native visual acceptance, multiplayer networking, and broader release gates remain in the [audit](docs/qa/2026-09-08-full-functionality-audit/) and [menu reference](agent_docs/main-menu-parity.md).
+> **Verification (2026-09-09):** The cockpit passes native and browser acceptance: 14 authentic bitmap controls, one documented music-only extension, all setup/destination paths, accessible input, `MDATA.300`, and recovered button effects. All 504 workspace tests pass. Multiplayer networking and broader release gates remain in the [audit](docs/qa/2026-09-08-full-functionality-audit/) and [menu reference](agent_docs/main-menu-parity.md).
 
 | Layer | Implementation status | Release acceptance |
 |-------|-----------------------|--------------------|

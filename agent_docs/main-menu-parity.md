@@ -45,7 +45,7 @@ space, and apply the same scale and offset to drawing and hit testing.
 
 ```text
 ┌────────────────────────────── 640 ──────────────────────────────┐
-│  [Easy] [Intermediate] [Expert]                                │
+│  [Easy] [Intermediate] [Expert]                    [OR music]   │
 │                                                                 │
 │                              [Credits] [Multiplayer]             │
 │                         [galaxy size screens]                    │
@@ -81,6 +81,28 @@ data enum retains the encoded values as `Standard = 1`, `Large = 2`, and
 `Huge = 3`; UI parity maps original Small/Medium/Large to current
 Standard/Large/Huge respectively without changing the data encoding.
 
+## Documented Open Rebellion extension
+
+The original constructor creates exactly the 14 controls above. It does not
+create a standalone cockpit mute button: music is configured through the
+Save/Load and Options destination and persisted under `MusicSwitch` and
+`MusicVolume` (see `ghidra/notes/FUN_004173c0.c`, `FUN_004176e0.c`, and
+`FUN_00421790_settings.c`).
+
+Open Rebellion adds one optional convenience control after those 14 authentic
+controls. `Menu music` occupies logical rect `(594,10,30,22)`, outside every
+original hotspot. It starts enabled for players, mutes only music, preserves
+the original control effects, and resets to enabled on a new app launch. Test
+runs assert that default once, then switch it off and leave it muted.
+
+The compact housing follows the cockpit's hard physical bevels. Its cyan
+projection, restrained scanlines, and inset red/green lamp draw specifically
+from the Jiff Gorda/SWG Project Thorn reference. A verified Fable 5.1 design
+pass moved the control clear of the canopy strut, confined the holographic
+treatment to the speaker projection, and required identical painted and hit
+bounds. This extension is vector-drawn because no original bitmap exists for
+it; it must never be represented as original-game parity.
+
 ## Defaults and transitions
 
 | Setting | Original field | Default | Open Rebellion mapping |
@@ -108,8 +130,9 @@ Death Star outcome to supersede that rule.
 3. Treat palette-blue matte in the Common menu sprites as transparent.
 4. Animate the matching sequence on hover and show a pressed state on pointer down.
 5. Transform the exact logical rectangles above for pointer hit testing.
-6. Preserve mouse behavior and expose all 14 controls through clipped semantic
-   DOM buttons without adding visible replacement text.
+6. Preserve mouse behavior and expose the 14 original controls plus the
+   documented music extension through clipped semantic DOM buttons without
+   adding visible replacement text.
 7. Keep difficulty, galaxy size, and game type selection visible.
 8. Start the selected faction directly; do not show the custom setup page.
 
@@ -124,7 +147,8 @@ F-016B verifies that all four setup values reach active configuration, save v11,
 reload, and `VictorySystem` in the browser. F-016C verifies that a subsequent
 campaign cleanly replaces every campaign subsystem. F-016D verifies that the
 browser accessibility tree operates the same Rust controls, focus art, state,
-destinations, and sound paths.
+destinations, and sound paths. F-016E verifies the documented music extension,
+native presentation, exact device-pixel geometry, and music-only audio path.
 
 ## Music contract
 
@@ -164,7 +188,7 @@ screenshots and a JSON result for every run.
 | Navigation | Load/options, credits, multiplayer, and quit reach the correct destination or remain explicit failures |
 | Pointer geometry | Center and edge clicks pass at 640x480, 1280x960, 1280x800, 1440x900, and a narrow supported viewport |
 | Keyboard access | Every control is keyboard reachable, single-activation, and visibly focused without covering art |
-| Browser semantics | One named navigation landmark exposes all 14 controls, selection state, cyclic traversal, and the same actions; it is absent outside the menu |
+| Browser semantics | One named navigation landmark exposes the 14 original controls and one documented extension, selection state, cyclic traversal, and the same actions; it is absent outside the menu |
 | Visual quality | No blank aperture, blue matte, stretch, clip, wrong sprite family, or text-button overlay |
 | Runtime quality | Zero page, console, request, WebGL, missing-asset, or panic errors |
 | Audio | MDATA.300 loads once, begins after the browser gesture, loops without overlap, obeys gain/mute, resumes on return, and the mapped WAVE effects play without overlap |
@@ -175,6 +199,8 @@ and the endpoint/audio/reset rows in
 [F-016C evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md).
 The semantic row is verified in
 [F-016D evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md).
-P04 is complete. P03 functional and semantic acceptance pass in the browser,
-and native build/startup passes; native interactive visual acceptance remains
-the final main-menu release-hardening gate.
+The extension and final visual row are verified in
+[F-016E evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-music-toggle.md).
+P03 and P04 are complete: browser functional, semantic, responsive, and audio
+acceptance pass, and the native presentation received interactive visual
+acceptance on 2026-09-09.

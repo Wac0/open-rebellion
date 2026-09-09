@@ -307,10 +307,10 @@ the run as formally degenerate.
 - Acceptance: versioned, compressed, asynchronous IndexedDB saves round-trip
   complete state, expose quota/corruption errors, and preserve fingerprints.
 
-### F-016: Original main-menu browser parity passes; native visual acceptance remains
+### F-016: Original main-menu parity and documented extension pass
 
 - Severity: P1
-- Status: browser functionality and semantics remediated; native visual acceptance remains
+- Status: remediated; P03 and P04 pass
 - Evidence: the former stretched, dimmed bitmap and replacement text buttons
   are gone. The browser now composes COMMON 20001 with the binary-mapped control
   resources, exact logical hit regions, 4:3 scaling, direct faction starts, and
@@ -334,21 +334,38 @@ the run as formally degenerate.
   nine of nine browser gates, including 84/84 focus transitions, six exact
   keyboard activations, all destinations, the campaign return, `MDATA.300`,
   all four original effects, four-request startup, and zero runtime errors. See
-  `evidence/2026-09-09-main-menu-semantics.md`.
+  `evidence/2026-09-09-main-menu-semantics.md`. F-016E records binary evidence
+  that the original had no standalone mute control, then adds one clearly
+  separated Open Rebellion extension. Its 30×22 hard-beveled housing and cyan
+  projection use the Jiff Gorda/SWG Project Thorn reference; verified Fable 5.1
+  review set the canopy clearance, restrained motion, color, and exact hit-area
+  rules. The user accepted the native presentation, all 504 tests pass, and
+  Astra-medium passed 10/10 browser gates across four viewports with 24/24
+  outside-edge probes inert, music gain zero while muted, SFX gain one, and no
+  runtime errors. A narrow follow-up found a one-pixel bevel overflow below
+  native size; clipping the full device to the shared hit rectangle corrected
+  it, and Astra R2 passed 10/10 at 320×240 and 480×360 with 8/8 outside-edge
+  probes inert. See `evidence/2026-09-09-main-menu-music-toggle.md`.
 - Reference: [`agent_docs/main-menu-parity.md`](../../../agent_docs/main-menu-parity.md)
   records the binary-confirmed geometry, resources, commands, settings, music,
   responsive transform, and Astra matrix.
 - Acceptance: native and browser reproduce the assembled cockpit, every mapped
   hover/click/keyboard behavior and selection, direct faction start, menu music,
   4:3 scaling, and all navigation with no blank aperture or missing resource.
-  P04 is complete. Browser semantics, native build/startup, and original-resource
-  loading pass; native interactive visual acceptance is the remaining P03 gate.
+  The original 14-control contract remains intact; the optional music-only
+  control is documented as an extension. P03 and P04 are complete.
 
 ## Fable 5.1 audit synthesis
 
 The Fable review confirmed the original blockers and sharpened several
 interpretations:
 
+- For the non-original menu-music extension, Fable judged the behavior
+  shippable after a one-function visual pass: six-pixel canopy clearance,
+  Project Thorn-style cyan confined to the projection, a rectangular inset
+  status lamp, static rest art, restrained 5 Hz hover interference, pressed
+  displacement, gold-only focus, and congruent paint/hit bounds. F-016E
+  applies and verifies each requirement.
 - The `19 pass / 5 fail / 1 skip` parity score is not five equivalent gameplay
   failures. The original AI interval is a documented augmentation, three Death
   Star checks expose structural AI/event gaps, and the research mismatch may be
@@ -414,7 +431,7 @@ and underlying state mutation are both demonstrated.
 | P00 | Supported scope | Define native and WASM contracts. Explicitly include or exclude browser audio, video, advisor, EData, and mods. |
 | P01 | Build infrastructure | Formatting, warning-free all-target check, strict clippy, all required tests, native build, actual WASM packaging, and artifact inspection. |
 | P02 | Data and startup | Every required/optional DAT table, string names, entity counts, troop classes, clean boot, and missing/corrupt-data errors. |
-| P03 | Main menu | Assemble and operate the original cockpit controls, animation, navigation, keyboard and screen-reader access, `MDATA.300` music, original button effects, and responsive 4:3 hit testing per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). Browser functional and semantic acceptance pass; native interactive visual acceptance remains. |
+| P03 | Main menu | **Pass.** Assemble and operate the original 14 cockpit controls, animation, navigation, keyboard and screen-reader access, `MDATA.300` music, original button effects, responsive 4:3 hit testing, and the documented optional music-only extension per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). Native and browser acceptance pass. |
 | P04 | Game setup | Use the cockpit controls for both factions, three difficulties, three original galaxy sizes, both game types, direct campaign start, correct state propagation, and clean second-campaign reset per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). |
 | P05 | Clock | Pause and every speed, focus loss, browser background/resume, modal/combat/cutscene tick behavior. |
 | P06 | Galaxy navigation | Pan, wheel zoom, reset, system selection, right-click menu, resizing, high-DPI scale, and cockpit input boundaries. |

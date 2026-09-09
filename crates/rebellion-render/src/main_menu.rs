@@ -6,7 +6,8 @@
 //! `agent_docs/main-menu-parity.md`.
 
 use egui_macroquad::egui::{
-    self, Color32, FontFamily, FontId, Pos2, Rect, Sense, Stroke, Vec2, WidgetInfo, WidgetType,
+    self, Color32, FontFamily, FontId, Pos2, Rect, Sense, Shape, Stroke, Vec2, WidgetInfo,
+    WidgetType,
 };
 use rebellion_core::dat::GalaxySize;
 use rebellion_core::missions::MissionFaction;
@@ -17,6 +18,8 @@ use crate::panels::game_setup::Difficulty;
 
 pub const LOGICAL_WIDTH: f32 = 640.0;
 pub const LOGICAL_HEIGHT: f32 = 480.0;
+pub const ORIGINAL_CONTROL_COUNT: usize = 14;
+pub const MUSIC_TOGGLE_RECT: LogicalRect = LogicalRect::new(594.0, 10.0, 30.0, 22.0);
 const ANIMATION_FPS: f64 = 15.0;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -36,6 +39,8 @@ pub enum MainMenuControl {
     Credits,
     Multiplayer,
     Quit,
+    /// Open Rebellion convenience extension; not present in the 1998 cockpit.
+    MusicToggle,
 }
 
 impl MainMenuControl {
@@ -66,6 +71,7 @@ impl MainMenuControl {
             Self::Credits => "Credits",
             Self::Multiplayer => "Multiplayer",
             Self::Quit => "Quit",
+            Self::MusicToggle => "Menu music",
         }
     }
 }
@@ -153,6 +159,7 @@ pub const CONTROL_RECTS: &[(MainMenuControl, LogicalRect)] = &[
         MainMenuControl::Quit,
         LogicalRect::new(536.0, 393.0, 63.0, 64.0),
     ),
+    (MainMenuControl::MusicToggle, MUSIC_TOGGLE_RECT),
 ];
 
 /// Persistent selections and animation state for the cockpit menu.
@@ -223,6 +230,7 @@ pub enum MainMenuAction {
     Credits,
     Multiplayer,
     Quit,
+    ToggleMusic,
 }
 
 pub fn main_menu_canvas_rect(viewport: Rect) -> Rect {
@@ -241,6 +249,15 @@ pub fn control_rect(canvas: Rect, logical: LogicalRect) -> Rect {
     )
 }
 
+/// Device-pixel-aligned bounds shared by the extension's paint and hit paths.
+pub fn music_toggle_rect(canvas: Rect) -> Rect {
+    let rect = control_rect(canvas, MUSIC_TOGGLE_RECT);
+    Rect::from_min_max(
+        Pos2::new(rect.min.x.round(), rect.min.y.round()),
+        Pos2::new(rect.max.x.round(), rect.max.y.round()),
+    )
+}
+
 fn logical_pointer(canvas: Rect, pointer: Pos2) -> Option<Pos2> {
     if !canvas.contains(pointer) || canvas.width() <= 0.0 {
         return None;
@@ -253,8 +270,11 @@ fn logical_pointer(canvas: Rect, pointer: Pos2) -> Option<Pos2> {
 }
 
 pub fn hit_test(canvas: Rect, pointer: Pos2) -> Option<MainMenuControl> {
+    if music_toggle_rect(canvas).contains(pointer) {
+        return Some(MainMenuControl::MusicToggle);
+    }
     let logical = logical_pointer(canvas, pointer)?;
-    CONTROL_RECTS
+    CONTROL_RECTS[..ORIGINAL_CONTROL_COUNT]
         .iter()
         .find_map(|(control, rect)| rect.contains(logical).then_some(*control))
 }
@@ -354,6 +374,9 @@ fn texture_for(
                 10011
             }
         }
+        MainMenuControl::MusicToggle => {
+            unreachable!("the Open Rebellion music toggle uses vector cockpit chrome")
+        }
     }
 }
 
@@ -406,6 +429,7 @@ fn activate(control: MainMenuControl, state: &mut MainMenuState) -> Option<MainM
         MainMenuControl::Credits => return Some(MainMenuAction::Credits),
         MainMenuControl::Multiplayer => return Some(MainMenuAction::Multiplayer),
         MainMenuControl::Quit => return Some(MainMenuAction::Quit),
+        MainMenuControl::MusicToggle => return Some(MainMenuAction::ToggleMusic),
     }
     None
 }
@@ -439,11 +463,154 @@ fn adjacent_control(current: Option<MainMenuControl>, backwards: bool) -> MainMe
     CONTROL_RECTS[next].0
 }
 
+fn draw_music_toggle(
+    painter: &egui::Painter,
+    rect: Rect,
+    music_enabled: bool,
+    hovered: bool,
+    pressed: bool,
+    hover_elapsed: f64,
+) {
+    // Egui centers line strokes on their paths. Clip the complete device to
+    // the shared interaction rect so sub-native scales cannot paint a bevel
+    // pixel outside the clickable housing.
+    let painter = painter.with_clip_rect(rect);
+    let scale = rect.width() / 30.0;
+    let stroke = scale.max(1.0);
+    let top_left = Color32::from_rgb(214, 226, 222);
+    let face = Color32::from_rgb(166, 180, 176);
+    let bottom_right = Color32::from_rgb(92, 104, 104);
+    let lip = Color32::from_rgb(24, 24, 32);
+    painter.rect_filled(rect, scale, face);
+    painter.add(Shape::line(
+        vec![rect.left_bottom(), rect.left_top(), rect.right_top()],
+        Stroke::new(stroke, top_left),
+    ));
+    painter.add(Shape::line(
+        vec![rect.left_bottom(), rect.right_bottom(), rect.right_top()],
+        Stroke::new(stroke, bottom_right),
+    ));
+    let aperture = rect.shrink(3.0 * scale);
+    painter.rect_filled(aperture, 0.5 * scale, Color32::from_rgb(8, 10, 14));
+    painter.rect_stroke(
+        aperture,
+        0.5 * scale,
+        Stroke::new(stroke, lip),
+        egui::StrokeKind::Inside,
+    );
+
+    let pressed_offset = if pressed { scale } else { 0.0 };
+    let center_y = rect.center().y + pressed_offset;
+    let core_alpha = if pressed {
+        90
+    } else if !music_enabled {
+        110
+    } else if hovered && ((hover_elapsed * 5.0) as u32 % 2 == 1) {
+        160
+    } else {
+        230
+    };
+    let icon = Color32::from_rgba_unmultiplied(176, 226, 240, core_alpha);
+    let bloom = Color32::from_rgba_unmultiplied(72, 168, 216, 64);
+    let origin_x = rect.left() + pressed_offset;
+    let speaker_body = Rect::from_min_max(
+        Pos2::new(origin_x + 5.0 * scale, center_y - 2.5 * scale),
+        Pos2::new(origin_x + 9.0 * scale, center_y + 2.5 * scale),
+    );
+    let speaker_cone = vec![
+        Pos2::new(origin_x + 9.0 * scale, center_y - 2.5 * scale),
+        Pos2::new(origin_x + 14.0 * scale, center_y - 6.0 * scale),
+        Pos2::new(origin_x + 14.0 * scale, center_y + 6.0 * scale),
+        Pos2::new(origin_x + 9.0 * scale, center_y + 2.5 * scale),
+    ];
+    painter.rect_filled(speaker_body.expand(scale), scale, bloom);
+    for dx in [-0.75, 0.75] {
+        painter.add(Shape::convex_polygon(
+            speaker_cone
+                .iter()
+                .map(|point| Pos2::new(point.x + dx * scale, point.y))
+                .collect(),
+            bloom,
+            Stroke::NONE,
+        ));
+    }
+    painter.rect_filled(speaker_body, 0.5 * scale, icon);
+    painter.add(Shape::convex_polygon(speaker_cone, icon, Stroke::NONE));
+    if music_enabled {
+        for (x, height) in [(16.0, 3.5), (19.5, 5.5)] {
+            let points = vec![
+                Pos2::new(origin_x + x * scale, center_y - height * scale),
+                Pos2::new(origin_x + (x + 2.0) * scale, center_y),
+                Pos2::new(origin_x + x * scale, center_y + height * scale),
+            ];
+            painter.add(Shape::line(
+                points.clone(),
+                Stroke::new((3.0 * scale).max(1.0), bloom),
+            ));
+            painter.add(Shape::line(
+                points,
+                Stroke::new((1.5 * scale).max(1.0), icon),
+            ));
+        }
+    } else {
+        painter.line_segment(
+            [
+                Pos2::new(origin_x + 5.0 * scale, center_y + 6.0 * scale),
+                Pos2::new(origin_x + 22.0 * scale, center_y - 6.0 * scale),
+            ],
+            Stroke::new((1.5 * scale).max(1.0), icon),
+        );
+    }
+
+    let scan_phase = if hovered && ((hover_elapsed * 5.0) as u32 % 2 == 1) {
+        1.0
+    } else {
+        0.0
+    };
+    for line in -2..=2 {
+        let dy = (line as f32 * 2.0 + scan_phase) * scale;
+        let abs_y = (line as f32 * 2.0 + scan_phase).abs();
+        let left = if abs_y <= 2.5 {
+            origin_x + 5.0 * scale
+        } else {
+            origin_x + (9.0 + (abs_y - 2.5) * (5.0 / 3.5)) * scale
+        };
+        painter.line_segment(
+            [
+                Pos2::new(left, center_y + dy),
+                Pos2::new(origin_x + 14.0 * scale, center_y + dy),
+            ],
+            Stroke::new(stroke, Color32::from_black_alpha(96)),
+        );
+    }
+
+    // Keep the state lamp wholly inside the dark aperture. Sitting it on the
+    // lower bevel made the final device pixel look clipped at some scales.
+    let led_surround = Rect::from_min_size(
+        Pos2::new(rect.right() - 9.0 * scale, rect.top() + 3.0 * scale),
+        Vec2::new(6.0 * scale, 5.0 * scale),
+    );
+    painter.rect_filled(led_surround, 0.0, Color32::from_rgb(24, 30, 32));
+    let led = led_surround.shrink(scale);
+    painter.rect_filled(
+        led,
+        0.0,
+        if pressed {
+            Color32::from_rgb(32, 38, 38)
+        } else if music_enabled {
+            Color32::from_rgb(72, 232, 96)
+        } else {
+            Color32::from_rgb(232, 92, 72)
+        },
+    );
+}
+
 /// Draw the assembled cockpit and return an action when a control activates.
 pub fn draw_main_menu(
     ctx: &egui::Context,
     cache: &mut BmpCache,
     state: &mut MainMenuState,
+    music_enabled: bool,
 ) -> Option<MainMenuAction> {
     let mut action = None;
     egui::CentralPanel::default()
@@ -505,10 +672,24 @@ pub fn draw_main_menu(
                         | MainMenuControl::MediumGalaxy
                         | MainMenuControl::LargeGalaxy
                 ) || *control == galaxy_indicator;
-                let rect = control_rect(canvas, *logical);
+                let rect = if *control == MainMenuControl::MusicToggle {
+                    music_toggle_rect(canvas)
+                } else {
+                    control_rect(canvas, *logical)
+                };
                 let response = ui.interact(rect, ui.id().with(*control as u8), Sense::click());
-                response
-                    .widget_info(|| WidgetInfo::labeled(WidgetType::Button, true, control.label()));
+                response.widget_info(|| {
+                    if *control == MainMenuControl::MusicToggle {
+                        WidgetInfo::selected(
+                            WidgetType::Button,
+                            true,
+                            music_enabled,
+                            control.label(),
+                        )
+                    } else {
+                        WidgetInfo::labeled(WidgetType::Button, true, control.label())
+                    }
+                });
                 let keyboard_activation = response.has_focus()
                     && ui.input(|input| {
                         input.key_pressed(egui::Key::Enter) || input.key_pressed(egui::Key::Space)
@@ -518,7 +699,16 @@ pub fn draw_main_menu(
                     state.keyboard_focus = Some(*control);
                 }
 
-                if draw_control {
+                if *control == MainMenuControl::MusicToggle {
+                    draw_music_toggle(
+                        ui.painter(),
+                        rect,
+                        music_enabled,
+                        state.hovered == Some(*control),
+                        response.is_pointer_button_down_on(),
+                        hover_elapsed,
+                    );
+                } else if draw_control {
                     let resource_id = texture_for(
                         *control,
                         state,
@@ -664,10 +854,14 @@ mod tests {
         assert_eq!(adjacent_control(None, false), MainMenuControl::Easy);
         assert_eq!(
             adjacent_control(Some(MainMenuControl::Easy), true),
-            MainMenuControl::Quit
+            MainMenuControl::MusicToggle
         );
         assert_eq!(
             adjacent_control(Some(MainMenuControl::Quit), false),
+            MainMenuControl::MusicToggle
+        );
+        assert_eq!(
+            adjacent_control(Some(MainMenuControl::MusicToggle), false),
             MainMenuControl::Easy
         );
         assert_eq!(
@@ -677,14 +871,19 @@ mod tests {
     }
 
     #[test]
-    fn semantic_indices_and_labels_cover_every_original_control() {
-        assert_eq!(CONTROL_RECTS.len(), 14);
+    fn semantic_indices_cover_original_controls_and_music_extension() {
+        assert_eq!(ORIGINAL_CONTROL_COUNT, 14);
+        assert_eq!(CONTROL_RECTS.len(), ORIGINAL_CONTROL_COUNT + 1);
         for (index, (control, _)) in CONTROL_RECTS.iter().enumerate() {
             assert_eq!(control.index(), index);
             assert_eq!(MainMenuControl::from_index(index as u32), Some(*control));
             assert!(!control.label().is_empty());
         }
-        assert_eq!(MainMenuControl::from_index(14), None);
+        assert_eq!(
+            CONTROL_RECTS[ORIGINAL_CONTROL_COUNT].0,
+            MainMenuControl::MusicToggle
+        );
+        assert_eq!(MainMenuControl::from_index(15), None);
     }
 
     #[test]
@@ -703,6 +902,49 @@ mod tests {
         assert_eq!(state.take_sfx(), Some(SfxKind::MenuLoadOptions));
         state.set_semantic_focus(None);
         assert_eq!(state.semantic_focus(), None);
+
+        assert_eq!(
+            state.activate_control(MainMenuControl::MusicToggle),
+            Some(MainMenuAction::ToggleMusic)
+        );
+        assert_eq!(state.take_sfx(), Some(SfxKind::MenuSelect));
+    }
+
+    #[test]
+    fn music_extension_occupies_only_its_top_right_region() {
+        let canvas = Rect::from_min_size(Pos2::ZERO, Vec2::new(640.0, 480.0));
+        assert_eq!(MUSIC_TOGGLE_RECT.width, 30.0);
+        assert_eq!(MUSIC_TOGGLE_RECT.height, 22.0);
+        assert_eq!(
+            hit_test(canvas, Pos2::new(609.0, 25.0)),
+            Some(MainMenuControl::MusicToggle)
+        );
+        assert_eq!(hit_test(canvas, Pos2::new(593.9, 25.0)), None);
+        assert_eq!(hit_test(canvas, Pos2::new(624.1, 25.0)), None);
+        assert_eq!(hit_test(canvas, Pos2::new(609.0, 9.9)), None);
+        assert_eq!(hit_test(canvas, Pos2::new(609.0, 32.1)), None);
+
+        for (_, original) in &CONTROL_RECTS[..ORIGINAL_CONTROL_COUNT] {
+            let separated = MUSIC_TOGGLE_RECT.x + MUSIC_TOGGLE_RECT.width < original.x
+                || original.x + original.width < MUSIC_TOGGLE_RECT.x
+                || MUSIC_TOGGLE_RECT.y + MUSIC_TOGGLE_RECT.height < original.y
+                || original.y + original.height < MUSIC_TOGGLE_RECT.y;
+            assert!(separated, "music extension overlaps an original control");
+        }
+
+        let scaled = control_rect(
+            Rect::from_min_size(Pos2::ZERO, Vec2::new(1280.0, 960.0)),
+            MUSIC_TOGGLE_RECT,
+        );
+        assert_eq!(scaled.width(), 60.0);
+        assert_eq!(scaled.height(), 44.0);
+
+        let narrow = control_rect(
+            Rect::from_min_size(Pos2::ZERO, Vec2::new(320.0, 240.0)),
+            MUSIC_TOGGLE_RECT,
+        );
+        assert_eq!(narrow.width(), 15.0);
+        assert_eq!(narrow.height(), 11.0);
     }
 
     #[test]
