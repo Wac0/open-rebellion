@@ -24,31 +24,21 @@ cp web/index.html "${DIST}/"
 cp web/gl.js "${DIST}/"
 cp web/open-rebellion.wasm "${DIST}/"
 
-# Runtime data is required by the WASM loading screen. Keep it local to the
-# protected distribution; the original game data is intentionally not tracked.
-if [ ! -d web/data/base ] || [ ! -d web/data/ui ]; then
-    echo "ERROR: scripts/build-wasm.sh did not stage the required web/data payload."
+# Runtime data is required by the WASM loading screen. Ship the deterministic
+# pack rather than thousands of loose files; the original game data remains
+# local, generated, and intentionally untracked.
+if [ ! -f web/data/runtime.orpk ]; then
+    echo "ERROR: scripts/build-wasm.sh did not create web/data/runtime.orpk."
     exit 1
 fi
-cp -R web/data "${DIST}/"
+mkdir -p "${DIST}/data"
+cp web/data/runtime.orpk "${DIST}/data/"
 
 # Refuse to create an artifact that can compile but cannot boot.
-for required_file in \
-    "${DIST}/data/base/SECTORSD.DAT" \
-    "${DIST}/data/base/SYSTEMSD.DAT" \
-    "${DIST}/data/base/CAPSHPSD.DAT" \
-    "${DIST}/data/base/FIGHTSD.DAT" \
-    "${DIST}/data/base/TROOPSD.DAT" \
-    "${DIST}/data/base/MJCHARSD.DAT" \
-    "${DIST}/data/base/MNCHARSD.DAT" \
-    "${DIST}/data/base/textstra.json" \
-    "${DIST}/data/ui/bmp-manifest.json"
-do
-    if [ ! -f "${required_file}" ]; then
-        echo "ERROR: required browser runtime file is missing: ${required_file}"
-        exit 1
-    fi
-done
+if [ ! -s "${DIST}/data/runtime.orpk" ]; then
+    echo "ERROR: packaged browser runtime pack is missing or empty."
+    exit 1
+fi
 
 # Record hashes for every shipped runtime file so release and deployment
 # verification can prove which data and code the browser loaded.

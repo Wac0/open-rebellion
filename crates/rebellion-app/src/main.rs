@@ -1,9 +1,12 @@
 mod audio;
+#[cfg(any(target_arch = "wasm32", test))]
+mod runtime_pack;
 
 use ::rand::Rng;
 use ::rand::SeedableRng;
 use macroquad::prelude::*;
 use rand_xoshiro::Xoshiro256PlusPlus;
+use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 
 use rebellion_core::ai::{AIAction, AIState, AISystem, AiFaction, FleetMoveReason};
@@ -213,6 +216,291 @@ impl LiveCampaign<'_> {
     }
 }
 
+#[cfg(target_arch = "wasm32")]
+const REQUIRED_WASM_DATA: &[&str] = &[
+    "SECTORSD.DAT",
+    "SYSTEMSD.DAT",
+    "CAPSHPSD.DAT",
+    "FIGHTSD.DAT",
+    "TROOPSD.DAT",
+    "MJCHARSD.DAT",
+    "MNCHARSD.DAT",
+];
+
+#[cfg(target_arch = "wasm32")]
+const OPTIONAL_WASM_DATA: &[&str] = &[
+    "GNPRTB.DAT",
+    "SDPRTB.DAT",
+    "DEFFACSD.DAT",
+    "SYFCCRTB.DAT",
+    "SYFCRMTB.DAT",
+    "CMUNEFTB.DAT",
+    "CMUNAFTB.DAT",
+    "CMUNEMTB.DAT",
+    "CMUNALTB.DAT",
+    "CMUNCRTB.DAT",
+    "CMUNHQTB.DAT",
+    "CMUNYVTB.DAT",
+    "FACLCRTB.DAT",
+    "FACLHQTB.DAT",
+    "DIPLMSTB.DAT",
+    "ESPIMSTB.DAT",
+    "ASSNMSTB.DAT",
+    "INCTMSTB.DAT",
+    "DSSBMSTB.DAT",
+    "ABDCMSTB.DAT",
+    "RCRTMSTB.DAT",
+    "RESCMSTB.DAT",
+    "SBTGMSTB.DAT",
+    "SUBDMSTB.DAT",
+    "ESCAPETB.DAT",
+    "FDECOYTB.DAT",
+    "FOILTB.DAT",
+    "INFORMTB.DAT",
+    "CSCRHTTB.DAT",
+    "UPRIS1TB.DAT",
+    "UPRIS2TB.DAT",
+    "RLEVADTB.DAT",
+    "RESRCTB.DAT",
+    "TDECOYTB.DAT",
+];
+
+#[cfg(target_arch = "wasm32")]
+fn draw_loading_progress(label: &str, loaded: usize, total: usize) {
+    clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
+    let text = if total == 0 {
+        label.to_string()
+    } else {
+        format!("{label} ({loaded}/{total})")
+    };
+    let font_size = 24.0;
+    let dims = measure_text(&text, None, font_size as u16, 1.0);
+    draw_text(
+        &text,
+        (screen_width() - dims.width) / 2.0,
+        screen_height() / 2.0,
+        font_size,
+        WHITE,
+    );
+    let bar_w = 300.0;
+    let bar_h = 8.0;
+    let bar_x = (screen_width() - bar_w) / 2.0;
+    let bar_y = screen_height() / 2.0 + 20.0;
+    draw_rectangle(bar_x, bar_y, bar_w, bar_h, DARKGRAY);
+    let ratio = if total == 0 {
+        0.0
+    } else {
+        loaded as f32 / total as f32
+    };
+    draw_rectangle(bar_x, bar_y, bar_w * ratio, bar_h, GREEN);
+}
+
+#[cfg(target_arch = "wasm32")]
+fn install_runtime_pack(bytes: &[u8]) -> Result<(), String> {
+    let mut pack = runtime_pack::parse_runtime_pack(bytes).map_err(|error| error.to_string())?;
+    for required in REQUIRED_WASM_DATA {
+        if !pack.game_files.contains_key(*required) {
+            return Err(format!("required entry is missing: {required}"));
+        }
+    }
+
+    let string_table: std::collections::HashMap<u16, String> = pack
+        .game_files
+        .remove("textstra.json")
+        .and_then(|data| serde_json::from_slice(&data).ok())
+        .unwrap_or_default();
+    let game_file_count = pack.game_files.len();
+    let bitmap_count = pack.bitmaps.len();
+    if bitmap_count == 0 {
+        return Err("runtime pack contains no UI bitmaps".to_string());
+    }
+
+    rebellion_data::set_string_table(string_table);
+    rebellion_data::set_file_cache(pack.game_files);
+    rebellion_render::set_bmp_cache(pack.bitmaps);
+    macroquad::logging::info!(
+        "runtime_asset_pack loaded game_files={} ui_bitmaps={} bytes={}",
+        game_file_count,
+        bitmap_count,
+        bytes.len()
+    );
+    Ok(())
+}
+
+#[cfg(target_arch = "wasm32")]
+async fn load_legacy_wasm_assets() {
+    use std::collections::HashMap;
+
+    let total = REQUIRED_WASM_DATA.len() + OPTIONAL_WASM_DATA.len();
+    let mut files: HashMap<String, Vec<u8>> = HashMap::new();
+    let mut loaded = 0;
+
+    for &name in REQUIRED_WASM_DATA {
+        let path = format!("data/base/{name}");
+        match macroquad::file::load_file(&path).await {
+            Ok(data) => {
+                files.insert(name.to_string(), data);
+                loaded += 1;
+            }
+            Err(error) => panic!("Required file {name} failed to load: {error:?}"),
+        }
+        draw_loading_progress("Loading game data…", loaded, total);
+        next_frame().await;
+    }
+
+    for &name in OPTIONAL_WASM_DATA {
+        let path = format!("data/base/{name}");
+        if let Ok(data) = macroquad::file::load_file(&path).await {
+            files.insert(name.to_string(), data);
+        }
+        loaded += 1;
+        draw_loading_progress("Loading game data…", loaded, total);
+        next_frame().await;
+    }
+
+    let string_table: HashMap<u16, String> =
+        match macroquad::file::load_file("data/base/textstra.json").await {
+            Ok(data) => serde_json::from_slice(&data).unwrap_or_default(),
+            Err(_) => HashMap::new(),
+        };
+    rebellion_data::set_string_table(string_table);
+    rebellion_data::set_file_cache(files);
+
+    #[derive(serde::Deserialize)]
+    struct BmpEntry {
+        dll: String,
+        id: u32,
+    }
+
+    let Ok(manifest_bytes) = macroquad::file::load_file("data/ui/bmp-manifest.json").await else {
+        eprintln!("WARNING: bmp-manifest.json not found — UI textures will be missing");
+        return;
+    };
+    let entries: Vec<BmpEntry> = match serde_json::from_slice(&manifest_bytes) {
+        Ok(entries) => entries,
+        Err(error) => {
+            eprintln!(
+                "ERROR: bmp-manifest.json is malformed: {error} — UI textures will be missing"
+            );
+            Vec::new()
+        }
+    };
+    let bmp_total = entries.len();
+    let mut bmp_cache = HashMap::with_capacity(bmp_total);
+    let mut fetch_failures = 0;
+
+    for (index, entry) in entries.iter().enumerate() {
+        let path = format!("data/ui/{}/BMP/{}.bmp", entry.dll, entry.id);
+        match macroquad::file::load_file(&path).await {
+            Ok(data) => {
+                bmp_cache.insert(format!("{}/{}", entry.dll, entry.id), data);
+            }
+            Err(error) => {
+                fetch_failures += 1;
+                if fetch_failures <= 5 {
+                    eprintln!("WARNING: failed to fetch {path}: {error:?}");
+                }
+            }
+        }
+        let bmp_loaded = index + 1;
+        if bmp_total > 0 && (bmp_loaded % 50 == 0 || bmp_loaded == bmp_total) {
+            draw_loading_progress("Loading UI assets…", bmp_loaded, bmp_total);
+            next_frame().await;
+        }
+    }
+
+    if fetch_failures > 0 {
+        eprintln!(
+            "WARNING: {fetch_failures}/{bmp_total} BMP fetches failed — some UI textures will be missing"
+        );
+    }
+    eprintln!(
+        "Loaded {} of {} UI BMPs through legacy per-file fallback",
+        bmp_cache.len(),
+        bmp_total
+    );
+    rebellion_render::set_bmp_cache(bmp_cache);
+}
+
+#[cfg(target_arch = "wasm32")]
+async fn load_wasm_assets() {
+    draw_loading_progress("Loading optimized runtime assets…", 0, 0);
+    next_frame().await;
+
+    match macroquad::file::load_file("data/runtime.orpk").await {
+        Ok(bytes) => install_runtime_pack(&bytes)
+            .unwrap_or_else(|error| panic!("Invalid data/runtime.orpk: {error}")),
+        Err(error) => {
+            eprintln!(
+                "WARNING: data/runtime.orpk unavailable ({error:?}); using legacy per-file loading"
+            );
+            load_legacy_wasm_assets().await;
+        }
+    }
+}
+
+/// Cache every glyph the Macroquad layers can draw in the current Galaxy view
+/// before the first draw call for a new font size.
+///
+/// Macroquad 0.4.x may resize its shared font atlas while a render batch still
+/// references the old texture. Pre-measuring the complete character set makes
+/// any resize happen at the safe start of the frame instead. Egui uses its own
+/// atlas and is unaffected.
+fn prewarm_galaxy_font_sizes(
+    world: &GameWorld,
+    map_state: &GalaxyMapState,
+    warmed_sizes: &mut HashSet<u16>,
+) {
+    let mut sizes = vec![14, 18];
+    // draw_galaxy_map consumes the wheel after this warmup. Include the two
+    // possible one-frame zoom outcomes so the newly selected size is already
+    // cached before the map emits any text geometry.
+    let zooms = [
+        map_state.zoom,
+        (map_state.zoom * 1.1).clamp(0.3, 5.0),
+        (map_state.zoom / 1.1).clamp(0.3, 5.0),
+    ];
+    for zoom in zooms {
+        if map_state.show_sector_labels {
+            sizes.push((16.0 * zoom).clamp(10.0, 32.0) as u16);
+        }
+        if zoom > 0.8 {
+            sizes.push((14.0 * zoom).clamp(9.0, 20.0) as u16);
+        }
+        if zoom > 1.5 {
+            sizes.push((12.0 * zoom).min(18.0) as u16);
+        }
+    }
+    sizes.sort_unstable();
+    sizes.dedup();
+
+    if sizes.iter().all(|size| warmed_sizes.contains(size)) {
+        return;
+    }
+
+    let mut characters = std::collections::BTreeSet::new();
+    for text in [
+        "REBEL ALLIANCE — COMMAND CENTER",
+        "GALACTIC EMPIRE — COMMAND BRIDGE",
+        "0123456789d",
+    ] {
+        characters.extend(text.chars());
+    }
+    for (_, sector) in &world.sectors {
+        characters.extend(sector.name.chars());
+    }
+    for (_, system) in &world.systems {
+        characters.extend(system.name.chars());
+    }
+    let sample: String = characters.into_iter().collect();
+
+    for size in sizes {
+        if warmed_sizes.insert(size) {
+            measure_text(&sample, None, size, 1.0);
+        }
+    }
+}
+
 #[macroquad::main(window_conf)]
 async fn main() {
     // Accept an optional GData path as the first CLI argument.
@@ -254,230 +542,7 @@ async fn main() {
 
     #[cfg(target_arch = "wasm32")]
     let mut world = {
-        use std::collections::HashMap;
-
-        // Files to load via HTTP fetch
-        let required: &[&str] = &[
-            "SECTORSD.DAT",
-            "SYSTEMSD.DAT",
-            "CAPSHPSD.DAT",
-            "FIGHTSD.DAT",
-            "TROOPSD.DAT",
-            "MJCHARSD.DAT",
-            "MNCHARSD.DAT",
-        ];
-        let optional: &[&str] = &[
-            "GNPRTB.DAT",
-            "SDPRTB.DAT",
-            "DEFFACSD.DAT",
-            "SYFCCRTB.DAT",
-            "SYFCRMTB.DAT",
-            "CMUNEFTB.DAT",
-            "CMUNAFTB.DAT",
-            "CMUNEMTB.DAT",
-            "CMUNALTB.DAT",
-            "CMUNCRTB.DAT",
-            "CMUNHQTB.DAT",
-            "CMUNYVTB.DAT",
-            "FACLCRTB.DAT",
-            "FACLHQTB.DAT",
-            "DIPLMSTB.DAT",
-            "ESPIMSTB.DAT",
-            "ASSNMSTB.DAT",
-            "INCTMSTB.DAT",
-            "DSSBMSTB.DAT",
-            "ABDCMSTB.DAT",
-            "RCRTMSTB.DAT",
-            "RESCMSTB.DAT",
-            "SBTGMSTB.DAT",
-            "SUBDMSTB.DAT",
-            "ESCAPETB.DAT",
-            "FDECOYTB.DAT",
-            "FOILTB.DAT",
-            "INFORMTB.DAT",
-            "CSCRHTTB.DAT",
-            "UPRIS1TB.DAT",
-            "UPRIS2TB.DAT",
-            "RLEVADTB.DAT",
-            "RESRCTB.DAT",
-            "TDECOYTB.DAT",
-        ];
-
-        let mut files: HashMap<String, Vec<u8>> = HashMap::new();
-        let total = required.len() + optional.len();
-        let mut loaded = 0;
-
-        // Loading screen: show progress while fetching DAT files
-        for &name in required {
-            let path = format!("data/base/{}", name);
-            match macroquad::file::load_file(&path).await {
-                Ok(data) => {
-                    files.insert(name.to_string(), data);
-                    loaded += 1;
-                }
-                Err(e) => {
-                    panic!("Required file {} failed to load: {:?}", name, e);
-                }
-            }
-            // Draw loading progress
-            clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
-            let text = format!("Loading... ({}/{})", loaded, total);
-            let font_size = 24.0;
-            let dims = measure_text(&text, None, font_size as u16, 1.0);
-            draw_text(
-                &text,
-                (screen_width() - dims.width) / 2.0,
-                screen_height() / 2.0,
-                font_size,
-                WHITE,
-            );
-            // Progress bar
-            let bar_w = 300.0;
-            let bar_h = 8.0;
-            let bar_x = (screen_width() - bar_w) / 2.0;
-            let bar_y = screen_height() / 2.0 + 20.0;
-            draw_rectangle(bar_x, bar_y, bar_w, bar_h, DARKGRAY);
-            draw_rectangle(
-                bar_x,
-                bar_y,
-                bar_w * (loaded as f32 / total as f32),
-                bar_h,
-                GREEN,
-            );
-            next_frame().await;
-        }
-
-        // Optional files: silently skip on 404
-        for &name in optional {
-            let path = format!("data/base/{}", name);
-            if let Ok(data) = macroquad::file::load_file(&path).await {
-                files.insert(name.to_string(), data);
-            }
-            loaded += 1;
-            // Update loading bar
-            clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
-            let text = format!("Loading... ({}/{})", loaded, total);
-            let font_size = 24.0;
-            let dims = measure_text(&text, None, font_size as u16, 1.0);
-            draw_text(
-                &text,
-                (screen_width() - dims.width) / 2.0,
-                screen_height() / 2.0,
-                font_size,
-                WHITE,
-            );
-            let bar_w = 300.0;
-            let bar_h = 8.0;
-            let bar_x = (screen_width() - bar_w) / 2.0;
-            let bar_y = screen_height() / 2.0 + 20.0;
-            draw_rectangle(bar_x, bar_y, bar_w, bar_h, DARKGRAY);
-            draw_rectangle(
-                bar_x,
-                bar_y,
-                bar_w * (loaded as f32 / total as f32),
-                bar_h,
-                GREEN,
-            );
-            next_frame().await;
-        }
-
-        // Load string table from pre-extracted JSON (TEXTSTRA.DLL can't be parsed in WASM)
-        let string_table: HashMap<u16, String> =
-            match macroquad::file::load_file("data/base/textstra.json").await {
-                Ok(data) => serde_json::from_slice(&data).unwrap_or_default(),
-                Err(_) => HashMap::new(),
-            };
-        if !string_table.is_empty() {
-            eprintln!(
-                "Loaded {} entity names from textstra.json",
-                string_table.len()
-            );
-        }
-
-        // Set the file cache and string table so load_game_data() can find them
-        rebellion_data::set_string_table(string_table);
-        rebellion_data::set_file_cache(files);
-
-        // ── Pre-fetch UI BMPs into BmpCache ──────────────────────────────────
-        // Load the manifest generated by build-wasm.sh, then fetch each BMP
-        // via HTTP and store raw bytes in the static WASM_BMP_CACHE.
-        if let Ok(manifest_bytes) = macroquad::file::load_file("data/ui/bmp-manifest.json").await {
-            #[derive(serde::Deserialize)]
-            struct BmpEntry {
-                dll: String,
-                id: u32,
-            }
-            let entries: Vec<BmpEntry> = match serde_json::from_slice(&manifest_bytes) {
-                Ok(v) => v,
-                Err(e) => {
-                    eprintln!("ERROR: bmp-manifest.json is malformed: {} — UI textures will be missing", e);
-                    Vec::new()
-                }
-            };
-            let bmp_total = entries.len();
-            if bmp_total == 0 {
-                eprintln!("WARNING: bmp-manifest.json is empty — no UI BMPs to load");
-            }
-            let mut bmp_cache_map: HashMap<String, Vec<u8>> = HashMap::with_capacity(bmp_total);
-            let mut bmp_loaded: usize = 0;
-            let mut fetch_failures: usize = 0;
-
-            for entry in &entries {
-                let path = format!("data/ui/{}/BMP/{}.bmp", entry.dll, entry.id);
-                match macroquad::file::load_file(&path).await {
-                    Ok(data) => {
-                        let key = format!("{}/{}", entry.dll, entry.id);
-                        bmp_cache_map.insert(key, data);
-                    }
-                    Err(e) => {
-                        fetch_failures += 1;
-                        if fetch_failures <= 5 {
-                            eprintln!("WARNING: failed to fetch {}: {:?}", path, e);
-                        }
-                    }
-                }
-                bmp_loaded += 1;
-
-                // Update loading bar every 50 files to avoid frame overhead
-                if bmp_total > 0 && (bmp_loaded % 50 == 0 || bmp_loaded == bmp_total) {
-                    clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
-                    let text = format!("Loading UI assets… ({}/{})", bmp_loaded, bmp_total);
-                    let font_size = 24.0;
-                    let dims = measure_text(&text, None, font_size as u16, 1.0);
-                    draw_text(
-                        &text,
-                        (screen_width() - dims.width) / 2.0,
-                        screen_height() / 2.0,
-                        font_size,
-                        WHITE,
-                    );
-                    let bar_w = 300.0;
-                    let bar_h = 8.0;
-                    let bar_x = (screen_width() - bar_w) / 2.0;
-                    let bar_y = screen_height() / 2.0 + 20.0;
-                    draw_rectangle(bar_x, bar_y, bar_w, bar_h, DARKGRAY);
-                    draw_rectangle(
-                        bar_x,
-                        bar_y,
-                        bar_w * (bmp_loaded as f32 / bmp_total as f32),
-                        bar_h,
-                        GREEN,
-                    );
-                    next_frame().await;
-                }
-            }
-
-            if fetch_failures > 0 {
-                eprintln!(
-                    "WARNING: {}/{} BMP fetches failed — some UI textures will be missing",
-                    fetch_failures, bmp_total
-                );
-            }
-            eprintln!("Loaded {} of {} UI BMPs into WASM cache", bmp_cache_map.len(), bmp_total);
-            rebellion_render::set_bmp_cache(bmp_cache_map);
-        } else {
-            eprintln!("WARNING: bmp-manifest.json not found — UI textures will be missing");
-        }
+        load_wasm_assets().await;
 
         match rebellion_data::load_game_data(&gdata_path) {
             Ok(w) => w,
@@ -589,6 +654,7 @@ async fn main() {
 
     // ── UI state ────────────────────────────────────────────────────────────
     let mut map_state = GalaxyMapState::default();
+    let mut warmed_galaxy_font_sizes = HashSet::new();
     let mut msg_log = MessageLog::default();
     let mut log_state = MessageLogState::default();
 
@@ -1970,6 +2036,7 @@ async fn main() {
                             ) {
                                 Ok(w) => {
                                     world = w;
+                                    warmed_galaxy_font_sizes.clear();
                                 }
                                 Err(e) => {
                                     eprintln!(
@@ -2042,6 +2109,11 @@ async fn main() {
             }
 
             GameMode::Galaxy => {
+                prewarm_galaxy_font_sizes(
+                    &world,
+                    &map_state,
+                    &mut warmed_galaxy_font_sizes,
+                );
                 let fog_state = if player_faction == MissionFaction::Alliance {
                     &fog_alliance_state
                 } else {
@@ -2808,6 +2880,7 @@ async fn main() {
                                 economy: &mut economy_state,
                             }
                             .restore(state);
+                            warmed_galaxy_font_sizes.clear();
 
                             cockpit_state.faction = if player_faction == MissionFaction::Alliance {
                                 CockpitFaction::Alliance

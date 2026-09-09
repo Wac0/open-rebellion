@@ -33,6 +33,7 @@ instead of a frame-cycling fallback.
 - [x] (2026-03-31 06:52Z) Grepped the repository for `TODO`, `FIXME`, and `HACK` comments and separated live source comments from stale documentation and vendored code comments.
 - [x] (2026-03-31 06:52Z) Reconciled stale gaps from the 2026-03-26 cross-reference report against later completed work in Knesset Ereshkigal, Knesset Ptah, and Knesset Hephaestus.
 - [x] (2026-09-08) Replaced the approximate fleet-list icon offset with exact mappings for all 38 fighter and capital-ship classes; Astra-medium R9 passed the browser bitmap and interaction gate. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.md`.
+- [x] (2026-09-08) Shipped deterministic `runtime.orpk` with 52 game-data entries and 2,231 BMPs. Astra-medium R6 passed both factions with four cold-load requests, zero loose asset requests, correct transparent fleet art, working interactions, and no errors across twenty zoom steps. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md`.
 - [ ] Implement Milestone 1: targeted mission parity and covert foil parity.
 - [ ] Implement Milestone 2: remaining AI decision parity.
 - [ ] Implement Milestone 3: remaining UI and media parity.
@@ -44,7 +45,7 @@ instead of a frame-cycling fallback.
 - [ ] M0: wire complete save/load/delete, fix HD and troop-data paths, and boot a self-contained browser package.
 - [ ] M1: stop fleet redispatch/spawn/backlog feedback loops and prove deterministic native/WASM replay across five 5,000-tick seeds.
 - [ ] M2: converge app, playtest, automatic combat, and tactical combat on one authoritative simulation/event path.
-- [ ] M3: ship indexed lazy-loaded assets, bounded caches, IndexedDB saves, high-DPI rendering, browser audio/advisors, and Chrome/Firefox/Safari acceptance.
+- [ ] M3: extend the verified indexed/lazy runtime pack with compression and bounded caches, then add IndexedDB saves, high-DPI rendering, browser audio/advisors, and Chrome/Firefox/Safari acceptance.
 - [ ] M4: build validated commands, an authoritative fog-safe server, prediction/reconciliation, reconnect, and multiplayer security after determinism passes.
 - [ ] M5: continuously gate format, clippy, release builds, app/browser integration, campaign bounds, bitmap screenshots, and performance budgets.
 - [ ] v1.0: deploy the complete browser build to Cloudflare Pages behind secret-backed password middleware and signed sessions, then pass Astra-medium authentication, single-player, multiplayer, performance, and bitmap acceptance against the deployed URL.

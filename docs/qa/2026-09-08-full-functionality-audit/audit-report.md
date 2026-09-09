@@ -253,11 +253,19 @@ the run as formally degenerate.
 ### F-014: Browser startup, memory, and rendering are not release-scaled
 
 - Severity: P1
-- Status: confirmed optimization gap
-- Evidence: approximately 2,231 BMP and 40 DAT resources are fetched serially;
-  raw bytes and decoded textures have no eviction policy; high-DPI mode is not
-  enabled; the galaxy can run two egui passes per frame; and sector hulls are
-  recomputed each frame.
+- Status: partially remediated; F-014A verified 2026-09-08
+- Closed tranche: a deterministic pack now carries 52 game-data entries and
+  2,231 bitmaps. The release package boots with four total requests and one
+  `runtime.orpk` request, retains lazy bitmap decode, includes hashes for all
+  five shipped files, and preserves a loose-file development fallback. Astra
+  medium passed both factions, fleet interactions, and ten zoom steps per
+  faction with zero loading, bitmap, console, or WebGL errors. See the
+  [F-014A evidence](evidence/2026-09-08-runtime-pack.md).
+- Remaining evidence: the pack is not compressed; raw bytes and decoded
+  textures have no eviction policy; HD assets are absent; high-DPI mode is not
+  enabled; the galaxy can run two egui passes per frame; sector hulls are
+  recomputed each frame; and Firefox/Safari and memory/frame budgets have not
+  passed.
 - Acceptance: the browser asset pack, lazy decode, LRU limits, one UI pass, and
   cached geometry meet the budgets below in Chrome, Firefox, and Safari.
 
@@ -300,10 +308,10 @@ later work must not hide failures in an earlier invariant.
 
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
-| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
+| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. Save/load wiring, paths, a self-contained package, and deterministic four-request startup are implemented; persistence replay and fingerprints remain. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
 | M1 — Simulation correctness | Prevent in-transit redispatch; model fleet position; merge arrivals; attach production correctly; impose stable ordering/RNG; aggregate system combat; enable Death Star production/fire; repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
-| M3 — Browser excellence | Create a Brotli-compressed indexed `ui.pak`; lazy-decode and LRU-cache textures; ship HD entries; enable high DPI; use one egui pass; cache geometry; move saves to IndexedDB; unlock audio after gesture; stage advisor frames; run real-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |
+| M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |
 | M4 — Multiplayer | Introduce validated, tick-stamped commands; authoritative host simulation; faction-filtered fog-safe deltas and snapshots; secure WSS transport; prediction/reconciliation; reconnect; persistence and observability. | Two clients run 5,000 ticks with matching server checkpoints every 250 ticks; at 200 ms RTT there are no input stalls and ≤1 reconciliation per 100 commands; reconnect within 60 s; all illegal commands rejected; hidden state absent from client memory. |
 | M5 — Continuous proof | Enforce format/clippy/build/browser checks; short and long campaign gates; resource and screenshot ledgers; app integration tests; package boot and data/save hashes. | Every supported P00–P40 pass is green from release artifacts, with reproducible evidence retained by CI. |
 | v1.0 — Protected Cloudflare release | Deploy the self-contained browser build to Cloudflare Pages with Functions middleware, `SITE_PASSWORD` and `SESSION_SECRET` secrets, signed secure cookies, asset headers, preview/production environments, and rollback instructions. | Anonymous requests cannot retrieve HTML, WASM, DAT, bitmap, save, or multiplayer endpoints; valid login survives navigation; invalid/expired/tampered sessions fail closed; logout works; Astra medium verifies gameplay and bitmap evidence through the deployed URL in current Chrome, Firefox, and Safari. |

@@ -1,0 +1,1600 @@
+{
+  "status": "FAIL",
+  "runs": {
+    "Alliance": {
+      "faction": "Alliance",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8771/",
+          "method": "GET",
+          "type": "document"
+        },
+        {
+          "url": "http://127.0.0.1:8771/gl.js",
+          "method": "GET",
+          "type": "script"
+        },
+        {
+          "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "method": "GET",
+          "type": "fetch"
+        },
+        {
+          "url": "http://127.0.0.1:8771/data/runtime.orpk",
+          "method": "GET",
+          "type": "xhr"
+        }
+      ],
+      "console": [
+        {
+          "type": "warning",
+          "text": "No audio_init function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No js_create_string function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No quad_url_link_open function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No js_free_object function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "Missed function: audio_init"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x134004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x134004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x134004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x134004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+        },
+        {
+          "type": "error",
+          "text": "glBindTexture called with an already deleted texture ID 17!"
+        }
+      ],
+      "page_errors": [],
+      "failures": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8771/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cdp": [
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/",
+              "method": "GET",
+              "headers": {
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"macOS\""
+              },
+              "mixedContentType": "none",
+              "initialPriority": "VeryHigh",
+              "referrerPolicy": "unsafe-url",
+              "isSameSite": true
+            },
+            "timestamp": 589582.566051,
+            "wallTime": 1788917839.249819,
+            "initiator": {
+              "type": "other"
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Document",
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "timestamp": 589582.574721,
+            "type": "Document",
+            "response": {
+              "url": "http://127.0.0.1:8771/",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "617",
+                "Content-type": "text/html",
+                "Date": "Wed, 09 Sep 2026 01:37:19 GMT",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "text/html",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 21,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 186,
+              "timing": {
+                "requestTime": 589582.568182,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 1.94,
+                "dnsEnd": 1.944,
+                "connectStart": 1.944,
+                "connectEnd": 2.151,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 2.608,
+                "sendEnd": 2.89,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 4.783,
+                "receiveHeadersEnd": 5.127
+              },
+              "responseTime": 1788917839256.555,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79"
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37030.2",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/gl.js",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589582.580134,
+            "wallTime": 1788917839.264029,
+            "initiator": {
+              "type": "parser",
+              "url": "http://127.0.0.1:8771/",
+              "lineNumber": 14,
+              "columnNumber": 24
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Script",
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "timestamp": 589582.574119,
+            "encodedDataLength": 803
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37030.2",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "timestamp": 589582.584612,
+            "type": "Script",
+            "response": {
+              "url": "http://127.0.0.1:8771/gl.js",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "68801",
+                "Date": "Wed, 09 Sep 2026 01:37:19 GMT",
+                "Content-type": "text/javascript",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "text/javascript",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 27,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 194,
+              "timing": {
+                "requestTime": 589582.580864,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.044,
+                "dnsEnd": 0.045,
+                "connectStart": 0.045,
+                "connectEnd": 0.219,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.238,
+                "sendEnd": 0.256,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.573,
+                "receiveHeadersEnd": 0.588
+              },
+              "responseTime": 1788917839265.028,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37030.2",
+            "timestamp": 589582.58159,
+            "encodedDataLength": 68995
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37030.4",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589582.595043,
+            "wallTime": 1788917839.278705,
+            "initiator": {
+              "type": "script",
+              "stack": {
+                "callFrames": [
+                  {
+                    "functionName": "load",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 1569,
+                    "columnNumber": 14
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "6",
+                    "url": "http://127.0.0.1:8771/",
+                    "lineNumber": 15,
+                    "columnNumber": 12
+                  }
+                ]
+              }
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Fetch",
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37030.4",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "timestamp": 589582.600433,
+            "type": "Fetch",
+            "response": {
+              "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "4368365",
+                "Date": "Wed, 09 Sep 2026 01:37:19 GMT",
+                "Content-type": "application/wasm",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "application/wasm",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 33,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 197,
+              "timing": {
+                "requestTime": 589582.595369,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.043,
+                "dnsEnd": 0.044,
+                "connectStart": 0.044,
+                "connectEnd": 0.176,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.198,
+                "sendEnd": 0.215,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.599,
+                "receiveHeadersEnd": 0.64
+              },
+              "responseTime": 1788917839279.558,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37030.4",
+            "timestamp": 589582.605822,
+            "encodedDataLength": 4368562
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37030.5",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/data/runtime.orpk",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589582.791927,
+            "wallTime": 1788917839.475752,
+            "initiator": {
+              "type": "script",
+              "stack": {
+                "callFrames": [
+                  {
+                    "functionName": "fs_load_file",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 1448,
+                    "columnNumber": 16
+                  },
+                  {
+                    "functionName": "$func174",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 59670
+                  },
+                  {
+                    "functionName": "$func170",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 43514
+                  },
+                  {
+                    "functionName": "$func249",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 176153
+                  },
+                  {
+                    "functionName": "$func480",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 1115527
+                  },
+                  {
+                    "functionName": "$func1177",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 1952515
+                  },
+                  {
+                    "functionName": "$frame",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 2047834
+                  },
+                  {
+                    "functionName": "animation",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 437,
+                    "columnNumber": 17
+                  }
+                ]
+              }
+            },
+            "redirectHasExtraInfo": false,
+            "type": "XHR",
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37030.5",
+            "loaderId": "3E0CB0BF5FB0ABE2286E48AC05FEF404",
+            "timestamp": 589582.798805,
+            "type": "XHR",
+            "response": {
+              "url": "http://127.0.0.1:8771/data/runtime.orpk",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "28285762",
+                "Date": "Wed, 09 Sep 2026 01:37:19 GMT",
+                "Content-type": "application/octet-stream",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "application/octet-stream",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 39,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 206,
+              "timing": {
+                "requestTime": 589582.792322,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.051,
+                "dnsEnd": 0.052,
+                "connectStart": 0.052,
+                "connectEnd": 0.254,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.287,
+                "sendEnd": 0.316,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.726,
+                "receiveHeadersEnd": 0.752
+              },
+              "responseTime": 1788917839476.637,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "65DE1B8D805082AEB9BF4AFEB39C2E79"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37030.5",
+            "timestamp": 589582.826241,
+            "encodedDataLength": 28285968
+          }
+        }
+      ],
+      "screenshots": [
+        "/tmp/r5-menu.png",
+        "/tmp/r5-setup.png",
+        "/tmp/r5-alliance-start.png",
+        "/tmp/r5-alliance-fleets.png",
+        "/tmp/r5-alliance-expanded.png",
+        "/tmp/r5-alliance-collapsed.png",
+        "/tmp/r5-alliance-reexpanded.png",
+        "/tmp/r5-alliance-goto.png",
+        "/tmp/r5-alliance-zoom-in-1.png",
+        "/tmp/r5-alliance-zoom-in-2.png",
+        "/tmp/r5-alliance-zoom-in-3.png",
+        "/tmp/r5-alliance-zoom-in-4.png",
+        "/tmp/r5-alliance-zoom-in-5.png",
+        "/tmp/r5-alliance-zoom-out-1.png",
+        "/tmp/r5-alliance-zoom-out-2.png",
+        "/tmp/r5-alliance-zoom-out-3.png",
+        "/tmp/r5-alliance-zoom-out-4.png",
+        "/tmp/r5-alliance-zoom-out-5.png",
+        "/tmp/open-rebellion-runtime-pack-r5-alliance.png"
+      ],
+      "performance": [
+        {
+          "name": "http://127.0.0.1:8771/gl.js",
+          "entryType": "resource",
+          "startTime": 14.899999976158142,
+          "duration": 1.2000000476837158,
+          "initiatorType": "script",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 14.899999976158142,
+          "domainLookupStart": 15.399999976158142,
+          "domainLookupEnd": 15.399999976158142,
+          "connectStart": 15.399999976158142,
+          "secureConnectionStart": 0,
+          "connectEnd": 15.600000023841858,
+          "requestStart": 15.600000023841858,
+          "responseStart": 15.899999976158142,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 15.899999976158142,
+          "responseEnd": 16.100000023841858,
+          "transferSize": 69101,
+          "encodedBodySize": 68801,
+          "decodedBodySize": 68801,
+          "responseStatus": 200,
+          "serverTiming": []
+        },
+        {
+          "name": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "entryType": "resource",
+          "startTime": 29.600000023841858,
+          "duration": 10.699999928474426,
+          "initiatorType": "fetch",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 29.600000023841858,
+          "domainLookupStart": 29.899999976158142,
+          "domainLookupEnd": 29.899999976158142,
+          "connectStart": 29.899999976158142,
+          "secureConnectionStart": 0,
+          "connectEnd": 30,
+          "requestStart": 30,
+          "responseStart": 30.5,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 30.5,
+          "responseEnd": 40.299999952316284,
+          "transferSize": 4368665,
+          "encodedBodySize": 4368365,
+          "decodedBodySize": 4368365,
+          "responseStatus": 200,
+          "serverTiming": []
+        },
+        {
+          "name": "http://127.0.0.1:8771/data/runtime.orpk",
+          "entryType": "resource",
+          "startTime": 226.70000004768372,
+          "duration": 34,
+          "initiatorType": "xmlhttprequest",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 226.70000004768372,
+          "domainLookupStart": 226.89999997615814,
+          "domainLookupEnd": 226.89999997615814,
+          "connectStart": 226.89999997615814,
+          "secureConnectionStart": 0,
+          "connectEnd": 227.10000002384186,
+          "requestStart": 227.10000002384186,
+          "responseStart": 227.5,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 227.5,
+          "responseEnd": 260.7000000476837,
+          "transferSize": 28286062,
+          "encodedBodySize": 28285762,
+          "decodedBodySize": 28285762,
+          "responseStatus": 200,
+          "serverTiming": []
+        }
+      ],
+      "navigation": [
+        {
+          "name": "http://127.0.0.1:8771/",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 31.700000047683716,
+          "initiatorType": "navigation",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 0.5,
+          "domainLookupStart": 4.600000023841858,
+          "domainLookupEnd": 4.600000023841858,
+          "connectStart": 4.600000023841858,
+          "secureConnectionStart": 0,
+          "connectEnd": 4.799999952316284,
+          "requestStart": 5.299999952316284,
+          "responseStart": 7.399999976158142,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 7.399999976158142,
+          "responseEnd": 8.600000023841858,
+          "transferSize": 917,
+          "encodedBodySize": 617,
+          "decodedBodySize": 617,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 0,
+          "unloadEventEnd": 0,
+          "domInteractive": 31.600000023841858,
+          "domContentLoadedEventStart": 31.600000023841858,
+          "domContentLoadedEventEnd": 31.600000023841858,
+          "domComplete": 31.700000047683716,
+          "loadEventStart": 31.700000047683716,
+          "loadEventEnd": 31.700000047683716,
+          "type": "navigate",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null
+        }
+      ],
+      "status": "FAIL",
+      "counts": {
+        "total": 4,
+        "runtime_pack": 1,
+        "loose_assets": 0,
+        "http_failures": 0,
+        "loading_failures": 0,
+        "page_errors": 0,
+        "console_errors": 1,
+        "console_warnings": 9
+      },
+      "bytes": {
+        "transferSize": 32724745,
+        "encodedBodySize": 32723545,
+        "decodedBodySize": 32723545
+      },
+      "pack": {
+        "transferSize": 28286062,
+        "encodedBodySize": 28285762,
+        "decodedBodySize": 28285762,
+        "startTime": 226.70000004768372,
+        "duration": 34,
+        "requestStart": 227.10000002384186,
+        "responseStart": 227.5,
+        "responseEnd": 260.7000000476837,
+        "ttfb_ms": 0.3999999761581421,
+        "download_ms": 33.200000047683716
+      },
+      "gates": {
+        "boots": true,
+        "required_console_pack_counts": true,
+        "exactly_one_pack": true,
+        "zero_loose_assets": true,
+        "no_http_or_loading_failure": true,
+        "no_runtime_exception": true,
+        "no_invalid_or_deleted_texture_error": false,
+        "medium_difficulty_campaign": true,
+        "correct_faction_cockpit": true,
+        "correct_faction_fleet_miniatures": true,
+        "transparent_miniatures_no_blue_matte": true,
+        "no_missing_bitmap_observed": true,
+        "fleet_expand_collapse_reexpand": true,
+        "go_to_system": true,
+        "zoom_in_out_interaction": true
+      },
+      "visual_notes": {
+        "miniatures": "Corellian Corvette",
+        "destination": "Yavin",
+        "observations": "Cockpit and miniatures visible; miniature silhouettes composite on panel background without blue rectangles. Expanded contents disappear on collapse and return on re-expand. Go to System selects the matching headquarters and opens its details. Five wheel steps in and five out change map scale and label sizes.",
+        "zoom_steps_each_direction": 5
+      },
+      "failure_details": [
+        {
+          "message": "glBindTexture called with an already deleted texture ID 17!",
+          "stage": "Detected after campaign/fleet/Go to System/zoom sequence; exact first action not captured"
+        }
+      ],
+      "artifact": "/tmp/open-rebellion-runtime-pack-r5-alliance.png"
+    },
+    "Empire": {
+      "faction": "Empire",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8771/",
+          "method": "GET",
+          "type": "document"
+        },
+        {
+          "url": "http://127.0.0.1:8771/gl.js",
+          "method": "GET",
+          "type": "script"
+        },
+        {
+          "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "method": "GET",
+          "type": "fetch"
+        },
+        {
+          "url": "http://127.0.0.1:8771/data/runtime.orpk",
+          "method": "GET",
+          "type": "xhr"
+        }
+      ],
+      "console": [
+        {
+          "type": "warning",
+          "text": "No audio_init function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No js_create_string function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No quad_url_link_open function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "No js_free_object function in gl.js"
+        },
+        {
+          "type": "warning",
+          "text": "Missed function: audio_init"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+        },
+        {
+          "type": "error",
+          "text": "glBindTexture called with an already deleted texture ID 17!"
+        }
+      ],
+      "page_errors": [],
+      "failures": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8771/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8771/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cdp": [
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "6DD6DF1E52A04772EA323082B9693121",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/",
+              "method": "GET",
+              "headers": {
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"macOS\""
+              },
+              "mixedContentType": "none",
+              "initialPriority": "VeryHigh",
+              "referrerPolicy": "unsafe-url",
+              "isSameSite": true
+            },
+            "timestamp": 589680.850466,
+            "wallTime": 1788917937.534119,
+            "initiator": {
+              "type": "other"
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Document",
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "6DD6DF1E52A04772EA323082B9693121",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "timestamp": 589680.851605,
+            "type": "Document",
+            "response": {
+              "url": "http://127.0.0.1:8771/",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "617",
+                "Content-type": "text/html",
+                "Date": "Wed, 09 Sep 2026 01:38:57 GMT",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "text/html",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 51,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 186,
+              "timing": {
+                "requestTime": 589680.850694,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.151,
+                "dnsEnd": 0.152,
+                "connectStart": 0.152,
+                "connectEnd": 0.317,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.341,
+                "sendEnd": 0.359,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.696,
+                "receiveHeadersEnd": 0.72
+              },
+              "responseTime": 1788917937535.03,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C"
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37789.2",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/gl.js",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589680.852632,
+            "wallTime": 1788917937.536296,
+            "initiator": {
+              "type": "parser",
+              "url": "http://127.0.0.1:8771/",
+              "lineNumber": 14,
+              "columnNumber": 24
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Script",
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "6DD6DF1E52A04772EA323082B9693121",
+            "timestamp": 589680.851621,
+            "encodedDataLength": 803
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37789.2",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "timestamp": 589680.854114,
+            "type": "Script",
+            "response": {
+              "url": "http://127.0.0.1:8771/gl.js",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "68801",
+                "Date": "Wed, 09 Sep 2026 01:38:57 GMT",
+                "Content-type": "text/javascript",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "text/javascript",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 57,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 194,
+              "timing": {
+                "requestTime": 589680.852791,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.029,
+                "dnsEnd": 0.03,
+                "connectStart": 0.03,
+                "connectEnd": 0.118,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.135,
+                "sendEnd": 0.149,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.369,
+                "receiveHeadersEnd": 0.383
+              },
+              "responseTime": 1788917937536.8,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37789.2",
+            "timestamp": 589680.85354,
+            "encodedDataLength": 68995
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37789.4",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589680.855198,
+            "wallTime": 1788917937.538904,
+            "initiator": {
+              "type": "script",
+              "stack": {
+                "callFrames": [
+                  {
+                    "functionName": "load",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 1569,
+                    "columnNumber": 14
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "6",
+                    "url": "http://127.0.0.1:8771/",
+                    "lineNumber": 15,
+                    "columnNumber": 12
+                  }
+                ]
+              }
+            },
+            "redirectHasExtraInfo": false,
+            "type": "Fetch",
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37789.4",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "timestamp": 589680.855832,
+            "type": "Fetch",
+            "response": {
+              "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "4368365",
+                "Date": "Wed, 09 Sep 2026 01:38:57 GMT",
+                "Content-type": "application/wasm",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "application/wasm",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 63,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 197,
+              "timing": {
+                "requestTime": 589680.855349,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.027,
+                "dnsEnd": 0.029,
+                "connectStart": 0.029,
+                "connectEnd": 0.15,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.166,
+                "sendEnd": 0.18,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.383,
+                "receiveHeadersEnd": 0.398
+              },
+              "responseTime": 1788917937539.373,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37789.4",
+            "timestamp": 589680.859742,
+            "encodedDataLength": 4368562
+          }
+        },
+        {
+          "event": "Network.requestWillBeSent",
+          "data": {
+            "requestId": "37789.5",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "documentURL": "http://127.0.0.1:8771/",
+            "request": {
+              "url": "http://127.0.0.1:8771/data/runtime.orpk",
+              "method": "GET",
+              "headers": {
+                "sec-ch-ua-platform": "\"macOS\"",
+                "Referer": "http://127.0.0.1:8771/",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+                "sec-ch-ua": "\"HeadlessChrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+                "sec-ch-ua-mobile": "?0"
+              },
+              "mixedContentType": "none",
+              "initialPriority": "High",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "isSameSite": true
+            },
+            "timestamp": 589680.979623,
+            "wallTime": 1788917937.663346,
+            "initiator": {
+              "type": "script",
+              "stack": {
+                "callFrames": [
+                  {
+                    "functionName": "fs_load_file",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 1448,
+                    "columnNumber": 16
+                  },
+                  {
+                    "functionName": "$func174",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 59670
+                  },
+                  {
+                    "functionName": "$func170",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 43514
+                  },
+                  {
+                    "functionName": "$func249",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 176153
+                  },
+                  {
+                    "functionName": "$func480",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 1115527
+                  },
+                  {
+                    "functionName": "$func1177",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 1952515
+                  },
+                  {
+                    "functionName": "$frame",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:8771/open-rebellion.wasm",
+                    "lineNumber": 0,
+                    "columnNumber": 2047834
+                  },
+                  {
+                    "functionName": "animation",
+                    "scriptId": "5",
+                    "url": "http://127.0.0.1:8771/gl.js",
+                    "lineNumber": 437,
+                    "columnNumber": 17
+                  }
+                ]
+              }
+            },
+            "redirectHasExtraInfo": false,
+            "type": "XHR",
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C",
+            "hasUserGesture": false
+          }
+        },
+        {
+          "event": "Network.responseReceived",
+          "data": {
+            "requestId": "37789.5",
+            "loaderId": "6DD6DF1E52A04772EA323082B9693121",
+            "timestamp": 589680.986724,
+            "type": "XHR",
+            "response": {
+              "url": "http://127.0.0.1:8771/data/runtime.orpk",
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "Content-Length": "28285762",
+                "Date": "Wed, 09 Sep 2026 01:38:57 GMT",
+                "Content-type": "application/octet-stream",
+                "Last-Modified": "Wed, 09 Sep 2026 01:35:11 GMT",
+                "Server": "SimpleHTTP/0.6 Python/3.13.5"
+              },
+              "mimeType": "application/octet-stream",
+              "charset": "",
+              "connectionReused": false,
+              "connectionId": 69,
+              "remoteIPAddress": "127.0.0.1",
+              "remotePort": 8771,
+              "fromDiskCache": false,
+              "fromServiceWorker": false,
+              "fromPrefetchCache": false,
+              "encodedDataLength": 206,
+              "timing": {
+                "requestTime": 589680.979887,
+                "proxyStart": -1,
+                "proxyEnd": -1,
+                "dnsStart": 0.073,
+                "dnsEnd": 0.076,
+                "connectStart": 0.076,
+                "connectEnd": 0.259,
+                "sslStart": -1,
+                "sslEnd": -1,
+                "workerStart": -1,
+                "workerReady": -1,
+                "workerFetchStart": -1,
+                "workerRespondWithSettled": -1,
+                "sendStart": 0.287,
+                "sendEnd": 0.307,
+                "pushStart": 0,
+                "pushEnd": 0,
+                "receiveHeadersStart": 0.793,
+                "receiveHeadersEnd": 0.827
+              },
+              "responseTime": 1788917937664.321,
+              "protocol": "http/1.0",
+              "alternateProtocolUsage": "unspecifiedReason",
+              "securityState": "secure",
+              "isIpProtectionUsed": false
+            },
+            "hasExtraInfo": true,
+            "frameId": "42CA502CDA7B6DD9446004D8471B1E9C"
+          }
+        },
+        {
+          "event": "Network.loadingFinished",
+          "data": {
+            "requestId": "37789.5",
+            "timestamp": 589680.996095,
+            "encodedDataLength": 28285968
+          }
+        }
+      ],
+      "screenshots": [
+        "/tmp/r5-empire-menu.png",
+        "/tmp/r5-empire-setup.png",
+        "/tmp/r5-empire-start.png",
+        "/tmp/r5-empire-expanded.png",
+        "/tmp/r5-empire-collapsed.png",
+        "/tmp/r5-empire-reexpanded.png",
+        "/tmp/r5-empire-goto.png",
+        "/tmp/r5-empire-zoom-in-1.png",
+        "/tmp/r5-empire-zoom-in-2.png",
+        "/tmp/r5-empire-zoom-in-3.png",
+        "/tmp/r5-empire-zoom-in-4.png",
+        "/tmp/r5-empire-zoom-in-5.png",
+        "/tmp/r5-empire-zoom-out-1.png",
+        "/tmp/r5-empire-zoom-out-2.png",
+        "/tmp/r5-empire-zoom-out-3.png",
+        "/tmp/r5-empire-zoom-out-4.png",
+        "/tmp/r5-empire-zoom-out-5.png",
+        "/tmp/open-rebellion-runtime-pack-r5-empire.png"
+      ],
+      "performance": [
+        {
+          "name": "http://127.0.0.1:8771/gl.js",
+          "entryType": "resource",
+          "startTime": 2.200000047683716,
+          "duration": 0.8999999761581421,
+          "initiatorType": "script",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 2.200000047683716,
+          "domainLookupStart": 2.299999952316284,
+          "domainLookupEnd": 2.299999952316284,
+          "connectStart": 2.299999952316284,
+          "secureConnectionStart": 0,
+          "connectEnd": 2.399999976158142,
+          "requestStart": 2.399999976158142,
+          "responseStart": 2.700000047683716,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 2.700000047683716,
+          "responseEnd": 3.100000023841858,
+          "transferSize": 69101,
+          "encodedBodySize": 68801,
+          "decodedBodySize": 68801,
+          "responseStatus": 200,
+          "serverTiming": []
+        },
+        {
+          "name": "http://127.0.0.1:8771/open-rebellion.wasm",
+          "entryType": "resource",
+          "startTime": 4.799999952316284,
+          "duration": 4.5,
+          "initiatorType": "fetch",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 4.799999952316284,
+          "domainLookupStart": 4.899999976158142,
+          "domainLookupEnd": 4.899999976158142,
+          "connectStart": 4.899999976158142,
+          "secureConnectionStart": 0,
+          "connectEnd": 5,
+          "requestStart": 5,
+          "responseStart": 5.299999952316284,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 5.299999952316284,
+          "responseEnd": 9.299999952316284,
+          "transferSize": 4368665,
+          "encodedBodySize": 4368365,
+          "decodedBodySize": 4368365,
+          "responseStatus": 200,
+          "serverTiming": []
+        },
+        {
+          "name": "http://127.0.0.1:8771/data/runtime.orpk",
+          "entryType": "resource",
+          "startTime": 129.20000004768372,
+          "duration": 16.399999976158142,
+          "initiatorType": "xmlhttprequest",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 129.20000004768372,
+          "domainLookupStart": 129.5,
+          "domainLookupEnd": 129.5,
+          "connectStart": 129.5,
+          "secureConnectionStart": 0,
+          "connectEnd": 129.70000004768372,
+          "requestStart": 129.70000004768372,
+          "responseStart": 130.20000004768372,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 130.20000004768372,
+          "responseEnd": 145.60000002384186,
+          "transferSize": 28286062,
+          "encodedBodySize": 28285762,
+          "decodedBodySize": 28285762,
+          "responseStatus": 200,
+          "serverTiming": []
+        }
+      ],
+      "navigation": [
+        {
+          "name": "http://127.0.0.1:8771/",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 4.899999976158142,
+          "initiatorType": "navigation",
+          "deliveryType": "",
+          "nextHopProtocol": "http/1.0",
+          "renderBlockingStatus": "non-blocking",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 0,
+          "domainLookupStart": 0.3999999761581421,
+          "domainLookupEnd": 0.3999999761581421,
+          "connectStart": 0.3999999761581421,
+          "secureConnectionStart": 0,
+          "connectEnd": 0.5,
+          "requestStart": 0.6000000238418579,
+          "responseStart": 0.8999999761581421,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 0.8999999761581421,
+          "responseEnd": 1.100000023841858,
+          "transferSize": 917,
+          "encodedBodySize": 617,
+          "decodedBodySize": 617,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 0,
+          "unloadEventEnd": 0,
+          "domInteractive": 4.899999976158142,
+          "domContentLoadedEventStart": 4.899999976158142,
+          "domContentLoadedEventEnd": 4.899999976158142,
+          "domComplete": 4.899999976158142,
+          "loadEventStart": 4.899999976158142,
+          "loadEventEnd": 4.899999976158142,
+          "type": "navigate",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null
+        }
+      ],
+      "status": "FAIL",
+      "counts": {
+        "total": 4,
+        "runtime_pack": 1,
+        "loose_assets": 0,
+        "http_failures": 0,
+        "loading_failures": 0,
+        "page_errors": 0,
+        "console_errors": 1,
+        "console_warnings": 5
+      },
+      "bytes": {
+        "transferSize": 32724745,
+        "encodedBodySize": 32723545,
+        "decodedBodySize": 32723545
+      },
+      "pack": {
+        "transferSize": 28286062,
+        "encodedBodySize": 28285762,
+        "decodedBodySize": 28285762,
+        "startTime": 129.20000004768372,
+        "duration": 16.399999976158142,
+        "requestStart": 129.70000004768372,
+        "responseStart": 130.20000004768372,
+        "responseEnd": 145.60000002384186,
+        "ttfb_ms": 0.5,
+        "download_ms": 15.399999976158142
+      },
+      "gates": {
+        "boots": true,
+        "required_console_pack_counts": true,
+        "exactly_one_pack": true,
+        "zero_loose_assets": true,
+        "no_http_or_loading_failure": true,
+        "no_runtime_exception": true,
+        "no_invalid_or_deleted_texture_error": false,
+        "medium_difficulty_campaign": true,
+        "correct_faction_cockpit": true,
+        "correct_faction_fleet_miniatures": true,
+        "transparent_miniatures_no_blue_matte": true,
+        "no_missing_bitmap_observed": true,
+        "fleet_expand_collapse_reexpand": true,
+        "go_to_system": true,
+        "zoom_in_out_interaction": true
+      },
+      "visual_notes": {
+        "miniatures": "Imperial Star Destroyer and TIE Fighter",
+        "destination": "Coruscant",
+        "observations": "Cockpit and miniatures visible; miniature silhouettes composite on panel background without blue rectangles. Expanded contents disappear on collapse and return on re-expand. Go to System selects the matching headquarters and opens its details. Five wheel steps in and five out change map scale and label sizes.",
+        "zoom_steps_each_direction": 5
+      },
+      "failure_details": [
+        {
+          "message": "glBindTexture called with an already deleted texture ID 17!",
+          "stage": "Zoom-in after Go to System; console was error-free immediately before zoom"
+        }
+      ],
+      "artifact": "/tmp/open-rebellion-runtime-pack-r5-empire.png"
+    }
+  },
+  "url": "http://127.0.0.1:8771/",
+  "verified_at": "2026-09-09T01:41:18.118402+00:00",
+  "method": {
+    "browser": "Playwright Chromium headless shell 1194",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "fresh_context_per_faction": true,
+    "cache_disabled": true,
+    "service_workers": "blocked",
+    "capture": "Playwright request/response/requestfailed/console/pageerror and CDP Network events registered before navigation",
+    "repository_edits": false,
+    "campaign": "Standard galaxy, Medium difficulty; no Medium galaxy size exists in setup",
+    "byte_source": "PerformanceResourceTiming transferSize, encodedBodySize, decodedBodySize; totals include navigation; raw CDP loadingFinished also retained"
+  }
+}

@@ -116,8 +116,19 @@ if not entries:
     print('  WARNING: manifest is empty — no BMPs found', file=sys.stderr)
 "
 else
-    echo "WARNING: data/base/ui/ not found — run scripts/stage-ui-assets.py first."
+    echo "ERROR: data/base/ui/ not found — run scripts/stage-ui-assets.py first."
+    exit 1
 fi
+
+# ── Build deterministic single-request runtime pack ─────────────────────────
+# The WASM client prefers this self-describing pack and retains the loose-file
+# loader only as a development fallback. This removes thousands of serial HTTP
+# requests without changing the resource keys consumed by BmpCache.
+echo "Building browser runtime asset pack…"
+python3 "$ROOT/scripts/build-runtime-pack.py" \
+    --base "$WEB_DATA" \
+    --ui "$WEB_UI" \
+    --output "$ROOT/web/data/runtime.orpk"
 
 WASM_SIZE=$(du -h "$ROOT/web/open-rebellion.wasm" | cut -f1)
 echo "Done. WASM size: $WASM_SIZE"

@@ -23,14 +23,15 @@
 //!
 //! # WASM
 //!
-//! On `wasm32` targets, BMP bytes are pre-fetched via HTTP during the loading
-//! screen and stored in a static `WASM_BMP_CACHE`.  The WASM `load_texture()`
-//! reads from this cache, decodes via `image::load_from_memory()`, and
-//! registers the result as an egui texture — identical to the native path
-//! minus filesystem I/O.
+//! On `wasm32` targets, BMP bytes are loaded from the single-request runtime
+//! asset pack (or the loose-file development fallback) into a static
+//! `WASM_BMP_CACHE`. The WASM `load_texture()` reads from this cache, decodes
+//! only requested images via `image::load_from_memory()`, and registers the
+//! result as an egui texture — identical to the native path minus filesystem
+//! I/O.
 //!
-//! Call [`set_bmp_cache()`] from the app's WASM loading screen after fetching
-//! all BMP bytes, before the game loop starts.
+//! Call [`set_bmp_cache()`] from the app's WASM loading screen after unpacking
+//! the runtime asset bytes, before the game loop starts.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};

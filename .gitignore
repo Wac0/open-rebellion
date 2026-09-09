@@ -31,6 +31,7 @@ assets/references/**/*.png
 
 # Generated assets (large, reproducible)
 data/generated/
+/dist/
 
 # HD upscaled assets (generated, not redistributable)
 data/hd/

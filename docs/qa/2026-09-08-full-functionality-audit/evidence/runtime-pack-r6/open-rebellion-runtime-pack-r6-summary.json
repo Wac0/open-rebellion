@@ -1,0 +1,1228 @@
+{
+  "url": "http://127.0.0.1:8772/",
+  "status": "PASS",
+  "factions": {
+    "alliance": {
+      "faction": "alliance",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8772/",
+          "method": "GET",
+          "resource_type": "document",
+          "phase": "open",
+          "time": 1788918306.1837041
+        },
+        {
+          "url": "http://127.0.0.1:8772/gl.js",
+          "method": "GET",
+          "resource_type": "script",
+          "phase": "open",
+          "time": 1788918306.196379
+        },
+        {
+          "url": "http://127.0.0.1:8772/open-rebellion.wasm",
+          "method": "GET",
+          "resource_type": "fetch",
+          "phase": "open",
+          "time": 1788918306.211093
+        },
+        {
+          "url": "http://127.0.0.1:8772/data/runtime.orpk",
+          "method": "GET",
+          "resource_type": "xhr",
+          "phase": "open",
+          "time": 1788918306.380096
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8772/",
+          "status": 200,
+          "headers": {
+            "content-length": "617",
+            "content-type": "text/html",
+            "date": "Wed, 09 Sep 2026 01:45:06 GMT",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918306.1902778
+        },
+        {
+          "url": "http://127.0.0.1:8772/gl.js",
+          "status": 200,
+          "headers": {
+            "content-length": "68801",
+            "date": "Wed, 09 Sep 2026 01:45:06 GMT",
+            "content-type": "text/javascript",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918306.1981592
+        },
+        {
+          "url": "http://127.0.0.1:8772/open-rebellion.wasm",
+          "status": 200,
+          "headers": {
+            "content-length": "4369091",
+            "date": "Wed, 09 Sep 2026 01:45:06 GMT",
+            "content-type": "application/wasm",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918306.211668
+        },
+        {
+          "url": "http://127.0.0.1:8772/data/runtime.orpk",
+          "status": 200,
+          "headers": {
+            "content-length": "28285762",
+            "date": "Wed, 09 Sep 2026 01:45:06 GMT",
+            "content-type": "application/octet-stream",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918306.380558
+        }
+      ],
+      "failures": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "No audio_init function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918306.220122
+        },
+        {
+          "type": "warning",
+          "text": "No js_create_string function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918306.2202408
+        },
+        {
+          "type": "warning",
+          "text": "No quad_url_link_open function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918306.220314
+        },
+        {
+          "type": "warning",
+          "text": "No js_free_object function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918306.220385
+        },
+        {
+          "type": "warning",
+          "text": "Missed function: audio_init",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1562,
+            "columnNumber": 24
+          },
+          "phase": "open",
+          "time": 1788918306.248619
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+          "location": {
+            "url": "http://127.0.0.1:8772/",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "phase": "open",
+          "time": 1788918306.248968
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+          "location": {
+            "url": "http://127.0.0.1:8772/",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "phase": "open",
+          "time": 1788918306.249045
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+          "location": {
+            "url": "http://127.0.0.1:8772/",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "phase": "open",
+          "time": 1788918306.249086
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+          "location": {
+            "url": "http://127.0.0.1:8772/",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "phase": "open",
+          "time": 1788918306.3720682
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 630,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918306.428668
+        }
+      ],
+      "page_errors": [],
+      "checkpoints": [
+        {
+          "action": "cold-load",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "new-game",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "select-alliance-standard-medium",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "start-campaign",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "open-fleets",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "fleet-expand",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "fleet-collapse",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "fleet-re-expand",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "go-to-system",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "before-zoom",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-in-1",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-in-2",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-in-3",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-in-4",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-in-5",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-out-1",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-out-2",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-out-3",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-out-4",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        },
+        {
+          "action": "zoom-out-5",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 10
+        }
+      ],
+      "screenshots": [
+        "/tmp/or-r6-alliance-cold-load.png",
+        "/tmp/or-r6-alliance-new-game.png",
+        "/tmp/or-r6-alliance-select-alliance-standard-medium.png",
+        "/tmp/or-r6-alliance-start-campaign.png",
+        "/tmp/or-r6-alliance-open-fleets.png",
+        "/tmp/or-r6-alliance-fleet-expand.png",
+        "/tmp/or-r6-alliance-fleet-collapse.png",
+        "/tmp/or-r6-alliance-fleet-re-expand.png",
+        "/tmp/or-r6-alliance-go-to-system.png",
+        "/tmp/or-r6-alliance-zoom-in-1.png",
+        "/tmp/or-r6-alliance-zoom-in-2.png",
+        "/tmp/or-r6-alliance-zoom-in-3.png",
+        "/tmp/or-r6-alliance-zoom-in-4.png",
+        "/tmp/or-r6-alliance-zoom-in-5.png",
+        "/tmp/or-r6-alliance-zoom-out-1.png",
+        "/tmp/or-r6-alliance-zoom-out-2.png",
+        "/tmp/or-r6-alliance-zoom-out-3.png",
+        "/tmp/or-r6-alliance-zoom-out-4.png",
+        "/tmp/or-r6-alliance-zoom-out-5.png"
+      ],
+      "actions": [
+        {
+          "op": "click",
+          "x": 710,
+          "y": 425,
+          "label": "new-game"
+        },
+        {
+          "op": "click",
+          "x": 564,
+          "y": 477,
+          "label": "select-alliance-standard-medium"
+        },
+        {
+          "op": "click",
+          "x": 713,
+          "y": 593,
+          "label": "start-campaign"
+        },
+        {
+          "op": "key",
+          "key": "f",
+          "label": "open-fleets"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-expand"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-collapse"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-re-expand"
+        },
+        {
+          "op": "click",
+          "x": 66,
+          "y": 202,
+          "label": "go-to-system"
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-1",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-2",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-3",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-4",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-5",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-1",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-2",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-3",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-4",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-5",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        }
+      ],
+      "final_screenshot": "/tmp/open-rebellion-runtime-pack-r6-alliance.png",
+      "runtime_pack_logs": [
+        "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+      ],
+      "warning_count": 9,
+      "invalid_texture_messages": [],
+      "visual_observations": {
+        "setup": "Standard galaxy and Medium difficulty highlighted; correct faction selected.",
+        "cockpit": "Alliance silver frame with cyan upper corners and controls on left.",
+        "miniatures": [
+          "Corellian Corvette"
+        ],
+        "miniature_background": "Dark panel visible around authentic ship silhouettes; no blue matte, placeholder, or missing miniature.",
+        "fleet_toggle": "Contents disappear on collapse and return on re-expand.",
+        "go_to_system": "Yavin selected, Alliance 100%, fleet shown in system panel."
+      },
+      "zoom_results": [
+        {
+          "action": "zoom-in-1",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-2",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-3",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-4",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-5",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-1",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-2",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-3",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-4",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-5",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        }
+      ],
+      "gates": {
+        "cold_load": true,
+        "runtime_pack_counts": true,
+        "exactly_four_requests_total": true,
+        "exactly_one_runtime_pack": true,
+        "zero_loose_assets": true,
+        "standard_medium": true,
+        "correct_faction_cockpit": true,
+        "transparent_authentic_miniatures": true,
+        "no_blue_matte_or_missing_visible_assets": true,
+        "fleet_expand_collapse_reexpand": true,
+        "go_to_system": true,
+        "console_checked_before_zoom": true,
+        "five_zoom_in_five_zoom_out": true,
+        "no_invalid_deleted_webgl_texture": true,
+        "no_http_loading_failures": true,
+        "no_page_exceptions": true,
+        "no_console_errors": true,
+        "final_screenshot_saved": true
+      },
+      "status": "PASS",
+      "first_failing_action": null,
+      "final_screenshot_sha256": "6363a15acb56ae32465d865359d4b7a0ca26023b5c3e6cd50cd1dd1acd53f5b1"
+    },
+    "empire": {
+      "faction": "empire",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8772/",
+          "method": "GET",
+          "resource_type": "document",
+          "phase": "open",
+          "time": 1788918435.413824
+        },
+        {
+          "url": "http://127.0.0.1:8772/gl.js",
+          "method": "GET",
+          "resource_type": "script",
+          "phase": "open",
+          "time": 1788918435.4169521
+        },
+        {
+          "url": "http://127.0.0.1:8772/open-rebellion.wasm",
+          "method": "GET",
+          "resource_type": "fetch",
+          "phase": "open",
+          "time": 1788918435.418968
+        },
+        {
+          "url": "http://127.0.0.1:8772/data/runtime.orpk",
+          "method": "GET",
+          "resource_type": "xhr",
+          "phase": "open",
+          "time": 1788918435.547677
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8772/",
+          "status": 200,
+          "headers": {
+            "content-length": "617",
+            "content-type": "text/html",
+            "date": "Wed, 09 Sep 2026 01:47:15 GMT",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918435.415154
+        },
+        {
+          "url": "http://127.0.0.1:8772/gl.js",
+          "status": 200,
+          "headers": {
+            "content-length": "68801",
+            "date": "Wed, 09 Sep 2026 01:47:15 GMT",
+            "content-type": "text/javascript",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918435.417749
+        },
+        {
+          "url": "http://127.0.0.1:8772/open-rebellion.wasm",
+          "status": 200,
+          "headers": {
+            "content-length": "4369091",
+            "date": "Wed, 09 Sep 2026 01:47:15 GMT",
+            "content-type": "application/wasm",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918435.419541
+        },
+        {
+          "url": "http://127.0.0.1:8772/data/runtime.orpk",
+          "status": 200,
+          "headers": {
+            "content-length": "28285762",
+            "date": "Wed, 09 Sep 2026 01:47:15 GMT",
+            "content-type": "application/octet-stream",
+            "last-modified": "Wed, 09 Sep 2026 01:43:07 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.13.5"
+          },
+          "phase": "open",
+          "time": 1788918435.5482109
+        }
+      ],
+      "failures": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "No audio_init function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918435.426024
+        },
+        {
+          "type": "warning",
+          "text": "No js_create_string function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918435.4261172
+        },
+        {
+          "type": "warning",
+          "text": "No quad_url_link_open function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918435.4261918
+        },
+        {
+          "type": "warning",
+          "text": "No js_free_object function in gl.js",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1560,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918435.426256
+        },
+        {
+          "type": "warning",
+          "text": "Missed function: audio_init",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 1562,
+            "columnNumber": 24
+          },
+          "phase": "open",
+          "time": 1788918435.441021
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762",
+          "location": {
+            "url": "http://127.0.0.1:8772/gl.js",
+            "lineNumber": 630,
+            "columnNumber": 20
+          },
+          "phase": "open",
+          "time": 1788918435.594613
+        }
+      ],
+      "page_errors": [],
+      "checkpoints": [
+        {
+          "action": "cold-load",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "new-game",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "select-empire-standard-medium",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "start-campaign",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "open-fleets",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "fleet-expand",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "fleet-collapse",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "fleet-re-expand",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "go-to-system",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "before-zoom",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-in-1",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-in-2",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-in-3",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-in-4",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-in-5",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-out-1",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-out-2",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-out-3",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-out-4",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        },
+        {
+          "action": "zoom-out-5",
+          "requests": 4,
+          "console_errors": 0,
+          "page_errors": 0,
+          "request_failures": 0,
+          "http_errors": 0,
+          "console_total": 6
+        }
+      ],
+      "screenshots": [
+        "/tmp/or-r6-empire-cold-load.png",
+        "/tmp/or-r6-empire-new-game.png",
+        "/tmp/or-r6-empire-select-empire-standard-medium.png",
+        "/tmp/or-r6-empire-start-campaign.png",
+        "/tmp/or-r6-empire-open-fleets.png",
+        "/tmp/or-r6-empire-fleet-expand.png",
+        "/tmp/or-r6-empire-fleet-collapse.png",
+        "/tmp/or-r6-empire-fleet-re-expand.png",
+        "/tmp/or-r6-empire-go-to-system.png",
+        "/tmp/or-r6-empire-zoom-in-1.png",
+        "/tmp/or-r6-empire-zoom-in-2.png",
+        "/tmp/or-r6-empire-zoom-in-3.png",
+        "/tmp/or-r6-empire-zoom-in-4.png",
+        "/tmp/or-r6-empire-zoom-in-5.png",
+        "/tmp/or-r6-empire-zoom-out-1.png",
+        "/tmp/or-r6-empire-zoom-out-2.png",
+        "/tmp/or-r6-empire-zoom-out-3.png",
+        "/tmp/or-r6-empire-zoom-out-4.png",
+        "/tmp/or-r6-empire-zoom-out-5.png"
+      ],
+      "actions": [
+        {
+          "op": "click",
+          "x": 710,
+          "y": 425,
+          "label": "new-game"
+        },
+        {
+          "op": "click",
+          "x": 793,
+          "y": 477,
+          "label": "select-empire-standard-medium"
+        },
+        {
+          "op": "click",
+          "x": 713,
+          "y": 593,
+          "label": "start-campaign"
+        },
+        {
+          "op": "key",
+          "key": "f",
+          "label": "open-fleets"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-expand"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-collapse"
+        },
+        {
+          "op": "click",
+          "x": 27,
+          "y": 67,
+          "label": "fleet-re-expand"
+        },
+        {
+          "op": "click",
+          "x": 66,
+          "y": 243,
+          "label": "go-to-system"
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-1",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-2",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-3",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-4",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-in-5",
+          "deltaY": -120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-1",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-2",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-3",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-4",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        },
+        {
+          "op": "wheel",
+          "label": "zoom-out-5",
+          "deltaY": 120,
+          "x": 720,
+          "y": 450
+        }
+      ],
+      "final_screenshot": "/tmp/open-rebellion-runtime-pack-r6-empire.png",
+      "runtime_pack_logs": [
+        "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+      ],
+      "warning_count": 5,
+      "invalid_texture_messages": [],
+      "visual_observations": {
+        "setup": "Standard galaxy and Medium difficulty highlighted; correct faction selected.",
+        "cockpit": "Empire rounded metallic frame with controls on right and blue left panel.",
+        "miniatures": [
+          "Imperial Star Destroyer",
+          "TIE Fighter"
+        ],
+        "miniature_background": "Dark panel visible around authentic ship silhouettes; no blue matte, placeholder, or missing miniature.",
+        "fleet_toggle": "Contents disappear on collapse and return on re-expand.",
+        "go_to_system": "Coruscant selected, Empire 100%, fleet shown in system panel."
+      },
+      "zoom_results": [
+        {
+          "action": "zoom-in-1",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-2",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-3",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-4",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-in-5",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-1",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-2",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-3",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-4",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        },
+        {
+          "action": "zoom-out-5",
+          "map_pixels_changed": true,
+          "console_checked": true,
+          "passed": true
+        }
+      ],
+      "gates": {
+        "cold_load": true,
+        "runtime_pack_counts": true,
+        "exactly_four_requests_total": true,
+        "exactly_one_runtime_pack": true,
+        "zero_loose_assets": true,
+        "standard_medium": true,
+        "correct_faction_cockpit": true,
+        "transparent_authentic_miniatures": true,
+        "no_blue_matte_or_missing_visible_assets": true,
+        "fleet_expand_collapse_reexpand": true,
+        "go_to_system": true,
+        "console_checked_before_zoom": true,
+        "five_zoom_in_five_zoom_out": true,
+        "no_invalid_deleted_webgl_texture": true,
+        "no_http_loading_failures": true,
+        "no_page_exceptions": true,
+        "no_console_errors": true,
+        "final_screenshot_saved": true
+      },
+      "status": "PASS",
+      "first_failing_action": null,
+      "final_screenshot_sha256": "fa672e04f1a9895c5291e850a957f730ba08ff27226c86391edf550ac897d808"
+    }
+  },
+  "method": {
+    "fresh_context_per_faction": true,
+    "listeners_before_navigation": true,
+    "viewport": [
+      1440,
+      1000
+    ],
+    "wheel_delta": 120,
+    "console_check_after_each_step_ms": 1200,
+    "repository_files_modified": false,
+    "browser_contexts": "Two new nonpersistent Chromium contexts; Alliance closed before Empire opened.",
+    "visual_review": "Screenshots inspected directly for setup, cockpit, miniature transparency, collapse/re-expand, system selection, zoom and final rendering."
+  },
+  "browser_version": "141.0.7390.37",
+  "environment_notes": [
+    "Initial sandboxed Chromium launch failed with macOS MachPort permission denied before navigation. Authorized launch outside sandbox succeeded."
+  ]
+}

@@ -326,14 +326,62 @@
     {
       "id": "F-014",
       "severity": "P1",
-      "status": "confirmed_optimization_gap",
+      "status": "partially_remediated",
       "title": "Browser startup, memory, and rendering are not release-scaled",
       "evidence": [
-        "approximately 2231 BMP and 40 DAT resources are fetched serially",
+        "F-014A now packages 52 game-data entries and 2231 BMPs in one deterministic runtime.orpk request",
+        "Astra medium passed both factions with exactly four cold-load requests, zero loose DAT/BMP/manifest requests, and no console, page, loading, bitmap, or WebGL errors",
         "raw bytes and decoded textures are retained without eviction",
         "high-DPI rendering is not enabled",
         "the Galaxy path can perform two egui passes per frame",
         "sector hull geometry is recomputed each frame"
+      ],
+      "verified_tranches": [
+        {
+          "id": "F-014A",
+          "status": "pass",
+          "verified_at": "2026-09-08",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "pack_entries": {
+            "game_data": 52,
+            "bitmaps": 2231
+          },
+          "pack_bytes": 28285762,
+          "pack_sha256": "491fd403efb4bbb8210331c535626d9f10f8efb568a2f0a70f7cafc963c208ca",
+          "wasm_bytes": 4369091,
+          "wasm_sha256": "3b144223ccf5f6cb7f3d29e3f8625162a67a0f1cecccf22f754472e7525b73f5",
+          "package_files": 5,
+          "reproducible_builds": [
+            "runtime-pack-r6",
+            "runtime-pack-r7"
+          ],
+          "browser": {
+            "factions": [
+              "alliance",
+              "empire"
+            ],
+            "requests_per_cold_load": 4,
+            "runtime_pack_requests": 1,
+            "loose_asset_requests": 0,
+            "zoom_steps_per_faction": 10,
+            "console_errors": 0,
+            "page_errors": 0,
+            "http_or_loading_failures": 0,
+            "invalid_or_deleted_texture_errors": 0,
+            "bitmap_and_interaction_acceptance": "pass"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md"
+        }
+      ],
+      "remaining": [
+        "Brotli compression",
+        "bounded raw and decoded asset caches",
+        "HD asset entries",
+        "high-DPI rendering",
+        "single-pass egui",
+        "cached sector geometry",
+        "memory and frame-time budgets",
+        "Firefox and Safari acceptance"
       ],
       "acceptance": "Indexed asset packing, lazy decode, bounded LRU caches, one UI pass, cached geometry, and cross-browser tests meet the recorded performance budgets."
     },
@@ -441,7 +489,7 @@
       "estimate": "3 weeks",
       "depends_on": ["M2"],
       "work": [
-        "ship indexed compressed bitmap and HD assets with lazy decode and LRU caching",
+        "extend the verified deterministic runtime.orpk foundation with Brotli compression, HD entries, and bounded raw and decoded asset caches",
         "enable high-DPI rendering and one egui pass",
         "cache static sector geometry",
         "move saves to compressed asynchronous IndexedDB",

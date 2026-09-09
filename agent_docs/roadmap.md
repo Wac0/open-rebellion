@@ -355,7 +355,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 
 - [ ] Wire Save, Load, Delete, and the main-menu save picker on native and WASM.
 - [ ] Persist complete deterministic campaign state and surface corruption/quota errors.
-- [ ] Correct the native HD root; prefetch `TROOPSD.DAT`; package browser runtime data.
+- [x] Correct the native HD root, prefetch `TROOPSD.DAT`, and package all 52 game-data entries plus 2,231 BMPs in deterministic `runtime.orpk` (`F-014A`; [Astra evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md)).
 - [x] Map all 38 fighter/capital-ship records to authentic GOKRES fleet miniatures and pass Astra-medium bitmap/interaction proof (`4589d2e`; F-010B).
 - [ ] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence; do not infer logical buttons from sequential resource IDs.
 - [ ] Make a clean packaged browser artifact boot in CI.
@@ -383,7 +383,8 @@ would tune around known simulation feedback defects.
 
 ### M3: Exceptional Browser Runtime — 3 weeks
 
-- [ ] Replace thousands of serial requests with a Brotli-compressed indexed `ui.pak`, lazy decode, and bounded texture LRU.
+- [x] Replace thousands of serial startup requests with deterministic `runtime.orpk`; both factions now boot in four requests with lazy bitmap decode and zero loose asset requests (`F-014A`).
+- [ ] Add Brotli compression plus bounded raw-byte and decoded-texture caches to the verified runtime-pack foundation.
 - [ ] Include HD assets; enable high DPI; use one egui pass; cache sector geometry.
 - [ ] Move saves from synchronous base64 `localStorage` to compressed asynchronous IndexedDB.
 - [ ] Start audio after user gesture and stage owned advisor assets in release packages.
@@ -405,7 +406,7 @@ would tune around known simulation feedback defects.
 - [ ] Enforce format, strict clippy, native, packaged-WASM, and clean-package boot gates.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
 - [ ] Generate the complete bitmap resource ledger from the entity map; fail on unexplained misses. Fleet-list miniatures are verified in F-010B.
-- [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
+- [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence. F-010B fleet and F-014A runtime-pack evidence are retained; the full ledger remains open.
 - [x] Publish current project documentation from `main` through GitHub Pages and verify the public site (P40; run `34296165296`).
 - [ ] Close every supported P00–P40 pass from release artifacts before claiming 100% functionality.
 

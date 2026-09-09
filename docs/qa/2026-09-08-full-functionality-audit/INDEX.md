@@ -21,15 +21,17 @@ acceptance plan required before the project can claim 100% functionality.
 | [Audit data](audit-report.json) | Machine-readable baseline, findings, optimization milestones, feature passes, and release gates. |
 | [Cockpit PR #2 audit](evidence/2026-09-08-cockpit-pr-audit.md) | Resource adjudication, integrated diagnostics, Astra browser evidence, screenshots, and follow-up scope. |
 | [Fleet miniature proof](evidence/2026-09-08-fleet-miniatures.md) | Exact GOKRES mappings, transparency checks, Astra browser evidence, interactions, and screenshots for F-010B. |
+| [Runtime pack proof](evidence/2026-09-08-runtime-pack.md) | Deterministic package hashes, four-request startup, two-faction bitmap/interaction proof, and zoom/WebGL regression evidence for F-014A. |
 | [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
 ## Current conclusion
 
 The project is substantially implemented, but it is not yet demonstrably 100%
-functional. The fleet-miniature tranche of bitmap acceptance now passes, while
-long-running simulation behavior, deterministic replay, tactical parity,
-browser media/performance, formatting, lint, and release-level visual
+functional. Fleet-miniature acceptance and the deterministic four-request
+browser startup tranche now pass. Long-running simulation behavior,
+deterministic replay, tactical parity, remaining browser memory/media work,
+cross-browser performance, formatting, lint, and release-level visual
 acceptance remain incomplete.
 
 The JSON document is the canonical source for stable finding and feature IDs.
