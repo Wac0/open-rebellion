@@ -6,6 +6,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR="$ROOT/target/wasm32-unknown-unknown/release"
 GDATA="$ROOT/data/base"
 WEB_DATA="$ROOT/web/data/base"
+WEB_AUDIO="$ROOT/web/data/sounds"
+MDATA_DIR="${REBELLION_MDATA_DIR:-$ROOT/../star-wars-rebellion/MDATA}"
 
 echo "Building rebellion-app for wasm32…"
 PATH="/usr/bin:$PATH" cargo build --manifest-path "$ROOT/Cargo.toml" \
@@ -77,6 +79,17 @@ fi
 DAT_COUNT=$(ls -1 "$WEB_DATA"/*.DAT 2>/dev/null | wc -l | tr -d ' ')
 echo "Staged $DAT_COUNT DAT files + textstra.json in web/data/base/"
 
+# Stage the licensed main-menu music without adding it to version control.
+# REBELLION_MDATA_DIR may point at an original installation's MDATA directory.
+mkdir -p "$WEB_AUDIO/music"
+if [ -f "$MDATA_DIR/MDATA.302" ]; then
+    cp "$MDATA_DIR/MDATA.302" "$WEB_AUDIO/music/main_theme.wav"
+    echo "Staged MDATA.302 as the shuttle-cockpit main theme."
+else
+    rm -f "$WEB_AUDIO/music/main_theme.wav"
+    echo "WARNING: MDATA.302 not found in $MDATA_DIR; the menu will remain silent."
+fi
+
 # ── Stage UI BMPs into web/data/ui/ ─────────────────────────────────────────
 UI_SRC="$ROOT/data/base/ui"
 WEB_UI="$ROOT/web/data/ui"
@@ -128,6 +141,7 @@ echo "Building browser runtime asset pack…"
 python3 "$ROOT/scripts/build-runtime-pack.py" \
     --base "$WEB_DATA" \
     --ui "$WEB_UI" \
+    --audio "$WEB_AUDIO" \
     --output "$ROOT/web/data/runtime.orpk"
 
 WASM_SIZE=$(du -h "$ROOT/web/open-rebellion.wasm" | cut -f1)

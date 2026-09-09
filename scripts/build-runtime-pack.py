@@ -16,6 +16,7 @@ HEADER = struct.Struct("<4sHHI")
 ENTRY_HEADER = struct.Struct("<BHI")
 KIND_GAME_DATA = 0
 KIND_BITMAP = 1
+KIND_AUDIO = 2
 
 
 @dataclass(frozen=True)
@@ -25,7 +26,9 @@ class Entry:
     path: Path
 
 
-def collect_entries(base_dir: Path, ui_dir: Path) -> list[Entry]:
+def collect_entries(
+    base_dir: Path, ui_dir: Path, audio_dir: Path | None = None
+) -> list[Entry]:
     entries = [
         Entry(KIND_GAME_DATA, path.name, path)
         for path in sorted(base_dir.glob("*.DAT"), key=lambda item: item.name)
@@ -44,6 +47,10 @@ def collect_entries(base_dir: Path, ui_dir: Path) -> list[Entry]:
             entries.append(
                 Entry(KIND_BITMAP, f"{dll_dir.name}/{path.stem}", path)
             )
+
+    if audio_dir is not None and audio_dir.is_dir():
+        for path in sorted(audio_dir.rglob("*.wav")):
+            entries.append(Entry(KIND_AUDIO, path.relative_to(audio_dir).as_posix(), path))
 
     entries.sort(key=lambda entry: (entry.kind, entry.key))
     keys = [(entry.kind, entry.key) for entry in entries]
@@ -118,6 +125,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--ui", type=Path, required=True)
+    parser.add_argument("--audio", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -126,7 +134,7 @@ def main() -> None:
     if not args.ui.is_dir():
         parser.error(f"UI directory does not exist: {args.ui}")
 
-    entries = collect_entries(args.base, args.ui)
+    entries = collect_entries(args.base, args.ui, args.audio)
     if not entries:
         parser.error("refusing to create an empty runtime pack")
     written = write_pack(entries, args.output)
@@ -134,8 +142,10 @@ def main() -> None:
 
     game_files = sum(entry.kind == KIND_GAME_DATA for entry in entries)
     bitmaps = sum(entry.kind == KIND_BITMAP for entry in entries)
+    audio_files = sum(entry.kind == KIND_AUDIO for entry in entries)
     print(
-        f"Runtime pack: {game_files} game files + {bitmaps} bitmaps, "
+        f"Runtime pack: {game_files} game files + {bitmaps} bitmaps + "
+        f"{audio_files} audio files, "
         f"{written} bytes ({args.output})"
     )
 

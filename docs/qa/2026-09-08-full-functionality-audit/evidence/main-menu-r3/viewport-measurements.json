@@ -1,0 +1,54 @@
+{
+  "640x480": {
+    "expected_rect": [
+      0.0,
+      0,
+      640.0,
+      480
+    ],
+    "screenshots": "/tmp/open-rebellion-main-menu-astra-r2/resting-640x480.png",
+    "observed_horizontal_art_bounds_excluding_browser_focus_outline": [
+      2,
+      638
+    ]
+  },
+  "1280x800": {
+    "expected_rect": [
+      106.66666666666663,
+      0,
+      1066.6666666666667,
+      800
+    ],
+    "screenshots": "/tmp/open-rebellion-main-menu-astra-r2/resting-1280x800.png",
+    "observed_horizontal_art_bounds_excluding_browser_focus_outline": [
+      106,
+      1174
+    ]
+  },
+  "1280x960": {
+    "expected_rect": [
+      0.0,
+      0,
+      1280.0,
+      960
+    ],
+    "screenshots": "/tmp/open-rebellion-main-menu-astra-r2/resting-1280x960.png",
+    "observed_horizontal_art_bounds_excluding_browser_focus_outline": [
+      2,
+      1278
+    ]
+  },
+  "1440x900": {
+    "expected_rect": [
+      120.0,
+      0,
+      1200.0,
+      900
+    ],
+    "screenshots": "/tmp/open-rebellion-main-menu-astra-r2/resting-1440x900.png",
+    "observed_horizontal_art_bounds_excluding_browser_focus_outline": [
+      120,
+      1320
+    ]
+  }
+}

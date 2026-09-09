@@ -3,7 +3,7 @@ title: "Roadmap"
 description: "Development milestones from Galaxy Viewer through Release packaging"
 category: "agent-docs"
 created: 2026-03-11
-updated: 2026-09-08
+updated: 2026-09-09
 tags: [roadmap, planning, milestones, parity]
 ---
 
@@ -133,8 +133,7 @@ Campaign results: VICTORY at tick 1188, 211 battles, eval score 0.59
 *v0.16.0 — Player-facing UI rebuild following `docs/plans/2026-03-22-001-feat-complete-game-ui-rebuild-plan.md`*
 
 ### Completed (2026-03-23/24)
-- Phase 1.1: Main Menu Screen (title, New Game / Load Game / Quit)
-- Phase 1.2: Game Setup (galaxy size, difficulty, faction selection)
+- Phase 1.1/1.2 prototype: custom text main menu and separate setup screen. These are now superseded by the authentic cockpit gate below.
 - Phase 1.4: TEXTSTRA.DLL string extraction (1,347 entity names)
 - Phase 2.4: Star Wars egui theme (dark space + gold/amber accents, Liberation Sans)
 - Phase 3.3: System Context Menu (right-click: control, popularity, garrison, actions)
@@ -158,6 +157,8 @@ Campaign results: VICTORY at tick 1188, 211 battles, eval score 0.59
 - Phase 7: Entity Portraits (GOKRES.DLL 61 portraits + 57 ship status views)
 
 ### Remaining UI — HD Visual Polish (IN PROGRESS)
+
+- [x] Reconstruct the browser's original 640x480 shuttle-cockpit composition, exact pointer regions, visible settings, direct faction start, and single-loop MDATA.302 music. Astra-medium R3 passed 11/11 after finding two R2 defects ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md)); native, accessibility, endpoints, and downstream setup propagation remain open in P03/P04.
 
 8-model shootout completed (2026-04-14). **UltraSharp V2** (DAT2, Spandrel+MPS) won all 5 categories (portraits, ships, sprites, UI, events). Batch pipeline built. 235/2,231 DLL BMPs upscaled so far.
 
@@ -359,7 +360,8 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [x] Map all 38 fighter/capital-ship records to authentic GOKRES fleet miniatures and pass Astra-medium bitmap/interaction proof (`4589d2e`; F-010B).
 - [x] Add the F-011A versioned canonical save-state fingerprint, v9 integrity verification, v8 compatibility, and lossless browser metadata; Astra-medium r3 passed all 34 save/reload/load and bitmap assertions ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md)).
 - [x] Add the F-011B1 v10 continuation envelope for simulation RNG, second AI, repair, combat cooldowns, and active configuration; preserve real v9 artifacts and pass the Astra-medium 40/40 browser continuation gate ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md)).
-- [ ] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence; do not infer logical buttons from sequential resource IDs.
+- [x] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence, implement it without inferred sequential mappings, and pass the Astra-medium browser bitmap/hotspot/audio tranche ([reference](main-menu-parity.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md)).
+- [ ] Close the remaining P03/P04 gates: Credits and Multiplayer destinations, Headquarters Only victory wiring, observable difficulty/size persistence, native parity, accessibility, gain/mute, return-to-menu audio, and clean second-campaign reset.
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [x] Link README parity claims to current acceptance evidence.
 - [ ] Extend F-011B1 to versioned command streams, data-input hashes, stable execution ordering, and native/WASM checkpoint equivalence.

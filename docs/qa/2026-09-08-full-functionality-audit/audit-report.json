@@ -1,5 +1,8 @@
 {
   "schema_version": 1,
+  "reference_documents": {
+    "main_menu": "agent_docs/main-menu-parity.md"
+  },
   "audit": {
     "name": "Open Rebellion Full Functionality Audit",
     "date": "2026-09-08",
@@ -568,6 +571,72 @@
         "save v10 preserves the currently known continuation envelope, but quota failures and asynchronous migration are not exercised end to end"
       ],
       "acceptance": "Versioned compressed IndexedDB saves round-trip complete state asynchronously, surface quota/corruption errors, and preserve fingerprints."
+    },
+    {
+      "id": "F-016",
+      "severity": "P1",
+      "status": "partially_remediated",
+      "title": "Original main-menu cockpit parity is only partially accepted",
+      "evidence": [
+        "The browser composes COMMON 20001 with binary-mapped control resources instead of stretching and dimming the empty shell or overlaying replacement text buttons",
+        "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented MDATA.302 WebAudio",
+        "Astra medium R3 passed 11 of 11 assertions after correcting the R2 URL-plugin ABI diagnostic and stopping music on Quit",
+        "Credits, Multiplayer, Headquarters Only propagation, live difficulty and size persistence, native parity, accessibility, gain/mute, return-to-menu, and second-campaign reset remain open"
+      ],
+      "reference": "agent_docs/main-menu-parity.md",
+      "verified_tranches": [
+        {
+          "id": "F-016A",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "scope": "browser cockpit composition, pointer controls, direct faction start, load and quit routes, and menu music",
+          "workspace_tests": {
+            "passed": 491,
+            "failed": 0,
+            "ignored": 2
+          },
+          "browser": {
+            "r2_focused_passed": 43,
+            "r2_focused_failed": 1,
+            "r3_passed": 11,
+            "r3_failed": 0,
+            "requests_per_cold_load": 4,
+            "runtime_pack_requests": 1,
+            "viewports": ["640x480", "1280x800", "1280x960", "1440x900"],
+            "original_pointer_regions": 14,
+            "outside_edge_clicks": 8,
+            "factions": ["Alliance", "Empire"],
+            "systems_per_campaign": 200,
+            "console_errors": 0,
+            "page_errors": 0,
+            "failed_requests": 0,
+            "missing_bridge_or_texture_warnings": 0
+          },
+          "audio": {
+            "runtime_pack_entries": 1,
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded_buffers": 1,
+            "looping_sources_after_gesture": 1,
+            "overlapping_sources": 0,
+            "active_loops_after_quit": 0
+          },
+          "artifact": {
+            "runtime_pack_entries": {
+              "game_data": 52,
+              "bitmaps": 2231,
+              "audio": 1
+            },
+            "runtime_pack_bytes": 30724745,
+            "runtime_pack_sha256": "472c3c8ce7968e34e250bbd97ae1e1cc5830a3d2e08b21ee5dd1d5ce2d4c5a18",
+            "wasm_bytes": 4612625,
+            "wasm_sha256": "63f984a77002edb29692660da0bb65b1d8fbf495452a18cc88c04584a28029d7"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md"
+        }
+      ],
+      "acceptance": "Native and browser reproduce the assembled cockpit, every mapped hover/click/keyboard behavior and selection, direct faction start, MDATA.302 menu music, 4:3 scaling, and all navigation with no blank aperture or missing resource."
     }
   ],
   "fable_review": {
@@ -742,8 +811,39 @@
     {"id":"P00","name":"Supported scope","status":"pending"},
     {"id":"P01","name":"Build infrastructure","status":"pending"},
     {"id":"P02","name":"Data and startup","status":"pending"},
-    {"id":"P03","name":"Main menu","status":"pending"},
-    {"id":"P04","name":"Game setup","status":"pending"},
+    {
+      "id": "P03",
+      "name": "Main menu",
+      "status": "in_progress",
+      "reference": "agent_docs/main-menu-parity.md",
+      "verified_tranches": [
+        "F-016A browser cockpit composition, exact pointer regions, direct faction start, Load/Options, Quit, and MDATA.302 single-loop playback"
+      ],
+      "subpasses": [
+        "browser cockpit assembly and original hotspot behavior: pass",
+        "browser Load/Options, Quit, and MDATA.302 playback: pass",
+        "Credits and Multiplayer destinations: open",
+        "responsive browser acceptance: pass; native and accessibility acceptance: open",
+        "gain/mute and return-to-menu audio lifecycle: open"
+      ],
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md"
+    },
+    {
+      "id": "P04",
+      "name": "Game setup",
+      "status": "in_progress",
+      "reference": "agent_docs/main-menu-parity.md",
+      "verified_tranches": [
+        "visible difficulty, galaxy-size, and game-type selections",
+        "direct Alliance and Empire starts without the replacement setup page"
+      ],
+      "remaining": [
+        "Headquarters Only victory-rule and save-state propagation",
+        "live observable difficulty and galaxy-size persistence",
+        "clean second-campaign reset"
+      ],
+      "acceptance": "Three difficulties, three original galaxy sizes, both game types, both faction starts, settings propagation, and clean second-campaign reset pass from the cockpit."
+    },
     {"id":"P05","name":"Clock","status":"pending"},
     {"id":"P06","name":"Galaxy navigation","status":"pending"},
     {"id":"P07","name":"Fog and overlays","status":"pending"},

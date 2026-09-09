@@ -1,0 +1,6208 @@
+{
+  "hover-MediumGalaxy-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Quit-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 11185,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Quit-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 11182,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-galaxy.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "selection-06-SmallGalaxy.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-MediumGalaxy-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-MediumGalaxy-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Intermediate-left.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Quit-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 11187,
+      "mean_error": 0.0
+    }
+  },
+  "endpoint-Multiplayer.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-galaxy.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-Quit-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 11190,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Intermediate-top.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-MediumGalaxy-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "quit.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 47.761
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 37.662
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 30.173
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 89.371
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 63.976
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 40.419
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 26.177
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 85.502
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 31.28
+    },
+    "Alliance": {
+      "resource": 11045,
+      "mean_error": 31.23
+    },
+    "LoadOptions": {
+      "resource": 11151,
+      "mean_error": 51.497
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 47.993
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 46.915
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 77.788
+    }
+  },
+  "outside-Intermediate-right.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "save-selected.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 56.428
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 32.902
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 74.483
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 63.058
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 45.959
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 36.087
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 85.511
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 42.209
+    },
+    "Alliance": {
+      "resource": 11045,
+      "mean_error": 39.096
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 49.788
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 42.234
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.699
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.347
+    }
+  },
+  "endpoint-Credits.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "resting-640x480.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-00-Easy.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Expert-top.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Alliance-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 11040,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Intermediate-bottom.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Credits-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 11250,
+      "mean_error": 0.808
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-11-GameType.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Credits-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 0.794
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Alliance-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 11037,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Alliance-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 11032,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Credits-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 11241,
+      "mean_error": 0.731
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Credits-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 11244,
+      "mean_error": 0.766
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Alliance-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 11035,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-02-Expert.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Empire-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Empire-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 11002,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-10-GameType.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10159,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Empire-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 11007,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Empire-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 11010,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Expert-right.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GameType-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Easy-0.png": {
+    "Easy": {
+      "resource": 11062,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LoadOptions-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 11160,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-unselected-2.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11130,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-unselected-3.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11133,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LoadOptions-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 11157,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Easy-1.png": {
+    "Easy": {
+      "resource": 11065,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GameType-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GameType-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Easy-3.png": {
+    "Easy": {
+      "resource": 11070,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LoadOptions-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 11152,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-unselected-1.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11127,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Expert-unselected-0.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LoadOptions-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 11155,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Easy-2.png": {
+    "Easy": {
+      "resource": 11067,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GameType-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GalaxyLever-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-08-GalaxyLever.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Intermediate-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11092,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Intermediate-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11095,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GalaxyLever-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GalaxyLever-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Intermediate-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11100,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Intermediate-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-GalaxyLever-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-07-GalaxyLever.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10002,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 0.0
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-configured.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10159,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Multiplayer-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-09-GalaxyLever.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-06.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "selection-05-LargeGalaxy.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "save-inspection.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 56.428
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 32.902
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 72.871
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 63.058
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 45.959
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 36.087
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 85.511
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 42.209
+    },
+    "Alliance": {
+      "resource": 11045,
+      "mean_error": 39.096
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 49.788
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 42.234
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.699
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.347
+    }
+  },
+  "Empire-transition-02.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-SmallGalaxy-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-04-MediumGalaxy.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10002,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 0.0
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "load-picker.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.464
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 55.92
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 31.884
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 72.871
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 63.058
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 45.959
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 36.087
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 85.511
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 41.115
+    },
+    "Alliance": {
+      "resource": 11045,
+      "mean_error": 39.096
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.293
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 42.234
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.699
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 72.181
+    }
+  },
+  "hover-SmallGalaxy-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-transition-03.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "Alliance-transition-07.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "outside-Expert-bottom.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Multiplayer-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11272,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-Multiplayer-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11272,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-05.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "Empire-transition-01.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-SmallGalaxy-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "selection-01-Intermediate.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11275,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-SmallGalaxy-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-transition-00.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10159,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 11002,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-04.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-Multiplayer-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-00.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10159,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 11031,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-transition-04.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-LargeGalaxy-0.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LargeGalaxy-1.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-transition-05.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "Alliance-transition-01.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "selection-03-Easy.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-03.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "Empire-transition-07.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "hover-LargeGalaxy-3.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "hover-LargeGalaxy-2.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Empire-transition-06.png": {
+    "Easy": {
+      "resource": 11087,
+      "mean_error": 80.731
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.286
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 38.455
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 73.182
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 53.286
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 43.877
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11009,
+      "mean_error": 55.01
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.084
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 45.085
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 47.243
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  },
+  "Empire-configured.png": {
+    "Easy": {
+      "resource": 11061,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11274,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10003,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 47.304
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 0.0
+    },
+    "GameType": {
+      "resource": 10159,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "outside-Expert-left.png": {
+    "Easy": {
+      "resource": 11273,
+      "mean_error": 0.0
+    },
+    "Intermediate": {
+      "resource": 11091,
+      "mean_error": 0.0
+    },
+    "Expert": {
+      "resource": 11121,
+      "mean_error": 0.0
+    },
+    "GalaxyLever": {
+      "resource": 10001,
+      "mean_error": 0.0
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 0.0
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 11.298
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 38.2
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 0.0
+    },
+    "Empire": {
+      "resource": 10009,
+      "mean_error": 0.0
+    },
+    "Alliance": {
+      "resource": 10007,
+      "mean_error": 0.0
+    },
+    "LoadOptions": {
+      "resource": 10005,
+      "mean_error": 0.0
+    },
+    "Credits": {
+      "resource": 10013,
+      "mean_error": 0.874
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 0.0
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 0.0
+    }
+  },
+  "Alliance-transition-02.png": {
+    "Easy": {
+      "resource": 11068,
+      "mean_error": 48.502
+    },
+    "Intermediate": {
+      "resource": 11097,
+      "mean_error": 42.446
+    },
+    "Expert": {
+      "resource": 11123,
+      "mean_error": 39.83
+    },
+    "GalaxyLever": {
+      "resource": 10014,
+      "mean_error": 76.019
+    },
+    "SmallGalaxy": {
+      "resource": 10017,
+      "mean_error": 69.46
+    },
+    "MediumGalaxy": {
+      "resource": 10018,
+      "mean_error": 71.292
+    },
+    "LargeGalaxy": {
+      "resource": 10019,
+      "mean_error": 57.941
+    },
+    "GameType": {
+      "resource": 10158,
+      "mean_error": 86.844
+    },
+    "Empire": {
+      "resource": 11005,
+      "mean_error": 49.981
+    },
+    "Alliance": {
+      "resource": 11034,
+      "mean_error": 47.222
+    },
+    "LoadOptions": {
+      "resource": 11167,
+      "mean_error": 50.071
+    },
+    "Credits": {
+      "resource": 11247,
+      "mean_error": 43.819
+    },
+    "Multiplayer": {
+      "resource": 11271,
+      "mean_error": 48.469
+    },
+    "Quit": {
+      "resource": 10011,
+      "mean_error": 64.293
+    }
+  }
+}

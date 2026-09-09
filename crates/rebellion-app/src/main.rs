@@ -49,9 +49,9 @@ use rebellion_render::{
     update_event_screen, AdvisorFaction, AdvisorState, AudioVolumeState, BmpCache, CockpitButton,
     CockpitFaction, CockpitState, Difficulty, EncyclopediaState, EventScreenState, FleetsState,
     GalaxyMapState, GameMessage, GameSetupAction, GameSetupState, GroundAction,
-    GroundCombatState, MainMenuAction, ManufacturingPanelState, MessageCategory, MessageLog,
-    MessageLogState, MissionsPanelState, MusicContext, OfficersState, PanelAction, SfxKind,
-    TacticalAction, TacticalState, VideoError, VideoPlayer, VoiceLine,
+    GroundCombatState, MainMenuAction, MainMenuState, ManufacturingPanelState, MessageCategory,
+    MessageLog, MessageLogState, MissionsPanelState, MusicContext, OfficersState, PanelAction,
+    SfxKind, TacticalAction, TacticalState, VideoError, VideoPlayer, VoiceLine,
 };
 
 /// Top-level game mode state machine.
@@ -312,7 +312,9 @@ fn draw_loading_progress(label: &str, loaded: usize, total: usize) {
 }
 
 #[cfg(target_arch = "wasm32")]
-fn install_runtime_pack(bytes: &[u8]) -> Result<(), String> {
+fn install_runtime_pack(
+    bytes: &[u8],
+) -> Result<std::collections::HashMap<String, Vec<u8>>, String> {
     let mut pack = runtime_pack::parse_runtime_pack(bytes).map_err(|error| error.to_string())?;
     for required in REQUIRED_WASM_DATA {
         if !pack.game_files.contains_key(*required) {
@@ -327,6 +329,7 @@ fn install_runtime_pack(bytes: &[u8]) -> Result<(), String> {
         .unwrap_or_default();
     let game_file_count = pack.game_files.len();
     let bitmap_count = pack.bitmaps.len();
+    let audio_file_count = pack.audio_files.len();
     if bitmap_count == 0 {
         return Err("runtime pack contains no UI bitmaps".to_string());
     }
@@ -335,12 +338,13 @@ fn install_runtime_pack(bytes: &[u8]) -> Result<(), String> {
     rebellion_data::set_file_cache(pack.game_files);
     rebellion_render::set_bmp_cache(pack.bitmaps);
     macroquad::logging::info!(
-        "runtime_asset_pack loaded game_files={} ui_bitmaps={} bytes={}",
+        "runtime_asset_pack loaded game_files={} ui_bitmaps={} audio_files={} bytes={}",
         game_file_count,
         bitmap_count,
+        audio_file_count,
         bytes.len()
     );
-    Ok(())
+    Ok(pack.audio_files)
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -439,7 +443,7 @@ async fn load_legacy_wasm_assets() {
 }
 
 #[cfg(target_arch = "wasm32")]
-async fn load_wasm_assets() {
+async fn load_wasm_assets() -> std::collections::HashMap<String, Vec<u8>> {
     draw_loading_progress("Loading optimized runtime assets…", 0, 0);
     next_frame().await;
 
@@ -451,6 +455,7 @@ async fn load_wasm_assets() {
                 "WARNING: data/runtime.orpk unavailable ({error:?}); using legacy per-file loading"
             );
             load_legacy_wasm_assets().await;
+            std::collections::HashMap::new()
         }
     }
 }
@@ -557,13 +562,11 @@ async fn main() {
     };
 
     #[cfg(target_arch = "wasm32")]
-    let mut world = {
-        load_wasm_assets().await;
-
-        match rebellion_data::load_game_data(&gdata_path) {
-            Ok(w) => w,
-            Err(e) => panic!("Failed to parse game data: {}", e),
-        }
+    let (mut world, mut browser_audio_files) = {
+        let audio_files = load_wasm_assets().await;
+        let world = rebellion_data::load_game_data(&gdata_path)
+            .unwrap_or_else(|error| panic!("Failed to parse game data: {error}"));
+        (world, audio_files)
     };
 
     eprintln!(
@@ -597,7 +600,10 @@ async fn main() {
 
     // ── Game mode ─────────────────────────────────────────────────────────
     let mut game_mode = GameMode::MainMenu;
+    let mut main_menu_state = MainMenuState::default();
     let mut game_setup_state = GameSetupState::default();
+    let mut pending_cockpit_start: Option<GameSetupAction> = None;
+    let mut _headquarters_only = false;
     let mut _difficulty = Difficulty::Medium; // stored after setup, used for AI tuning
 
     // ── Simulation state ────────────────────────────────────────────────────
@@ -755,6 +761,23 @@ async fn main() {
         audio_vol.backend_available = engine.is_available();
         engine
     };
+
+    #[cfg(target_arch = "wasm32")]
+    let browser_main_theme = browser_audio_files.remove("music/main_theme.wav");
+    #[cfg(target_arch = "wasm32")]
+    let mut browser_menu_audio = browser_main_theme.as_deref().map(|bytes| {
+        // Initialise WebAudio and begin decoding before the first interaction.
+        // Its resume handlers are then ready for the first user gesture.
+        let mut engine = audio::AudioEngine::new();
+        engine.load_music_bytes(rebellion_render::MusicTrack::MainTheme, bytes);
+        engine
+    });
+    #[cfg(target_arch = "wasm32")]
+    let mut browser_menu_audio_requested = false;
+    #[cfg(target_arch = "wasm32")]
+    {
+        audio_vol.backend_available = browser_main_theme.is_some();
+    }
 
     let mut cutscene_player = open_cutscene(
         Path::new(INTRO_CUTSCENE),
@@ -1975,17 +1998,61 @@ async fn main() {
             }
 
             GameMode::MainMenu => {
+                #[cfg(not(target_arch = "wasm32"))]
+                audio_engine.play_music_for_context(
+                    MusicContext::MainMenu,
+                    &sounds_dir,
+                    &audio_vol,
+                );
+
                 clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
                 let mut menu_action = None;
                 egui_macroquad::ui(|ctx| {
-                    menu_action = draw_main_menu(ctx, &mut bmp_cache);
+                    menu_action = draw_main_menu(ctx, &mut bmp_cache, &mut main_menu_state);
                 });
                 egui_macroquad::draw();
 
+                #[cfg(target_arch = "wasm32")]
+                if !browser_menu_audio_requested
+                    && (is_mouse_button_pressed(macroquad::input::MouseButton::Left)
+                        || is_key_pressed(KeyCode::Enter)
+                        || is_key_pressed(KeyCode::Space)
+                        || is_key_pressed(KeyCode::Tab))
+                {
+                    browser_menu_audio_requested = true;
+                    if browser_menu_audio.is_none() {
+                        eprintln!(
+                            "[audio] menu music unavailable: runtime pack has no music/main_theme.wav"
+                        );
+                    }
+                }
+                #[cfg(target_arch = "wasm32")]
+                if browser_menu_audio_requested {
+                    if let Some(engine) = browser_menu_audio.as_mut() {
+                        engine.try_play_loaded_music(&audio_vol);
+                    }
+                }
+
                 if let Some(action) = menu_action {
                     match action {
-                        MainMenuAction::NewGame => {
-                            game_setup_state = GameSetupState::default();
+                        MainMenuAction::StartGame {
+                            difficulty,
+                            faction,
+                            galaxy_size,
+                            headquarters_only,
+                        } => {
+                            // The original faction controls start immediately.
+                            // Reuse the established campaign initialization path
+                            // without displaying the replacement setup page.
+                            game_setup_state.difficulty = difficulty;
+                            game_setup_state.faction = Some(faction);
+                            game_setup_state.galaxy_size = galaxy_size;
+                            _headquarters_only = headquarters_only;
+                            pending_cockpit_start = Some(GameSetupAction::StartGame {
+                                difficulty,
+                                faction,
+                                galaxy_size,
+                            });
                             game_mode = GameMode::GameSetup;
                         }
                         MainMenuAction::LoadGame => {
@@ -1993,7 +2060,19 @@ async fn main() {
                             save_load_panel_state.open_load();
                             game_mode = GameMode::LoadGame;
                         }
+                        MainMenuAction::Credits => {
+                            eprintln!("[main_menu] credits endpoint is not implemented yet");
+                        }
+                        MainMenuAction::Multiplayer => {
+                            eprintln!("[main_menu] multiplayer endpoint is not implemented yet");
+                        }
                         MainMenuAction::Quit => {
+                            #[cfg(not(target_arch = "wasm32"))]
+                            audio_engine.stop_music();
+                            #[cfg(target_arch = "wasm32")]
+                            if let Some(engine) = browser_menu_audio.as_mut() {
+                                engine.stop_music();
+                            }
                             break;
                         }
                     }
@@ -2013,12 +2092,14 @@ async fn main() {
             }
 
             GameMode::GameSetup => {
-                clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
-                let mut setup_action = None;
-                egui_macroquad::ui(|ctx| {
-                    setup_action = draw_game_setup(ctx, &mut game_setup_state);
-                });
-                egui_macroquad::draw();
+                let mut setup_action = pending_cockpit_start.take();
+                if setup_action.is_none() {
+                    clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
+                    egui_macroquad::ui(|ctx| {
+                        setup_action = draw_game_setup(ctx, &mut game_setup_state);
+                    });
+                    egui_macroquad::draw();
+                }
 
                 if let Some(action) = setup_action {
                     match action {

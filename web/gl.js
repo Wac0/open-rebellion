@@ -1621,3 +1621,145 @@ function load(wasm_path) {
             });
     }
 }
+
+// Runtime plugins required by the workspace's pinned WASM dependencies:
+// quad-snd 0.2.8, sapp-jsutils 0.1.7, and quad-url 0.1.2. Keeping them in
+// this bundle preserves the deterministic four-request browser startup.
+(function registerAudioPlugin() {
+    "use strict";
+
+    const BrowserAudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioContext = null;
+    const sounds = new Map();
+    const playbacks = new Map();
+    let nextSoundKey = 1;
+    let nextPlaybackKey = 1;
+
+    function resumeAudioContext() {
+        if (audioContext !== null && audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+    }
+
+    function audioInit() {
+        if (audioContext !== null) {
+            return;
+        }
+        audioContext = new BrowserAudioContext();
+        document.addEventListener("pointerdown", resumeAudioContext, { passive: true });
+        document.addEventListener("touchstart", resumeAudioContext, { passive: true });
+        document.addEventListener("keydown", resumeAudioContext);
+    }
+
+    function stopPlayback(playback) {
+        try {
+            playback.source.stop();
+        } catch (_) {
+            // A source that already ended cannot be stopped again.
+        }
+        playback.source.disconnect();
+        playback.gain.disconnect();
+        playbacks.delete(playback.key);
+    }
+
+    function register(imports) {
+        imports.env.audio_init = audioInit;
+        imports.env.audio_add_buffer = function (pointer, length) {
+            const bytes = wasm_memory.buffer.slice(pointer, pointer + length);
+            const soundKey = nextSoundKey++;
+            audioContext.decodeAudioData(
+                bytes,
+                buffer => sounds.set(soundKey, buffer),
+                error => console.error("Failed to decode audio buffer", error),
+            );
+            return soundKey;
+        };
+        imports.env.audio_source_is_loaded = soundKey => sounds.has(soundKey);
+        imports.env.audio_play_buffer = function (soundKey, volume, looped) {
+            const playbackKey = nextPlaybackKey++;
+            const source = audioContext.createBufferSource();
+            const gain = audioContext.createGain();
+            source.buffer = sounds.get(soundKey);
+            source.loop = Boolean(looped);
+            gain.gain.value = volume;
+            source.connect(gain);
+            gain.connect(audioContext.destination);
+            const playback = { key: playbackKey, soundKey, source, gain };
+            playbacks.set(playbackKey, playback);
+            source.addEventListener("ended", () => {
+                if (playbacks.has(playbackKey)) {
+                    source.disconnect();
+                    gain.disconnect();
+                    playbacks.delete(playbackKey);
+                }
+            });
+            source.start(0);
+            return playbackKey;
+        };
+        imports.env.audio_source_set_volume = function (soundKey, volume) {
+            for (const playback of playbacks.values()) {
+                if (playback.soundKey === soundKey) {
+                    playback.gain.gain.value = volume;
+                }
+            }
+        };
+        imports.env.audio_source_stop = function (soundKey) {
+            for (const playback of Array.from(playbacks.values())) {
+                if (playback.soundKey === soundKey) {
+                    stopPlayback(playback);
+                }
+            }
+        };
+        imports.env.audio_source_delete = function (soundKey) {
+            imports.env.audio_source_stop(soundKey);
+            sounds.delete(soundKey);
+        };
+        imports.env.audio_playback_stop = function (playbackKey) {
+            const playback = playbacks.get(playbackKey);
+            if (playback !== undefined) {
+                stopPlayback(playback);
+            }
+        };
+        imports.env.audio_playback_set_volume = function (playbackKey, volume) {
+            const playback = playbacks.get(playbackKey);
+            if (playback !== undefined) {
+                playback.gain.gain.value = volume;
+            }
+        };
+    }
+
+    miniquad_add_plugin({ register_plugin: register, version: 1, name: "macroquad_audio" });
+}());
+
+(function registerBrowserObjectAndUrlPlugins() {
+    "use strict";
+
+    const objects = new Map([[-1, null], [-2, undefined]]);
+    let nextObjectId = 0;
+
+    function createObject(value) {
+        if (value === undefined) return -2;
+        if (value === null) return -1;
+        const id = nextObjectId++;
+        objects.set(id, value);
+        return id;
+    }
+
+    function registerObjects(imports) {
+        imports.env.js_create_string = function (pointer, length) {
+            return createObject(UTF8ToString(pointer, length));
+        };
+        imports.env.js_free_object = objectId => objects.delete(objectId);
+    }
+
+    function registerUrl(imports) {
+        imports.env.quad_url_link_open = function (objectId, newTab) {
+            const url = objects.get(objectId);
+            window.open(url, newTab === 0 ? "_self" : "_blank");
+        };
+    }
+
+    miniquad_add_plugin({ register_plugin: registerObjects, version: 1, name: "sapp_jsutils" });
+    // quad-url encodes 0.1.2 as (major << 24) | (minor << 16) | patch.
+    miniquad_add_plugin({ register_plugin: registerUrl, version: 65538, name: "quad_url" });
+}());

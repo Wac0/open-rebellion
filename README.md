@@ -11,10 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-macroquad-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Browser-blue.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Core-100%25-brightgreen.svg" alt="Core Parity">
-  <img src="https://img.shields.io/badge/UI-99%25-brightgreen.svg" alt="UI Parity">
-  <img src="https://img.shields.io/badge/Combat-100%25-brightgreen.svg" alt="Combat Parity">
-  <img src="https://img.shields.io/badge/Tests-465%20passing-green.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-491%20passing-green.svg" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
   <a href="https://tdimino.github.io/open-rebellion/"><img src="https://img.shields.io/badge/Docs-Ghidra%20RE-blueviolet.svg" alt="Ghidra RE Docs"></a>
 </p>
@@ -31,7 +28,7 @@ If you ever stayed up past midnight watching your fleet crawl across the galaxy 
 
 If you spent hours on TheForce.net debating whether Vergere was secretly a Sith, rolling dice and envisioning new storylines for Star Wars DnD, or composing elaborate threads on InvisionFree RPG message boards set in the Outer Rim—this project is for you.
 
-If you modded *Star Wars Galaxies* client-side until its servers shut down, roleplayed with your saber down on *Jedi Academy* multiplayer maps, ran *Rebellion* tournaments on mIRC, or replayed *KOTOR I* for the sixth time through a janky port on Steam—this project is *especially* for you.
+If you modded *Star Wars Galaxies* client-side until its servers shut down, roleplayed with lightsabers holstered on *Jedi Academy* multiplayer servers, ran *Rebellion* tournaments on mIRC, or replayed *KOTOR I* for the sixth time through a janky port on Steam—this project is *especially* for you.
 
 **Open Rebellion** is a from-scratch Rust reimplementation of [Star Wars Rebellion](https://www.gog.com/en/game/star_wars_rebellion) (Coolhand/LucasArts, 1998), the 4X galactic strategy game that never got a sequel, never got a Mac port, and never got the love it deserved. We're fixing all three.
 
@@ -43,34 +40,28 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification status (2026-09-08):** The parity percentages below are implementation estimates, not final release acceptance. A repository-wide audit found open native/WASM integration, browser, persistence, simulation, and visual-verification work. Track the evidence in the [full functionality audit](docs/qa/2026-09-08-full-functionality-audit/); the former `progress.json` is retained in the [project archive](archive/INDEX.md).
->
-> The current packaged browser build now loads 52 game-data files and 2,231 bitmaps through one deterministic runtime pack. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md) four-request startup, both factions, fleet artwork and interactions, and zoom rendering without browser errors; remaining browser and release gates are still open.
->
-> Save format v10 now preserves the simulation RNG, second AI, repair state, combat cooldowns, and active configuration in addition to canonical state fingerprints. Astra medium verified the [40/40 continuation gate](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md) and a separate [33/33 delete-and-reload gate](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-save-delete.md), both with intact bitmap UI; versioned command replay and native/WASM equivalence remain open.
->
-> GitHub Actions workflow definitions are intentionally local and untracked as of 2026-09-08. Release gates remain manual until M5 restores a reviewed CI provider.
+> **Verification (2026-09-09):** Astra has verified four-request browser startup, save-v10 continuation/delete, and the responsive original cockpit with exact bitmap controls, direct faction starts, and one MDATA.302 music loop. P03/P04 and other release gates remain open; hosted CI workflows are intentionally local/untracked. Follow the [audit](docs/qa/2026-09-08-full-functionality-audit/), [menu reference](agent_docs/main-menu-parity.md), and [archive](archive/INDEX.md).
 
-| Layer | Parity | What's Done |
-|-------|--------|-------------|
-| **Core** | 100% | 15 simulation systems, 18/18 AI dispatch validators, config-driven AI, PerceptionIntegrator, WASM BmpCache pipeline |
-| **UI** | 99% | 13 egui panels, cockpit chrome, tactical combat view, droid advisor, native cutscenes, HD upscaling pipeline |
-| **Combat** | 100% | 7-phase pipeline with per-weapon fire, shield absorption, fighter dogfight, ground combat, Emperor modifier |
+| Layer | Implementation status | Release acceptance |
+|-------|-----------------------|--------------------|
+| **Core** | 15 simulation systems and config-driven AI implemented | Audit open |
+| **UI** | 13 panels, cockpit chrome, tactical view, advisors, and native cutscenes implemented | Audit open |
+| **Combat** | Space and ground pipelines implemented | Audit open |
 
-Twelve phases complete:
+Major implemented areas (each remains subject to the linked acceptance audit):
 
 - **Galaxy Viewer** — 200 star systems, pan/zoom/click, 51/51 DAT parsers with byte-level round-trip validation
 - **Living Galaxy** — Game clock, manufacturing, 9 mission types, AI manager, event system, mod loader
 - **War Room** — Player faction selection, 5 UI panels, fleet movement, fog of war, encyclopedia, audio
 - **War Machine** — Space combat (7-phase pipeline), ground combat, orbital bombardment, blockade, uprising, Death Star, research, Jedi training, victory conditions, save/load
-- **Full Parity** — 4 scripted story chains, Han Solo speed bonus, betrayal, decoy, escape, mission state flags
+- **Legacy behavior coverage** — 4 scripted story chains, Han Solo speed bonus, betrayal, decoy, escape, mission state flags
 - **Mod Workshop** — Sensor-radius fog, captivity, save v4, ModRuntime, Mod Manager panel
-- **Release** — Story events, release packaging, GitHub Actions CI, example mod
+- **Release groundwork** — Story events, local release packaging, example mod
 - **AI Overhaul** — Distance-based transit, per-fleet targeting with deconfliction, ControlKind state machine, faction-asymmetric doctrine, role-based character AI
 - **AI Parity** — Config-driven AI (16 tunable params), 18/18 dispatch validators, troop deployment, Death Star multi-target, reconnaissance
 - **UI Rebuild** — 13 egui panels, cockpit BMP sprites, galaxy overlays, tactical combat view, event screens, GOKRES portraits
 - **Knesset Tammuz** — Cutscene state machine (8 story triggers), Emperor combat modifier, advisor BIN v2 decoder (99% parse rate), mission telemetry
-- **Ghidra RE Complete** — [5,127 functions decompiled](https://tdimino.github.io/open-rebellion/) from REBEXE.EXE, 111 GNPRTB parameters mapped, C++ class hierarchy reconstructed
+- **Ghidra RE corpus** — [5,127 functions decompiled](https://tdimino.github.io/open-rebellion/) from REBEXE.EXE, 111 GNPRTB parameters mapped, C++ class hierarchy reconstructed
 
 ## You Will Need
 

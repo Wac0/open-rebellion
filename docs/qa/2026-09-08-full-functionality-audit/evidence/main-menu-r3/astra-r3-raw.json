@@ -1,0 +1,517 @@
+{
+  "sessions": {
+    "quit_and_boundary": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12c004f3600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12c004f3600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12c004f3600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12c004f3600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "startup_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "startup_responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold": {
+        "at": 4516.100000023842,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 359.7999999523163,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "gestures": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "activeLoops": 0
+      },
+      "first_gesture": {
+        "at": 5809.299999952316,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 359.7999999523163,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "id": 0,
+            "starts": [
+              {
+                "at": 4721.299999952316,
+                "args": [
+                  0
+                ],
+                "loop": true,
+                "duration": 110.60825,
+                "contextTime": 0.005333333333333333,
+                "contextState": "suspended"
+              }
+            ],
+            "stops": [],
+            "ended": false
+          }
+        ],
+        "gestures": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 4706.299999952316
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 1.072
+          }
+        ],
+        "activeLoops": 1
+      },
+      "boundary_click": {
+        "x": 186,
+        "y": 59,
+        "expert_rect": [
+          187,
+          41,
+          45,
+          36
+        ]
+      },
+      "after_boundary": {
+        "at": 6494.199999928474,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 359.7999999523163,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "id": 0,
+            "starts": [
+              {
+                "at": 4721.299999952316,
+                "args": [
+                  0
+                ],
+                "loop": true,
+                "duration": 110.60825,
+                "contextTime": 0.005333333333333333,
+                "contextState": "suspended"
+              }
+            ],
+            "stops": [],
+            "ended": false
+          }
+        ],
+        "gestures": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 4706.299999952316
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 5905.699999928474
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 1.7546666666666666
+          }
+        ],
+        "activeLoops": 1
+      },
+      "after_quit": {
+        "at": 7564.299999952316,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 359.7999999523163,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "id": 0,
+            "starts": [
+              {
+                "at": 4721.299999952316,
+                "args": [
+                  0
+                ],
+                "loop": true,
+                "duration": 110.60825,
+                "contextTime": 0.005333333333333333,
+                "contextState": "suspended"
+              }
+            ],
+            "stops": [
+              {
+                "at": 6587.799999952316,
+                "args": [],
+                "contextTime": 1.8506666666666667
+              }
+            ],
+            "ended": true,
+            "endedAt": 6591
+          }
+        ],
+        "gestures": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 4706.299999952316
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 5905.699999928474
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 6505.199999928474
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 2.8266666666666667
+          }
+        ],
+        "activeLoops": 0
+      },
+      "quit_later": {
+        "at": 12567.399999976158,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 359.7999999523163,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "id": 0,
+            "starts": [
+              {
+                "at": 4721.299999952316,
+                "args": [
+                  0
+                ],
+                "loop": true,
+                "duration": 110.60825,
+                "contextTime": 0.005333333333333333,
+                "contextState": "suspended"
+              }
+            ],
+            "stops": [
+              {
+                "at": 6587.799999952316,
+                "args": [],
+                "contextTime": 1.8506666666666667
+              }
+            ],
+            "ended": true,
+            "endedAt": 6591
+          }
+        ],
+        "gestures": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 4706.299999952316
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 5905.699999928474
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 6505.199999928474
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 7.8293333333333335
+          }
+        ],
+        "activeLoops": 0
+      }
+    },
+    "alliance": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "console": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "startup_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "startup_responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold": {
+        "at": 4509.299999952316,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 103.29999995231628,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "gestures": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "activeLoops": 0
+      },
+      "transition_samples": [
+        "alliance-transition-0.png",
+        "alliance-transition-1.png",
+        "alliance-transition-2.png"
+      ],
+      "after_start": {
+        "at": 7315.200000047684,
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "at": 103.29999995231628,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "id": 0,
+            "starts": [
+              {
+                "at": 4533.700000047684,
+                "args": [
+                  0
+                ],
+                "loop": true,
+                "duration": 110.60825,
+                "contextTime": 0.005333333333333333,
+                "contextState": "suspended"
+              }
+            ],
+            "stops": [],
+            "ended": false
+          }
+        ],
+        "gestures": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "at": 4517.600000023842
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 2.768
+          }
+        ],
+        "activeLoops": 1
+      }
+    },
+    "uninstrumented": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "console": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "startup_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "startup_responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ]
+    }
+  },
+  "method": "Fresh isolated Chromium contexts, default autoplay, native WebAudio wrapping; no repository writes.",
+  "browser": "141.0.7390.37"
+}

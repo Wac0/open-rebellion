@@ -1,0 +1,588 @@
+{
+  "run": "Open Rebellion original main-menu parity focused Astra R2",
+  "date": "2026-09-09",
+  "url": "http://127.0.0.1:8765/",
+  "method": "Independent fresh Playwright Chromium headless contexts, default autoplay policy, device scale 1, screenshots and WebAudio hooks; supplemental uninstrumented browser confirms console error. No repository edits.",
+  "assertions": [
+    {
+      "id": "cold_start_exactly_four",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Four fresh contexts each request document, gl.js, open-rebellion.wasm and data/runtime.orpk; no extra requests after interactions.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "runtime_pack_once",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "runtime.orpk requested exactly once per fresh context, all responses 200.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "cockpit_640x480",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Complete cockpit, centered aspect-preserving 4:3; black surplus letterboxing is intentional. Native and 2x fill viewport; wide layouts have symmetric side bars.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-640x480.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/viewport-measurements.json"
+      ]
+    },
+    {
+      "id": "cockpit_1280x800",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Complete cockpit, centered aspect-preserving 4:3; black surplus letterboxing is intentional. Native and 2x fill viewport; wide layouts have symmetric side bars.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-1280x800.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/viewport-measurements.json"
+      ]
+    },
+    {
+      "id": "cockpit_1280x960",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Complete cockpit, centered aspect-preserving 4:3; black surplus letterboxing is intentional. Native and 2x fill viewport; wide layouts have symmetric side bars.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-1280x960.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/viewport-measurements.json"
+      ]
+    },
+    {
+      "id": "cockpit_1440x900",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Complete cockpit, centered aspect-preserving 4:3; black surplus letterboxing is intentional. Native and 2x fill viewport; wide layouts have symmetric side bars.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-1440x900.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/viewport-measurements.json"
+      ]
+    },
+    {
+      "id": "composition",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original shell and populated controls, no blue sprite matte, blank cockpit, stretch or replacement text buttons. Standard Game/HQ label remains inside its original display.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-640x480.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Easy",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Easy-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Easy-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Easy-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Easy-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Intermediate",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Intermediate-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Intermediate-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Intermediate-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Intermediate-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Expert",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-unselected-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-unselected-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-unselected-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Expert-unselected-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Empire",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Empire-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Empire-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Empire-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Empire-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Alliance",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Alliance-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Alliance-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Alliance-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Alliance-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_LoadOptions",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LoadOptions-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LoadOptions-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LoadOptions-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LoadOptions-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Credits",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Credits-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Credits-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Credits-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Credits-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Multiplayer",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Multiplayer-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Multiplayer-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Multiplayer-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Multiplayer-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "hover_Quit",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original bitmap family changes across sampled hover frames. Selected difficulty correctly remains selected/static. Pixel comparison is exact except Credits (<0.81 mean channel error with alpha/resampling).",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Quit-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Quit-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Quit-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-Quit-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "region_GalaxyLever",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Pointer exercised; original contract has no time-based hover sequence for this control. Original static bitmap selection and click transitions verified.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GalaxyLever-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GalaxyLever-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GalaxyLever-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GalaxyLever-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "region_SmallGalaxy",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Pointer exercised; original contract has no time-based hover sequence for this control. Original static bitmap selection and click transitions verified.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-SmallGalaxy-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-SmallGalaxy-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-SmallGalaxy-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-SmallGalaxy-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "region_MediumGalaxy",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Pointer exercised; original contract has no time-based hover sequence for this control. Original static bitmap selection and click transitions verified.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-MediumGalaxy-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-MediumGalaxy-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-MediumGalaxy-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-MediumGalaxy-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "region_LargeGalaxy",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Pointer exercised; original contract has no time-based hover sequence for this control. Original static bitmap selection and click transitions verified.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LargeGalaxy-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LargeGalaxy-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LargeGalaxy-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-LargeGalaxy-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "region_GameType",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Pointer exercised; original contract has no time-based hover sequence for this control. Original static bitmap selection and click transitions verified.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GameType-0.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GameType-1.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GameType-2.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/hover-GameType-3.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Intermediate_left",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Intermediate-left.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Intermediate_right",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Intermediate-right.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Intermediate_top",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Intermediate-top.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Intermediate_bottom",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Intermediate-bottom.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Expert_left",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Expert-left.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Expert_right",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Expert-right.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Expert_top",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Expert-top.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "outside_Expert_bottom",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Click one logical pixel beyond original rectangle at 640x480 leaves Easy selected (11273); target remains unselected.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/outside-Expert-bottom.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "defaults",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Easy, Small (encoded Standard=1), Standard Game match original selected bitmaps.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/resting-640x480.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "difficulty_transitions",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Easy -> Intermediate -> Expert -> Easy selected original sprites 11273/11275/11274.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-00-Easy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-01-Intermediate.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-02-Expert.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-03-Easy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "galaxy_transitions",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Screen clicks select Medium/Large/Small; lever cycles Small -> Medium -> Large -> Small using 10001/10002/10003 and matching screen indicators.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-04-MediumGalaxy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-05-LargeGalaxy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-06-SmallGalaxy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-07-GalaxyLever.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-08-GalaxyLever.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-09-GalaxyLever.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "game_type_transitions",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Standard -> Headquarters Only -> Standard with 10158/10159 original bitmap and matching label.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-10-GameType.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-11-GameType.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/bitmap-comparison.json"
+      ]
+    },
+    {
+      "id": "start_Alliance",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Correct faction cockpit/advisor, visible Systems: 200. Expert/Large/HQ selected before start. Eight transition samples show menu followed directly by galaxy; source confirms pending setup bypass.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/Alliance-configured.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/Alliance-galaxy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/campaign-transition-contact-sheet.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt"
+      ]
+    },
+    {
+      "id": "start_Empire",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Correct faction cockpit/advisor, visible Systems: 200. Expert/Large/HQ selected before start. Eight transition samples show menu followed directly by galaxy; source confirms pending setup bypass.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/Empire-configured.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/Empire-galaxy.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/campaign-transition-contact-sheet.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt"
+      ]
+    },
+    {
+      "id": "load_options",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Original control opens Load Game slot picker.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/load-picker.png"
+      ]
+    },
+    {
+      "id": "quit_visual_exit",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Quit leaves a black viewport; this is an intentional exit result, not a blank menu regression. Browser host RAF continues.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/quit.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "music_original_bytes",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "One decoded buffer: 2438956 bytes, SHA256 fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3, duration 110.60825 seconds. No additional audio HTTP request.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "music_gesture_loop_no_overlap",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "Before gesture suspended context, zero sources. After first pointer gesture one running context and one started looping source. Same single source after many gestures at context time 23.536s; no second or overlapping source. Playback is WebAudio-instrumented, not an acoustic listening test.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "zero_console_errors",
+      "status": "fail",
+      "scope": "focused",
+      "detail": "Every tested fresh context logs console.error: Plugin quad_url version mismatchjs version: 0.1.2, crate version: 65538. Reproduced without instrumentation. gl.js registers string version 0.1.2 while WASM reports integer 65538.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/supplement-console.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-console.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt"
+      ]
+    },
+    {
+      "id": "zero_page_errors",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "No uncaught page exceptions.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/supplement-console.json"
+      ]
+    },
+    {
+      "id": "zero_failed_http",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "No requestfailed events or HTTP error responses.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/supplement-console.json"
+      ]
+    },
+    {
+      "id": "zero_missing_function_bridge",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "No missing-function bridge warnings.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/supplement-console.json"
+      ]
+    },
+    {
+      "id": "zero_missing_texture",
+      "status": "pass",
+      "scope": "focused",
+      "detail": "No missing-texture/deleted-texture warnings.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json",
+        "/tmp/open-rebellion-main-menu-astra-r2/supplement-console.json"
+      ]
+    },
+    {
+      "id": "quit_stops_audio",
+      "status": "fail",
+      "scope": "additional_exit_cleanup",
+      "detail": "Additional exit-cleanup finding: music still started, loop=true, ended=false, not stopped; context time advances from 0.731 to 1.264 seconds after Quit. Visual exit succeeds but audible source survives.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/quit.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/raw-evidence.json"
+      ]
+    },
+    {
+      "id": "endpoint_Credits",
+      "status": "open",
+      "scope": "known_endpoint",
+      "detail": "Clicked original control; remains on cockpit with no implemented destination. Known open endpoint, explicitly excluded from regressions.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/endpoint-Credits.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt"
+      ]
+    },
+    {
+      "id": "endpoint_Multiplayer",
+      "status": "open",
+      "scope": "known_endpoint",
+      "detail": "Clicked original control; remains on cockpit with no implemented destination. Known open endpoint, explicitly excluded from regressions.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/endpoint-Multiplayer.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt"
+      ]
+    },
+    {
+      "id": "propagation_difficulty",
+      "status": "unverified",
+      "scope": "P04",
+      "detail": "Source passes selected value into game_setup_state and SeedOptions for world reload. Live browser proves selected art and successful campaign, but exposes no selected active value. Both factions have 200 systems regardless; system count is not proof of size propagation. Disposable save inspection did not produce a save, so persistence is not established.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-configured.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-saved.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-storage.json"
+      ]
+    },
+    {
+      "id": "propagation_galaxy_size",
+      "status": "unverified",
+      "scope": "P04",
+      "detail": "Source passes selected value into game_setup_state and SeedOptions for world reload. Live browser proves selected art and successful campaign, but exposes no selected active value. Both factions have 200 systems regardless; system count is not proof of size propagation. Disposable save inspection did not produce a save, so persistence is not established.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-configured.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-saved.png",
+        "/tmp/open-rebellion-main-menu-astra-r2/propagation-storage.json"
+      ]
+    },
+    {
+      "id": "propagation_headquarters_only",
+      "status": "open",
+      "scope": "P04",
+      "detail": "Known P04 gap confirmed by source: copied only into unused _headquarters_only, omitted from pending StartGame/SeedOptions; no linkage to active configuration, save state or VictorySystem. Menu toggle alone is not gameplay parity.",
+      "evidence": [
+        "/tmp/open-rebellion-main-menu-astra-r2/source-corroboration.txt",
+        "/tmp/open-rebellion-main-menu-astra-r2/selection-10-GameType.png"
+      ]
+    }
+  ],
+  "counts": {
+    "pass": 43,
+    "fail": 2,
+    "open": 3,
+    "unverified": 2
+  },
+  "focused_counts": {
+    "pass": 43,
+    "fail": 1
+  },
+  "safe_to_commit_focused_tranche": false,
+  "commit_reason": "Required zero-console-errors gate fails: quad_url version mismatch. Additional quit audio cleanup fails. Keep P03 and P04 in progress.",
+  "limitations": [
+    "Finite hover/transition samples, not exhaustive animation sequence or every rendered frame.",
+    "No acoustic listening; audio identity and source playback proven by native WebAudio hooks.",
+    "Five original pointer regions are static, not animated; evaluated against canonical resource table.",
+    "Native parity, full P03/P04 completion, keyboard accessibility, gain/mute, return-to-menu lifecycle and subsequent campaign reset were outside this focused request.",
+    "The qa.draws field instrumented drawElements only and is zero because renderer uses instanced draw calls; it is not evidence of no rendering.",
+    "Chromium emits ReadPixels performance warnings during screenshots; these are retained and are not missing-texture or bridge warnings."
+  ]
+}

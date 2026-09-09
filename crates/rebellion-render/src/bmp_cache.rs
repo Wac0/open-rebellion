@@ -147,6 +147,11 @@ pub mod resources {
         /// Main title-screen background.
         pub const MAIN_MENU_BG: u32 = 20001;
 
+        /// First animated shuttle-cockpit control frame.
+        pub const MAIN_MENU_ANIMATION_FIRST: u32 = 11001;
+        /// Last shuttle-cockpit control/selection frame.
+        pub const MAIN_MENU_ANIMATION_LAST: u32 = 11275;
+
         /// Main-menu button: restart the game.
         pub const BTN_RESTART_GAME_NORMAL: u32 = 10035;
         /// Main-menu button: restart the game (pressed).
@@ -872,7 +877,20 @@ fn uses_blue_screen_transparency(source: DllSource, resource_id: u32) -> bool {
                 | resources::gokres::MINI_SHIP_STRIKE_CRUISER
                     ..=resources::gokres::MINI_SHIP_IMPERIAL_DREADNOUGHT
         ),
-        DllSource::Common | DllSource::Tactical => false,
+        DllSource::Common => matches!(
+            resource_id,
+            10001..=10003
+                | 10005
+                | 10007
+                | 10009
+                | 10011
+                | 10013..=10015
+                | 10017..=10019
+                | 10158..=10159
+                | resources::common::MAIN_MENU_ANIMATION_FIRST
+                    ..=resources::common::MAIN_MENU_ANIMATION_LAST
+        ),
+        DllSource::Tactical => false,
     }
 }
 

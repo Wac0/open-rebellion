@@ -1,0 +1,596 @@
+{
+  "sessions": {
+    "menu": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "console": [
+        {
+          "type": "error",
+          "text": "Plugin quad_url version mismatchjs version: 0.1.2, crate version: 65538"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f3000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f3000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f3000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x104004f3000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "draws": 0,
+        "frames": 247
+      },
+      "cold_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "first_gesture_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 0.7733333333333333
+          }
+        ],
+        "draws": 0,
+        "frames": 468
+      },
+      "after_many_gestures_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 23.536
+          }
+        ],
+        "draws": 0,
+        "frames": 1834
+      },
+      "picker_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 23.824
+          }
+        ],
+        "draws": 0,
+        "frames": 1851
+      }
+    },
+    "Alliance": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "console": [
+        {
+          "type": "error",
+          "text": "Plugin quad_url version mismatchjs version: 0.1.2, crate version: 65538"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "draws": 0,
+        "frames": 268
+      },
+      "cold_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 3.104
+          }
+        ],
+        "draws": 0,
+        "frames": 456
+      },
+      "storage": {}
+    },
+    "Empire": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "console": [
+        {
+          "type": "error",
+          "text": "Plugin quad_url version mismatchjs version: 0.1.2, crate version: 65538"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "draws": 0,
+        "frames": 266
+      },
+      "cold_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 3.104
+          }
+        ],
+        "draws": 0,
+        "frames": 454
+      },
+      "storage": {}
+    },
+    "quit": {
+      "requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "console": [
+        {
+          "type": "error",
+          "text": "Plugin quad_url version mismatchjs version: 0.1.2, crate version: 65538"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        }
+      ],
+      "pageerrors": [],
+      "failed": [],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "status": 200
+        }
+      ],
+      "cold_audio": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "draws": 0,
+        "frames": 267
+      },
+      "cold_requests": [
+        "http://127.0.0.1:8765/",
+        "http://127.0.0.1:8765/gl.js",
+        "http://127.0.0.1:8765/open-rebellion.wasm",
+        "http://127.0.0.1:8765/data/runtime.orpk"
+      ],
+      "before": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [],
+        "contexts": [
+          {
+            "state": "suspended",
+            "currentTime": 0
+          }
+        ],
+        "draws": 0,
+        "frames": 267
+      },
+      "after": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 0.7306666666666667
+          }
+        ],
+        "draws": 0,
+        "frames": 313
+      },
+      "later": {
+        "decodes": [
+          {
+            "bytes": 2438956,
+            "sha256": "fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3",
+            "decoded": true,
+            "duration": 110.60825
+          }
+        ],
+        "sources": [
+          {
+            "started": true,
+            "ended": false,
+            "loop": true,
+            "duration": 110.60825,
+            "contextState": "suspended"
+          }
+        ],
+        "contexts": [
+          {
+            "state": "running",
+            "currentTime": 1.264
+          }
+        ],
+        "draws": 0,
+        "frames": 345
+      }
+    }
+  },
+  "hover": {
+    "Easy": [
+      "hover-Easy-0.png",
+      "hover-Easy-1.png",
+      "hover-Easy-2.png",
+      "hover-Easy-3.png"
+    ],
+    "Intermediate": [
+      "hover-Intermediate-0.png",
+      "hover-Intermediate-1.png",
+      "hover-Intermediate-2.png",
+      "hover-Intermediate-3.png"
+    ],
+    "Expert": [
+      "hover-Expert-0.png",
+      "hover-Expert-1.png",
+      "hover-Expert-2.png",
+      "hover-Expert-3.png"
+    ],
+    "GalaxyLever": [
+      "hover-GalaxyLever-0.png",
+      "hover-GalaxyLever-1.png",
+      "hover-GalaxyLever-2.png",
+      "hover-GalaxyLever-3.png"
+    ],
+    "SmallGalaxy": [
+      "hover-SmallGalaxy-0.png",
+      "hover-SmallGalaxy-1.png",
+      "hover-SmallGalaxy-2.png",
+      "hover-SmallGalaxy-3.png"
+    ],
+    "MediumGalaxy": [
+      "hover-MediumGalaxy-0.png",
+      "hover-MediumGalaxy-1.png",
+      "hover-MediumGalaxy-2.png",
+      "hover-MediumGalaxy-3.png"
+    ],
+    "LargeGalaxy": [
+      "hover-LargeGalaxy-0.png",
+      "hover-LargeGalaxy-1.png",
+      "hover-LargeGalaxy-2.png",
+      "hover-LargeGalaxy-3.png"
+    ],
+    "GameType": [
+      "hover-GameType-0.png",
+      "hover-GameType-1.png",
+      "hover-GameType-2.png",
+      "hover-GameType-3.png"
+    ],
+    "Empire": [
+      "hover-Empire-0.png",
+      "hover-Empire-1.png",
+      "hover-Empire-2.png",
+      "hover-Empire-3.png"
+    ],
+    "Alliance": [
+      "hover-Alliance-0.png",
+      "hover-Alliance-1.png",
+      "hover-Alliance-2.png",
+      "hover-Alliance-3.png"
+    ],
+    "LoadOptions": [
+      "hover-LoadOptions-0.png",
+      "hover-LoadOptions-1.png",
+      "hover-LoadOptions-2.png",
+      "hover-LoadOptions-3.png"
+    ],
+    "Credits": [
+      "hover-Credits-0.png",
+      "hover-Credits-1.png",
+      "hover-Credits-2.png",
+      "hover-Credits-3.png"
+    ],
+    "Multiplayer": [
+      "hover-Multiplayer-0.png",
+      "hover-Multiplayer-1.png",
+      "hover-Multiplayer-2.png",
+      "hover-Multiplayer-3.png"
+    ],
+    "Quit": [
+      "hover-Quit-0.png",
+      "hover-Quit-1.png",
+      "hover-Quit-2.png",
+      "hover-Quit-3.png"
+    ]
+  },
+  "selections": {
+    "selection-00-Easy": "Easy",
+    "selection-01-Intermediate": "Intermediate",
+    "selection-02-Expert": "Expert",
+    "selection-03-Easy": "Easy",
+    "selection-04-MediumGalaxy": "MediumGalaxy",
+    "selection-05-LargeGalaxy": "LargeGalaxy",
+    "selection-06-SmallGalaxy": "SmallGalaxy",
+    "selection-07-GalaxyLever": "GalaxyLever",
+    "selection-08-GalaxyLever": "GalaxyLever",
+    "selection-09-GalaxyLever": "GalaxyLever",
+    "selection-10-GameType": "GameType",
+    "selection-11-GameType": "GameType"
+  },
+  "edges": {
+    "Intermediate": [
+      "outside-Intermediate-left.png",
+      "outside-Intermediate-right.png",
+      "outside-Intermediate-top.png",
+      "outside-Intermediate-bottom.png"
+    ],
+    "Expert": [
+      "outside-Expert-left.png",
+      "outside-Expert-right.png",
+      "outside-Expert-top.png",
+      "outside-Expert-bottom.png"
+    ]
+  }
+}

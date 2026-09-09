@@ -306,6 +306,28 @@ the run as formally degenerate.
 - Acceptance: versioned, compressed, asynchronous IndexedDB saves round-trip
   complete state, expose quota/corruption errors, and preserve fingerprints.
 
+### F-016: Original main-menu cockpit parity is only partially accepted
+
+- Severity: P1
+- Status: partially remediated; browser cockpit/audio tranche passes
+- Evidence: the former stretched, dimmed bitmap and replacement text buttons
+  are gone. The browser now composes COMMON 20001 with the binary-mapped control
+  resources, exact logical hit regions, 4:3 scaling, direct faction starts, and
+  the original MDATA.302 bytes. Astra-medium R2 exercised the full matrix and
+  exposed a URL-plugin ABI diagnostic plus audio surviving Quit; after both
+  fixes, R3 passed 11/11 focused assertions with zero console/page/request/
+  texture errors and zero active audio loops after Quit. Workspace tests pass
+  491/491. See `evidence/2026-09-09-main-menu-cockpit.md`.
+- Reference: [`agent_docs/main-menu-parity.md`](../../../agent_docs/main-menu-parity.md)
+  records the binary-confirmed geometry, resources, commands, settings, music,
+  responsive transform, and Astra matrix.
+- Acceptance: native and browser reproduce the assembled cockpit, every mapped
+  hover/click/keyboard behavior and selection, direct faction start, menu music,
+  4:3 scaling, and all navigation with no blank aperture or missing resource.
+  Credits, Multiplayer, Headquarters Only propagation, live difficulty/size
+  persistence, native/accessibility, gain/mute, return-to-menu, and clean
+  second-campaign reset remain open; P03/P04 therefore remain in progress.
+
 ## Fable 5.1 audit synthesis
 
 The Fable review confirmed the original blockers and sharpened several
@@ -376,8 +398,8 @@ and underlying state mutation are both demonstrated.
 | P00 | Supported scope | Define native and WASM contracts. Explicitly include or exclude browser audio, video, advisor, EData, and mods. |
 | P01 | Build infrastructure | Formatting, warning-free all-target check, strict clippy, all required tests, native build, actual WASM packaging, and artifact inspection. |
 | P02 | Data and startup | Every required/optional DAT table, string names, entity counts, troop classes, clean boot, and missing/corrupt-data errors. |
-| P03 | Main menu | New Game, Load Game, Quit, version display, keyboard/mouse focus, and responsive layout. |
-| P04 | Game setup | Both factions, three difficulties, every supported galaxy size, disabled states, Back, Start Campaign, and clean second-campaign reset. |
+| P03 | Main menu | Assemble and operate the original cockpit controls, animation, navigation, keyboard access, MDATA.302 music, and responsive 4:3 hit testing per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). |
+| P04 | Game setup | Use the cockpit controls for both factions, three difficulties, three original galaxy sizes, both game types, direct campaign start, correct state propagation, and clean second-campaign reset per [`main-menu-parity.md`](../../../agent_docs/main-menu-parity.md). |
 | P05 | Clock | Pause and every speed, focus loss, browser background/resume, modal/combat/cutscene tick behavior. |
 | P06 | Galaxy navigation | Pan, wheel zoom, reset, system selection, right-click menu, resizing, high-DPI scale, and cockpit input boundaries. |
 | P07 | Fog and overlays | Both factions, sensor radius, recon intelligence, fleet/facility/system overlays, labels, grid, and no hidden-information leakage. |

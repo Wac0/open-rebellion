@@ -42,6 +42,25 @@ class RuntimePackBuilderTests(unittest.TestCase):
             self.assertEqual(first.read_bytes(), second.read_bytes())
             PACKER.verify_pack(second, entries)
 
+    def test_optional_audio_uses_relative_runtime_keys(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            base = root / "base"
+            bmp = root / "ui" / "common-dll" / "BMP"
+            audio = root / "audio" / "music"
+            base.mkdir()
+            bmp.mkdir(parents=True)
+            audio.mkdir(parents=True)
+            (base / "SYSTEMSD.DAT").write_bytes(b"systems")
+            (bmp / "20001.bmp").write_bytes(b"bitmap")
+            (audio / "main_theme.wav").write_bytes(b"wave")
+
+            entries = PACKER.collect_entries(base, root / "ui", root / "audio")
+            self.assertIn(
+                (PACKER.KIND_AUDIO, "music/main_theme.wav"),
+                [(entry.kind, entry.key) for entry in entries],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

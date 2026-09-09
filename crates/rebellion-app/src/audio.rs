@@ -95,7 +95,7 @@
 //! }
 //! ```
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
 use quad_snd::{AudioContext, Sound};
@@ -214,6 +214,9 @@ pub struct AudioEngine {
 
     /// Whether music is currently playing.
     music_playing: bool,
+
+    /// Missing tracks already reported, keeping diagnostics bounded.
+    missing_music_logged: HashSet<MusicTrack>,
 }
 
 impl AudioEngine {
@@ -225,6 +228,7 @@ impl AudioEngine {
             voice: HashMap::new(),
             music: None,
             music_playing: false,
+            missing_music_logged: HashSet::new(),
         }
     }
 
@@ -321,25 +325,42 @@ impl AudioEngine {
         self.voice.insert(line, sound);
     }
 
-    /// Load a music track from raw bytes and immediately start playing it.
+    /// Begin decoding a music track supplied by the browser runtime pack.
     ///
-    /// Used on WASM where files are fetched asynchronously.
-    #[allow(dead_code)]
-    pub fn load_and_play_music_bytes(
-        &mut self,
-        track: MusicTrack,
-        bytes: &[u8],
-        vol_state: &AudioVolumeState,
-    ) {
+    /// WebAudio decoding is asynchronous. Call `try_play_loaded_music` on
+    /// subsequent frames after a user gesture rather than attempting playback
+    /// before the decoded buffer exists.
+    #[cfg(target_arch = "wasm32")]
+    pub fn load_music_bytes(&mut self, track: MusicTrack, bytes: &[u8]) {
         self.stop_music();
-        let vol = vol_state.effective_music_volume() as f32;
         let sound = Sound::load(&self.ctx, bytes);
-        sound.play(&self.ctx, quad_snd::PlaySoundParams {
-            looped: true,
-            volume: vol,
-        });
         self.music = Some((sound, track));
+        self.music_playing = false;
+    }
+
+    /// Start decoded browser music once, returning whether playback is active.
+    #[cfg(target_arch = "wasm32")]
+    pub fn try_play_loaded_music(&mut self, vol_state: &AudioVolumeState) -> bool {
+        if self.music_playing {
+            return true;
+        }
+
+        let Some((sound, _)) = &self.music else {
+            return false;
+        };
+        if !sound.is_loaded() {
+            return false;
+        }
+
+        sound.play(
+            &self.ctx,
+            quad_snd::PlaySoundParams {
+                looped: true,
+                volume: vol_state.effective_music_volume() as f32,
+            },
+        );
         self.music_playing = true;
+        true
     }
 
     // -----------------------------------------------------------------------
@@ -399,8 +420,26 @@ impl AudioEngine {
 
         self.stop_music();
 
-        let path = audio_base_path(sounds_dir).join("music").join(music_file(track));
+        let staged_path = audio_base_path(sounds_dir).join("music").join(music_file(track));
+        let path = if staged_path.exists() {
+            staged_path
+        } else if track == MusicTrack::MainTheme {
+            let configured = std::env::var_os("REBELLION_MDATA_DIR")
+                .map(PathBuf::from)
+                .map(|directory| directory.join("MDATA.302"));
+            configured
+                .filter(|candidate| candidate.exists())
+                .unwrap_or_else(|| PathBuf::from("../star-wars-rebellion/MDATA/MDATA.302"))
+        } else {
+            staged_path
+        };
         if !path.exists() {
+            if self.missing_music_logged.insert(track) {
+                eprintln!(
+                    "[audio] music unavailable track={track:?} expected_path={}",
+                    path.display()
+                );
+            }
             return;
         }
 

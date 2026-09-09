@@ -12,11 +12,13 @@ const MAX_KEY_LEN: usize = 512;
 
 const KIND_GAME_DATA: u8 = 0;
 const KIND_BITMAP: u8 = 1;
+const KIND_AUDIO: u8 = 2;
 
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct RuntimePack {
     pub game_files: HashMap<String, Vec<u8>>,
     pub bitmaps: HashMap<String, Vec<u8>>,
+    pub audio_files: HashMap<String, Vec<u8>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -87,6 +89,7 @@ pub fn parse_runtime_pack(bytes: &[u8]) -> Result<RuntimePack, PackError> {
     let mut pack = RuntimePack {
         game_files: HashMap::with_capacity(count as usize),
         bitmaps: HashMap::with_capacity(count as usize),
+        audio_files: HashMap::new(),
     };
 
     for _ in 0..count {
@@ -115,6 +118,7 @@ pub fn parse_runtime_pack(bytes: &[u8]) -> Result<RuntimePack, PackError> {
         let destination = match kind {
             KIND_GAME_DATA => &mut pack.game_files,
             KIND_BITMAP => &mut pack.bitmaps,
+            KIND_AUDIO => &mut pack.audio_files,
             other => return Err(PackError::UnknownKind(other)),
         };
         if destination.insert(key.clone(), data).is_some() {
@@ -165,17 +169,19 @@ mod tests {
     }
 
     #[test]
-    fn parses_game_data_and_bitmap_entries() {
+    fn parses_game_data_bitmap_and_audio_entries() {
         let bytes = pack(&[
             (KIND_GAME_DATA, "SYSTEMSD.DAT", b"systems"),
             (KIND_GAME_DATA, "textstra.json", b"{}"),
             (KIND_BITMAP, "strategy-dll/900", b"bitmap"),
+            (KIND_AUDIO, "music/main_theme.wav", b"wave"),
         ]);
 
         let parsed = parse_runtime_pack(&bytes).unwrap();
         assert_eq!(parsed.game_files["SYSTEMSD.DAT"], b"systems");
         assert_eq!(parsed.game_files["textstra.json"], b"{}");
         assert_eq!(parsed.bitmaps["strategy-dll/900"], b"bitmap");
+        assert_eq!(parsed.audio_files["music/main_theme.wav"], b"wave");
     }
 
     #[test]

@@ -1,0 +1,172 @@
+{
+  "run": "Focused browser Astra R3",
+  "date": "2026-09-09T14:27:01.461948+00:00",
+  "url": "http://127.0.0.1:8765/",
+  "browser": "141.0.7390.37",
+  "method": "Fresh isolated Chromium contexts, default autoplay, native WebAudio wrapping; no repository writes.",
+  "assertions": [
+    {
+      "id": "startup_exactly_four_successful_requests",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "All three fresh contexts request only document, gl.js, open-rebellion.wasm and data/runtime.orpk; all HTTP 200.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "runtime_orpk_once",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Exactly once in every context; interactions add no requests.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "original_cockpit_renders",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Visually inspected native 640x480 composition: original cockpit shell, populated apertures, Easy selected, no blue matte or replacement menu.",
+      "evidence": [
+        "cockpit-cold.png"
+      ]
+    },
+    {
+      "id": "zero_console_and_page_errors",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Zero console errors, page exceptions or failed requests, including fresh uninstrumented confirmation. ReadPixels performance warnings retained in raw evidence.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "no_quad_url_abi_or_missing_function_warnings",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "No quad_url ABI mismatch or missing-function diagnostics in any context.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "MDATA_302_identity_decodes_once",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "One decode of 2,438,956 bytes; SHA-256 fbd5e5772e5bbe7b3d82157cc60722972782aae22dd67cc7ff3259d370d078e3; duration 110.60825 seconds.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "first_gesture_starts_exactly_one_loop",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Cold context suspended with zero sources; trusted first pointerdown precedes one looping start; context running after gesture, no duplicate after boundary gesture.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "quit_exit_display",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Quit renders black exit display (thin canvas border excluded).",
+      "evidence": [
+        "quit-exit.png"
+      ]
+    },
+    {
+      "id": "quit_explicitly_stops_and_ends_loop",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Source 0 stop() at context time 1.850667s, ended event 3.2ms later; zero active loops at 2.826667s and 7.829333s. Context remains running without an active loop.",
+      "evidence": [
+        "raw-evidence.json"
+      ]
+    },
+    {
+      "id": "outside_Expert_boundary_smoke",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Click (186,59), one pixel left of Expert rectangle (187,41,45,36), leaves all three difficulty control pixels unchanged; Easy remains selected.",
+      "evidence": [
+        "boundary-before.png",
+        "boundary-after.png"
+      ]
+    },
+    {
+      "id": "Alliance_direct_start_smoke",
+      "status": "pass",
+      "scope": "focused_R3",
+      "detail": "Single Alliance click (468,334) reaches galaxy with Alliance frame and C-3PO greeting, with no second setup interaction. Finite transition screenshots; no propagation certification.",
+      "evidence": [
+        "alliance-transition-0.png",
+        "alliance-transition-1.png",
+        "alliance-transition-2.png",
+        "alliance-galaxy.png"
+      ]
+    }
+  ],
+  "explicitly_open": [
+    {
+      "item": "Credits",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "Multiplayer",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "Headquarters Only propagation",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "live difficulty propagation",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "live size propagation",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "native parity",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "accessibility",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "mute/gain",
+      "status": "open",
+      "scope": "outside focused certification"
+    },
+    {
+      "item": "return-to-menu lifecycle",
+      "status": "open",
+      "scope": "outside focused certification"
+    }
+  ],
+  "safe_to_commit_focused_tranche": true,
+  "P03": "in progress",
+  "P04": "in progress",
+  "repository_files_edited": false,
+  "limitations": [
+    "WebAudio source instrumentation, not acoustic listening; default headless audio output is muted.",
+    "Finite 640x480 smoke tests; broader R2 matrix not rerun.",
+    "Initial probe moved pointer away before canvas processed release; final recorded run waits 200ms after release and visibly confirms activation."
+  ],
+  "counts": {
+    "pass": 11,
+    "fail": 0
+  }
+}
