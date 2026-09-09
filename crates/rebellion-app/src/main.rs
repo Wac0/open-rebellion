@@ -2841,7 +2841,11 @@ async fn main() {
                         &state,
                         &active_mods,
                     ) {
-                        Ok(()) => {
+                        Ok(fingerprint) => {
+                            macroquad::logging::info!(
+                                "save_state_fingerprint slot={} tick={} fingerprint={}",
+                                slot, state.clock.tick, fingerprint
+                            );
                             save_load_panel_state.error_message = None;
                             save_slots = read_save_slots(&saves_dir);
                             msg_log.push(GameMessage::new(
@@ -2859,6 +2863,13 @@ async fn main() {
                 PanelAction::LoadGame { slot } => {
                     match rebellion_data::save::load_slot(&saves_dir, slot) {
                         Ok((meta, state)) => {
+                            macroquad::logging::info!(
+                                "load_state_fingerprint slot={} tick={} fingerprint={} verified={}",
+                                slot,
+                                meta.game_tick,
+                                meta.state_fingerprint,
+                                meta.fingerprint_verified
+                            );
                             LiveCampaign {
                                 world: &mut world,
                                 clock: &mut clock,

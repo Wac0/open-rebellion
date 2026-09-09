@@ -1,0 +1,95 @@
+{
+  "result": "PASS",
+  "url": "http://127.0.0.1:8138/",
+  "repository_files_edited": false,
+  "browser": "Playwright Chromium headless; fresh browser.new_context; same context reload; closed after audit",
+  "checks": {
+    "fresh_nonpersistent_context": true,
+    "initial_storage_empty": true,
+    "boot": true,
+    "alliance_standard_campaign": true,
+    "save_modal_opened_with_s": true,
+    "save_slot_1": true,
+    "save_key_present": true,
+    "metadata_key_present": true,
+    "metadata_schema_version_1": true,
+    "exact_lossless_name": true,
+    "game_tick_present_and_matches_ui": true,
+    "fingerprint_version_1": true,
+    "fingerprint_u64": true,
+    "save_console_matches_metadata": true,
+    "same_context_reload_persisted_slot": true,
+    "load_via_main_menu_and_slot_1": true,
+    "load_console_identical_verified": true,
+    "loaded_campaign_resumed": true,
+    "bitmap_cockpit_and_map_present": true,
+    "runtime_orpk_success": true,
+    "runtime_pack_bitmaps_loaded": true,
+    "no_loose_dat_bmp": true,
+    "no_http_errors": true,
+    "no_failed_requests": true,
+    "no_page_exceptions": true,
+    "no_unexpected_console_errors": true,
+    "no_missing_asset_or_invalid_deleted_texture_logs": true,
+    "required_screenshots_present": true,
+    "context_closed": true
+  },
+  "metadata": {
+    "schema_version": 1,
+    "name": "Fingerprint | Astra",
+    "game_tick": 0,
+    "state_fingerprint": {
+      "version": 1,
+      "value": 16333838361542804298
+    }
+  },
+  "fingerprint_decimal_lossless": "16333838361542804298",
+  "fingerprint_display": "v1:e2ad73730e68434a",
+  "metadata_parser": "Python json with arbitrary-precision integers; no JavaScript numeric rounding",
+  "save_payload_characters": 103187,
+  "save_console_records": [
+    "save_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a"
+  ],
+  "load_console_records": [
+    "load_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a verified=true"
+  ],
+  "failures": [],
+  "usability_evidence": "Loaded Day 0; resumed at 1x; dismissed character event; paused at Day 19 with bitmap-framed galaxy map visible.",
+  "network": {
+    "responses": 8,
+    "runtime_orpk_successes": 2,
+    "http_errors": [],
+    "failed_requests": [],
+    "loose_dat_bmp": []
+  },
+  "page_exceptions": [],
+  "unexpected_console_errors": [],
+  "missing_asset_or_texture_errors": [],
+  "warnings": {
+    "optional_audio_video": [
+      "No audio_init function in gl.js",
+      "Missed function: audio_init"
+    ],
+    "software_renderer_performance": [
+      "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "[.WebGL-0x104004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    ],
+    "other_optional_js_imports": [
+      "No js_create_string function in gl.js",
+      "No quad_url_link_open function in gl.js",
+      "No js_free_object function in gl.js"
+    ]
+  },
+  "screenshots": {
+    "populated_save_modal": "/tmp/open-rebellion-f011a-astra-r2/save-populated.png",
+    "persisted_load_slot": "/tmp/open-rebellion-f011a-astra-r2/load-persisted.png",
+    "post_load_campaign": "/tmp/open-rebellion-f011a-astra-r2/post-load-campaign.png",
+    "post_load_resumed_campaign": "/tmp/open-rebellion-f011a-astra-r2/post-load-usable.png"
+  },
+  "evidence": {
+    "events": "/tmp/open-rebellion-f011a-astra-r2/events.json",
+    "storage": "/tmp/open-rebellion-f011a-astra-r2/storage.json",
+    "initial_storage": "/tmp/open-rebellion-f011a-astra-r2/initial-storage.json",
+    "harness": "/tmp/open-rebellion-f011a-astra-r2/audit.py"
+  }
+}

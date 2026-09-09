@@ -22,17 +22,18 @@ acceptance plan required before the project can claim 100% functionality.
 | [Cockpit PR #2 audit](evidence/2026-09-08-cockpit-pr-audit.md) | Resource adjudication, integrated diagnostics, Astra browser evidence, screenshots, and follow-up scope. |
 | [Fleet miniature proof](evidence/2026-09-08-fleet-miniatures.md) | Exact GOKRES mappings, transparency checks, Astra browser evidence, interactions, and screenshots for F-010B. |
 | [Runtime pack proof](evidence/2026-09-08-runtime-pack.md) | Deterministic package hashes, four-request startup, two-faction bitmap/interaction proof, and zoom/WebGL regression evidence for F-014A. |
+| [Save-state fingerprint proof](evidence/2026-09-08-state-fingerprints.md) | Canonical two-run fingerprints, v9 integrity checks, native v8 compatibility, and Astra browser save/reload/load proof for F-011A. |
 | [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
 ## Current conclusion
 
 The project is substantially implemented, but it is not yet demonstrably 100%
-functional. Fleet-miniature acceptance and the deterministic four-request
-browser startup tranche now pass. Long-running simulation behavior,
-deterministic replay, tactical parity, remaining browser memory/media work,
-cross-browser performance, formatting, lint, and release-level visual
-acceptance remain incomplete.
+functional. Fleet-miniature acceptance, deterministic four-request browser
+startup, and the F-011A canonical save-state fingerprint tranche now pass.
+Long-running deterministic replay, tactical parity, remaining browser
+memory/media work, cross-browser performance, formatting, lint, and
+release-level visual acceptance remain incomplete.
 
 The JSON document is the canonical source for stable finding and feature IDs.
 The Markdown document explains the evidence and how to execute each pass. Its

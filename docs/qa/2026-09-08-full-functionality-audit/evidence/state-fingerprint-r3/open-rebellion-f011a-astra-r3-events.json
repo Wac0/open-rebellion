@@ -1,0 +1,112 @@
+{
+  "console": [
+    {
+      "type": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "Missed function: audio_init"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+    },
+    {
+      "type": "info",
+      "text": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a"
+    },
+    {
+      "type": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "Missed function: audio_init"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+    },
+    {
+      "type": "info",
+      "text": "load_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a verified=true"
+    }
+  ],
+  "exceptions": [],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:8139/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/gl.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/data/runtime.orpk",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/gl.js",
+      "status": 304
+    },
+    {
+      "url": "http://127.0.0.1:8139/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8139/data/runtime.orpk",
+      "status": 200
+    }
+  ],
+  "failed_requests": []
+}

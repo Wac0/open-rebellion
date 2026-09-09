@@ -291,13 +291,78 @@
     {
       "id": "F-011",
       "severity": "P0_for_multiplayer_P1_for_reproducible_single_player",
-      "status": "confirmed_architecture_gap",
+      "status": "partially_remediated",
       "title": "Deterministic replay is not established",
       "evidence": [
+        "F-011A adds a versioned canonical logical-state fingerprint to native and browser save metadata",
+        "two independently seeded initial campaigns now produce identical fingerprints after unordered map and set normalization",
+        "Astra medium r3 passed 34 browser save, reload, load, bitmap, network, and error assertions with a matching verified fingerprint",
         "unordered map iteration affects movement and AI tie-breaking",
         "headless and app paths consume random values differently",
         "interactive seeds are wall-clock-derived",
         "save state omits RNG, AI runtime, combat cooldown, configuration, and data hashes"
+      ],
+      "verified_tranches": [
+        {
+          "id": "F-011A",
+          "status": "pass",
+          "verified_at": "2026-09-08",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "fingerprint": {
+            "algorithm_version": 1,
+            "display": "v1:e2ad73730e68434a",
+            "browser_decimal_string": "16333838361542804298",
+            "canonicalizes": [
+              "map keys",
+              "blockaded set",
+              "busy_characters set",
+              "fired_ids set",
+              "visible set"
+            ],
+            "preserves_sequence_order": true,
+            "cryptographic_authenticator": false
+          },
+          "save_format": {
+            "current": 9,
+            "native_v8_compatible": true,
+            "v8_fingerprint_verified": false,
+            "v9_mismatch_rejected": true,
+            "browser_metadata_schema": 1,
+            "browser_name_with_pipe_preserved": true
+          },
+          "automated": {
+            "save_tests_passed": 16,
+            "seeded_two_run_tests_passed": 1,
+            "failures": 0,
+            "wasm_check": "pass",
+            "release_package": "pass_with_preexisting_warnings"
+          },
+          "browser": {
+            "assertions": 34,
+            "save_reload_load": "pass",
+            "matching_verified_fingerprint": true,
+            "resumed_to_day": 17,
+            "bitmap_cockpit_and_map": "pass",
+            "runtime_pack_loads": 2,
+            "loose_asset_requests": 0,
+            "http_or_loading_failures": 0,
+            "page_or_console_errors": 0,
+            "missing_asset_or_texture_errors": 0
+          },
+          "artifact": {
+            "wasm_bytes": 4504917,
+            "wasm_sha256": "3ad0e01c67d20e8c700c012bf8398e9e38e932e780ae1075114cc250aee3167a",
+            "runtime_pack_sha256": "491fd403efb4bbb8210331c535626d9f10f8efb568a2f0a70f7cafc963c208ca"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md"
+        }
+      ],
+      "remaining": [
+        "persist RNG and all deterministic continuation state",
+        "record and replay versioned command streams",
+        "remove simulation-time unordered iteration effects",
+        "converge headless and interactive tick paths",
+        "compare native, WASM, automatic, and tactical checkpoints"
       ],
       "acceptance": "Repeated native and native-versus-WASM runs produce identical versioned fingerprints from the same seed and command stream, including across save/load."
     },

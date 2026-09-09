@@ -1,0 +1,137 @@
+{
+  "result": "PASS",
+  "url": "http://127.0.0.1:8139/",
+  "repository_files_edited": false,
+  "browser": "Playwright Chromium headless; fresh browser.new_context; same-context reload; context and browser closed",
+  "checks": {
+    "fresh_nonpersistent_context": true,
+    "context_closed": true,
+    "initial_local_storage_empty": true,
+    "boot_visually_confirmed": true,
+    "alliance_standard_campaign_visually_confirmed": true,
+    "save_modal_opened_with_s": true,
+    "slot_1_selected": true,
+    "required_save_key_present": true,
+    "required_meta_key_present": true,
+    "metadata_schema_version_1": true,
+    "metadata_exact_name": true,
+    "metadata_tick_0": true,
+    "fingerprint_version_1": true,
+    "fingerprint_value_decimal_string": true,
+    "fingerprint_value_lossless_u64": true,
+    "fingerprint_format_v1_16_lowercase_hex": true,
+    "save_console_matches": true,
+    "same_context_reload_storage_unchanged": true,
+    "main_menu_load_game_persisted_slot_1_visually_confirmed": true,
+    "load_console_matches_verified_true": true,
+    "loaded_day_0_visually_confirmed": true,
+    "resumed_gameplay_day_17_visually_confirmed": true,
+    "authentic_bitmap_cockpit_map_before_and_after_load": true,
+    "runtime_orpk_loaded_on_boot_and_reload": true,
+    "runtime_pack_bitmaps_loaded_on_boot_and_reload": true,
+    "no_loose_dat_bmp": true,
+    "no_http_failures": true,
+    "no_loading_request_failures": true,
+    "no_page_exceptions": true,
+    "no_console_errors": true,
+    "no_missing_asset_invalid_deleted_texture_logs": true,
+    "only_known_warnings": true,
+    "required_screenshots_exist": true,
+    "repository_files_untouched": true
+  },
+  "failures": [],
+  "metadata": {
+    "schema_version": 1,
+    "name": "Fingerprint | Astra",
+    "game_tick": 0,
+    "state_fingerprint": {
+      "version": 1,
+      "value": "16333838361542804298"
+    }
+  },
+  "fingerprint_decimal_lossless": "16333838361542804298",
+  "fingerprint_display": "v1:e2ad73730e68434a",
+  "metadata_parser": "Python json; fingerprint required to be JSON string, ASCII decimal, lossless unsigned 64-bit integer",
+  "save_console_records": [
+    "save_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a"
+  ],
+  "load_console_records": [
+    "load_state_fingerprint slot=0 tick=0 fingerprint=v1:e2ad73730e68434a verified=true"
+  ],
+  "save_payload_characters": 103187,
+  "network": {
+    "responses": [
+      {
+        "url": "http://127.0.0.1:8139/",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/gl.js",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/open-rebellion.wasm",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/data/runtime.orpk",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/gl.js",
+        "status": 304
+      },
+      {
+        "url": "http://127.0.0.1:8139/open-rebellion.wasm",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8139/data/runtime.orpk",
+        "status": 200
+      }
+    ],
+    "runtime_orpk_successes": 2,
+    "http_failures": [],
+    "failed_requests": [],
+    "loose_dat_bmp": []
+  },
+  "page_exceptions": [],
+  "console_errors": [],
+  "missing_asset_or_texture_errors": [],
+  "warnings": {
+    "optional_audio": [
+      "No audio_init function in gl.js",
+      "Missed function: audio_init"
+    ],
+    "optional_js": [
+      "No js_create_string function in gl.js",
+      "No quad_url_link_open function in gl.js",
+      "No js_free_object function in gl.js"
+    ],
+    "software_renderer_performance": [
+      "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "[.WebGL-0x13c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    ],
+    "unclassified": []
+  },
+  "visual_evidence": "Inspected boot cockpit, Alliance Standard setup, Save modal, persisted Load slot, loaded Day 0 map, and resumed Day 17 bitmap-framed map. Started 1x, dismissed character event, then paused.",
+  "screenshots": {
+    "save_modal": "/tmp/open-rebellion-f011a-astra-r3/save-populated.png",
+    "load_slot": "/tmp/open-rebellion-f011a-astra-r3/load-persisted.png",
+    "post_load_campaign": "/tmp/open-rebellion-f011a-astra-r3/post-load-campaign.png",
+    "resumed_campaign": "/tmp/open-rebellion-f011a-astra-r3/resumed-campaign.png"
+  },
+  "evidence": {
+    "events.json": "/tmp/open-rebellion-f011a-astra-r3/events.json",
+    "initial-storage.json": "/tmp/open-rebellion-f011a-astra-r3/initial-storage.json",
+    "storage-before-reload.json": "/tmp/open-rebellion-f011a-astra-r3/storage-before-reload.json",
+    "storage.json": "/tmp/open-rebellion-f011a-astra-r3/storage.json",
+    "audit.py": "/tmp/open-rebellion-f011a-astra-r3/audit.py",
+    "validate.py": "/tmp/open-rebellion-f011a-astra-r3/validate.py"
+  },
+  "environment_note": "Initial sandboxed Chromium launch was blocked by macOS Mach IPC restrictions; authorized escalated launch succeeded with a fresh nonpersistent context."
+}

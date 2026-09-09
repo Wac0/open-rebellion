@@ -357,9 +357,11 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [ ] Persist complete deterministic campaign state and surface corruption/quota errors.
 - [x] Correct the native HD root, prefetch `TROOPSD.DAT`, and package all 52 game-data entries plus 2,231 BMPs in deterministic `runtime.orpk` (`F-014A`; [Astra evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md)).
 - [x] Map all 38 fighter/capital-ship records to authentic GOKRES fleet miniatures and pass Astra-medium bitmap/interaction proof (`4589d2e`; F-010B).
+- [x] Add the F-011A versioned canonical save-state fingerprint, v9 integrity verification, v8 compatibility, and lossless browser metadata; Astra-medium r3 passed all 34 save/reload/load and bitmap assertions ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md)).
 - [ ] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence; do not infer logical buttons from sequential resource IDs.
 - [ ] Make a clean packaged browser artifact boot in CI.
-- [ ] Link README parity claims to acceptance evidence and add two-run fingerprints.
+- [x] Link README parity claims to current acceptance evidence.
+- [ ] Extend F-011A from the passing seeded-initial-state probe to replayable command streams with complete continuation state.
 
 ### M1: Simulation Correctness and Determinism — 2–3 weeks
 

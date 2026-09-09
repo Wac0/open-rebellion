@@ -1,0 +1,76 @@
+{
+  "result": "FAIL",
+  "url": "http://127.0.0.1:8137/",
+  "repository_files_edited": false,
+  "browser": "Playwright Chromium headless, fresh browser.new_context(), closed after audit",
+  "checks": {
+    "fresh_nonpersistent_context": true,
+    "initial_storage_empty": true,
+    "boot": true,
+    "alliance_standard_campaign": true,
+    "canvas_save_slot_1": true,
+    "save_key_present": true,
+    "metadata_key_present": true,
+    "metadata_schema_version_1": true,
+    "exact_lossless_name": true,
+    "saved_tick_matches_ui": true,
+    "fingerprint_version_1": true,
+    "fingerprint_u64": true,
+    "save_console_matches_metadata": false,
+    "same_context_reload_persisted_slot": true,
+    "load_via_main_menu_and_slot": true,
+    "load_console_identical_verified": false,
+    "loaded_campaign_usable": true,
+    "bitmap_cockpit_and_map_present": true,
+    "runtime_orpk_loaded": true,
+    "no_loose_dat_bmp": true,
+    "no_http_errors": true,
+    "no_failed_requests": true,
+    "no_page_exceptions": true,
+    "no_console_errors": true,
+    "no_missing_asset_or_invalid_texture_logs": true
+  },
+  "metadata": {
+    "schema_version": 1,
+    "name": "Fingerprint | Astra",
+    "game_tick": 0,
+    "state_fingerprint": {
+      "version": 1,
+      "value": 16333838361542804298
+    }
+  },
+  "fingerprint_display": "v1:e2ad73730e68434a",
+  "save_payload_characters": 103187,
+  "save_console_records": [],
+  "load_console_records": [],
+  "failures": [
+    "No save_state_fingerprint console record was emitted; metadata match cannot be verified.",
+    "No load_state_fingerprint console record was emitted; identical fingerprint and verified=true cannot be verified."
+  ],
+  "usability_evidence": "Loaded at Day 0, resumed simulation to Day 18, dismissed character event, returned to bitmap-framed galaxy map.",
+  "network": {
+    "responses": 8,
+    "runtime_orpk_successes": 2,
+    "http_errors": [],
+    "failed_requests": []
+  },
+  "warnings": [
+    "No audio_init function in gl.js",
+    "No js_create_string function in gl.js",
+    "No quad_url_link_open function in gl.js",
+    "No js_free_object function in gl.js",
+    "Missed function: audio_init",
+    "[.WebGL-0x11c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x11c004f1800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "screenshots": {
+    "populated_save_modal": "/tmp/open-rebellion-f011a-astra/save-populated.png",
+    "persisted_load_slot": "/tmp/open-rebellion-f011a-astra/load-persisted.png",
+    "post_load_campaign": "/tmp/open-rebellion-f011a-astra/post-load-campaign.png",
+    "post_load_usable": "/tmp/open-rebellion-f011a-astra/post-load-usable.png"
+  },
+  "evidence": {
+    "events": "/tmp/open-rebellion-f011a-astra/events.json",
+    "storage": "/tmp/open-rebellion-f011a-astra/storage.json"
+  }
+}

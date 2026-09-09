@@ -1,6 +1,6 @@
 //! Save / load for the full game state.
 //!
-//! # Format (v8)
+//! # Format (v9)
 //!
 //! Binary `bincode` encoding. A save file is:
 //!
@@ -14,6 +14,8 @@
 //!   [mod_name: length-prefixed UTF-8]       // v4+
 //!   [mod_version: length-prefixed UTF-8]    // v4+
 //! [mod_hash: u64]                           // v4+
+//! [fingerprint_version: u16]                // v9+
+//! [state_fingerprint: u64]                  // v9+, canonical logical state
 //! [bincode-encoded SaveState]
 //! ```
 //!
@@ -53,7 +55,7 @@ use rebellion_core::research::ResearchState;
 use rebellion_core::tick::GameClock;
 use rebellion_core::uprising::UprisingState;
 use rebellion_core::victory::VictoryState;
-use rebellion_core::world::{ControlKind, GameWorld};
+use rebellion_core::world::GameWorld;
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -64,8 +66,16 @@ pub const SAVE_MAGIC: &[u8; 8] = b"OPENREB\0";
 
 /// Current save format version. Increment when `SaveState` layout changes.
 ///
-/// v8: Character gained `heritage_known` + `is_killed`, SaveState gained `economy`.
-pub const SAVE_VERSION: u32 = 8;
+/// v9: Header gained a versioned fingerprint of the logical `SaveState`.
+pub const SAVE_VERSION: u32 = 9;
+
+/// Current state-fingerprint algorithm version.
+///
+/// Version 1 is domain-separated FNV-1a over a canonical JSON projection of
+/// the logical save state. JSON object keys and known set fields are sorted;
+/// meaningful sequence order is preserved. It is an informational determinism
+/// and corruption signal, not a cryptographic authentication mechanism.
+pub const STATE_FINGERPRINT_VERSION: u16 = 1;
 
 /// Minimum save version we can migrate from.
 const MIN_MIGRATABLE_VERSION: u32 = 3;
@@ -94,6 +104,90 @@ pub fn compute_mod_hash(mods: &[(String, String)]) -> u64 {
         hash = hash.wrapping_mul(0x100000001b3);
     }
     hash
+}
+
+// ---------------------------------------------------------------------------
+// State fingerprint
+// ---------------------------------------------------------------------------
+
+/// Versioned fingerprint of a logical game-state snapshot.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct StateFingerprint {
+    /// Fingerprint algorithm version, independent of [`SAVE_VERSION`].
+    pub version: u16,
+    /// Non-cryptographic 64-bit digest.
+    pub value: u64,
+}
+
+impl std::fmt::Display for StateFingerprint {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(formatter, "v{}:{:016x}", self.version, self.value)
+    }
+}
+
+const UNORDERED_SET_FIELDS: &[&str] = &[
+    "blockaded",
+    "busy_characters",
+    "fired_ids",
+    "visible",
+];
+
+fn canonicalize_fingerprint_value(
+    value: &mut serde_json::Value,
+    field_name: Option<&str>,
+) -> anyhow::Result<()> {
+    match value {
+        serde_json::Value::Object(fields) => {
+            for (name, child) in fields {
+                canonicalize_fingerprint_value(child, Some(name))?;
+            }
+        }
+        serde_json::Value::Array(items) => {
+            for item in items.iter_mut() {
+                canonicalize_fingerprint_value(item, None)?;
+            }
+            if field_name.is_some_and(|name| UNORDERED_SET_FIELDS.contains(&name)) {
+                let mut keyed = items
+                    .drain(..)
+                    .map(|item| Ok((serde_json::to_vec(&item)?, item)))
+                    .collect::<anyhow::Result<Vec<_>>>()?;
+                keyed.sort_by(|left, right| left.0.cmp(&right.0));
+                items.extend(keyed.into_iter().map(|(_, item)| item));
+            }
+        }
+        _ => {}
+    }
+    Ok(())
+}
+
+fn compute_state_fingerprint_for_version(
+    save_version: u32,
+    state: &SaveState,
+) -> anyhow::Result<StateFingerprint> {
+    let mut canonical_state = serde_json::to_value(state)?;
+    canonicalize_fingerprint_value(&mut canonical_state, None)?;
+    let canonical_bytes = serde_json::to_vec(&canonical_state)?;
+
+    let mut hash: u64 = 0xcbf29ce484222325;
+    for byte in b"OPENREB-STATE-FINGERPRINT\0"
+        .iter()
+        .copied()
+        .chain(STATE_FINGERPRINT_VERSION.to_le_bytes())
+        .chain(save_version.to_le_bytes())
+        .chain(canonical_bytes)
+    {
+        hash ^= byte as u64;
+        hash = hash.wrapping_mul(0x100000001b3);
+    }
+    Ok(StateFingerprint {
+        version: STATE_FINGERPRINT_VERSION,
+        value: hash,
+    })
+}
+
+/// Canonicalize a snapshot and return the fingerprint used by new save files.
+pub fn compute_state_fingerprint(state: &SaveState) -> anyhow::Result<StateFingerprint> {
+    compute_state_fingerprint_for_version(SAVE_VERSION, state)
 }
 
 // ---------------------------------------------------------------------------
@@ -150,6 +244,13 @@ pub struct SaveMeta {
     pub mod_names: Vec<String>,
     /// Deterministic hash of the sorted (name, version) mod list (v4+).
     pub mod_hash: u64,
+    /// Fingerprint of the canonical logical state.
+    pub state_fingerprint: StateFingerprint,
+    /// Whether the fingerprint was persisted and verified while loading.
+    ///
+    /// This is false for compatible v8 native saves, whose fingerprints are
+    /// computed during load because that format did not store one.
+    pub fingerprint_verified: bool,
 }
 
 // ---------------------------------------------------------------------------
@@ -192,9 +293,12 @@ mod native {
         name: &str,
         state: &SaveState,
         active_mods: &[(String, String)],
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<StateFingerprint> {
         std::fs::create_dir_all(saves_dir)
             .with_context(|| format!("creating saves directory {}", saves_dir.display()))?;
+
+        let encoded = bincode::serialize(state).context("serializing save state")?;
+        let state_fingerprint = compute_state_fingerprint(state)?;
 
         let path = slot_path(saves_dir, slot);
         let mut file = std::fs::File::create(&path)
@@ -240,13 +344,17 @@ mod native {
         file.write_all(&mod_hash.to_le_bytes())
             .context("writing mod hash")?;
 
+        // State fingerprint (v9+)
+        file.write_all(&state_fingerprint.version.to_le_bytes())
+            .context("writing state fingerprint version")?;
+        file.write_all(&state_fingerprint.value.to_le_bytes())
+            .context("writing state fingerprint")?;
+
         // ── Body ────────────────────────────────────────────────────────────
-        let encoded = bincode::serialize(state)
-            .context("serializing save state")?;
         file.write_all(&encoded)
             .context("writing save body")?;
 
-        Ok(())
+        Ok(state_fingerprint)
     }
 
     /// Convenience wrapper: save with no active mods.
@@ -255,7 +363,7 @@ mod native {
         slot: usize,
         name: &str,
         state: &SaveState,
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<StateFingerprint> {
         save_slot(saves_dir, slot, name, state, &[])
     }
 
@@ -343,12 +451,36 @@ mod native {
             (Vec::new(), compute_mod_hash(&[]))
         };
 
+        // ── State fingerprint (v9+) ────────────────────────────────────────
+        let expected_fingerprint = if version >= 9 {
+            let mut fingerprint_version_buf = [0u8; 2];
+            file.read_exact(&mut fingerprint_version_buf)
+                .context("reading state fingerprint version")?;
+            let fingerprint_version = u16::from_le_bytes(fingerprint_version_buf);
+            anyhow::ensure!(
+                fingerprint_version == STATE_FINGERPRINT_VERSION,
+                "unsupported state fingerprint version {} (this build supports {})",
+                fingerprint_version,
+                STATE_FINGERPRINT_VERSION
+            );
+
+            let mut fingerprint_buf = [0u8; 8];
+            file.read_exact(&mut fingerprint_buf)
+                .context("reading state fingerprint")?;
+            Some(StateFingerprint {
+                version: fingerprint_version,
+                value: u64::from_le_bytes(fingerprint_buf),
+            })
+        } else {
+            None
+        };
+
         // ── Body ────────────────────────────────────────────────────────────
         let mut body = Vec::new();
         file.read_to_end(&mut body).context("reading save body")?;
 
         let state: SaveState = match version {
-            SAVE_VERSION => {
+            SAVE_VERSION | 8 => {
                 bincode::deserialize(&body).context("deserializing save state")?
             }
             7 => {
@@ -388,6 +520,16 @@ mod native {
             _ => unreachable!("version range already validated above"),
         };
 
+        let state_fingerprint = compute_state_fingerprint_for_version(version, &state)?;
+        if let Some(expected) = expected_fingerprint {
+            anyhow::ensure!(
+                expected == state_fingerprint,
+                "save state fingerprint mismatch: expected {}, computed {}",
+                expected,
+                state_fingerprint
+            );
+        }
+
         let meta = SaveMeta {
             slot,
             name,
@@ -395,6 +537,8 @@ mod native {
             game_tick: state.clock.tick,
             mod_names,
             mod_hash,
+            state_fingerprint,
+            fingerprint_verified: expected_fingerprint.is_some(),
         };
 
         Ok((meta, state))
@@ -441,6 +585,44 @@ pub use native::{
 pub mod wasm_impl {
     use super::*;
     use std::path::{Path, PathBuf};
+
+    const BROWSER_META_VERSION: u32 = 1;
+
+    #[derive(Debug, Serialize, Deserialize)]
+    struct BrowserStateFingerprint {
+        version: u16,
+        /// Decimal string avoids JavaScript's 53-bit safe-integer limit.
+        value: String,
+    }
+
+    impl BrowserStateFingerprint {
+        fn from_fingerprint(fingerprint: StateFingerprint) -> Self {
+            Self {
+                version: fingerprint.version,
+                value: fingerprint.value.to_string(),
+            }
+        }
+
+        fn to_fingerprint(&self) -> anyhow::Result<StateFingerprint> {
+            anyhow::ensure!(
+                self.version == STATE_FINGERPRINT_VERSION,
+                "unsupported state fingerprint version {}",
+                self.version
+            );
+            Ok(StateFingerprint {
+                version: self.version,
+                value: self.value.parse()?,
+            })
+        }
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    struct BrowserSaveMeta {
+        schema_version: u32,
+        name: String,
+        game_tick: u64,
+        state_fingerprint: BrowserStateFingerprint,
+    }
 
     #[link(wasm_import_module = "env")]
     extern "C" {
@@ -561,14 +743,24 @@ pub mod wasm_impl {
     /// from older builds get rejected cleanly instead of attempting an
     /// inoperable bincode deserialize.
     fn slot_key(slot: usize) -> String {
-        format!("rebellion_save_v8_{}", slot)
+        format!("rebellion_save_v9_{}", slot)
     }
 
-    /// localStorage key for save metadata (name + tick).
+    /// localStorage key for versioned JSON save metadata.
     ///
     /// Prefix is bumped per save format version (see [`slot_key`]).
     fn meta_key(slot: usize) -> String {
-        format!("rebellion_meta_v8_{}", slot)
+        format!("rebellion_meta_v9_{}", slot)
+    }
+
+    fn parse_meta(encoded: &str) -> anyhow::Result<BrowserSaveMeta> {
+        let meta: BrowserSaveMeta = serde_json::from_str(encoded)?;
+        anyhow::ensure!(
+            meta.schema_version == BROWSER_META_VERSION,
+            "unsupported browser save metadata version {}",
+            meta.schema_version
+        );
+        Ok(meta)
     }
 
     pub fn default_saves_dir() -> PathBuf {
@@ -581,17 +773,24 @@ pub mod wasm_impl {
         name: &str,
         state: &SaveState,
         _active_mods: &[(String, String)],
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<StateFingerprint> {
         let encoded = bincode::serialize(state)?;
+        let state_fingerprint = compute_state_fingerprint(state)?;
         let b64 = b64_encode(&encoded);
 
         storage_set(&slot_key(slot), &b64)?;
 
-        // Store metadata separately (lightweight, for list_saves).
-        let meta = format!("{}|{}", name, state.clock.tick);
+        // Store metadata separately (lightweight, for list_saves). JSON keeps
+        // player-provided names lossless and makes the schema explicit.
+        let meta = serde_json::to_string(&BrowserSaveMeta {
+            schema_version: BROWSER_META_VERSION,
+            name: name.to_string(),
+            game_tick: state.clock.tick,
+            state_fingerprint: BrowserStateFingerprint::from_fingerprint(state_fingerprint),
+        })?;
         storage_set(&meta_key(slot), &meta)?;
 
-        Ok(())
+        Ok(state_fingerprint)
     }
 
     pub fn save_slot_no_mods(
@@ -599,7 +798,7 @@ pub mod wasm_impl {
         slot: usize,
         name: &str,
         state: &SaveState,
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<StateFingerprint> {
         save_slot(saves_dir, slot, name, state, &[])
     }
 
@@ -611,19 +810,28 @@ pub mod wasm_impl {
             .ok_or_else(|| anyhow::anyhow!("no save in slot {}", slot))?;
 
         let bytes = b64_decode(&b64)?;
+        let meta_encoded = storage_get(&meta_key(slot))?
+            .ok_or_else(|| anyhow::anyhow!("save metadata missing for slot {}", slot))?;
+        let browser_meta = parse_meta(&meta_encoded)?;
+        let expected_fingerprint = browser_meta.state_fingerprint.to_fingerprint()?;
         let state: SaveState = bincode::deserialize(&bytes)?;
-
-        // Read metadata.
-        let meta_str = storage_get(&meta_key(slot))?.unwrap_or_default();
-        let (name, _tick) = meta_str.split_once('|').unwrap_or(("Unnamed", "0"));
+        let state_fingerprint = compute_state_fingerprint(&state)?;
+        anyhow::ensure!(
+            expected_fingerprint == state_fingerprint,
+            "save state fingerprint mismatch: expected {}, computed {}",
+            expected_fingerprint,
+            state_fingerprint
+        );
 
         let meta = SaveMeta {
             slot,
-            name: name.to_string(),
+            name: browser_meta.name,
             timestamp_secs: 0, // no reliable clock in WASM
             game_tick: state.clock.tick,
             mod_names: vec![],
-            mod_hash: 0,
+            mod_hash: compute_mod_hash(&[]),
+            state_fingerprint,
+            fingerprint_verified: true,
         };
 
         Ok((meta, state))
@@ -631,19 +839,22 @@ pub mod wasm_impl {
 
     pub fn list_saves(_saves_dir: &Path) -> Vec<anyhow::Result<SaveMeta>> {
         (0..MAX_SAVE_SLOTS)
-            .filter_map(|slot| {
-                // Check if metadata exists for this slot.
-                let meta_str = storage_get(&meta_key(slot)).ok()??;
-                let (name, tick_str) = meta_str.split_once('|').unwrap_or(("Unnamed", "0"));
-                let tick: u64 = tick_str.parse().unwrap_or(0);
-                Some(Ok(SaveMeta {
-                    slot,
-                    name: name.to_string(),
-                    timestamp_secs: 0,
-                    game_tick: tick,
-                    mod_names: vec![],
-                    mod_hash: 0,
-                }))
+            .filter_map(|slot| match storage_get(&meta_key(slot)) {
+                Ok(None) => None,
+                Ok(Some(encoded)) => Some(parse_meta(&encoded).and_then(|meta| {
+                    let state_fingerprint = meta.state_fingerprint.to_fingerprint()?;
+                    Ok(SaveMeta {
+                        slot,
+                        name: meta.name,
+                        timestamp_secs: 0,
+                        game_tick: meta.game_tick,
+                        mod_names: vec![],
+                        mod_hash: compute_mod_hash(&[]),
+                        state_fingerprint,
+                        fingerprint_verified: true,
+                    })
+                })),
+                Err(error) => Some(Err(error)),
             })
             .collect()
     }
@@ -669,6 +880,7 @@ mod tests {
     use super::*;
     use rebellion_core::ai::{AIState, AiFaction};
     use rebellion_core::dat::Faction;
+    use rebellion_core::world::ControlKind;
     use std::io::Write;
 
     fn minimal_save_state() -> SaveState {
@@ -790,6 +1002,94 @@ mod tests {
         assert_eq!(meta.name, "Test Save");
         assert_eq!(meta.game_tick, loaded.clock.tick);
         assert!(meta.mod_names.is_empty());
+        assert!(meta.fingerprint_verified);
+        assert_eq!(
+            meta.state_fingerprint,
+            compute_state_fingerprint(&loaded).expect("fingerprint loaded state")
+        );
+    }
+
+    #[test]
+    fn repeated_snapshots_have_identical_fingerprints() {
+        let first_run = minimal_save_state();
+        let second_run = minimal_save_state();
+
+        let first = compute_state_fingerprint(&first_run).expect("fingerprint first snapshot");
+        let second = compute_state_fingerprint(&second_run).expect("fingerprint second snapshot");
+
+        assert_eq!(first.version, STATE_FINGERPRINT_VERSION);
+        assert_eq!(first, second);
+        assert!(first.to_string().starts_with("v1:"));
+    }
+
+    #[test]
+    fn fingerprint_changes_when_state_changes() {
+        let original = minimal_save_state();
+        let mut changed = original.clone();
+        changed.clock.tick = 1;
+
+        assert_ne!(
+            compute_state_fingerprint(&original).unwrap(),
+            compute_state_fingerprint(&changed).unwrap()
+        );
+    }
+
+    #[test]
+    fn fingerprint_normalizes_unordered_set_insertion() {
+        let mut forward = minimal_save_state();
+        let mut reverse = forward.clone();
+        let system_keys = forward.world.systems.keys().collect::<Vec<_>>();
+
+        forward.fog_alliance.visible.insert(system_keys[0]);
+        forward.fog_alliance.visible.insert(system_keys[1]);
+        reverse.fog_alliance.visible.insert(system_keys[1]);
+        reverse.fog_alliance.visible.insert(system_keys[0]);
+
+        assert_eq!(
+            compute_state_fingerprint(&forward).unwrap(),
+            compute_state_fingerprint(&reverse).unwrap()
+        );
+    }
+
+    #[test]
+    fn fingerprint_mismatch_rejects_tampered_body() {
+        let saves_dir = tmp_dir("fingerprint_tamper_v9");
+        const SAVE_NAME: &str = "Tamper Check";
+        let state = minimal_save_state();
+        save_slot(&saves_dir, 0, SAVE_NAME, &state, &[]).unwrap();
+
+        let path = slot_path(&saves_dir, 0);
+        let mut bytes = std::fs::read(&path).unwrap();
+        let body_offset = SAVE_MAGIC.len()
+            + 4
+            + 4
+            + SAVE_NAME.len()
+            + 8
+            + 4
+            + 8
+            + 2
+            + 8;
+        let mut changed = state.clone();
+        changed.clock.tick = 1;
+        bytes.truncate(body_offset);
+        bytes.extend(bincode::serialize(&changed).unwrap());
+        std::fs::write(path, bytes).unwrap();
+
+        let error = load_slot(&saves_dir, 0).expect_err("tampered body must be rejected");
+        assert!(error.to_string().contains("fingerprint mismatch"));
+    }
+
+    #[test]
+    fn v8_save_loads_with_unverified_computed_fingerprint() {
+        let saves_dir = tmp_dir("v8_fingerprint_compatibility");
+        let state = minimal_save_state();
+        let path = slot_path(&saves_dir, 0);
+        write_versioned_fixture(&path, 8, "V8 Save", &state);
+
+        let (meta, loaded) = load_slot(&saves_dir, 0).expect("v8 save should remain compatible");
+        assert_eq!(loaded.clock.tick, state.clock.tick);
+        assert_eq!(meta.state_fingerprint.version, STATE_FINGERPRINT_VERSION);
+        assert!(!meta.fingerprint_verified);
     }
 
     #[test]
