@@ -7,22 +7,67 @@
 //! merge with another fleet at same system, go to system).
 
 use egui_macroquad::egui::{self, RichText, ScrollArea, Vec2};
-use rebellion_core::ids::{CharacterKey, FleetKey, SystemKey};
+use rebellion_core::ids::{CharacterKey, DatId, FleetKey, SystemKey};
 use rebellion_core::missions::MissionFaction;
 use rebellion_core::movement::MovementState;
 use rebellion_core::world::GameWorld;
 
-use crate::bmp_cache::{BmpCache, DllSource};
-use crate::theme;
 use super::PanelAction;
+use crate::bmp_cache::{resources::gokres, BmpCache, DllSource};
+use crate::theme;
 
-// GOKRES.DLL mini-icon ID offsets.
-// Capital ship mini-icons: dat_id.raw() + CAPSHIP_MINI_OFFSET maps into 18000-18999.
-// Fighter mini-icons: dat_id.raw() + FIGHTER_MINI_OFFSET maps into 18000-18999.
-// These constants approximate the mapping from ship/fighter DatIds (range ~800-1050)
-// into the 18000 resource range. Missing icons fall through silently (cache returns None).
-const CAPSHIP_MINI_OFFSET: u32 = 17000;
-const FIGHTER_MINI_OFFSET: u32 = 17000;
+// GOKRES.DLL stores fleet mini-icons in faction-specific resource blocks. These
+// tables follow CAPSHPSD.DAT and FIGHTSD.DAT record order; they deliberately do
+// not derive a resource ID by adding an offset to the compound DatId.
+const ALLIANCE_FIGHTER_MINIS: [u32; 4] = [
+    gokres::MINI_FIGHTER_A_WING,
+    gokres::MINI_FIGHTER_B_WING,
+    gokres::MINI_FIGHTER_X_WING,
+    gokres::MINI_FIGHTER_Y_WING,
+];
+
+const EMPIRE_FIGHTER_MINIS: [u32; 4] = [
+    gokres::MINI_FIGHTER_TIE_FIGHTER,
+    gokres::MINI_FIGHTER_TIE_INTERCEPTOR,
+    gokres::MINI_FIGHTER_TIE_BOMBER,
+    gokres::MINI_FIGHTER_TIE_DEFENDER,
+];
+
+const ALLIANCE_CAPITAL_SHIP_MINIS: [u32; 15] = [
+    gokres::MINI_SHIP_MC80_LIBERTY_CRUISER,
+    gokres::MINI_SHIP_BULK_CRUISER,
+    gokres::MINI_SHIP_ASSAULT_FRIGATE,
+    gokres::MINI_SHIP_NEBULON_B_FRIGATE,
+    gokres::MINI_SHIP_ALLIANCE_ESCORT_CARRIER,
+    gokres::MINI_SHIP_CORELLIAN_CORVETTE,
+    gokres::MINI_SHIP_MEDIUM_TRANSPORT,
+    gokres::MINI_SHIP_BULK_TRANSPORT,
+    gokres::MINI_SHIP_CORELLIAN_GUNSHIP,
+    gokres::MINI_SHIP_ALLIANCE_DREADNAUGHT,
+    gokres::MINI_SHIP_CC_7700_FRIGATE,
+    gokres::MINI_SHIP_VISCOUNT_STAR_DEFENDER,
+    gokres::MINI_SHIP_LIBERATOR_CRUISER,
+    gokres::MINI_SHIP_MC30C_FRIGATE,
+    gokres::MINI_SHIP_MC80A_HOME_ONE_CRUISER,
+];
+
+const EMPIRE_CAPITAL_SHIP_MINIS: [u32; 15] = [
+    gokres::MINI_SHIP_STRIKE_CRUISER,
+    gokres::MINI_SHIP_LANCER_FRIGATE,
+    gokres::MINI_SHIP_INTERDICTOR_CRUISER,
+    gokres::MINI_SHIP_CARRACK_LIGHT_CRUISER,
+    gokres::MINI_SHIP_VICTORY_I_STAR_DESTROYER,
+    gokres::MINI_SHIP_IMPERIAL_I_STAR_DESTROYER,
+    gokres::MINI_SHIP_SUPER_STAR_DESTROYER,
+    gokres::MINI_SHIP_GLADIATOR_STAR_DESTROYER,
+    gokres::MINI_SHIP_DEATH_STAR,
+    gokres::MINI_SHIP_ACCLAMATOR_DROP_SHIP,
+    gokres::MINI_SHIP_VICTORY_II_STAR_DESTROYER,
+    gokres::MINI_SHIP_IMPERIAL_II_STAR_DESTROYER,
+    gokres::MINI_SHIP_STAR_GALLEON_FRIGATE,
+    gokres::MINI_SHIP_IMPERIAL_ESCORT_CARRIER,
+    gokres::MINI_SHIP_IMPERIAL_DREADNOUGHT,
+];
 
 /// Displayed size for GOKRES mini-icons in panel lists (original is 61x25).
 const MINI_ICON_HEIGHT: f32 = 20.0;
@@ -96,11 +141,7 @@ pub fn draw_fleets(
                     ui.horizontal(|ui| {
                         let toggle = if is_expanded { "▼" } else { "▶" };
                         if ui.small_button(toggle).clicked() {
-                            state.expanded_fleet = if is_expanded {
-                                None
-                            } else {
-                                Some(fleet_key)
-                            };
+                            state.expanded_fleet = if is_expanded { None } else { Some(fleet_key) };
                             state.assigning_to = None;
                         }
 
@@ -110,20 +151,23 @@ pub fn draw_fleets(
                                 .strong(),
                         );
 
-                        ui.with_layout(
-                            egui::Layout::right_to_left(egui::Align::Center),
-                            |ui| {
-                                let mut parts = Vec::new();
-                                if ship_count > 0 { parts.push(format!("{} ships", ship_count)); }
-                                if fighter_count > 0 { parts.push(format!("{} sqns", fighter_count)); }
-                                if fleet.has_death_star { parts.push("DS".to_string()); }
-                                ui.label(
-                                    RichText::new(parts.join(" · "))
-                                        .size(10.0)
-                                        .color(theme::TEXT_SECONDARY),
-                                );
-                            },
-                        );
+                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                            let mut parts = Vec::new();
+                            if ship_count > 0 {
+                                parts.push(format!("{} ships", ship_count));
+                            }
+                            if fighter_count > 0 {
+                                parts.push(format!("{} sqns", fighter_count));
+                            }
+                            if fleet.has_death_star {
+                                parts.push("DS".to_string());
+                            }
+                            ui.label(
+                                RichText::new(parts.join(" · "))
+                                    .size(10.0)
+                                    .color(theme::TEXT_SECONDARY),
+                            );
+                        });
                     });
 
                     if is_expanded {
@@ -137,21 +181,27 @@ pub fn draw_fleets(
                                         .strong(),
                                 );
                                 for (class_key, count) in fleet.ship_counts_by_class() {
-                                    let (class_name, dat_id_raw) = world
+                                    let (class_name, dat_id) = world
                                         .capital_ship_classes
                                         .get(class_key)
-                                        .map(|c| (c.name.as_str(), c.dat_id.raw()))
-                                        .unwrap_or(("Unknown", 0));
+                                        .map(|c| (c.name.as_str(), c.dat_id))
+                                        .unwrap_or(("Unknown", DatId::new(0)));
                                     ui.horizontal(|ui| {
                                         // GOKRES.DLL 61x25 mini-icon for this ship class.
-                                        let mini_id = dat_id_raw + CAPSHIP_MINI_OFFSET;
-                                        if let Some(tex) = bmp_cache.get(ctx, DllSource::Gokres, mini_id) {
-                                            let size = tex.size();
-                                            let h = MINI_ICON_HEIGHT;
-                                            let w = h * size[0] as f32 / size[1] as f32;
-                                            ui.add(egui::Image::new(egui::load::SizedTexture::new(
-                                                tex.id(), Vec2::new(w, h),
-                                            )));
+                                        if let Some(mini_id) = capital_ship_mini_id(dat_id) {
+                                            if let Some(tex) =
+                                                bmp_cache.get(ctx, DllSource::Gokres, mini_id)
+                                            {
+                                                let size = tex.size();
+                                                let h = MINI_ICON_HEIGHT;
+                                                let w = h * size[0] as f32 / size[1] as f32;
+                                                ui.add(egui::Image::new(
+                                                    egui::load::SizedTexture::new(
+                                                        tex.id(),
+                                                        Vec2::new(w, h),
+                                                    ),
+                                                ));
+                                            }
                                         }
                                         ui.label(
                                             RichText::new(format!("{} ×{}", class_name, count))
@@ -172,26 +222,35 @@ pub fn draw_fleets(
                                         .strong(),
                                 );
                                 for entry in &fleet.fighters {
-                                    let (class_name, dat_id_raw) = world
+                                    let (class_name, dat_id) = world
                                         .fighter_classes
                                         .get(entry.class)
-                                        .map(|c| (c.name.as_str(), c.dat_id.raw()))
-                                        .unwrap_or(("Unknown", 0));
+                                        .map(|c| (c.name.as_str(), c.dat_id))
+                                        .unwrap_or(("Unknown", DatId::new(0)));
                                     ui.horizontal(|ui| {
                                         // GOKRES.DLL 61x25 mini-icon for this fighter class.
-                                        let mini_id = dat_id_raw + FIGHTER_MINI_OFFSET;
-                                        if let Some(tex) = bmp_cache.get(ctx, DllSource::Gokres, mini_id) {
-                                            let size = tex.size();
-                                            let h = MINI_ICON_HEIGHT;
-                                            let w = h * size[0] as f32 / size[1] as f32;
-                                            ui.add(egui::Image::new(egui::load::SizedTexture::new(
-                                                tex.id(), Vec2::new(w, h),
-                                            )));
+                                        if let Some(mini_id) = fighter_mini_id(dat_id) {
+                                            if let Some(tex) =
+                                                bmp_cache.get(ctx, DllSource::Gokres, mini_id)
+                                            {
+                                                let size = tex.size();
+                                                let h = MINI_ICON_HEIGHT;
+                                                let w = h * size[0] as f32 / size[1] as f32;
+                                                ui.add(egui::Image::new(
+                                                    egui::load::SizedTexture::new(
+                                                        tex.id(),
+                                                        Vec2::new(w, h),
+                                                    ),
+                                                ));
+                                            }
                                         }
                                         ui.label(
-                                            RichText::new(format!("{} ×{}", class_name, entry.count))
-                                                .color(theme::TEXT_PRIMARY)
-                                                .size(11.0),
+                                            RichText::new(format!(
+                                                "{} ×{}",
+                                                class_name, entry.count
+                                            ))
+                                            .color(theme::TEXT_PRIMARY)
+                                            .size(11.0),
                                         );
                                     });
                                 }
@@ -236,9 +295,12 @@ pub fn draw_fleets(
                                             .size(11.0),
                                     );
                                     // Remove from fleet button
-                                    if ui.small_button(
-                                        RichText::new("×").color(theme::DANGER_RED).size(11.0),
-                                    ).clicked() {
+                                    if ui
+                                        .small_button(
+                                            RichText::new("×").color(theme::DANGER_RED).size(11.0),
+                                        )
+                                        .clicked()
+                                    {
                                         action = Some(PanelAction::RemoveCharacterFromFleet {
                                             character: char_key,
                                             fleet: fleet_key,
@@ -255,7 +317,8 @@ pub fn draw_fleets(
                                         .color(theme::GOLD)
                                         .size(10.0),
                                 );
-                                let available = available_characters(world, fleet_key, player_faction);
+                                let available =
+                                    available_characters(world, fleet_key, player_faction);
                                 if available.is_empty() {
                                     ui.label(
                                         RichText::new("No available officers")
@@ -268,30 +331,42 @@ pub fn draw_fleets(
                                         .max_height(120.0)
                                         .show(ui, |ui| {
                                             for (ck, name) in &available {
-                                                if ui.button(
-                                                    RichText::new(name.as_str())
-                                                        .color(theme::TEXT_PRIMARY)
-                                                        .size(11.0),
-                                                ).clicked() {
-                                                    action = Some(PanelAction::AssignCharacterToFleet {
-                                                        character: *ck,
-                                                        fleet: fleet_key,
-                                                    });
+                                                if ui
+                                                    .button(
+                                                        RichText::new(name.as_str())
+                                                            .color(theme::TEXT_PRIMARY)
+                                                            .size(11.0),
+                                                    )
+                                                    .clicked()
+                                                {
+                                                    action =
+                                                        Some(PanelAction::AssignCharacterToFleet {
+                                                            character: *ck,
+                                                            fleet: fleet_key,
+                                                        });
                                                     state.assigning_to = None;
                                                 }
                                             }
                                         });
                                 }
-                                if ui.small_button(
-                                    RichText::new("Cancel").color(theme::TEXT_DISABLED).size(10.0),
-                                ).clicked() {
+                                if ui
+                                    .small_button(
+                                        RichText::new("Cancel")
+                                            .color(theme::TEXT_DISABLED)
+                                            .size(10.0),
+                                    )
+                                    .clicked()
+                                {
                                     state.assigning_to = None;
                                 }
-                            } else if ui.button(
-                                RichText::new("Assign Officer")
-                                    .color(theme::GOLD)
-                                    .size(11.0),
-                            ).clicked() {
+                            } else if ui
+                                .button(
+                                    RichText::new("Assign Officer")
+                                        .color(theme::GOLD)
+                                        .size(11.0),
+                                )
+                                .clicked()
+                            {
                                 state.assigning_to = Some(fleet_key);
                             }
 
@@ -324,11 +399,17 @@ pub fn draw_fleets(
                                         .strong(),
                                 );
                                 for (other_key, other_ships) in &same_loc_fleets {
-                                    if ui.button(
-                                        RichText::new(format!("Merge with fleet ({} ships)", other_ships))
+                                    if ui
+                                        .button(
+                                            RichText::new(format!(
+                                                "Merge with fleet ({} ships)",
+                                                other_ships
+                                            ))
                                             .color(theme::TEXT_PRIMARY)
                                             .size(11.0),
-                                    ).clicked() {
+                                        )
+                                        .clicked()
+                                    {
                                         action = Some(PanelAction::MergeFleets {
                                             fleet_a: fleet_key,
                                             fleet_b: *other_key,
@@ -340,11 +421,10 @@ pub fn draw_fleets(
 
                             // ── Navigation ───────────────────────────────
                             ui.add_space(4.0);
-                            if ui.button(
-                                RichText::new("Go to System")
-                                    .color(theme::GOLD)
-                                    .size(11.0),
-                            ).clicked() {
+                            if ui
+                                .button(RichText::new("Go to System").color(theme::GOLD).size(11.0))
+                                .clicked()
+                            {
                                 action = Some(PanelAction::FocusFleetSystem(fleet.location));
                             }
                         });
@@ -378,6 +458,30 @@ fn fleet_color(faction: MissionFaction) -> egui::Color32 {
     }
 }
 
+fn capital_ship_mini_id(dat_id: DatId) -> Option<u32> {
+    match dat_id.index() {
+        64..=78 => ALLIANCE_CAPITAL_SHIP_MINIS
+            .get((dat_id.index() - 64) as usize)
+            .copied(),
+        128..=142 => EMPIRE_CAPITAL_SHIP_MINIS
+            .get((dat_id.index() - 128) as usize)
+            .copied(),
+        _ => None,
+    }
+}
+
+fn fighter_mini_id(dat_id: DatId) -> Option<u32> {
+    match dat_id.index() {
+        1..=4 => ALLIANCE_FIGHTER_MINIS
+            .get((dat_id.index() - 1) as usize)
+            .copied(),
+        5..=8 => EMPIRE_FIGHTER_MINIS
+            .get((dat_id.index() - 5) as usize)
+            .copied(),
+        _ => None,
+    }
+}
+
 /// Find characters eligible for fleet assignment:
 /// same faction, not captive, not on mission, not already in this fleet.
 fn available_characters(
@@ -397,15 +501,69 @@ fn available_characters(
             MissionFaction::Alliance => c.is_alliance,
             MissionFaction::Empire => c.is_empire,
         };
-        if !owns { continue; }
-        if c.is_captive || c.on_mission || c.on_mandatory_mission { continue; }
+        if !owns {
+            continue;
+        }
+        if c.is_captive || c.on_mission || c.on_mandatory_mission {
+            continue;
+        }
         // Not already in this fleet
-        if fleet.characters.contains(&ck) { continue; }
+        if fleet.characters.contains(&ck) {
+            continue;
+        }
         // Not already in another fleet
         let in_another = world.fleets.values().any(|f| f.characters.contains(&ck));
-        if in_another { continue; }
+        if in_another {
+            continue;
+        }
         result.push((ck, c.name.clone()));
     }
     result.sort_by(|a, b| a.1.cmp(&b.1));
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn maps_every_capital_ship_dat_record_to_its_gokres_miniature() {
+        for (offset, &resource_id) in ALLIANCE_CAPITAL_SHIP_MINIS.iter().enumerate() {
+            assert_eq!(
+                capital_ship_mini_id(DatId::new(0x1400_0040 + offset as u32)),
+                Some(resource_id)
+            );
+        }
+        for (offset, &resource_id) in EMPIRE_CAPITAL_SHIP_MINIS.iter().enumerate() {
+            assert_eq!(
+                capital_ship_mini_id(DatId::new(0x1400_0080 + offset as u32)),
+                Some(resource_id)
+            );
+        }
+    }
+
+    #[test]
+    fn maps_every_fighter_dat_record_to_its_gokres_miniature() {
+        for (offset, &resource_id) in ALLIANCE_FIGHTER_MINIS.iter().enumerate() {
+            assert_eq!(
+                fighter_mini_id(DatId::new(0x1c00_0001 + offset as u32)),
+                Some(resource_id)
+            );
+        }
+        for (offset, &resource_id) in EMPIRE_FIGHTER_MINIS.iter().enumerate() {
+            assert_eq!(
+                fighter_mini_id(DatId::new(0x1c00_0005 + offset as u32)),
+                Some(resource_id)
+            );
+        }
+    }
+
+    #[test]
+    fn unknown_class_ids_do_not_request_unrelated_bitmaps() {
+        assert_eq!(capital_ship_mini_id(DatId::new(0)), None);
+        assert_eq!(capital_ship_mini_id(DatId::new(0x1400_003f)), None);
+        assert_eq!(capital_ship_mini_id(DatId::new(0x1400_008f)), None);
+        assert_eq!(fighter_mini_id(DatId::new(0)), None);
+        assert_eq!(fighter_mini_id(DatId::new(0x1c00_0009)), None);
+    }
 }

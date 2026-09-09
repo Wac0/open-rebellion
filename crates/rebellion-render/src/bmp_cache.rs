@@ -852,20 +852,38 @@ fn rebase_path_prefix(path: &Path, from_prefix: &str, to_prefix: &str) -> PathBu
         .unwrap_or_else(|_| path.to_path_buf())
 }
 
-/// Decode a staged image and apply the original game's blue-screen
-/// transparency to the two full cockpit frames.
+/// Return whether a staged resource uses the original game's palette-blue
+/// transparency matte.
+fn uses_blue_screen_transparency(source: DllSource, resource_id: u32) -> bool {
+    match source {
+        DllSource::Strategy => matches!(
+            resource_id,
+            resources::strategy::GALAXY_BACKGROUND | resources::strategy::GALAXY_BACKGROUND_EMPIRE
+        ),
+        DllSource::Gokres => matches!(
+            resource_id,
+            resources::gokres::MINI_FIGHTER_A_WING
+                ..=resources::gokres::MINI_FIGHTER_Y_WING
+                | resources::gokres::MINI_FIGHTER_TIE_FIGHTER
+                    ..=resources::gokres::MINI_FIGHTER_TIE_DEFENDER
+                | resources::gokres::MINI_SHIP_MC80_LIBERTY_CRUISER
+                    ..=resources::gokres::MINI_SHIP_MC80A_HOME_ONE_CRUISER
+                | resources::gokres::MINI_SHIP_STRIKE_CRUISER
+                    ..=resources::gokres::MINI_SHIP_IMPERIAL_DREADNOUGHT
+        ),
+        DllSource::Common | DllSource::Tactical => false,
+    }
+}
+
+/// Decode a staged image and apply the original game's palette-blue
+/// transparency to resources whose extracted bitmaps contain that matte.
 fn decode_color_image(
     bytes: &[u8],
     source: DllSource,
     resource_id: u32,
 ) -> image::ImageResult<egui::ColorImage> {
     let mut rgba = image::load_from_memory(bytes)?.to_rgba8();
-    let is_cockpit = source == DllSource::Strategy
-        && matches!(
-            resource_id,
-            resources::strategy::GALAXY_BACKGROUND | resources::strategy::GALAXY_BACKGROUND_EMPIRE
-        );
-    if is_cockpit {
+    if uses_blue_screen_transparency(source, resource_id) {
         for pixel in rgba.pixels_mut() {
             if pixel[0] < 32 && pixel[1] < 32 && pixel[2] > 192 {
                 pixel[3] = 0;
@@ -969,5 +987,48 @@ mod tests {
 
         assert_eq!(decoded.pixels[0].a(), 0);
         assert_eq!(decoded.pixels[1].a(), 255);
+    }
+
+    #[test]
+    fn fleet_miniature_blue_screen_becomes_transparent() {
+        let mut image = image::RgbaImage::new(3, 1);
+        image.put_pixel(0, 0, image::Rgba([0, 0, 255, 255]));
+        image.put_pixel(1, 0, image::Rgba([20, 20, 220, 255]));
+        image.put_pixel(2, 0, image::Rgba([90, 100, 180, 255]));
+
+        let mut encoded = Vec::new();
+        image::DynamicImage::ImageRgba8(image)
+            .write_to(
+                &mut std::io::Cursor::new(&mut encoded),
+                image::ImageFormat::Png,
+            )
+            .unwrap();
+        let decoded = decode_color_image(
+            &encoded,
+            DllSource::Gokres,
+            resources::gokres::MINI_FIGHTER_X_WING,
+        )
+        .unwrap();
+
+        assert_eq!(decoded.pixels[0].a(), 0);
+        assert_eq!(decoded.pixels[1].a(), 0);
+        assert_eq!(decoded.pixels[2].a(), 255);
+    }
+
+    #[test]
+    fn unrelated_blue_resource_remains_opaque() {
+        let mut image = image::RgbaImage::new(1, 1);
+        image.put_pixel(0, 0, image::Rgba([0, 0, 255, 255]));
+
+        let mut encoded = Vec::new();
+        image::DynamicImage::ImageRgba8(image)
+            .write_to(
+                &mut std::io::Cursor::new(&mut encoded),
+                image::ImageFormat::Png,
+            )
+            .unwrap();
+        let decoded = decode_color_image(&encoded, DllSource::Gokres, 19008).unwrap();
+
+        assert_eq!(decoded.pixels[0].a(), 255);
     }
 }
