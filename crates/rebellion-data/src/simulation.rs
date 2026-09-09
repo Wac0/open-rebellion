@@ -9,7 +9,6 @@ use std::collections::HashMap;
 use crate::integrator::PerceptionIntegrator;
 use rebellion_core::ai::{AIState, AISystem};
 use rebellion_core::betrayal::{BetrayalState, BetrayalSystem};
-use rebellion_core::repair::{RepairState, RepairSystem};
 use rebellion_core::blockade::{BlockadeState, BlockadeSystem};
 use rebellion_core::bombardment::BombardmentSystem;
 use rebellion_core::combat::{CombatSide, CombatSystem};
@@ -23,11 +22,12 @@ use rebellion_core::jedi::{JediState, JediSystem};
 use rebellion_core::manufacturing::{ManufacturingState, ManufacturingSystem};
 use rebellion_core::missions::{MissionState, MissionSystem};
 use rebellion_core::movement::{MovementState, MovementSystem};
+use rebellion_core::repair::{RepairState, RepairSystem};
 use rebellion_core::research::{ResearchState, ResearchSystem};
 use rebellion_core::tick::{GameClock, TickEvent};
 use rebellion_core::uprising::{UprisingState, UprisingSystem};
 use rebellion_core::victory::{VictoryState, VictorySystem};
-use rebellion_core::world::{ControlKind, GameWorld, MstbTable};
+use rebellion_core::world::{CampaignConfig, GameWorld, MstbTable};
 
 /// Bundles all mutable simulation state needed for a tick.
 ///
@@ -52,6 +52,8 @@ pub struct SimulationStates {
     pub economy: EconomyState,
     pub repair: RepairState,
     pub combat_cooldowns: HashMap<SystemKey, u64>,
+    /// Original new-game choices that continue to govern this campaign.
+    pub campaign_config: CampaignConfig,
 }
 
 /// Run one simulation tick across all 15 systems.
@@ -79,10 +81,7 @@ pub fn run_simulation_tick(
         return Vec::new();
     }
 
-    let mut integrator = PerceptionIntegrator::new(
-        tick_events.last().unwrap().tick,
-        wall_ms,
-    );
+    let mut integrator = PerceptionIntegrator::new(tick_events.last().unwrap().tick, wall_ms);
     let mut roll_cursor = 0usize;
     let current_tick = tick_events.last().unwrap().tick;
 
@@ -142,13 +141,7 @@ pub fn run_simulation_tick(
                 .fleets
                 .iter()
                 .copied()
-                .filter(|&k| {
-                    world
-                        .fleets
-                        .get(k)
-                        .map(|f| !f.is_alliance)
-                        .unwrap_or(false)
-                })
+                .filter(|&k| world.fleets.get(k).map(|f| !f.is_alliance).unwrap_or(false))
                 .collect();
             if !alliance_fleets.is_empty() && !empire_fleets.is_empty() {
                 Some((sys_key, alliance_fleets[0], empire_fleets[0]))
@@ -184,18 +177,29 @@ pub fn run_simulation_tick(
         // Alliance is always coded as attacker, Empire as defender in the trigger above.
         // The space combat winner gets to follow up with ground assault + orbital bombardment.
         let winner_info = match space_result.winner {
-            CombatSide::Attacker => Some((atk_fleet, true)),   // Alliance won
-            CombatSide::Defender => Some((def_fleet, false)),   // Empire won
+            CombatSide::Attacker => Some((atk_fleet, true)), // Alliance won
+            CombatSide::Defender => Some((def_fleet, false)), // Empire won
             CombatSide::Draw => None,
         };
         if let Some((winner_fleet, winner_is_alliance)) = winner_info {
             let ground_rolls = take_rolls(256);
-            let ground_result =
-                CombatSystem::resolve_ground(world, sys_key, winner_is_alliance, world.difficulty_index, &ground_rolls, current_tick);
+            let ground_result = CombatSystem::resolve_ground(
+                world,
+                sys_key,
+                winner_is_alliance,
+                world.difficulty_index,
+                &ground_rolls,
+                current_tick,
+            );
             integrator.apply_ground_combat(world, &ground_result);
 
-            let brd_result =
-                BombardmentSystem::resolve_bombardment(world, winner_fleet, sys_key, world.difficulty_index, current_tick);
+            let brd_result = BombardmentSystem::resolve_bombardment(
+                world,
+                winner_fleet,
+                sys_key,
+                world.difficulty_index,
+                current_tick,
+            );
             integrator.emit_bombardment(world, sys_key, brd_result.damage);
         }
     }
@@ -209,7 +213,12 @@ pub fn run_simulation_tick(
     let mission_results =
         MissionSystem::advance(&mut states.missions, world, tick_events, &mission_rolls);
     for result in &mission_results {
-        integrator.apply_mission_result(world, result, &mut states.uprising, &mut states.death_star);
+        integrator.apply_mission_result(
+            world,
+            result,
+            &mut states.uprising,
+            &mut states.death_star,
+        );
         states.ai.mark_available(result.character);
         if let Some(ref mut ai2) = states.ai2 {
             ai2.mark_available(result.character);
@@ -221,7 +230,9 @@ pub fn run_simulation_tick(
         // invariants — the `<unknown>` fallback is a real invariant break and
         // panics in debug builds.
         for effect in &result.effects {
-            if let rebellion_core::missions::MissionEffect::CharacterKilled { character, .. } = effect {
+            if let rebellion_core::missions::MissionEffect::CharacterKilled { character, .. } =
+                effect
+            {
                 debug_assert!(
                     world.characters.contains_key(*character),
                     "EVT_CHARACTER_KILLED target missing from arena — R11 invariant break"
@@ -252,7 +263,10 @@ pub fn run_simulation_tick(
         match result.outcome {
             rebellion_core::missions::MissionOutcome::Success => {
                 // #R6: Successful espionage yields informant intel.
-                if matches!(result.kind, rebellion_core::missions::MissionKind::Espionage) {
+                if matches!(
+                    result.kind,
+                    rebellion_core::missions::MissionKind::Espionage
+                ) {
                     let char_name = world
                         .characters
                         .get(result.character)
@@ -333,27 +347,55 @@ pub fn run_simulation_tick(
 
     // ── 7. AI ────────────────────────────────────────────────────────────
     let ai_actions = AISystem::advance(
-        &mut states.ai, world, &states.manufacturing, &states.missions,
-        &states.movement, tick_events, config, &states.research,
+        &mut states.ai,
+        world,
+        &states.manufacturing,
+        &states.missions,
+        &states.movement,
+        tick_events,
+        config,
+        &states.research,
     );
     let ai_rolls = take_rolls(8);
     integrator.apply_ai_actions(
-        &ai_actions, &ai_rolls, &mut states.ai, &mut states.missions,
-        &mut states.manufacturing, &mut states.movement, &mut states.research,
-        world, current_tick, config, false,
+        &ai_actions,
+        &ai_rolls,
+        &mut states.ai,
+        &mut states.missions,
+        &mut states.manufacturing,
+        &mut states.movement,
+        &mut states.research,
+        world,
+        current_tick,
+        config,
+        false,
     );
 
     // ── 7b. AI (second faction, dual-AI mode) ───────────────────────────
     if let Some(ref mut ai2) = states.ai2 {
         let ai2_actions = AISystem::advance(
-            ai2, world, &states.manufacturing, &states.missions,
-            &states.movement, tick_events, config, &states.research,
+            ai2,
+            world,
+            &states.manufacturing,
+            &states.missions,
+            &states.movement,
+            tick_events,
+            config,
+            &states.research,
         );
         let ai2_rolls = take_rolls(8);
         integrator.apply_ai_actions(
-            &ai2_actions, &ai2_rolls, ai2, &mut states.missions,
-            &mut states.manufacturing, &mut states.movement, &mut states.research,
-            world, current_tick, config, true,
+            &ai2_actions,
+            &ai2_rolls,
+            ai2,
+            &mut states.missions,
+            &mut states.manufacturing,
+            &mut states.movement,
+            &mut states.research,
+            world,
+            current_tick,
+            config,
+            true,
         );
     }
 
@@ -366,7 +408,11 @@ pub fn run_simulation_tick(
     let empty_table = MstbTable::new(vec![]);
     let upris1tb = world.mission_tables.get("UPRIS1TB").unwrap_or(&empty_table);
     let uprising_events = UprisingSystem::advance(
-        &mut states.uprising, world, tick_events, &uprising_rolls, upris1tb,
+        &mut states.uprising,
+        world,
+        tick_events,
+        &uprising_rolls,
+        upris1tb,
     );
     integrator.apply_uprising_events(world, &uprising_events);
 
@@ -374,7 +420,11 @@ pub fn run_simulation_tick(
     let betrayal_rolls = take_rolls(world.characters.len());
     let loyalty_tb = world.mission_tables.get("UPRIS1TB").unwrap_or(&empty_table);
     let betrayal_events = BetrayalSystem::advance(
-        &mut states.betrayal, world, tick_events, &betrayal_rolls, loyalty_tb,
+        &mut states.betrayal,
+        world,
+        tick_events,
+        &betrayal_rolls,
+        loyalty_tb,
     );
     integrator.apply_betrayal_events(world, &betrayal_events);
 
@@ -443,7 +493,12 @@ pub fn run_simulation_tick(
 
     // ── 14. Victory check ────────────────────────────────────────────────
     integrator.emit_victory_check(&states.victory);
-    if let Some(outcome) = VictorySystem::check(&states.victory, world, tick_events) {
+    if let Some(outcome) = VictorySystem::check(
+        &states.victory,
+        world,
+        tick_events,
+        states.campaign_config.victory_conditions,
+    ) {
         integrator.apply_victory(&outcome, &mut states.victory, world);
     }
 
@@ -455,13 +510,13 @@ pub fn run_simulation_tick(
     integrator.finish()
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use rebellion_core::ai::AiFaction;
     use rebellion_core::dat::Faction;
     use rebellion_core::fog::FogState;
+    use rebellion_core::world::ControlKind;
 
     fn make_test_states() -> SimulationStates {
         let mut world = GameWorld::default();
@@ -531,6 +586,7 @@ mod tests {
             economy: EconomyState::default(),
             repair: RepairState,
             combat_cooldowns: HashMap::new(),
+            campaign_config: CampaignConfig::default(),
         };
         states
     }
@@ -609,9 +665,17 @@ mod tests {
             economy: EconomyState::default(),
             repair: RepairState,
             combat_cooldowns: HashMap::new(),
+            campaign_config: CampaignConfig::default(),
         };
 
-        let result = run_simulation_tick(&mut world, &mut states, &[], &[], 0, &rebellion_core::tuning::GameConfig::default());
+        let result = run_simulation_tick(
+            &mut world,
+            &mut states,
+            &[],
+            &[],
+            0,
+            &rebellion_core::tuning::GameConfig::default(),
+        );
         assert!(result.is_empty());
     }
 }

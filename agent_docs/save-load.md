@@ -1,6 +1,6 @@
 ---
 title: "Save/Load System"
-description: "Native and browser save v10, canonical fingerprints, continuation state, and historical migration"
+description: "Native and browser save v11, canonical fingerprints, campaign setup, continuation state, and historical migration"
 category: "agent-docs"
 created: 2026-03-15
 updated: 2026-09-09
@@ -11,13 +11,13 @@ tags: [save-load, bincode, migration, serialization, wasm, determinism]
 
 `crates/rebellion-data/src/save.rs` owns native files and browser storage.
 `crates/rebellion-app/src/main.rs` converts between a live campaign and the
-serializable snapshot. The current format is v10.
+serializable snapshot. The current format is v11.
 
-## Native format (v10)
+## Native format (v11)
 
 ```text
 [magic: 8 bytes "OPENREB\0"]
-[version: u32 LE]             — SAVE_VERSION = 10
+[version: u32 LE]             — SAVE_VERSION = 11
 [save_name: u32 len + UTF-8]
 [timestamp_secs: u64 LE]
 [mod_count: u32 LE]           — v4+
@@ -62,9 +62,13 @@ Every mutable campaign subsystem required by the app is serialized:
 | `repair` | `RepairState` |
 | `combat_cooldowns` | `HashMap<SystemKey, u64>` |
 | `game_config` | `GameConfig` |
+| `campaign_config` | `CampaignConfig` |
 
-The last five fields are the v10 continuation envelope. Loading restores them
-instead of reseeding RNG or clearing dual-AI, repair, and combat memory.
+The five fields ending with `game_config` are the v10 continuation envelope.
+Loading restores them instead of reseeding RNG or clearing dual-AI, repair,
+and combat memory. Save v11 adds `campaign_config`, preserving the selected
+difficulty, original galaxy-size label, player faction, and Standard versus
+Headquarters Only victory mode.
 
 ## Deterministic fingerprints
 
@@ -79,14 +83,20 @@ prove a versioned command replay or native/WASM execution equivalence.
 
 ## Migration rules
 
-- v10 is read directly and its stored fingerprint must match.
+- v11 is read directly and its stored fingerprint must match.
+- v10 is decoded through the exact historical `SaveStateV10` body. Its stored
+  fingerprint is checked before migration. Faction and difficulty are inferred
+  from preserved state; galaxy size and victory mode use explicit Standard
+  defaults because v10 did not retain them. The migrated v11 fingerprint is
+  reported as unverified.
 - v9 is decoded through the exact historical `SaveStateV9` body. Its v9
-  fingerprint is checked before migration; new v10 fields receive explicit
-  defaults and the migrated fingerprint is reported as unverified.
+  fingerprint is checked before migration; v10 continuation fields and v11
+  campaign setup receive explicit defaults, and the migrated fingerprint is
+  reported as unverified.
 - v8 uses the same historical body without a stored fingerprint. It migrates
   with explicit defaults and is reported as unverified.
 - v3–v7 are recognized but rejected with an incompatibility explanation.
-- Versions newer than v10 and versions older than v3 fail closed.
+- Versions newer than v11 and versions older than v3 fail closed.
 
 Do not rely on `#[serde(default)]` to migrate bincode. Bincode is positional.
 Changing `SaveState` requires a version bump and an exact legacy body struct.
@@ -98,14 +108,15 @@ the real migration boundary.
 WASM stores base64 bincode and versioned JSON metadata in `localStorage`:
 
 ```text
-rebellion_save_v10_<slot>
-rebellion_meta_v10_<slot>
+rebellion_save_v11_<slot>
+rebellion_meta_v11_<slot>
 ```
 
 Metadata includes the full save name, game tick, and fingerprint with its
 `u64` value encoded as a decimal string so JavaScript cannot truncate it. The
-reader falls back to v9 keys, verifies their v9 fingerprint, migrates the body,
-and writes new saves only under v10 keys. Delete removes both generations.
+reader falls back to v10 and then v9 keys, validates any stored fingerprint,
+migrates the body, and writes new saves only under v11 keys. Delete removes all
+three generations.
 
 This path is functional but not the production persistence target: base64 and
 synchronous `localStorage` can block the main thread or hit quota limits. M3
@@ -139,4 +150,5 @@ Native saves live at `<saves_dir>/<slot>.reb`. The UI exposes ten slots.
 
 Current verification evidence:
 [F-011A fingerprints](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md)
-and [F-011B1 continuation](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md).
+[F-011B1 continuation](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md),
+and [F-016B campaign setup](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md).

@@ -26,6 +26,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Save-continuation proof](evidence/2026-09-09-state-continuation.md) | Save v10 continuation envelope, historical v9 migration fixture, deterministic typed maps, and Astra 40/40 browser continuation proof for F-011B1. |
 | [Save/Delete UI proof](evidence/2026-09-09-save-delete.md) | F-001 wiring, empty-load-slot regression fix, storage deletion, reload persistence, and Astra 33/33 bitmap/browser proof. |
 | [Original main-menu cockpit proof](evidence/2026-09-09-main-menu-cockpit.md) | Binary-mapped controls, responsive bitmaps, direct faction starts, and Astra-verified MDATA.302 browser playback. |
+| [Campaign setup proof](evidence/2026-09-09-game-setup-propagation.md) | Save v11 setup persistence, Standard/Headquarters Only victory rules, and Astra 18/18 bitmap/browser proof. |
 | [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
@@ -34,9 +35,9 @@ acceptance plan required before the project can claim 100% functionality.
 The project is substantially implemented, but it is not yet demonstrably 100%
 functional. Fleet-miniature acceptance, deterministic four-request browser
 startup, F-001 browser Save/Load/Delete, the F-011A fingerprint primitive,
-F-011B1 save continuation, and the original-cockpit browser tranche now pass.
-P03/P04 still have explicit endpoints and cross-platform/state-propagation
-gates. Long-running command replay, native/WASM checkpoint parity, tactical parity, remaining browser
+F-011B1 save continuation, the original-cockpit browser tranche, and F-016B
+campaign setup/rules persistence now pass. P03/P04 still have explicit
+endpoints, cross-platform, and second-campaign-reset gates. Long-running command replay, native/WASM checkpoint parity, tactical parity, remaining browser
 memory/media work, cross-browser performance, formatting, lint, and
 release-level visual acceptance remain incomplete.
 

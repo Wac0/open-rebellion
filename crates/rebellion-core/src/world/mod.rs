@@ -110,6 +110,113 @@ impl SeedDifficulty {
             (Faction::Neutral, SeedDifficulty::Hard) => 3,
         }
     }
+
+    /// Recover the difficulty tier from an existing world's side-aware
+    /// GNPRTB column. This is used only when migrating saves created before
+    /// campaign setup was persisted explicitly.
+    pub fn from_gnprtb_index(index: u8) -> Self {
+        match index {
+            1 | 4 => Self::Easy,
+            3 | 6 => Self::Hard,
+            _ => Self::Medium,
+        }
+    }
+
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Easy => "Easy",
+            Self::Medium => "Intermediate",
+            Self::Hard => "Expert",
+        }
+    }
+}
+
+/// Original new-game victory-condition selector.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum VictoryConditions {
+    /// Capturing the enemy headquarters only wins after the faction's two
+    /// principal leaders are also held captive.
+    Standard,
+    /// Capturing the enemy headquarters is sufficient by itself.
+    HeadquartersOnly,
+}
+
+impl Default for VictoryConditions {
+    fn default() -> Self {
+        Self::Standard
+    }
+}
+
+impl VictoryConditions {
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Standard => "Standard Game",
+            Self::HeadquartersOnly => "Headquarters Only",
+        }
+    }
+}
+
+/// Setup choices that remain part of a live campaign after one-time seeding.
+///
+/// Unlike [`SeedOptions`], this record intentionally excludes the random seed:
+/// the simulation RNG state is persisted separately by the save system.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CampaignConfig {
+    pub galaxy_size: GalaxySize,
+    pub difficulty: SeedDifficulty,
+    pub player_faction: Faction,
+    pub victory_conditions: VictoryConditions,
+}
+
+impl Default for CampaignConfig {
+    fn default() -> Self {
+        Self {
+            galaxy_size: GalaxySize::Standard,
+            difficulty: SeedDifficulty::Medium,
+            player_faction: Faction::Alliance,
+            victory_conditions: VictoryConditions::Standard,
+        }
+    }
+}
+
+impl CampaignConfig {
+    pub fn from_seed_options(options: SeedOptions, victory_conditions: VictoryConditions) -> Self {
+        Self {
+            galaxy_size: options.galaxy_size,
+            difficulty: options.difficulty,
+            player_faction: options.player_faction,
+            victory_conditions,
+        }
+    }
+
+    /// Best-effort migration for saves that predate explicit campaign setup.
+    /// Galaxy size and game type were not recoverable from those bodies.
+    pub fn from_legacy_world(world: &GameWorld, player_is_alliance: bool) -> Self {
+        Self {
+            galaxy_size: GalaxySize::Standard,
+            difficulty: SeedDifficulty::from_gnprtb_index(world.difficulty_index),
+            player_faction: if player_is_alliance {
+                Faction::Alliance
+            } else {
+                Faction::Empire
+            },
+            victory_conditions: VictoryConditions::Standard,
+        }
+    }
+
+    pub fn summary(self) -> String {
+        let galaxy_size = match self.galaxy_size {
+            GalaxySize::Standard => "Small Galaxy",
+            GalaxySize::Large => "Medium Galaxy",
+            GalaxySize::Huge => "Large Galaxy",
+        };
+        format!(
+            "{}, {}, {}",
+            self.difficulty.label(),
+            galaxy_size,
+            self.victory_conditions.label()
+        )
+    }
 }
 
 /// New-game setup values that influence one-time campaign seeding.
@@ -250,7 +357,6 @@ pub struct CapitalShipClass {
     pub troop_capacity: u32,
 
     // ── Combat stats (from CAPSHPSD.DAT — needed for War Machine) ────────────
-
     /// Sensor range for detecting enemy units.
     pub detection: u32,
     /// Turbolaser batteries per arc (fore/aft/port/starboard).
@@ -276,7 +382,6 @@ pub struct CapitalShipClass {
     pub bombardment_modifier: u32,
 
     // ── Extended combat stats (DAT fields promoted for full combat parity) ──
-
     /// Aggregate attack power (sum of all arcs × attack strength). DAT offset: `overall_attack_strength`.
     #[serde(default)]
     pub overall_attack_strength: u32,
@@ -395,7 +500,6 @@ pub struct FighterClass {
     pub bombardment_defense: u32,
 
     // ── Extended fighter stats (DAT fields promoted for combat parity) ───────
-
     /// Shield strength (fighters rarely have shields but field exists). DAT offset: `shield_strength`.
     #[serde(default)]
     pub shield_strength: u32,
@@ -490,7 +594,6 @@ pub struct Character {
     pub can_be_general: bool,
 
     // ── Force / Jedi fields (entity-system.md §1.3) ───────────────────────────
-
     /// Current Force sensitivity tier (None → Aware → Training → Experienced).
     /// Driven by `jedi.rs` JediSystem.
     #[serde(default)]
@@ -505,7 +608,6 @@ pub struct Character {
     pub is_discovered_jedi: bool,
 
     // ── DAT-promoted fields ─────────────────────────────────────────────────
-
     /// Immune to betrayal missions (Luke, Vader). From MJCHARSD.DAT `is_unable_to_betray`.
     #[serde(default)]
     pub is_unable_to_betray: bool,
@@ -532,7 +634,6 @@ pub struct Character {
     pub on_mandatory_mission: bool,
 
     // ── Captivity ─────────────────────────────────────────────────────────
-
     /// Faction that captured this character (None if free).
     #[serde(default)]
     pub captured_by: Option<crate::dat::Faction>,
@@ -544,7 +645,6 @@ pub struct Character {
     pub is_captive: bool,
 
     // ── Location tracking ───────────────────────────────────────────────────
-
     /// System where this character is currently located.
     #[serde(default)]
     pub current_system: Option<SystemKey>,
@@ -553,7 +653,6 @@ pub struct Character {
     pub current_fleet: Option<FleetKey>,
 
     // ── Story state ────────────────────────────────────────────────────
-
     /// True once the player has witnessed the Luke–Vader paternity reveal.
     /// Gates the Final Battle BMP variant in the render layer.
     ///
@@ -612,16 +711,43 @@ impl Default for Character {
             is_alliance: false,
             is_empire: false,
             is_major: false,
-            diplomacy: SkillPair { base: 0, variance: 0 },
-            espionage: SkillPair { base: 0, variance: 0 },
-            ship_design: SkillPair { base: 0, variance: 0 },
-            troop_training: SkillPair { base: 0, variance: 0 },
-            facility_design: SkillPair { base: 0, variance: 0 },
-            combat: SkillPair { base: 0, variance: 0 },
-            leadership: SkillPair { base: 0, variance: 0 },
-            loyalty: SkillPair { base: 0, variance: 0 },
+            diplomacy: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            espionage: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            ship_design: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            troop_training: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            facility_design: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            combat: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            leadership: SkillPair {
+                base: 0,
+                variance: 0,
+            },
+            loyalty: SkillPair {
+                base: 0,
+                variance: 0,
+            },
             jedi_probability: 0,
-            jedi_level: SkillPair { base: 0, variance: 0 },
+            jedi_level: SkillPair {
+                base: 0,
+                variance: 0,
+            },
             can_be_admiral: false,
             can_be_commander: false,
             can_be_general: false,
@@ -697,7 +823,9 @@ impl Fleet {
     pub fn ship_counts_by_class(&self) -> Vec<(CapitalShipKey, u32)> {
         let mut counts: Vec<(CapitalShipKey, u32)> = Vec::new();
         for ship in &self.capital_ships {
-            if !ship.alive { continue; }
+            if !ship.alive {
+                continue;
+            }
             if let Some(entry) = counts.iter_mut().find(|(k, _)| *k == ship.class) {
                 entry.1 += 1;
             } else {
@@ -709,8 +837,7 @@ impl Fleet {
 
     /// True if this fleet has no alive capital ships and no fighter squadrons.
     pub fn is_empty(&self) -> bool {
-        !self.capital_ships.iter().any(|s| s.alive)
-            && self.fighters.iter().all(|e| e.count == 0)
+        !self.capital_ships.iter().any(|s| s.alive) && self.fighters.iter().all(|e| e.count == 0)
     }
 }
 
@@ -757,7 +884,9 @@ impl ShipInstance {
 
     /// Create `count` instances of the same class at full hull.
     pub fn make(class: CapitalShipKey, hull: i32, is_alliance: bool, count: u32) -> Vec<Self> {
-        (0..count).map(|_| Self::new(class, hull, is_alliance)).collect()
+        (0..count)
+            .map(|_| Self::new(class, hull, is_alliance))
+            .collect()
     }
 
     /// Shield recharge allocation nibble (bits 0-3).
@@ -812,7 +941,9 @@ pub struct GnprtbEntry {
 
 impl Default for GnprtbParams {
     fn default() -> Self {
-        Self { entries: Vec::new() }
+        Self {
+            entries: Vec::new(),
+        }
     }
 }
 
@@ -875,7 +1006,9 @@ pub struct SdprtbEntry {
 
 impl Default for SdprtbParams {
     fn default() -> Self {
-        Self { entries: Vec::new() }
+        Self {
+            entries: Vec::new(),
+        }
     }
 }
 
@@ -966,7 +1099,8 @@ impl MstbTable {
                     return lo.value;
                 }
                 let frac = (skill_score - lo.threshold) as f64 / span as f64;
-                let interpolated = lo.value as f64 + frac * (hi.value as i64 - lo.value as i64) as f64;
+                let interpolated =
+                    lo.value as f64 + frac * (hi.value as i64 - lo.value as i64) as f64;
                 return interpolated.round().max(0.0) as u32;
             }
         }
@@ -1066,7 +1200,8 @@ pub struct GameWorld {
     /// Defense facilities on system surfaces.
     pub defense_facilities: slotmap::SlotMap<DefenseFacilityKey, DefenseFacilityInstance>,
     /// Manufacturing facilities (shipyards, training centers, construction yards).
-    pub manufacturing_facilities: slotmap::SlotMap<ManufacturingFacilityKey, ManufacturingFacilityInstance>,
+    pub manufacturing_facilities:
+        slotmap::SlotMap<ManufacturingFacilityKey, ManufacturingFacilityInstance>,
     /// Production facilities (mines, refineries).
     pub production_facilities: slotmap::SlotMap<ProductionFacilityKey, ProductionFacilityInstance>,
     /// Troop class definitions keyed by DatId (from TROOPSD.DAT).
@@ -1091,7 +1226,9 @@ pub struct GameWorld {
     pub difficulty_index: u8,
 }
 
-fn default_difficulty_index() -> u8 { 2 }
+fn default_difficulty_index() -> u8 {
+    2
+}
 
 #[cfg(test)]
 mod tests {
@@ -1279,7 +1416,10 @@ mod tests {
         assert_eq!(c.current_fleet, None, "current_fleet must be cleared");
         assert!(!c.on_mission, "on_mission must be cleared");
         assert!(!c.on_hidden_mission, "on_hidden_mission must be cleared");
-        assert!(!c.on_mandatory_mission, "on_mandatory_mission must be cleared");
+        assert!(
+            !c.on_mandatory_mission,
+            "on_mandatory_mission must be cleared"
+        );
         assert!(!c.is_captive, "is_captive must be cleared");
         assert_eq!(c.captured_by, None, "captured_by must be cleared");
         assert_eq!(c.capture_tick, None, "capture_tick must be cleared");

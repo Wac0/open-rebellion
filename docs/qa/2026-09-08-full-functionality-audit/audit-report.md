@@ -300,9 +300,10 @@ the run as formally degenerate.
 - Severity: P1
 - Status: confirmed design gap
 - Evidence: synchronous base64-encoded bincode in `localStorage` is vulnerable
-  to quota limits and main-thread stalls. Save v10 captures the currently known
-  deterministic campaign continuation envelope, but browser persistence remains
-  synchronous and quota failures are not yet exercised end to end.
+  to quota limits and main-thread stalls. Save v11 captures the currently known
+  deterministic continuation envelope and campaign setup, but browser
+  persistence remains synchronous and quota failures are not yet exercised end
+  to end.
 - Acceptance: versioned, compressed, asynchronous IndexedDB saves round-trip
   complete state, expose quota/corruption errors, and preserve fingerprints.
 
@@ -316,17 +317,21 @@ the run as formally degenerate.
   the original MDATA.302 bytes. Astra-medium R2 exercised the full matrix and
   exposed a URL-plugin ABI diagnostic plus audio surviving Quit; after both
   fixes, R3 passed 11/11 focused assertions with zero console/page/request/
-  texture errors and zero active audio loops after Quit. Workspace tests pass
-  491/491. See `evidence/2026-09-09-main-menu-cockpit.md`.
+  texture errors and zero active audio loops after Quit. F-016B then persisted
+  faction, difficulty, galaxy size, and victory mode through save v11 and wired
+  Standard principal-leader capture versus Headquarters Only rules. Workspace
+  tests pass 495/495; Astra-medium R2 passed 18/18 setup, reload, bitmap,
+  storage, network, and error gates. See
+  `evidence/2026-09-09-main-menu-cockpit.md` and
+  `evidence/2026-09-09-game-setup-propagation.md`.
 - Reference: [`agent_docs/main-menu-parity.md`](../../../agent_docs/main-menu-parity.md)
   records the binary-confirmed geometry, resources, commands, settings, music,
   responsive transform, and Astra matrix.
 - Acceptance: native and browser reproduce the assembled cockpit, every mapped
   hover/click/keyboard behavior and selection, direct faction start, menu music,
   4:3 scaling, and all navigation with no blank aperture or missing resource.
-  Credits, Multiplayer, Headquarters Only propagation, live difficulty/size
-  persistence, native/accessibility, gain/mute, return-to-menu, and clean
-  second-campaign reset remain open; P03/P04 therefore remain in progress.
+  Credits, Multiplayer, native/accessibility, gain/mute, return-to-menu, and
+  clean second-campaign reset remain open; P03/P04 therefore remain in progress.
 
 ## Fable 5.1 audit synthesis
 

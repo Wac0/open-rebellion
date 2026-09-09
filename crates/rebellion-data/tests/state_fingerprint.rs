@@ -26,7 +26,7 @@ use rebellion_core::tick::GameClock;
 use rebellion_core::tuning::GameConfig;
 use rebellion_core::uprising::UprisingState;
 use rebellion_core::victory::VictoryState;
-use rebellion_core::world::SeedOptions;
+use rebellion_core::world::{CampaignConfig, SeedOptions};
 use rebellion_data::save::{compute_state_fingerprint, SaveState};
 
 fn data_dir() -> PathBuf {
@@ -86,6 +86,10 @@ fn seeded_snapshot(seed: u64) -> SaveState {
         repair: RepairState::default(),
         combat_cooldowns: std::collections::HashMap::new(),
         game_config: GameConfig::default(),
+        campaign_config: CampaignConfig::from_seed_options(
+            options,
+            rebellion_core::world::VictoryConditions::Standard,
+        ),
     }
 }
 

@@ -3,7 +3,7 @@ title: "Victory System"
 description: "Game-ending condition detection for Alliance and Empire"
 category: "agent-docs"
 created: 2026-03-14
-updated: 2026-03-16
+updated: 2026-09-09
 tags: [victory, hq-capture, death-star, simulation]
 ---
 
@@ -22,13 +22,22 @@ tags: [victory, hq-capture, death-star, simulation]
 
 ```rust
 // Each tick: check all victory conditions
-if let Some(outcome) = VictorySystem::check(&victory_state, &world, &tick_events) {
+if let Some(outcome) = VictorySystem::check(
+    &victory_state,
+    &world,
+    &tick_events,
+    campaign_config.victory_conditions,
+) {
     victory_state.resolved = true;
     // show victory/defeat screen
 }
 ```
 
 ## Victory Conditions
+
+The active `VictoryConditions` selects one of two rule sets.
+
+### Standard
 
 Checked in priority order (first match wins):
 
@@ -39,10 +48,19 @@ Checked in priority order (first match wins):
 
 Only checked when `death_star_active = true`.
 
-### 2. HQ Capture
+### 2. HQ and principal-leader capture
 
-- **Empire captures Alliance HQ**: Empire fleet at `alliance_hq` AND zero Alliance fleets
-- **Alliance captures Empire HQ**: Alliance fleet at `empire_hq` AND zero Empire fleets
+- **Empire victory**: Empire occupies `alliance_hq` and holds both Luke Skywalker and Mon Mothma captive.
+- **Alliance victory**: Alliance occupies `empire_hq` and holds both Emperor Palpatine and Darth Vader captive.
+
+Holding the leaders without the headquarters, using the wrong captor, or
+occupying the headquarters without both leaders does not end a Standard game.
+
+### Headquarters Only
+
+- Empire occupation of `alliance_hq` is sufficient for an Empire victory.
+- Alliance occupation of `empire_hq` is sufficient for an Alliance victory.
+- Death Star outcomes are ignored; “Only” is enforced literally.
 
 ## Initialization
 
@@ -59,3 +77,5 @@ Only checked when `death_star_active = true`.
 - `entity-system.md §4.2` — `SideVictoryConditionsNotif`, `FinalBattle`
 - Event IDs `0x12c`/`0x180`
 - `System::is_headquarters` flag
+- [`main-menu-parity.md`](../main-menu-parity.md) — original game-type selector and setup contract
+- [F-016B evidence](../../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md)

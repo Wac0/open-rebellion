@@ -95,6 +95,12 @@ The faction controls start immediately; there is no second custom setup page.
 `difficulty + 4` for Empire. Game type `1` becomes Standard and `2` becomes
 Headquarters Only. Galaxy selections use encoded values `1`, `2`, and `3`.
 
+Standard mode requires the winning faction to occupy the opposing headquarters
+and hold both opposing principal leaders: Luke Skywalker and Mon Mothma for an
+Empire victory, or Emperor Palpatine and Darth Vader for an Alliance victory.
+Headquarters Only ends on opposing-HQ occupation alone and does not allow a
+Death Star outcome to supersede that rule.
+
 ## Rendering and input requirements
 
 1. Draw bitmap 20001 at native color without a dimming tint.
@@ -113,8 +119,9 @@ Headquarters Only. Galaxy selections use encoded values `1`, `2`, and `3`.
 - **P04 — Game setup:** difficulty, galaxy size, game type, faction start,
   state propagation, and clean subsequent-campaign reset.
 
-Headquarters Only affects victory rules, not only its label. P04 cannot pass
-until it reaches active configuration, save data, and `VictorySystem`.
+F-016B verifies that all four setup values reach active configuration, save v11,
+reload, and `VictorySystem` in the browser. P04 remains open until starting a
+subsequent campaign cleanly replaces every campaign subsystem.
 
 ## Music contract
 
@@ -147,5 +154,7 @@ screenshots and a JSON result for every run.
 | Runtime quality | Zero page, console, request, WebGL, missing-asset, or panic errors |
 | Music | MDATA.302 loads once, begins after the browser gesture, loops without overlap, obeys gain/mute, and resumes correctly on return to menu |
 
+The browser setup/state rows are verified in
+[F-016B evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md).
 P03 and P04 remain open until all applicable rows pass in native and browser
-release artifacts.
+release artifacts, including a clean second-campaign reset.

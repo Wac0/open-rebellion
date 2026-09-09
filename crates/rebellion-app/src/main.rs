@@ -30,7 +30,10 @@ use rebellion_core::research::{ResearchState, ResearchSystem};
 use rebellion_core::tick::{GameClock, GameSpeed};
 use rebellion_core::uprising::{UprisingState, UprisingSystem};
 use rebellion_core::victory::{VictoryState, VictorySystem};
-use rebellion_core::world::{ControlKind, GameWorld, MstbTable, SeedDifficulty, SeedOptions};
+use rebellion_core::world::{
+    CampaignConfig, ControlKind, GameWorld, MstbTable, SeedDifficulty, SeedOptions,
+    VictoryConditions,
+};
 
 use rebellion_render::panels::bombardment::{draw_bombardment, BombardmentPanelState};
 use rebellion_render::panels::death_star::draw_death_star;
@@ -47,11 +50,11 @@ use rebellion_render::{
     draw_save_load, draw_sector_boundaries, draw_status_bar, draw_system_context_menu,
     draw_system_info_panel, draw_tactical_view, hovered_fleet, show_event_screen,
     update_event_screen, AdvisorFaction, AdvisorState, AudioVolumeState, BmpCache, CockpitButton,
-    CockpitFaction, CockpitState, Difficulty, EncyclopediaState, EventScreenState, FleetsState,
-    GalaxyMapState, GameMessage, GameSetupAction, GameSetupState, GroundAction,
-    GroundCombatState, MainMenuAction, MainMenuState, ManufacturingPanelState, MessageCategory,
-    MessageLog, MessageLogState, MissionsPanelState, MusicContext, OfficersState, PanelAction,
-    SfxKind, TacticalAction, TacticalState, VideoError, VideoPlayer, VoiceLine,
+    CockpitFaction, CockpitState, EncyclopediaState, EventScreenState, FleetsState, GalaxyMapState,
+    GameMessage, GameSetupAction, GameSetupState, GroundAction, GroundCombatState, MainMenuAction,
+    MainMenuState, ManufacturingPanelState, MessageCategory, MessageLog, MessageLogState,
+    MissionsPanelState, MusicContext, OfficersState, PanelAction, SfxKind, TacticalAction,
+    TacticalState, VideoError, VideoPlayer, VoiceLine,
 };
 
 /// Top-level game mode state machine.
@@ -167,9 +170,9 @@ struct LiveCampaign<'a> {
     sim_rng: &'a mut Xoshiro256PlusPlus,
     ai2: &'a mut Option<AIState>,
     repair: &'a mut RepairState,
-    combat_cooldowns:
-        &'a mut std::collections::HashMap<rebellion_core::ids::SystemKey, u64>,
+    combat_cooldowns: &'a mut std::collections::HashMap<rebellion_core::ids::SystemKey, u64>,
     game_config: &'a mut rebellion_core::tuning::GameConfig,
+    campaign_config: &'a mut CampaignConfig,
 }
 
 impl LiveCampaign<'_> {
@@ -198,6 +201,7 @@ impl LiveCampaign<'_> {
             repair: self.repair.clone(),
             combat_cooldowns: self.combat_cooldowns.clone(),
             game_config: self.game_config.clone(),
+            campaign_config: *self.campaign_config,
         }
     }
 
@@ -229,6 +233,7 @@ impl LiveCampaign<'_> {
         *self.repair = state.repair;
         *self.combat_cooldowns = state.combat_cooldowns;
         *self.game_config = state.game_config;
+        *self.campaign_config = state.campaign_config;
     }
 }
 
@@ -603,8 +608,7 @@ async fn main() {
     let mut main_menu_state = MainMenuState::default();
     let mut game_setup_state = GameSetupState::default();
     let mut pending_cockpit_start: Option<GameSetupAction> = None;
-    let mut _headquarters_only = false;
-    let mut _difficulty = Difficulty::Medium; // stored after setup, used for AI tuning
+    let mut pending_victory_conditions = VictoryConditions::Standard;
 
     // ── Simulation state ────────────────────────────────────────────────────
     // Seedable RNG for deterministic simulation
@@ -628,6 +632,7 @@ async fn main() {
     let mut event_state = EventState::new();
     let mut ai_state = AIState::new(AiFaction::Empire);
     let mut game_config = rebellion_core::tuning::GameConfig::default();
+    let mut campaign_config = CampaignConfig::default();
     let mut dual_ai_mode = false;
     let mut ai2_state: Option<AIState> = None;
     let mut movement_state = MovementState::new();
@@ -787,7 +792,9 @@ async fn main() {
         &mut audio_engine,
     );
     if cutscene_player.is_some() {
-        game_mode = GameMode::Cutscene { kind: CutsceneKind::Intro };
+        game_mode = GameMode::Cutscene {
+            kind: CutsceneKind::Intro,
+        };
     }
 
     // ── Apply Star Wars theme ────────────────────────────────────────────
@@ -831,10 +838,7 @@ async fn main() {
             }
         }
         // ── Galaxy-mode keyboard shortcuts (blocked during event screen) ────
-        if game_mode == GameMode::Galaxy
-            && !event_screen_state.is_active()
-            && !show_save_load
-        {
+        if game_mode == GameMode::Galaxy && !event_screen_state.is_active() && !show_save_load {
             if is_key_pressed(KeyCode::R) {
                 map_state = GalaxyMapState::default();
             }
@@ -885,7 +889,12 @@ async fn main() {
             toggle_panel!(KeyCode::B, show_bombardment);
             toggle_panel!(KeyCode::D, show_death_star);
             toggle_panel!(KeyCode::L, show_loyalty);
-            if is_key_pressed(KeyCode::S) && !matches!(game_mode, GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }) {
+            if is_key_pressed(KeyCode::S)
+                && !matches!(
+                    game_mode,
+                    GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }
+                )
+            {
                 if show_save_load {
                     save_load_panel_state.close();
                     show_save_load = false;
@@ -1244,8 +1253,7 @@ async fn main() {
             // ── Fog of war ──────────────────────────────────────────────────
             let alliance_reveals =
                 FogSystem::advance(&mut fog_alliance_state, &world, &movement_state);
-            let empire_reveals =
-                FogSystem::advance(&mut fog_empire_state, &world, &movement_state);
+            let empire_reveals = FogSystem::advance(&mut fog_empire_state, &world, &movement_state);
             let reveals = if player_faction == MissionFaction::Alliance {
                 alliance_reveals
             } else {
@@ -1354,13 +1362,12 @@ async fn main() {
                 use rebellion_core::effects::GameEffect;
                 match eff {
                     GameEffect::StoryMessageDisplayed { text, .. } => {
-                        msg_log.push(GameMessage::new(
-                            current_tick,
-                            text,
-                            MessageCategory::Event,
-                        ));
+                        msg_log.push(GameMessage::new(current_tick, text, MessageCategory::Event));
                     }
-                    GameEffect::SpecialForceSpawned { at_system, is_alliance } => {
+                    GameEffect::SpecialForceSpawned {
+                        at_system,
+                        is_alliance,
+                    } => {
                         let name = world
                             .systems
                             .get(at_system)
@@ -1395,7 +1402,9 @@ async fn main() {
             // Only trigger if no overlay is already active (highest-priority event wins).
             if !event_screen_state.is_active() {
                 // #R4: resolve Luke's heritage_known for render-layer BMP branching
-                let heritage_known = world.characters.values()
+                let heritage_known = world
+                    .characters
+                    .values()
                     .find(|c| c.name.contains("Luke"))
                     .map_or(false, |c| c.heritage_known);
 
@@ -1472,7 +1481,9 @@ async fn main() {
                         &mut audio_engine,
                     );
                     if cutscene_player.is_some() {
-                        game_mode = GameMode::Cutscene { kind: CutsceneKind::Story(number) };
+                        game_mode = GameMode::Cutscene {
+                            kind: CutsceneKind::Story(number),
+                        };
                         break;
                     }
                 }
@@ -1917,7 +1928,12 @@ async fn main() {
             }
 
             // ── Victory check ────────────────────────────────────────────────
-            if let Some(outcome) = VictorySystem::check(&victory_state, &world, &tick_events) {
+            if let Some(outcome) = VictorySystem::check(
+                &victory_state,
+                &world,
+                &tick_events,
+                campaign_config.victory_conditions,
+            ) {
                 victory_state.resolved = true;
                 let msg = match &outcome {
                     rebellion_core::victory::VictoryOutcome::HqCaptured {
@@ -1943,7 +1959,11 @@ async fn main() {
                 } else {
                     Path::new(DEFEAT_CUTSCENE)
                 };
-                let kind = if player_won { CutsceneKind::Victory } else { CutsceneKind::Defeat };
+                let kind = if player_won {
+                    CutsceneKind::Victory
+                } else {
+                    CutsceneKind::Defeat
+                };
                 cutscene_player = open_cutscene(
                     cutscene_path,
                     &mut msg_log,
@@ -1968,7 +1988,9 @@ async fn main() {
                 clear_background(BLACK);
 
                 let next_mode = match kind {
-                    CutsceneKind::Intro | CutsceneKind::Victory | CutsceneKind::Defeat => GameMode::MainMenu,
+                    CutsceneKind::Intro | CutsceneKind::Victory | CutsceneKind::Defeat => {
+                        GameMode::MainMenu
+                    }
                     CutsceneKind::Story(_) => GameMode::Galaxy,
                 };
 
@@ -2047,7 +2069,11 @@ async fn main() {
                             game_setup_state.difficulty = difficulty;
                             game_setup_state.faction = Some(faction);
                             game_setup_state.galaxy_size = galaxy_size;
-                            _headquarters_only = headquarters_only;
+                            pending_victory_conditions = if headquarters_only {
+                                VictoryConditions::HeadquartersOnly
+                            } else {
+                                VictoryConditions::Standard
+                            };
                             pending_cockpit_start = Some(GameSetupAction::StartGame {
                                 difficulty,
                                 faction,
@@ -2108,7 +2134,6 @@ async fn main() {
                             faction,
                             galaxy_size,
                         } => {
-                            _difficulty = difficulty;
                             player_faction = faction;
 
                             // Convert setup choices to SeedOptions and reload world.
@@ -2127,6 +2152,11 @@ async fn main() {
                                 player_faction: dat_faction_for_seed,
                                 rng_seed: None, // Fresh random seed each game
                             };
+                            campaign_config = CampaignConfig::from_seed_options(
+                                seed_options,
+                                pending_victory_conditions,
+                            );
+                            pending_victory_conditions = VictoryConditions::Standard;
                             match rebellion_data::load_game_data_with_options(
                                 &gdata_path,
                                 &seed_options,
@@ -2134,6 +2164,39 @@ async fn main() {
                                 Ok(w) => {
                                     world = w;
                                     warmed_galaxy_font_sizes.clear();
+                                    let alliance_hq = world
+                                        .systems
+                                        .iter()
+                                        .find(|(_, system)| {
+                                            system.is_headquarters
+                                                && system
+                                                    .control
+                                                    .is_controlled_by(Faction::Alliance)
+                                        })
+                                        .map(|(key, _)| key);
+                                    let empire_hq = world
+                                        .systems
+                                        .iter()
+                                        .find(|(_, system)| {
+                                            system.is_headquarters
+                                                && system.control.is_controlled_by(Faction::Empire)
+                                        })
+                                        .map(|(key, _)| key);
+                                    victory_state = match (alliance_hq, empire_hq) {
+                                        (Some(alliance), Some(empire)) => {
+                                            VictoryState::new(alliance, empire)
+                                        }
+                                        _ => {
+                                            let mut keys = world.systems.keys();
+                                            let alliance = keys.next().expect(
+                                                "world must have at least 2 systems for victory",
+                                            );
+                                            let empire = keys.next().expect(
+                                                "world must have at least 2 systems for victory",
+                                            );
+                                            VictoryState::new(alliance, empire)
+                                        }
+                                    };
                                 }
                                 Err(e) => {
                                     eprintln!(
@@ -2169,9 +2232,14 @@ async fn main() {
                             } else {
                                 "Galactic Empire"
                             };
+                            let campaign_summary = campaign_config.summary();
+                            macroquad::logging::info!(
+                                "[campaign] faction={} configuration={}",
+                                faction_name, campaign_summary
+                            );
                             msg_log.push(GameMessage::new(
                                 clock.tick,
-                                format!("You command the {}.", faction_name),
+                                format!("You command the {} — {}.", faction_name, campaign_summary),
                                 MessageCategory::Event,
                             ));
 
@@ -2206,11 +2274,7 @@ async fn main() {
             }
 
             GameMode::Galaxy => {
-                prewarm_galaxy_font_sizes(
-                    &world,
-                    &map_state,
-                    &mut warmed_galaxy_font_sizes,
-                );
+                prewarm_galaxy_font_sizes(&world, &map_state, &mut warmed_galaxy_font_sizes);
                 let fog_state = if player_faction == MissionFaction::Alliance {
                     &fog_alliance_state
                 } else {
@@ -2554,7 +2618,10 @@ async fn main() {
                                 enc_state.open = !enc_state.open;
                             }
                             CockpitButton::SaveLoad => {
-                                if !matches!(game_mode, GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }) {
+                                if !matches!(
+                                    game_mode,
+                                    GameMode::Cutscene { .. } | GameMode::VictoryModal { .. }
+                                ) {
                                     if show_save_load {
                                         save_load_panel_state.close();
                                         show_save_load = false;
@@ -2869,8 +2936,12 @@ async fn main() {
                 // Frozen galaxy backdrop with modal overlay.
                 clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
                 egui_macroquad::ui(|ctx| {
-                    use egui_macroquad::egui as egui;
-                    let title = if alliance_won { "Alliance Victory!" } else { "Imperial Victory!" };
+                    use egui_macroquad::egui;
+                    let title = if alliance_won {
+                        "Alliance Victory!"
+                    } else {
+                        "Imperial Victory!"
+                    };
                     let body = if alliance_won {
                         "The Rebel Alliance has triumphed. Freedom is restored to the galaxy."
                     } else {
@@ -2886,13 +2957,17 @@ async fn main() {
                                 .show(ui, |ui| {
                                     ui.set_width(400.0);
                                     ui.vertical_centered(|ui| {
-                                        ui.label(egui::RichText::new(title)
-                                            .size(24.0)
-                                            .color(egui::Color32::from_rgb(230, 200, 100)));
+                                        ui.label(
+                                            egui::RichText::new(title)
+                                                .size(24.0)
+                                                .color(egui::Color32::from_rgb(230, 200, 100)),
+                                        );
                                         ui.add_space(16.0);
-                                        ui.label(egui::RichText::new(body)
-                                            .size(14.0)
-                                            .color(egui::Color32::from_rgb(200, 195, 185)));
+                                        ui.label(
+                                            egui::RichText::new(body)
+                                                .size(14.0)
+                                                .color(egui::Color32::from_rgb(200, 195, 185)),
+                                        );
                                         ui.add_space(24.0);
                                         if ui.button("Continue").clicked() {
                                             game_mode = GameMode::MainMenu;
@@ -2933,6 +3008,7 @@ async fn main() {
                         repair: &mut repair_state,
                         combat_cooldowns: &mut combat_cooldowns,
                         game_config: &mut game_config,
+                        campaign_config: &mut campaign_config,
                     }
                     .snapshot();
                     let active_mods = mod_runtime.enabled_mod_list();
@@ -2946,7 +3022,9 @@ async fn main() {
                         Ok(fingerprint) => {
                             macroquad::logging::info!(
                                 "save_state_fingerprint slot={} tick={} fingerprint={}",
-                                slot, state.clock.tick, fingerprint
+                                slot,
+                                state.clock.tick,
+                                fingerprint
                             );
                             save_load_panel_state.error_message = None;
                             save_slots = read_save_slots(&saves_dir);
@@ -2996,8 +3074,13 @@ async fn main() {
                                 repair: &mut repair_state,
                                 combat_cooldowns: &mut combat_cooldowns,
                                 game_config: &mut game_config,
+                                campaign_config: &mut campaign_config,
                             }
                             .restore(state);
+                            macroquad::logging::info!(
+                                "[campaign] loaded configuration={}",
+                                campaign_config.summary()
+                            );
                             warmed_galaxy_font_sizes.clear();
 
                             cockpit_state.faction = if player_faction == MissionFaction::Alliance {
@@ -3117,6 +3200,7 @@ async fn main() {
                         &mut dual_ai_mode,
                         &mut ai2_state,
                         &mut victory_state,
+                        &campaign_config,
                         &mut blockade_state,
                         &event_state,
                         &mut mod_runtime,
@@ -3173,6 +3257,7 @@ fn apply_panel_action(
     dual_ai_mode: &mut bool,
     ai2_state: &mut Option<AIState>,
     victory_state: &mut VictoryState,
+    campaign_config: &CampaignConfig,
     blockade_state: &mut BlockadeState,
     event_state: &EventState,
     mod_runtime: &mut rebellion_data::mods::ModRuntime,
@@ -3460,7 +3545,9 @@ fn apply_panel_action(
                         &mut cleanup_effects,
                     );
                     for effect in cleanup_effects.drain(..) {
-                        if let rebellion_core::effects::GameEffect::CharacterKilled { character } = effect {
+                        if let rebellion_core::effects::GameEffect::CharacterKilled { character } =
+                            effect
+                        {
                             if let Some(c) = world.characters.get(character) {
                                 msg_log.push(GameMessage::new(
                                     clock.tick,
@@ -3548,8 +3635,12 @@ fn apply_panel_action(
         }
         PanelAction::ForceVictoryCheck => {
             let tick_ev = rebellion_core::tick::TickEvent { tick: clock.tick };
-            let result =
-                rebellion_core::victory::VictorySystem::check(victory_state, world, &[tick_ev]);
+            let result = rebellion_core::victory::VictorySystem::check(
+                victory_state,
+                world,
+                &[tick_ev],
+                campaign_config.victory_conditions,
+            );
             if let Some(outcome) = result {
                 msg_log.push(GameMessage::new(
                     clock.tick,

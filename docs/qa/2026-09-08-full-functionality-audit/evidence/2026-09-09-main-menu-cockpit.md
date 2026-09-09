@@ -55,10 +55,8 @@ the optimized 4,612,625-byte WASM SHA-256 is
 ## Remaining P03/P04 gates
 
 - Credits and Multiplayer still have no destinations.
-- Headquarters Only is visible but does not reach active victory rules, save
-  state, or `VictorySystem`.
-- Difficulty and galaxy size reach `SeedOptions` in source, but live downstream
-  values and persistence still need observable browser proof.
+- Headquarters Only rules and setup persistence were subsequently verified in
+  [F-016B](2026-09-09-game-setup-propagation.md).
 - Native parity, keyboard/accessibility acceptance, gain/mute behavior,
   return-to-menu audio lifecycle, and clean second-campaign reset remain open.
 

@@ -1,8 +1,9 @@
 //! Victory condition detection.
 //!
 //! Checks for game-ending states each tick:
-//! - **HQ capture**: the opposing faction controls the enemy headquarters system
-//!   (enemy fleet present, defending fleet absent).
+//! - **Standard HQ victory**: the opposing faction controls the enemy
+//!   headquarters and holds its two principal leaders captive.
+//! - **Headquarters Only victory**: headquarters capture is sufficient.
 //! - **Death Star fires on Alliance HQ**: `System::is_destroyed` is set at the
 //!   Alliance HQ while a Death Star fleet is present — Empire wins.
 //! - **Death Star destroyed**: Death Star fleet is gone from its last known
@@ -12,7 +13,8 @@
 //!
 //! Follows the stateless advance pattern:
 //! ```text
-//! VictorySystem::check(&VictoryState, &world, &[TickEvent]) -> Option<VictoryOutcome>
+//! VictorySystem::check(&VictoryState, &world, &[TickEvent], VictoryConditions)
+//!     -> Option<VictoryOutcome>
 //! ```
 //! Returns `None` every tick until a terminal condition is met, then returns
 //! `Some(VictoryOutcome)`. The caller sets `VictoryState::resolved = true` to
@@ -30,7 +32,7 @@ use serde::{Deserialize, Serialize};
 use crate::dat::Faction;
 use crate::ids::SystemKey;
 use crate::tick::TickEvent;
-use crate::world::GameWorld;
+use crate::world::{GameWorld, VictoryConditions};
 
 // ---------------------------------------------------------------------------
 // VictoryOutcome
@@ -117,6 +119,7 @@ impl VictorySystem {
         state: &VictoryState,
         world: &GameWorld,
         tick_events: &[TickEvent],
+        victory_conditions: VictoryConditions,
     ) -> Option<VictoryOutcome> {
         if tick_events.is_empty() || state.resolved {
             return None;
@@ -128,16 +131,21 @@ impl VictorySystem {
             return None;
         }
 
-        // Death Star check comes first: planet destruction is the terminal event
-        // that supersedes any fleet-presence HQ check.
-        if state.death_star_active {
+        // Headquarters Only is literal: no leader or Death Star outcome can
+        // terminate that campaign. Standard retains the established Death Star
+        // paths, checked before an HQ/leader victory.
+        if victory_conditions == VictoryConditions::Standard && state.death_star_active {
             if let Some(outcome) = Self::check_death_star(state, world) {
                 return Some(outcome);
             }
         }
 
         if let Some(outcome) = Self::check_hq_capture(state, world) {
-            return Some(outcome);
+            if victory_conditions == VictoryConditions::HeadquartersOnly
+                || Self::standard_leaders_captured(&outcome, world)
+            {
+                return Some(outcome);
+            }
         }
 
         None
@@ -174,6 +182,30 @@ impl VictorySystem {
         }
 
         None
+    }
+
+    /// Standard victory also requires the winner to hold both opposing
+    /// principal leaders, matching the original game-type rules.
+    fn standard_leaders_captured(outcome: &VictoryOutcome, world: &GameWorld) -> bool {
+        let (winner, required_names): (Faction, &[&str]) = match outcome {
+            VictoryOutcome::HqCaptured {
+                winner: Faction::Empire,
+                ..
+            } => (Faction::Empire, &["Luke Skywalker", "Mon Mothma"]),
+            VictoryOutcome::HqCaptured {
+                winner: Faction::Alliance,
+                ..
+            } => (Faction::Alliance, &["Emperor Palpatine", "Darth Vader"]),
+            _ => return true,
+        };
+
+        required_names.iter().all(|required| {
+            world.characters.iter().any(|(_, character)| {
+                character.name == *required
+                    && character.is_captive
+                    && character.captured_by == Some(winner)
+            })
+        })
     }
 
     /// Death Star fire and destruction conditions.
@@ -219,11 +251,7 @@ impl VictorySystem {
         None
     }
 
-    fn fleet_count_at(
-        world: &GameWorld,
-        sys: &crate::world::System,
-        is_alliance: bool,
-    ) -> usize {
+    fn fleet_count_at(world: &GameWorld, sys: &crate::world::System, is_alliance: bool) -> usize {
         sys.fleets
             .iter()
             .filter_map(|&fk| world.fleets.get(fk))
@@ -239,12 +267,12 @@ impl VictorySystem {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::world::ControlKind;
     use crate::dat::ExplorationStatus;
+    use crate::dat::SectorGroup;
     use crate::ids::DatId;
     use crate::tick::TickEvent;
-    use crate::world::{Fleet, GameWorld, Sector, System};
-    use crate::dat::SectorGroup;
+    use crate::world::ControlKind;
+    use crate::world::{Character, Fleet, GameWorld, Sector, System};
 
     fn tick(n: u64) -> TickEvent {
         TickEvent { tick: n }
@@ -314,7 +342,12 @@ mod tests {
         (world, a_hq, e_hq)
     }
 
-    fn add_fleet(world: &mut GameWorld, system: SystemKey, is_alliance: bool, has_death_star: bool) -> crate::ids::FleetKey {
+    fn add_fleet(
+        world: &mut GameWorld,
+        system: SystemKey,
+        is_alliance: bool,
+        has_death_star: bool,
+    ) -> crate::ids::FleetKey {
         let fk = world.fleets.insert(Fleet {
             location: system,
             capital_ships: vec![],
@@ -327,11 +360,20 @@ mod tests {
         fk
     }
 
+    fn capture_leader(world: &mut GameWorld, name: &str, captured_by: Faction) {
+        world.characters.insert(Character {
+            name: name.to_string(),
+            is_captive: true,
+            captured_by: Some(captured_by),
+            ..Character::default()
+        });
+    }
+
     #[test]
     fn no_outcome_without_ticks() {
         let (world, a, e) = make_world();
         let state = VictoryState::new(a, e);
-        assert!(VictorySystem::check(&state, &world, &[]).is_none());
+        assert!(VictorySystem::check(&state, &world, &[], VictoryConditions::Standard).is_none());
     }
 
     #[test]
@@ -339,39 +381,69 @@ mod tests {
         let (world, a, e) = make_world();
         let mut state = VictoryState::new(a, e);
         state.resolved = true;
-        assert!(VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]).is_none());
+        assert!(VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::Standard
+        )
+        .is_none());
     }
 
     #[test]
     fn no_outcome_no_fleets() {
         let (world, a, e) = make_world();
         let state = VictoryState::new(a, e);
-        assert!(VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]).is_none());
+        assert!(VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::Standard
+        )
+        .is_none());
     }
 
     #[test]
-    fn empire_captures_alliance_hq() {
+    fn headquarters_only_empire_captures_alliance_hq() {
         let (mut world, a, e) = make_world();
         add_fleet(&mut world, a, false, false);
 
         let state = VictoryState::new(a, e);
-        let out = VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]);
+        let out = VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::HeadquartersOnly,
+        );
         assert!(matches!(
             out,
-            Some(VictoryOutcome::HqCaptured { winner: Faction::Empire, loser: Faction::Alliance, .. })
+            Some(VictoryOutcome::HqCaptured {
+                winner: Faction::Empire,
+                loser: Faction::Alliance,
+                ..
+            })
         ));
     }
 
     #[test]
-    fn alliance_captures_empire_hq() {
+    fn headquarters_only_alliance_captures_empire_hq() {
         let (mut world, a, e) = make_world();
         add_fleet(&mut world, e, true, false);
 
         let state = VictoryState::new(a, e);
-        let out = VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]);
+        let out = VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::HeadquartersOnly,
+        );
         assert!(matches!(
             out,
-            Some(VictoryOutcome::HqCaptured { winner: Faction::Alliance, loser: Faction::Empire, .. })
+            Some(VictoryOutcome::HqCaptured {
+                winner: Faction::Alliance,
+                loser: Faction::Empire,
+                ..
+            })
         ));
     }
 
@@ -382,7 +454,13 @@ mod tests {
         add_fleet(&mut world, a, true, false);
 
         let state = VictoryState::new(a, e);
-        assert!(VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]).is_none());
+        assert!(VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::HeadquartersOnly
+        )
+        .is_none());
     }
 
     #[test]
@@ -395,7 +473,12 @@ mod tests {
         state.death_star_active = true;
         state.death_star_location = Some(a);
 
-        let out = VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]);
+        let out = VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::Standard,
+        );
         assert!(matches!(out, Some(VictoryOutcome::DeathStarVictory { .. })));
     }
 
@@ -408,8 +491,16 @@ mod tests {
         state.death_star_active = true;
         state.death_star_location = Some(a);
 
-        let out = VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]);
-        assert!(matches!(out, Some(VictoryOutcome::DeathStarDestroyed { .. })));
+        let out = VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::Standard,
+        );
+        assert!(matches!(
+            out,
+            Some(VictoryOutcome::DeathStarDestroyed { .. })
+        ));
     }
 
     #[test]
@@ -417,6 +508,82 @@ mod tests {
         let (world, a, e) = make_world();
         let state = VictoryState::new(a, e);
         // death_star_active = false by default
-        assert!(VictorySystem::check(&state, &world, &[tick(VictorySystem::MIN_VICTORY_TICK)]).is_none());
+        assert!(VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::Standard
+        )
+        .is_none());
+    }
+
+    #[test]
+    fn standard_hq_capture_waits_for_both_alliance_leaders() {
+        let (mut world, alliance_hq, empire_hq) = make_world();
+        add_fleet(&mut world, alliance_hq, false, false);
+        capture_leader(&mut world, "Luke Skywalker", Faction::Empire);
+
+        let state = VictoryState::new(alliance_hq, empire_hq);
+        let tick = tick(VictorySystem::MIN_VICTORY_TICK);
+        assert!(
+            VictorySystem::check(&state, &world, &[tick], VictoryConditions::Standard,).is_none()
+        );
+
+        capture_leader(&mut world, "Mon Mothma", Faction::Empire);
+        assert!(matches!(
+            VictorySystem::check(&state, &world, &[tick], VictoryConditions::Standard,),
+            Some(VictoryOutcome::HqCaptured {
+                winner: Faction::Empire,
+                ..
+            })
+        ));
+    }
+
+    #[test]
+    fn standard_hq_capture_waits_for_both_empire_leaders() {
+        let (mut world, alliance_hq, empire_hq) = make_world();
+        add_fleet(&mut world, empire_hq, true, false);
+        capture_leader(&mut world, "Emperor Palpatine", Faction::Alliance);
+        capture_leader(&mut world, "Darth Vader", Faction::Empire);
+
+        let state = VictoryState::new(alliance_hq, empire_hq);
+        let tick = tick(VictorySystem::MIN_VICTORY_TICK);
+        assert!(
+            VictorySystem::check(&state, &world, &[tick], VictoryConditions::Standard,).is_none()
+        );
+
+        let vader = world
+            .characters
+            .iter()
+            .find(|(_, character)| character.name == "Darth Vader")
+            .map(|(key, _)| key)
+            .unwrap();
+        world.characters.get_mut(vader).unwrap().captured_by = Some(Faction::Alliance);
+        assert!(matches!(
+            VictorySystem::check(&state, &world, &[tick], VictoryConditions::Standard,),
+            Some(VictoryOutcome::HqCaptured {
+                winner: Faction::Alliance,
+                ..
+            })
+        ));
+    }
+
+    #[test]
+    fn headquarters_only_ignores_death_star_outcomes() {
+        let (mut world, alliance_hq, empire_hq) = make_world();
+        world.systems.get_mut(alliance_hq).unwrap().is_destroyed = true;
+        add_fleet(&mut world, alliance_hq, false, true);
+        add_fleet(&mut world, alliance_hq, true, false);
+        let mut state = VictoryState::new(alliance_hq, empire_hq);
+        state.death_star_active = true;
+        state.death_star_location = Some(alliance_hq);
+
+        assert!(VictorySystem::check(
+            &state,
+            &world,
+            &[tick(VictorySystem::MIN_VICTORY_TICK)],
+            VictoryConditions::HeadquartersOnly,
+        )
+        .is_none());
     }
 }

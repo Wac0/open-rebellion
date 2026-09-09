@@ -1,0 +1,567 @@
+{
+  "url": "http://127.0.0.1:8765",
+  "viewport": {
+    "width": 640,
+    "height": 480
+  },
+  "runs": [
+    {
+      "name": "alliance",
+      "console": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        },
+        {
+          "type": "info",
+          "text": "[campaign] faction=Rebel Alliance configuration=Expert, Small Galaxy, Headquarters Only"
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "initialStorage": [],
+      "coldRequests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "purpose": "preflight coordinate discovery: Large Galaxy click did not select; excluded from acceptance runs"
+    },
+    {
+      "name": "alliance-acceptance",
+      "console": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        },
+        {
+          "type": "info",
+          "text": "[campaign] faction=Rebel Alliance configuration=Expert, Large Galaxy, Headquarters Only"
+        },
+        {
+          "type": "info",
+          "text": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:7ee5e0093d3910e8"
+        },
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        },
+        {
+          "type": "info",
+          "text": "load_state_fingerprint slot=0 tick=0 fingerprint=v1:7ee5e0093d3910e8 verified=true"
+        },
+        {
+          "type": "info",
+          "text": "[campaign] loaded configuration=Expert, Large Galaxy, Headquarters Only"
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "initialStorage": [],
+      "coldRequests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "beforeReloadRequestCount": 4,
+      "loadedStorageKeys": [
+        "rebellion_meta_v11_0",
+        "rebellion_save_v11_0"
+      ],
+      "savedStorageSummary": {
+        "rebellion_save_v11_0": {
+          "length": 103587,
+          "sha256": "037c5f4b3b1d2050af59775c39109230c4953c63b5b0f0b21bb4d2f21b9e9a0c"
+        },
+        "rebellion_meta_v11_0": {
+          "length": 123,
+          "sha256": "70cc89143576758a99f23cd074fe7093c17feaeae281f34d6bb0690e68c26ad3",
+          "value": {
+            "schema_version": 1,
+            "name": "F-016B Astra R2",
+            "game_tick": 0,
+            "state_fingerprint": {
+              "version": 1,
+              "value": "9143960948732137704"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "empire-defaults",
+      "console": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        },
+        {
+          "type": "info",
+          "text": "[campaign] faction=Galactic Empire configuration=Easy, Small Galaxy, Standard Game"
+        }
+      ],
+      "requests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "initialStorage": [],
+      "coldRequests": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "name": "640x480 viewport",
+      "pass": true,
+      "evidence": {
+        "width": 640,
+        "height": 480
+      }
+    },
+    {
+      "name": "Alliance cleared storage",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "Alliance exact configuration",
+      "pass": true,
+      "evidence": {
+        "type": "info",
+        "text": "[campaign] faction=Rebel Alliance configuration=Expert, Large Galaxy, Headquarters Only"
+      }
+    },
+    {
+      "name": "Named UI slot 1",
+      "pass": true,
+      "evidence": {
+        "schema_version": 1,
+        "name": "F-016B Astra R2",
+        "game_tick": 0,
+        "state_fingerprint": {
+          "version": 1,
+          "value": "9143960948732137704"
+        }
+      }
+    },
+    {
+      "name": "Only required save keys",
+      "pass": true,
+      "evidence": [
+        "rebellion_save_v11_0",
+        "rebellion_meta_v11_0"
+      ]
+    },
+    {
+      "name": "Main cockpit load UI",
+      "pass": true,
+      "evidence": "11-main-cockpit-load.png"
+    },
+    {
+      "name": "Loaded exact configuration",
+      "pass": true,
+      "evidence": {
+        "type": "info",
+        "text": "[campaign] loaded configuration=Expert, Large Galaxy, Headquarters Only"
+      }
+    },
+    {
+      "name": "Matching verified fingerprint",
+      "pass": true,
+      "evidence": {
+        "save": {
+          "type": "info",
+          "text": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:7ee5e0093d3910e8"
+        },
+        "load": {
+          "type": "info",
+          "text": "load_state_fingerprint slot=0 tick=0 fingerprint=v1:7ee5e0093d3910e8 verified=true"
+        }
+      }
+    },
+    {
+      "name": "Keys persist after reload/load",
+      "pass": true,
+      "evidence": [
+        "rebellion_meta_v11_0",
+        "rebellion_save_v11_0"
+      ]
+    },
+    {
+      "name": "Empire separate cleared context",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "Empire untouched defaults exact configuration",
+      "pass": true,
+      "evidence": [
+        {
+          "type": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 audio_files=1 bytes=30724745"
+        },
+        {
+          "type": "info",
+          "text": "[campaign] faction=Galactic Empire configuration=Easy, Small Galaxy, Standard Game"
+        }
+      ]
+    },
+    {
+      "name": "alliance cold load four successful requests",
+      "pass": true,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "alliance-acceptance cold load four successful requests",
+      "pass": true,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "empire-defaults cold load four successful requests",
+      "pass": true,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "Reload four successful requests",
+      "pass": true,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:8765/",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/gl.js",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/open-rebellion.wasm",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:8765/data/runtime.orpk",
+          "method": "GET",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "Original cockpit populated",
+      "pass": true,
+      "evidence": [
+        "01-alliance-cold.png",
+        "05-alliance-selected.png",
+        "09-reloaded-cockpit.png",
+        "13-empire-default-cockpit.png"
+      ]
+    },
+    {
+      "name": "Alliance and Empire galaxy populated",
+      "pass": true,
+      "evidence": [
+        "06-alliance-galaxy.png",
+        "12-alliance-loaded-galaxy.png",
+        "14-empire-default-galaxy.png"
+      ]
+    },
+    {
+      "name": "Zero application bridge page request missing-bitmap errors",
+      "pass": true,
+      "evidence": []
+    }
+  ],
+  "actions": {
+    "alliance": [
+      [
+        "Expert",
+        211,
+        57
+      ],
+      [
+        "Large Galaxy",
+        374,
+        305
+      ],
+      [
+        "Headquarters Only",
+        327,
+        350
+      ],
+      [
+        "Alliance",
+        478,
+        337
+      ],
+      [
+        "Save/Load",
+        458,
+        460
+      ],
+      [
+        "slot 1",
+        227,
+        125
+      ],
+      [
+        "name field",
+        306,
+        394
+      ],
+      [
+        "Save",
+        154,
+        426
+      ],
+      [
+        "reload"
+      ],
+      [
+        "main cockpit load",
+        94,
+        414
+      ],
+      [
+        "slot 1",
+        260,
+        138
+      ],
+      [
+        "Load",
+        154,
+        412
+      ]
+    ],
+    "empire": [
+      [
+        "Empire",
+        185,
+        337
+      ]
+    ],
+    "note": "Acceptance clicks used 120ms duration and frame settling. Preflight rapid clicks missed Large Galaxy; separate cleared acceptance run succeeded. Reloaded cockpit click (429,252) had no visible effect before main load control."
+  },
+  "timestamp": "2026-09-09T15:15:49.470Z",
+  "artifacts": [
+    "01-alliance-cold.png",
+    "02-alliance-options.png",
+    "03-alliance-galaxy.png",
+    "04-galaxy-control-hover.png",
+    "05-alliance-selected.png",
+    "06-alliance-galaxy.png",
+    "07-save-dialog.png",
+    "08-slot1-saved.png",
+    "09-reloaded-cockpit.png",
+    "10-cockpit-load-dialog.png",
+    "11-main-cockpit-load.png",
+    "12-alliance-loaded-galaxy.png",
+    "13-empire-default-cockpit.png",
+    "14-empire-default-galaxy.png"
+  ],
+  "summary": {
+    "passed": 18,
+    "failed": 0,
+    "failedGates": [],
+    "safeToCommit": true,
+    "scope": "Browser-artifact F-016B regression only; no repository source/documentation read, edits, or commits."
+  }
+}

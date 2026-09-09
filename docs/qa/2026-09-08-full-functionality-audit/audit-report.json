@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "reference_documents": {
-    "main_menu": "agent_docs/main-menu-parity.md"
+    "main_menu": "agent_docs/main-menu-parity.md",
+    "victory_rules": "agent_docs/systems/victory.md",
+    "original_game_flow": "docs/GAME-FLOW.md#21-victory--defeat"
   },
   "audit": {
     "name": "Open Rebellion Full Functionality Audit",
@@ -568,7 +570,7 @@
       "title": "Browser persistence is not production-safe",
       "evidence": [
         "synchronous base64 bincode localStorage path",
-        "save v10 preserves the currently known continuation envelope, but quota failures and asynchronous migration are not exercised end to end"
+        "save v11 preserves the currently known continuation envelope and original campaign setup, but quota failures and asynchronous migration are not exercised end to end"
       ],
       "acceptance": "Versioned compressed IndexedDB saves round-trip complete state asynchronously, surface quota/corruption errors, and preserve fingerprints."
     },
@@ -581,7 +583,9 @@
         "The browser composes COMMON 20001 with binary-mapped control resources instead of stretching and dimming the empty shell or overlaying replacement text buttons",
         "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented MDATA.302 WebAudio",
         "Astra medium R3 passed 11 of 11 assertions after correcting the R2 URL-plugin ABI diagnostic and stopping music on Quit",
-        "Credits, Multiplayer, Headquarters Only propagation, live difficulty and size persistence, native parity, accessibility, gain/mute, return-to-menu, and second-campaign reset remain open"
+        "F-016B persists faction, difficulty, galaxy size, and game type through save v11 and enforces Standard principal-leader capture versus Headquarters Only rules",
+        "Astra medium F-016B R2 passed 18 of 18 setup, reload, bitmap, storage, network, and error assertions",
+        "Credits, Multiplayer, native parity, accessibility, gain/mute, return-to-menu, and second-campaign reset remain open"
       ],
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
@@ -634,6 +638,56 @@
             "wasm_sha256": "63f984a77002edb29692660da0bb65b1d8fbf495452a18cc88c04584a28029d7"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-cockpit.md"
+        },
+        {
+          "id": "F-016B",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "scope": "campaign setup propagation, save v11 migration and persistence, and Standard versus Headquarters Only victory rules",
+          "workspace_tests": {
+            "passed": 495,
+            "failed": 0,
+            "ignored": 2
+          },
+          "focused_tests": {
+            "victory_passed": 12,
+            "save_passed": 22,
+            "failed": 0
+          },
+          "save": {
+            "version": 11,
+            "v10_positional_migration": "pass",
+            "browser_keys": ["rebellion_save_v11_0", "rebellion_meta_v11_0"],
+            "verified_fingerprint": "v1:7ee5e0093d3910e8"
+          },
+          "browser": {
+            "r1_passed": 13,
+            "r1_failed": 3,
+            "r1_defect": "configuration records used a native stderr path that was not observable in the browser",
+            "r2_passed": 18,
+            "r2_failed": 0,
+            "requests_per_cold_load": 4,
+            "viewports": ["640x480"],
+            "factions": ["Alliance", "Empire"],
+            "console_errors": 0,
+            "page_errors": 0,
+            "failed_requests": 0,
+            "missing_bridge_or_texture_warnings": 0,
+            "bitmap_ui": "pass"
+          },
+          "artifact": {
+            "wasm_bytes": 4628391,
+            "wasm_sha256": "72416bf12663f174a94595ec87fc244c5bb7fa132b00786f7b3d02115fdaabad",
+            "runtime_pack_entries": {
+              "game_data": 52,
+              "bitmaps": 2231,
+              "audio": 1
+            },
+            "runtime_pack_bytes": 30724745,
+            "runtime_pack_sha256": "472c3c8ce7968e34e250bbd97ae1e1cc5830a3d2e08b21ee5dd1d5ce2d4c5a18"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md"
         }
       ],
       "acceptance": "Native and browser reproduce the assembled cockpit, every mapped hover/click/keyboard behavior and selection, direct faction start, MDATA.302 menu music, 4:3 scaling, and all navigation with no blank aperture or missing resource."
@@ -835,13 +889,13 @@
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
         "visible difficulty, galaxy-size, and game-type selections",
-        "direct Alliance and Empire starts without the replacement setup page"
+        "direct Alliance and Empire starts without the replacement setup page",
+        "F-016B save v11 propagation and Standard versus Headquarters Only victory rules"
       ],
       "remaining": [
-        "Headquarters Only victory-rule and save-state propagation",
-        "live observable difficulty and galaxy-size persistence",
         "clean second-campaign reset"
       ],
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md",
       "acceptance": "Three difficulties, three original galaxy sizes, both game types, both faction starts, settings propagation, and clean second-campaign reset pass from the cockpit."
     },
     {"id":"P05","name":"Clock","status":"pending"},

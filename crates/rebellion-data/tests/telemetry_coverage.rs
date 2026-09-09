@@ -15,7 +15,7 @@ use rand::Rng;
 use rand::SeedableRng;
 use rand_xoshiro::Xoshiro256PlusPlus;
 
-use rebellion_core::ai::{AiFaction, AIState};
+use rebellion_core::ai::{AIState, AiFaction};
 use rebellion_core::dat::Faction;
 use rebellion_core::fog::{FogState, FogSystem};
 use rebellion_core::game_events::*;
@@ -49,14 +49,19 @@ const ALL_SYSTEMS: &[&str] = &[
 /// fixture injections cannot reliably guarantee. These emit events in real
 /// games but are hard to trigger deterministically in a 393-tick test.
 const OPTIONAL_SYSTEMS: &[&str] = &[
-    SYS_VICTORY,   // Requires HQ capture or DS fire at enemy HQ — not guaranteed
-    SYS_UPRISING,  // Needs UPRIS1TB table + specific RNG + control stability
-    SYS_BETRAYAL,  // Needs UPRIS1TB table + character survival + RNG alignment
+    SYS_VICTORY,  // Requires HQ capture or DS fire at enemy HQ — not guaranteed
+    SYS_UPRISING, // Needs UPRIS1TB table + specific RNG + control stability
+    SYS_BETRAYAL, // Needs UPRIS1TB table + character survival + RNG alignment
 ];
 
 fn data_dir() -> PathBuf {
     let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    manifest.parent().unwrap().parent().unwrap().join("data/base")
+    manifest
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .join("data/base")
 }
 
 #[test]
@@ -121,6 +126,7 @@ fn telemetry_coverage_all_sys_constants_emit() {
         economy: rebellion_core::economy::EconomyState::default(),
         repair: rebellion_core::repair::RepairState,
         combat_cooldowns: HashMap::new(),
+        campaign_config: rebellion_core::world::CampaignConfig::default(),
     };
 
     // Seed fog and story events
@@ -134,21 +140,21 @@ fn telemetry_coverage_all_sys_constants_emit() {
     // Set BOTH popularities low so that even if economy flips control, loyalty
     // remains below threshold for whichever faction ends up controlling it.
     for (_, sys) in world.systems.iter_mut() {
-        if sys.control.is_controlled_by(Faction::Empire)
-            && !sys.is_headquarters
-            && sys.is_populated
+        if sys.control.is_controlled_by(Faction::Empire) && !sys.is_headquarters && sys.is_populated
         {
-            sys.popularity_empire = 0.05;    // loyalty if Empire controls: -45
-            sys.popularity_alliance = 0.05;  // loyalty if Alliance controls: -45
+            sys.popularity_empire = 0.05; // loyalty if Empire controls: -45
+            sys.popularity_alliance = 0.05; // loyalty if Alliance controls: -45
             break;
         }
     }
 
     // DEATH STAR: Start construction with 100 ticks remaining (enough time for
     // uprising and betrayal to fire before DS completion triggers victory)
-    if let Some((sys_key, _)) = world.systems.iter().find(|(_, s)| {
-        s.control.is_controlled_by(Faction::Empire) && !s.is_headquarters
-    }) {
+    if let Some((sys_key, _)) = world
+        .systems
+        .iter()
+        .find(|(_, s)| s.control.is_controlled_by(Faction::Empire) && !s.is_headquarters)
+    {
         states.death_star.under_construction =
             Some(rebellion_core::death_star::DeathStarConstruction {
                 system: sys_key,
@@ -198,8 +204,7 @@ fn telemetry_coverage_all_sys_constants_emit() {
         "\n=== Telemetry Coverage Report ({} total events) ===",
         total_events
     );
-    let optional: std::collections::HashSet<&str> =
-        OPTIONAL_SYSTEMS.iter().copied().collect();
+    let optional: std::collections::HashSet<&str> = OPTIONAL_SYSTEMS.iter().copied().collect();
     let mut missing_required = Vec::new();
     let mut missing_optional = Vec::new();
 

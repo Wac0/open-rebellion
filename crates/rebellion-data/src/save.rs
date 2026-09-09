@@ -1,6 +1,6 @@
 //! Save / load for the full game state.
 //!
-//! # Format (v10)
+//! # Format (v11)
 //!
 //! Binary `bincode` encoding. A save file is:
 //!
@@ -62,7 +62,7 @@ use rebellion_core::tick::GameClock;
 use rebellion_core::tuning::GameConfig;
 use rebellion_core::uprising::UprisingState;
 use rebellion_core::victory::VictoryState;
-use rebellion_core::world::GameWorld;
+use rebellion_core::world::{CampaignConfig, GameWorld};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -76,7 +76,8 @@ pub const SAVE_MAGIC: &[u8; 8] = b"OPENREB\0";
 /// v9: Header gained a versioned fingerprint of the logical `SaveState`.
 /// v10: Body gained deterministic continuation state (RNG, second AI, repair,
 /// combat cooldowns, and tuning configuration).
-pub const SAVE_VERSION: u32 = 10;
+/// v11: Body gained the original new-game campaign configuration.
+pub const SAVE_VERSION: u32 = 11;
 
 /// Current state-fingerprint algorithm version.
 ///
@@ -105,7 +106,11 @@ pub fn compute_mod_hash(mods: &[(String, String)]) -> u64 {
     sorted.sort();
     let mut hash: u64 = 0xcbf29ce484222325; // FNV-1a offset basis
     for (name, version) in &sorted {
-        for byte in name.bytes().chain(b":".iter().copied()).chain(version.bytes()) {
+        for byte in name
+            .bytes()
+            .chain(b":".iter().copied())
+            .chain(version.bytes())
+        {
             hash ^= byte as u64;
             hash = hash.wrapping_mul(0x100000001b3); // FNV-1a prime
         }
@@ -134,12 +139,7 @@ impl std::fmt::Display for StateFingerprint {
     }
 }
 
-const UNORDERED_SET_FIELDS: &[&str] = &[
-    "blockaded",
-    "busy_characters",
-    "fired_ids",
-    "visible",
-];
+const UNORDERED_SET_FIELDS: &[&str] = &["blockaded", "busy_characters", "fired_ids", "visible"];
 
 /// In v9 these typed-key maps used serde's native JSON map representation.
 /// The only representable shape was an empty object; non-empty slotmap keys
@@ -155,10 +155,7 @@ const LEGACY_V9_TYPED_MAP_FIELDS: &[&str] = &[
     "queues",
 ];
 
-fn restore_legacy_v9_empty_map_shapes(
-    value: &mut serde_json::Value,
-    field_name: Option<&str>,
-) {
+fn restore_legacy_v9_empty_map_shapes(value: &mut serde_json::Value, field_name: Option<&str>) {
     match value {
         serde_json::Value::Object(fields) => {
             for (name, child) in fields {
@@ -289,6 +286,104 @@ pub struct SaveState {
     pub combat_cooldowns: std::collections::HashMap<SystemKey, u64>,
     /// Tuning parameters used by the simulation that produced this state.
     pub game_config: GameConfig,
+    /// Original difficulty, galaxy-size, faction, and victory-condition choices.
+    pub campaign_config: CampaignConfig,
+}
+
+/// Exact v10 body. Keep this separate: bincode is positional, so appending a
+/// field to `SaveState` cannot be migrated through serde defaults.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct SaveStateV10 {
+    world: GameWorld,
+    clock: GameClock,
+    manufacturing: ManufacturingState,
+    missions: MissionState,
+    events: EventState,
+    ai: AIState,
+    movement: MovementState,
+    fog_alliance: FogState,
+    fog_empire: FogState,
+    player_is_alliance: bool,
+    blockade: BlockadeState,
+    uprising: UprisingState,
+    death_star: DeathStarState,
+    research: ResearchState,
+    jedi: JediState,
+    victory: VictoryState,
+    betrayal: BetrayalState,
+    economy: EconomyState,
+    sim_rng: Xoshiro256PlusPlus,
+    ai2: Option<AIState>,
+    repair: RepairState,
+    #[serde(
+        serialize_with = "rebellion_core::serde_ordered::serialize_hash_map",
+        deserialize_with = "rebellion_core::serde_ordered::deserialize_hash_map"
+    )]
+    combat_cooldowns: std::collections::HashMap<SystemKey, u64>,
+    game_config: GameConfig,
+}
+
+impl From<SaveStateV10> for SaveState {
+    fn from(legacy: SaveStateV10) -> Self {
+        let campaign_config =
+            CampaignConfig::from_legacy_world(&legacy.world, legacy.player_is_alliance);
+        Self {
+            world: legacy.world,
+            clock: legacy.clock,
+            manufacturing: legacy.manufacturing,
+            missions: legacy.missions,
+            events: legacy.events,
+            ai: legacy.ai,
+            movement: legacy.movement,
+            fog_alliance: legacy.fog_alliance,
+            fog_empire: legacy.fog_empire,
+            player_is_alliance: legacy.player_is_alliance,
+            blockade: legacy.blockade,
+            uprising: legacy.uprising,
+            death_star: legacy.death_star,
+            research: legacy.research,
+            jedi: legacy.jedi,
+            victory: legacy.victory,
+            betrayal: legacy.betrayal,
+            economy: legacy.economy,
+            sim_rng: legacy.sim_rng,
+            ai2: legacy.ai2,
+            repair: legacy.repair,
+            combat_cooldowns: legacy.combat_cooldowns,
+            game_config: legacy.game_config,
+            campaign_config,
+        }
+    }
+}
+
+impl From<&SaveState> for SaveStateV10 {
+    fn from(current: &SaveState) -> Self {
+        Self {
+            world: current.world.clone(),
+            clock: current.clock.clone(),
+            manufacturing: current.manufacturing.clone(),
+            missions: current.missions.clone(),
+            events: current.events.clone(),
+            ai: current.ai.clone(),
+            movement: current.movement.clone(),
+            fog_alliance: current.fog_alliance.clone(),
+            fog_empire: current.fog_empire.clone(),
+            player_is_alliance: current.player_is_alliance,
+            blockade: current.blockade.clone(),
+            uprising: current.uprising.clone(),
+            death_star: current.death_star.clone(),
+            research: current.research.clone(),
+            jedi: current.jedi.clone(),
+            victory: current.victory.clone(),
+            betrayal: current.betrayal.clone(),
+            economy: current.economy.clone(),
+            sim_rng: current.sim_rng.clone(),
+            ai2: current.ai2.clone(),
+            repair: current.repair.clone(),
+            combat_cooldowns: current.combat_cooldowns.clone(),
+            game_config: current.game_config.clone(),
+        }
+    }
 }
 
 /// Body layout shared by v8 and v9 saves. Bincode is positional, so legacy
@@ -317,6 +412,8 @@ struct SaveStateV9 {
 
 impl From<SaveStateV9> for SaveState {
     fn from(legacy: SaveStateV9) -> Self {
+        let campaign_config =
+            CampaignConfig::from_legacy_world(&legacy.world, legacy.player_is_alliance);
         Self {
             world: legacy.world,
             clock: legacy.clock,
@@ -341,6 +438,7 @@ impl From<SaveStateV9> for SaveState {
             repair: RepairState::default(),
             combat_cooldowns: std::collections::HashMap::new(),
             game_config: GameConfig::default(),
+            campaign_config,
         }
     }
 }
@@ -450,8 +548,7 @@ mod native {
             .with_context(|| format!("creating save file {}", path.display()))?;
 
         // ── Header ──────────────────────────────────────────────────────────
-        file.write_all(SAVE_MAGIC)
-            .context("writing save magic")?;
+        file.write_all(SAVE_MAGIC).context("writing save magic")?;
         file.write_all(&SAVE_VERSION.to_le_bytes())
             .context("writing save version")?;
 
@@ -459,8 +556,7 @@ mod native {
         let name_bytes = name.as_bytes();
         file.write_all(&(name_bytes.len() as u32).to_le_bytes())
             .context("writing name length")?;
-        file.write_all(name_bytes)
-            .context("writing name")?;
+        file.write_all(name_bytes).context("writing name")?;
 
         // Timestamp
         let timestamp = std::time::SystemTime::now()
@@ -477,13 +573,11 @@ mod native {
             let nb = mod_name.as_bytes();
             file.write_all(&(nb.len() as u32).to_le_bytes())
                 .context("writing mod name length")?;
-            file.write_all(nb)
-                .context("writing mod name")?;
+            file.write_all(nb).context("writing mod name")?;
             let vb = mod_version.as_bytes();
             file.write_all(&(vb.len() as u32).to_le_bytes())
                 .context("writing mod version length")?;
-            file.write_all(vb)
-                .context("writing mod version")?;
+            file.write_all(vb).context("writing mod version")?;
         }
         let mod_hash = compute_mod_hash(active_mods);
         file.write_all(&mod_hash.to_le_bytes())
@@ -496,8 +590,7 @@ mod native {
             .context("writing state fingerprint")?;
 
         // ── Body ────────────────────────────────────────────────────────────
-        file.write_all(&encoded)
-            .context("writing save body")?;
+        file.write_all(&encoded).context("writing save body")?;
 
         Ok(state_fingerprint)
     }
@@ -531,26 +624,30 @@ mod native {
         );
 
         let mut version_buf = [0u8; 4];
-        file.read_exact(&mut version_buf).context("reading version")?;
+        file.read_exact(&mut version_buf)
+            .context("reading version")?;
         let version = u32::from_le_bytes(version_buf);
 
         // ── Version gate ────────────────────────────────────────────────────
         if version > SAVE_VERSION {
             anyhow::bail!(
                 "save version {} is from a newer build (this build supports up to {})",
-                version, SAVE_VERSION
+                version,
+                SAVE_VERSION
             );
         }
         if version < MIN_MIGRATABLE_VERSION {
             anyhow::bail!(
                 "save version {} is too old to migrate (minimum supported: {})",
-                version, MIN_MIGRATABLE_VERSION
+                version,
+                MIN_MIGRATABLE_VERSION
             );
         }
 
         // ── Name + timestamp (present in all versions) ──────────────────────
         let mut name_len_buf = [0u8; 4];
-        file.read_exact(&mut name_len_buf).context("reading name length")?;
+        file.read_exact(&mut name_len_buf)
+            .context("reading name length")?;
         let name_len = u32::from_le_bytes(name_len_buf) as usize;
         let mut name_bytes = vec![0u8; name_len];
         file.read_exact(&mut name_bytes).context("reading name")?;
@@ -563,25 +660,29 @@ mod native {
         // ── Mod metadata (v4+) ──────────────────────────────────────────────
         let (mod_names, mod_hash) = if version >= 4 {
             let mut count_buf = [0u8; 4];
-            file.read_exact(&mut count_buf).context("reading mod count")?;
+            file.read_exact(&mut count_buf)
+                .context("reading mod count")?;
             let mod_count = u32::from_le_bytes(count_buf) as usize;
 
             let mut names = Vec::with_capacity(mod_count);
             for _ in 0..mod_count {
                 let mut len_buf = [0u8; 4];
-                file.read_exact(&mut len_buf).context("reading mod name length")?;
+                file.read_exact(&mut len_buf)
+                    .context("reading mod name length")?;
                 let len = u32::from_le_bytes(len_buf) as usize;
                 let mut bytes = vec![0u8; len];
                 file.read_exact(&mut bytes).context("reading mod name")?;
                 let mod_name = String::from_utf8(bytes).context("invalid mod name encoding")?;
 
-                file.read_exact(&mut len_buf).context("reading mod version length")?;
+                file.read_exact(&mut len_buf)
+                    .context("reading mod version length")?;
                 let vlen = u32::from_le_bytes(len_buf) as usize;
                 let mut vbytes = vec![0u8; vlen];
-                file.read_exact(&mut vbytes).context("reading mod version")?;
+                file.read_exact(&mut vbytes)
+                    .context("reading mod version")?;
                 // We store name only in meta; version is folded into the hash.
-                let _mod_version = String::from_utf8(vbytes)
-                    .context("invalid mod version encoding")?;
+                let _mod_version =
+                    String::from_utf8(vbytes).context("invalid mod version encoding")?;
 
                 names.push(mod_name);
             }
@@ -628,8 +729,7 @@ mod native {
             SAVE_VERSION => {
                 let state: SaveState =
                     bincode::deserialize(&body).context("deserializing save state")?;
-                let fingerprint =
-                    compute_serializable_fingerprint_for_version(version, &state)?;
+                let fingerprint = compute_serializable_fingerprint_for_version(version, &state)?;
                 if let Some(expected) = expected_fingerprint {
                     anyhow::ensure!(
                         expected == fingerprint,
@@ -639,6 +739,23 @@ mod native {
                     );
                 }
                 (state, fingerprint, expected_fingerprint.is_some())
+            }
+            10 => {
+                let legacy: SaveStateV10 =
+                    bincode::deserialize(&body).context("deserializing v10 save state")?;
+                if let Some(expected) = expected_fingerprint {
+                    let legacy_fingerprint =
+                        compute_serializable_fingerprint_for_version(version, &legacy)?;
+                    anyhow::ensure!(
+                        expected == legacy_fingerprint,
+                        "save state fingerprint mismatch: expected {}, computed {}",
+                        expected,
+                        legacy_fingerprint
+                    );
+                }
+                let state = SaveState::from(legacy);
+                let fingerprint = compute_state_fingerprint(&state)?;
+                (state, fingerprint, false)
             }
             9 | 8 => {
                 let legacy: SaveStateV9 =
@@ -819,8 +936,12 @@ pub mod wasm_impl {
             let triple = (b0 << 16) | (b1 << 8) | b2;
             out.push(CHARS[((triple >> 18) & 0x3F) as usize] as char);
             out.push(CHARS[((triple >> 12) & 0x3F) as usize] as char);
-            if chunk.len() > 1 { out.push(CHARS[((triple >> 6) & 0x3F) as usize] as char); }
-            if chunk.len() > 2 { out.push(CHARS[(triple & 0x3F) as usize] as char); }
+            if chunk.len() > 1 {
+                out.push(CHARS[((triple >> 6) & 0x3F) as usize] as char);
+            }
+            if chunk.len() > 2 {
+                out.push(CHARS[(triple & 0x3F) as usize] as char);
+            }
         }
         out
     }
@@ -841,28 +962,36 @@ pub mod wasm_impl {
         let bytes: Vec<u8> = s.bytes().filter(|b| *b != b'\n' && *b != b'\r').collect();
         let mut out = Vec::with_capacity(bytes.len() * 3 / 4);
         for chunk in bytes.chunks(4) {
-            if chunk.len() < 2 { break; }
+            if chunk.len() < 2 {
+                break;
+            }
             let a = val(chunk[0])? as u32;
             let b = val(chunk[1])? as u32;
-            let c = if chunk.len() > 2 { val(chunk[2])? as u32 } else { 0 };
-            let d = if chunk.len() > 3 { val(chunk[3])? as u32 } else { 0 };
+            let c = if chunk.len() > 2 {
+                val(chunk[2])? as u32
+            } else {
+                0
+            };
+            let d = if chunk.len() > 3 {
+                val(chunk[3])? as u32
+            } else {
+                0
+            };
             let triple = (a << 18) | (b << 12) | (c << 6) | d;
             out.push((triple >> 16) as u8);
-            if chunk.len() > 2 && chunk[2] != b'=' { out.push((triple >> 8) as u8); }
-            if chunk.len() > 3 && chunk[3] != b'=' { out.push(triple as u8); }
+            if chunk.len() > 2 && chunk[2] != b'=' {
+                out.push((triple >> 8) as u8);
+            }
+            if chunk.len() > 3 && chunk[3] != b'=' {
+                out.push(triple as u8);
+            }
         }
         Ok(out)
     }
 
     fn storage_set(key: &str, value: &str) -> anyhow::Result<()> {
-        let status = unsafe {
-            rebellion_storage_set(
-                key.as_ptr(),
-                key.len(),
-                value.as_ptr(),
-                value.len(),
-            )
-        };
+        let status =
+            unsafe { rebellion_storage_set(key.as_ptr(), key.len(), value.as_ptr(), value.len()) };
         if status == 0 {
             Ok(())
         } else {
@@ -871,9 +1000,8 @@ pub mod wasm_impl {
     }
 
     fn storage_get(key: &str) -> anyhow::Result<Option<String>> {
-        let required = unsafe {
-            rebellion_storage_get(key.as_ptr(), key.len(), std::ptr::null_mut(), 0)
-        };
+        let required =
+            unsafe { rebellion_storage_get(key.as_ptr(), key.len(), std::ptr::null_mut(), 0) };
         match required {
             -1 => return Ok(None),
             n if n < 0 => anyhow::bail!("localStorage.getItem failed"),
@@ -882,12 +1010,7 @@ pub mod wasm_impl {
 
         let mut bytes = vec![0; required as usize];
         let written = unsafe {
-            rebellion_storage_get(
-                key.as_ptr(),
-                key.len(),
-                bytes.as_mut_ptr(),
-                bytes.len(),
-            )
+            rebellion_storage_get(key.as_ptr(), key.len(), bytes.as_mut_ptr(), bytes.len())
         };
         if written < 0 || written as usize != bytes.len() {
             anyhow::bail!("localStorage value changed while being read")
@@ -910,10 +1033,14 @@ pub mod wasm_impl {
     /// from older builds get rejected cleanly instead of attempting an
     /// inoperable bincode deserialize.
     fn slot_key(slot: usize) -> String {
+        format!("rebellion_save_v11_{}", slot)
+    }
+
+    fn v10_slot_key(slot: usize) -> String {
         format!("rebellion_save_v10_{}", slot)
     }
 
-    fn legacy_slot_key(slot: usize) -> String {
+    fn v9_slot_key(slot: usize) -> String {
         format!("rebellion_save_v9_{}", slot)
     }
 
@@ -921,10 +1048,14 @@ pub mod wasm_impl {
     ///
     /// Prefix is bumped per save format version (see [`slot_key`]).
     fn meta_key(slot: usize) -> String {
+        format!("rebellion_meta_v11_{}", slot)
+    }
+
+    fn v10_meta_key(slot: usize) -> String {
         format!("rebellion_meta_v10_{}", slot)
     }
 
-    fn legacy_meta_key(slot: usize) -> String {
+    fn v9_meta_key(slot: usize) -> String {
         format!("rebellion_meta_v9_{}", slot)
     }
 
@@ -977,17 +1108,18 @@ pub mod wasm_impl {
         save_slot(saves_dir, slot, name, state, &[])
     }
 
-    pub fn load_slot(
-        _saves_dir: &Path,
-        slot: usize,
-    ) -> anyhow::Result<(SaveMeta, SaveState)> {
+    pub fn load_slot(_saves_dir: &Path, slot: usize) -> anyhow::Result<(SaveMeta, SaveState)> {
         let (save_version, b64, meta_encoded) = if let Some(body) = storage_get(&slot_key(slot))? {
             let meta = storage_get(&meta_key(slot))?
                 .ok_or_else(|| anyhow::anyhow!("save metadata missing for slot {}", slot))?;
             (SAVE_VERSION, body, meta)
-        } else if let Some(body) = storage_get(&legacy_slot_key(slot))? {
-            let meta = storage_get(&legacy_meta_key(slot))?
-                .ok_or_else(|| anyhow::anyhow!("legacy save metadata missing for slot {}", slot))?;
+        } else if let Some(body) = storage_get(&v10_slot_key(slot))? {
+            let meta = storage_get(&v10_meta_key(slot))?
+                .ok_or_else(|| anyhow::anyhow!("v10 save metadata missing for slot {}", slot))?;
+            (10, body, meta)
+        } else if let Some(body) = storage_get(&v9_slot_key(slot))? {
+            let meta = storage_get(&v9_meta_key(slot))?
+                .ok_or_else(|| anyhow::anyhow!("v9 save metadata missing for slot {}", slot))?;
             (9, body, meta)
         } else {
             anyhow::bail!("no save in slot {}", slot);
@@ -1005,6 +1137,19 @@ pub mod wasm_impl {
                 fingerprint
             );
             (state, fingerprint, true)
+        } else if save_version == 10 {
+            let legacy: SaveStateV10 = bincode::deserialize(&bytes)?;
+            let legacy_fingerprint =
+                compute_serializable_fingerprint_for_version(save_version, &legacy)?;
+            anyhow::ensure!(
+                expected_fingerprint == legacy_fingerprint,
+                "save state fingerprint mismatch: expected {}, computed {}",
+                expected_fingerprint,
+                legacy_fingerprint
+            );
+            let state = SaveState::from(legacy);
+            let fingerprint = compute_state_fingerprint(&state)?;
+            (state, fingerprint, false)
         } else {
             let legacy: SaveStateV9 = bincode::deserialize(&bytes)?;
             let legacy_fingerprint =
@@ -1039,8 +1184,12 @@ pub mod wasm_impl {
             .filter_map(|slot| {
                 let encoded = match storage_get(&meta_key(slot)) {
                     Ok(Some(encoded)) => Ok(Some((encoded, true))),
-                    Ok(None) => storage_get(&legacy_meta_key(slot))
-                        .map(|legacy| legacy.map(|encoded| (encoded, false))),
+                    Ok(None) => match storage_get(&v10_meta_key(slot)) {
+                        Ok(Some(encoded)) => Ok(Some((encoded, false))),
+                        Ok(None) => storage_get(&v9_meta_key(slot))
+                            .map(|legacy| legacy.map(|encoded| (encoded, false))),
+                        Err(error) => Err(error),
+                    },
                     Err(error) => Err(error),
                 };
                 match encoded {
@@ -1067,8 +1216,10 @@ pub mod wasm_impl {
     pub fn delete_slot(_saves_dir: &Path, slot: usize) -> anyhow::Result<()> {
         storage_remove(&slot_key(slot))?;
         storage_remove(&meta_key(slot))?;
-        storage_remove(&legacy_slot_key(slot))?;
-        storage_remove(&legacy_meta_key(slot))?;
+        storage_remove(&v10_slot_key(slot))?;
+        storage_remove(&v10_meta_key(slot))?;
+        storage_remove(&v9_slot_key(slot))?;
+        storage_remove(&v9_meta_key(slot))?;
         Ok(())
     }
 }
@@ -1098,34 +1249,54 @@ mod tests {
             dat_id: rebellion_core::ids::DatId::new(0x9200_0000),
             name: "Test".into(),
             group: rebellion_core::dat::SectorGroup::Core,
-            x: 0, y: 0, systems: vec![],
+            x: 0,
+            y: 0,
+            systems: vec![],
         });
         let sys_a = world.systems.insert(rebellion_core::world::System {
             dat_id: rebellion_core::ids::DatId::new(0x9000_0000),
-            name: "A".into(), sector: sector_key, x: 0, y: 0,
+            name: "A".into(),
+            sector: sector_key,
+            x: 0,
+            y: 0,
             exploration_status: rebellion_core::dat::ExplorationStatus::Explored,
-            popularity_alliance: 0.5, popularity_empire: 0.5,
+            popularity_alliance: 0.5,
+            popularity_empire: 0.5,
             is_populated: true,
             total_energy: 0,
             raw_materials: 0,
-            fleets: vec![], ground_units: vec![], special_forces: vec![],
-            defense_facilities: vec![], manufacturing_facilities: vec![],
-            production_facilities: vec![], is_headquarters: true,
-            is_destroyed: false, control: ControlKind::Controlled(Faction::Alliance),
+            fleets: vec![],
+            ground_units: vec![],
+            special_forces: vec![],
+            defense_facilities: vec![],
+            manufacturing_facilities: vec![],
+            production_facilities: vec![],
+            is_headquarters: true,
+            is_destroyed: false,
+            control: ControlKind::Controlled(Faction::Alliance),
             espionage_rating: 0.0,
         });
         let sys_b = world.systems.insert(rebellion_core::world::System {
             dat_id: rebellion_core::ids::DatId::new(0x9000_0001),
-            name: "B".into(), sector: sector_key, x: 100, y: 100,
+            name: "B".into(),
+            sector: sector_key,
+            x: 100,
+            y: 100,
             exploration_status: rebellion_core::dat::ExplorationStatus::Explored,
-            popularity_alliance: 0.5, popularity_empire: 0.5,
+            popularity_alliance: 0.5,
+            popularity_empire: 0.5,
             is_populated: true,
             total_energy: 0,
             raw_materials: 0,
-            fleets: vec![], ground_units: vec![], special_forces: vec![],
-            defense_facilities: vec![], manufacturing_facilities: vec![],
-            production_facilities: vec![], is_headquarters: true,
-            is_destroyed: false, control: ControlKind::Controlled(Faction::Empire),
+            fleets: vec![],
+            ground_units: vec![],
+            special_forces: vec![],
+            defense_facilities: vec![],
+            manufacturing_facilities: vec![],
+            production_facilities: vec![],
+            is_headquarters: true,
+            is_destroyed: false,
+            control: ControlKind::Controlled(Faction::Empire),
             espionage_rating: 0.0,
         });
         SaveState {
@@ -1152,6 +1323,7 @@ mod tests {
             repair: RepairState::default(),
             combat_cooldowns: std::collections::HashMap::new(),
             game_config: GameConfig::default(),
+            campaign_config: CampaignConfig::default(),
         }
     }
 
@@ -1171,7 +1343,8 @@ mod tests {
         file.write_all(SAVE_MAGIC).unwrap();
         file.write_all(&3u32.to_le_bytes()).unwrap(); // version = 3
         let name_bytes = name.as_bytes();
-        file.write_all(&(name_bytes.len() as u32).to_le_bytes()).unwrap();
+        file.write_all(&(name_bytes.len() as u32).to_le_bytes())
+            .unwrap();
         file.write_all(name_bytes).unwrap();
         let timestamp: u64 = 1700000000; // fixed timestamp for reproducibility
         file.write_all(&timestamp.to_le_bytes()).unwrap();
@@ -1181,19 +1354,37 @@ mod tests {
     }
 
     /// Write a save file with an arbitrary version number (for rejection tests).
-    fn write_versioned_fixture(path: &std::path::Path, version: u32, name: &str, state: &SaveState) {
+    fn write_versioned_fixture(
+        path: &std::path::Path,
+        version: u32,
+        name: &str,
+        state: &SaveState,
+    ) {
         let mut file = std::fs::File::create(path).expect("create versioned fixture");
         file.write_all(SAVE_MAGIC).unwrap();
         file.write_all(&version.to_le_bytes()).unwrap();
         let name_bytes = name.as_bytes();
-        file.write_all(&(name_bytes.len() as u32).to_le_bytes()).unwrap();
+        file.write_all(&(name_bytes.len() as u32).to_le_bytes())
+            .unwrap();
         file.write_all(name_bytes).unwrap();
         let timestamp: u64 = 1700000000;
         file.write_all(&timestamp.to_le_bytes()).unwrap();
         if version >= 4 {
             file.write_all(&0u32.to_le_bytes()).unwrap(); // empty mod list
-            file.write_all(&compute_mod_hash(&[]).to_le_bytes()).unwrap();
+            file.write_all(&compute_mod_hash(&[]).to_le_bytes())
+                .unwrap();
         }
+        if version == 10 {
+            let legacy = SaveStateV10::from(state);
+            let fingerprint = compute_serializable_fingerprint_for_version(version, &legacy)
+                .expect("fingerprint v10 body");
+            file.write_all(&fingerprint.version.to_le_bytes()).unwrap();
+            file.write_all(&fingerprint.value.to_le_bytes()).unwrap();
+            let encoded = bincode::serialize(&legacy).expect("serialize v10 body");
+            file.write_all(&encoded).unwrap();
+            return;
+        }
+
         let legacy = SaveStateV9::from(state);
         if version >= 9 {
             let fingerprint = compute_serializable_fingerprint_for_version(version, &legacy)
@@ -1212,11 +1403,9 @@ mod tests {
         let saves_dir = tmp_dir("round_trip_v5");
 
         let state = minimal_save_state();
-        save_slot(&saves_dir, 0, "Test Save", &state, &[])
-            .expect("save should succeed");
+        save_slot(&saves_dir, 0, "Test Save", &state, &[]).expect("save should succeed");
 
-        let (meta, loaded) = load_slot(&saves_dir, 0)
-            .expect("load should succeed");
+        let (meta, loaded) = load_slot(&saves_dir, 0).expect("load should succeed");
 
         assert_eq!(meta.slot, 0);
         assert_eq!(meta.name, "Test Save");
@@ -1231,7 +1420,7 @@ mod tests {
 
     #[test]
     fn round_trip_preserves_deterministic_continuation_envelope() {
-        let saves_dir = tmp_dir("continuation_envelope_v10");
+        let saves_dir = tmp_dir("continuation_envelope_v11");
         let mut state = minimal_save_state();
         state.sim_rng = Xoshiro256PlusPlus::seed_from_u64(0x5eed);
         state.ai2 = Some(AIState::new(AiFaction::Alliance));
@@ -1239,6 +1428,10 @@ mod tests {
         let system = state.world.systems.keys().next().unwrap();
         state.combat_cooldowns.insert(system, 61);
         state.game_config.ai.tick_interval = 13;
+        state.campaign_config.galaxy_size = rebellion_core::dat::GalaxySize::Huge;
+        state.campaign_config.difficulty = rebellion_core::world::SeedDifficulty::Hard;
+        state.campaign_config.victory_conditions =
+            rebellion_core::world::VictoryConditions::HeadquartersOnly;
 
         save_slot(&saves_dir, 0, "Continuation", &state, &[]).unwrap();
         let mut uninterrupted_rng = state.sim_rng.clone();
@@ -1256,6 +1449,7 @@ mod tests {
         assert_eq!(loaded.ai2.as_ref().unwrap().last_eval_tick, 77);
         assert_eq!(loaded.combat_cooldowns.get(&system), Some(&61));
         assert_eq!(loaded.game_config.ai.tick_interval, 13);
+        assert_eq!(loaded.campaign_config, state.campaign_config);
     }
 
     #[test]
@@ -1324,6 +1518,9 @@ mod tests {
         rng_changed.sim_rng.next_u64();
         let mut config_changed = original.clone();
         config_changed.game_config.ai.tick_interval += 1;
+        let mut campaign_changed = original.clone();
+        campaign_changed.campaign_config.victory_conditions =
+            rebellion_core::world::VictoryConditions::HeadquartersOnly;
 
         let original_fingerprint = compute_state_fingerprint(&original).unwrap();
         assert_ne!(
@@ -1333,6 +1530,10 @@ mod tests {
         assert_ne!(
             original_fingerprint,
             compute_state_fingerprint(&config_changed).unwrap()
+        );
+        assert_ne!(
+            original_fingerprint,
+            compute_state_fingerprint(&campaign_changed).unwrap()
         );
     }
 
@@ -1345,15 +1546,7 @@ mod tests {
 
         let path = slot_path(&saves_dir, 0);
         let mut bytes = std::fs::read(&path).unwrap();
-        let body_offset = SAVE_MAGIC.len()
-            + 4
-            + 4
-            + SAVE_NAME.len()
-            + 8
-            + 4
-            + 8
-            + 2
-            + 8;
+        let body_offset = SAVE_MAGIC.len() + 4 + 4 + SAVE_NAME.len() + 8 + 4 + 8 + 2 + 8;
         let mut changed = state.clone();
         changed.clock.tick = 1;
         bytes.truncate(body_offset);
@@ -1395,6 +1588,35 @@ mod tests {
     }
 
     #[test]
+    fn v10_save_migrates_campaign_setup_from_world() {
+        let saves_dir = tmp_dir("v10_campaign_config_compatibility");
+        let mut state = minimal_save_state();
+        state.player_is_alliance = false;
+        state.world.difficulty_index = 6;
+        let path = slot_path(&saves_dir, 0);
+        write_versioned_fixture(&path, 10, "V10 Save", &state);
+
+        let (meta, loaded) = load_slot(&saves_dir, 0).expect("v10 save should migrate");
+        assert_eq!(
+            loaded.campaign_config.player_faction,
+            rebellion_core::dat::Faction::Empire
+        );
+        assert_eq!(
+            loaded.campaign_config.difficulty,
+            rebellion_core::world::SeedDifficulty::Hard
+        );
+        assert_eq!(
+            loaded.campaign_config.galaxy_size,
+            rebellion_core::dat::GalaxySize::Standard
+        );
+        assert_eq!(
+            loaded.campaign_config.victory_conditions,
+            rebellion_core::world::VictoryConditions::Standard
+        );
+        assert!(!meta.fingerprint_verified);
+    }
+
+    #[test]
     fn loads_v9_artifact_written_by_previous_release() {
         let saves_dir = tmp_dir("v9_historical_artifact");
         let path = slot_path(&saves_dir, 0);
@@ -1407,8 +1629,8 @@ mod tests {
         )
         .unwrap();
 
-        let (meta, mut loaded) = load_slot(&saves_dir, 0)
-            .expect("the previously released v9 artifact must migrate");
+        let (meta, mut loaded) =
+            load_slot(&saves_dir, 0).expect("the previously released v9 artifact must migrate");
         let mut default_rng = Xoshiro256PlusPlus::seed_from_u64(0);
 
         assert_eq!(meta.name, "Test Save");
@@ -1496,11 +1718,9 @@ mod tests {
         let state = minimal_save_state();
         let mods = vec![("TestMod".to_string(), "1.0".to_string())];
 
-        save_slot(&saves_dir, 0, "Modded", &state, &mods)
-            .expect("save with mods should succeed");
+        save_slot(&saves_dir, 0, "Modded", &state, &mods).expect("save with mods should succeed");
 
-        let (meta, _) = load_slot(&saves_dir, 0)
-            .expect("load modded save should succeed");
+        let (meta, _) = load_slot(&saves_dir, 0).expect("load modded save should succeed");
 
         assert_eq!(meta.mod_names, vec!["TestMod".to_string()]);
         assert_eq!(meta.mod_hash, compute_mod_hash(&mods));
@@ -1511,11 +1731,9 @@ mod tests {
         let saves_dir = tmp_dir("empty_mods");
         let state = minimal_save_state();
 
-        save_slot(&saves_dir, 0, "No Mods", &state, &[])
-            .expect("save with no mods should succeed");
+        save_slot(&saves_dir, 0, "No Mods", &state, &[]).expect("save with no mods should succeed");
 
-        let (meta, _) = load_slot(&saves_dir, 0)
-            .expect("load should succeed");
+        let (meta, _) = load_slot(&saves_dir, 0).expect("load should succeed");
 
         assert!(meta.mod_names.is_empty());
         assert_eq!(meta.mod_hash, compute_mod_hash(&[]));
@@ -1528,8 +1746,7 @@ mod tests {
         let path = slot_path(&saves_dir, 0);
         write_versioned_fixture(&path, 99, "Future", &state);
 
-        let err = load_slot(&saves_dir, 0)
-            .expect_err("future version should be rejected");
+        let err = load_slot(&saves_dir, 0).expect_err("future version should be rejected");
 
         let msg = err.to_string();
         assert!(
@@ -1548,8 +1765,7 @@ mod tests {
         save_slot(&saves_dir, 0, "Mods A", &state, &mods_a).unwrap();
 
         // Load succeeds even though our "current" mods differ.
-        let (meta, _) = load_slot(&saves_dir, 0)
-            .expect("mismatched mods should still load");
+        let (meta, _) = load_slot(&saves_dir, 0).expect("mismatched mods should still load");
 
         // The meta records what was saved, not what's current.
         assert_eq!(meta.mod_names, vec!["ModA".to_string()]);

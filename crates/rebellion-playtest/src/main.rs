@@ -18,12 +18,12 @@ use rand::Rng;
 use rand::SeedableRng;
 use rand_xoshiro::Xoshiro256PlusPlus;
 
-use rebellion_core::ai::{AiFaction, AIState};
+use rebellion_core::ai::{AIState, AiFaction};
 use rebellion_core::commands::all_commands;
 use rebellion_core::dat::Faction;
 use rebellion_core::fog::{FogState, FogSystem};
-use rebellion_core::world::{ControlKind, SeedOptions};
 use rebellion_core::tick::{GameClock, GameSpeed};
+use rebellion_core::world::{ControlKind, SeedOptions};
 use rebellion_data::simulation::{run_simulation_tick, SimulationStates};
 
 use logger::EventLogger;
@@ -96,31 +96,61 @@ fn dispatch_command(
 ) -> String {
     match cmd {
         "show_game_stats" => {
-            let a = world.systems.values().filter(|s| s.control.is_controlled_by(Faction::Alliance)).count();
-            let e = world.systems.values().filter(|s| s.control.is_controlled_by(Faction::Empire)).count();
-            format!("Stats: {} systems ({} Alliance, {} Empire), {} fleets, {} characters",
-                world.systems.len(), a, e, world.fleets.len(), world.characters.len())
+            let a = world
+                .systems
+                .values()
+                .filter(|s| s.control.is_controlled_by(Faction::Alliance))
+                .count();
+            let e = world
+                .systems
+                .values()
+                .filter(|s| s.control.is_controlled_by(Faction::Empire))
+                .count();
+            format!(
+                "Stats: {} systems ({} Alliance, {} Empire), {} fleets, {} characters",
+                world.systems.len(),
+                a,
+                e,
+                world.fleets.len(),
+                world.characters.len()
+            )
         }
         "list_active_missions" => {
             let missions = states.missions.missions();
             if missions.is_empty() {
                 "No active missions".to_string()
             } else {
-                missions.iter().map(|m| format!("{:?} by {:?}", m.kind, m.faction)).collect::<Vec<_>>().join("\n")
+                missions
+                    .iter()
+                    .map(|m| format!("{:?} by {:?}", m.kind, m.faction))
+                    .collect::<Vec<_>>()
+                    .join("\n")
             }
         }
-        "list_active_fleets" => {
-            world.fleets.iter().map(|(_, f)| {
-                let sys = world.systems.get(f.location).map(|s| s.name.as_str()).unwrap_or("?");
+        "list_active_fleets" => world
+            .fleets
+            .iter()
+            .map(|(_, f)| {
+                let sys = world
+                    .systems
+                    .get(f.location)
+                    .map(|s| s.name.as_str())
+                    .unwrap_or("?");
                 let side = if f.is_alliance { "Alliance" } else { "Empire" };
                 let ships = f.ship_count() as usize
                     + f.fighters.iter().map(|e| e.count as usize).sum::<usize>();
                 format!("{} fleet at {} — {} ships", side, sys, ships)
-            }).collect::<Vec<_>>().join("\n")
-        }
+            })
+            .collect::<Vec<_>>()
+            .join("\n"),
         "show_event_count" => {
             let total = states.events.events().len();
-            let fired = states.events.events().iter().filter(|e| states.events.has_fired(e.id)).count();
+            let fired = states
+                .events
+                .events()
+                .iter()
+                .filter(|e| states.events.has_fired(e.id))
+                .count();
             format!("Events: {} defined, {} fired", total, fired)
         }
         "toggle_dual_ai" => {
@@ -144,21 +174,31 @@ fn dispatch_command(
         }
         "force_victory_check" => {
             let tick_ev = rebellion_core::tick::TickEvent { tick: 0 };
-            let result = rebellion_core::victory::VictorySystem::check(&states.victory, world, &[tick_ev]);
+            let result = rebellion_core::victory::VictorySystem::check(
+                &states.victory,
+                world,
+                &[tick_ev],
+                states.campaign_config.victory_conditions,
+            );
             match result {
                 Some(outcome) => format!("Victory: {:?}", outcome),
                 None => "No winner yet".to_string(),
             }
         }
         id if id.starts_with("advance_") => {
-            let n: u64 = id.trim_start_matches("advance_")
-                .trim_end_matches("_tick").trim_end_matches("_ticks").trim_end_matches("s")
-                .parse().unwrap_or(1);
+            let n: u64 = id
+                .trim_start_matches("advance_")
+                .trim_end_matches("_tick")
+                .trim_end_matches("_ticks")
+                .trim_end_matches("s")
+                .parse()
+                .unwrap_or(1);
             for t in 1..=n {
                 let tick_events = vec![rebellion_core::tick::TickEvent { tick: t }];
                 let rolls: Vec<f64> = (0..1024).map(|_| rng.gen::<f64>()).collect();
                 let wall_ms = start.elapsed().as_millis() as u64;
-                let evts = run_simulation_tick(world, states, &tick_events, &rolls, wall_ms, &game_config);
+                let evts =
+                    run_simulation_tick(world, states, &tick_events, &rolls, wall_ms, &game_config);
                 logger.extend(evts);
             }
             format!("Advanced {} ticks ({} events)", n, logger.len())
@@ -174,7 +214,10 @@ fn dispatch_command(
                 Err(e) => format!("Export failed: {}", e),
             }
         }
-        _ => format!("Unknown command: '{}'. Use --exec list for available commands.", cmd),
+        _ => format!(
+            "Unknown command: '{}'. Use --exec list for available commands.",
+            cmd
+        ),
     }
 }
 
@@ -199,7 +242,10 @@ fn main() -> anyhow::Result<()> {
         // Validate command exists
         let commands = all_commands();
         if !commands.iter().any(|c| c.id == cmd.as_str()) {
-            eprintln!("Unknown command: '{}'. Use --exec list to see available commands.", cmd);
+            eprintln!(
+                "Unknown command: '{}'. Use --exec list to see available commands.",
+                cmd
+            );
             std::process::exit(1);
         }
     }
@@ -300,6 +346,7 @@ fn main() -> anyhow::Result<()> {
         economy: rebellion_core::economy::EconomyState::default(),
         repair: rebellion_core::repair::RepairState,
         combat_cooldowns: HashMap::new(),
+        campaign_config: rebellion_core::world::CampaignConfig::default(),
     };
 
     // Seed fog
@@ -316,7 +363,16 @@ fn main() -> anyhow::Result<()> {
 
     // Handle --exec: dispatch single command and exit
     if let Some(ref cmd) = args.exec {
-        let output = dispatch_command(cmd, &mut world, &mut states, &mut rng, &mut logger, &start, ai_faction, &game_config);
+        let output = dispatch_command(
+            cmd,
+            &mut world,
+            &mut states,
+            &mut rng,
+            &mut logger,
+            &start,
+            ai_faction,
+            &game_config,
+        );
         println!("{}", output);
         return Ok(());
     }
@@ -337,8 +393,12 @@ fn main() -> anyhow::Result<()> {
                 }
             }
             let cmd = line.trim();
-            if cmd.is_empty() { continue; }
-            if cmd == "quit" || cmd == "exit" { break; }
+            if cmd.is_empty() {
+                continue;
+            }
+            if cmd == "quit" || cmd == "exit" {
+                break;
+            }
             if cmd == "help" {
                 let commands = all_commands();
                 for c in &commands {
@@ -357,7 +417,14 @@ fn main() -> anyhow::Result<()> {
                     let tick_events = vec![rebellion_core::tick::TickEvent { tick: tick_counter }];
                     let rolls: Vec<f64> = (0..1024).map(|_| rng.gen::<f64>()).collect();
                     let wall_ms = start.elapsed().as_millis() as u64;
-                    let evts = run_simulation_tick(&mut world, &mut states, &tick_events, &rolls, wall_ms, &game_config);
+                    let evts = run_simulation_tick(
+                        &mut world,
+                        &mut states,
+                        &tick_events,
+                        &rolls,
+                        wall_ms,
+                        &game_config,
+                    );
                     logger.extend(evts);
                 }
                 let new_events = logger.len() - pre_count;
@@ -377,8 +444,12 @@ fn main() -> anyhow::Result<()> {
                 let mut neutral = 0usize;
                 for (_, sys) in world.systems.iter() {
                     match sys.control {
-                        ControlKind::Controlled(rebellion_core::dat::Faction::Alliance) => alliance.push(sys.name.as_str()),
-                        ControlKind::Controlled(rebellion_core::dat::Faction::Empire) => empire.push(sys.name.as_str()),
+                        ControlKind::Controlled(rebellion_core::dat::Faction::Alliance) => {
+                            alliance.push(sys.name.as_str())
+                        }
+                        ControlKind::Controlled(rebellion_core::dat::Faction::Empire) => {
+                            empire.push(sys.name.as_str())
+                        }
                         _ => neutral += 1,
                     }
                 }
@@ -393,20 +464,35 @@ fn main() -> anyhow::Result<()> {
                 continue;
             }
             if cmd == "transit" {
-                let orders: Vec<_> = states.movement.orders().iter().map(|(_, order)| {
-                    let origin = world.systems.get(order.origin).map(|s| s.name.as_str()).unwrap_or("?");
-                    let dest = world.systems.get(order.destination).map(|s| s.name.as_str()).unwrap_or("?");
-                    let faction = world.fleets.get(order.fleet)
-                        .map(|f| if f.is_alliance { "Alliance" } else { "Empire" })
-                        .unwrap_or("?");
-                    serde_json::json!({
-                        "faction": faction,
-                        "origin": origin,
-                        "destination": dest,
-                        "progress": format!("{:.0}%", order.progress() * 100.0),
-                        "ticks_remaining": order.ticks_remaining(),
+                let orders: Vec<_> = states
+                    .movement
+                    .orders()
+                    .iter()
+                    .map(|(_, order)| {
+                        let origin = world
+                            .systems
+                            .get(order.origin)
+                            .map(|s| s.name.as_str())
+                            .unwrap_or("?");
+                        let dest = world
+                            .systems
+                            .get(order.destination)
+                            .map(|s| s.name.as_str())
+                            .unwrap_or("?");
+                        let faction = world
+                            .fleets
+                            .get(order.fleet)
+                            .map(|f| if f.is_alliance { "Alliance" } else { "Empire" })
+                            .unwrap_or("?");
+                        serde_json::json!({
+                            "faction": faction,
+                            "origin": origin,
+                            "destination": dest,
+                            "progress": format!("{:.0}%", order.progress() * 100.0),
+                            "ticks_remaining": order.ticks_remaining(),
+                        })
                     })
-                }).collect();
+                    .collect();
                 let json = serde_json::json!({
                     "command": "transit",
                     "count": orders.len(),
@@ -417,7 +503,11 @@ fn main() -> anyhow::Result<()> {
                 continue;
             }
             if cmd.starts_with("events") {
-                let n: usize = cmd.trim_start_matches("events").trim().parse().unwrap_or(10);
+                let n: usize = cmd
+                    .trim_start_matches("events")
+                    .trim()
+                    .parse()
+                    .unwrap_or(10);
                 let all = logger.events();
                 let start_idx = all.len().saturating_sub(n);
                 let recent: Vec<_> = all[start_idx..].iter().collect();
@@ -430,7 +520,16 @@ fn main() -> anyhow::Result<()> {
                 println!("{}", json);
                 continue;
             }
-            let output = dispatch_command(cmd, &mut world, &mut states, &mut rng, &mut logger, &start, ai_faction, &game_config);
+            let output = dispatch_command(
+                cmd,
+                &mut world,
+                &mut states,
+                &mut rng,
+                &mut logger,
+                &start,
+                ai_faction,
+                &game_config,
+            );
             let json = serde_json::json!({
                 "command": cmd,
                 "tick": tick_counter,
@@ -454,7 +553,14 @@ fn main() -> anyhow::Result<()> {
         let rolls: Vec<f64> = (0..1024).map(|_| rng.gen::<f64>()).collect();
 
         // Run shared simulation tick
-        let events = run_simulation_tick(&mut world, &mut states, &tick_events, &rolls, wall_ms, &game_config);
+        let events = run_simulation_tick(
+            &mut world,
+            &mut states,
+            &tick_events,
+            &rolls,
+            wall_ms,
+            &game_config,
+        );
         if args.jsonl {
             for event in &events {
                 println!("{}", serde_json::to_string(event).unwrap_or_default());

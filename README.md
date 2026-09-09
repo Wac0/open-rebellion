@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-macroquad-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Browser-blue.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Tests-491%20passing-green.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-495%20passing-green.svg" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
   <a href="https://tdimino.github.io/open-rebellion/"><img src="https://img.shields.io/badge/Docs-Ghidra%20RE-blueviolet.svg" alt="Ghidra RE Docs"></a>
 </p>
@@ -40,7 +40,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification (2026-09-09):** Astra has verified four-request browser startup, save-v10 continuation/delete, and the responsive original cockpit with exact bitmap controls, direct faction starts, and one MDATA.302 music loop. P03/P04 and other release gates remain open; hosted CI workflows are intentionally local/untracked. Follow the [audit](docs/qa/2026-09-08-full-functionality-audit/), [menu reference](agent_docs/main-menu-parity.md), and [archive](archive/INDEX.md).
+> **Verification (2026-09-09):** Astra has verified four-request browser startup, save-v11 setup/continuation, and the responsive original cockpit with exact bitmap controls, both factions, and MDATA.302 music. P03/P04 and other release gates remain open; hosted CI remains manual. Follow the [audit](docs/qa/2026-09-08-full-functionality-audit/), [menu reference](agent_docs/main-menu-parity.md), and [archive](archive/INDEX.md).
 
 | Layer | Implementation status | Release acceptance |
 |-------|-----------------------|--------------------|
