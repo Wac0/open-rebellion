@@ -47,7 +47,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 >
 > The current packaged browser build now loads 52 game-data files and 2,231 bitmaps through one deterministic runtime pack. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md) four-request startup, both factions, fleet artwork and interactions, and zoom rendering without browser errors; remaining browser and release gates are still open.
 >
-> Save format v9 now records canonical state fingerprints. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md) browser save, reload, and load with a matching integrity-checked fingerprint and intact bitmap UI; full deterministic replay remains open.
+> Save format v10 now preserves the simulation RNG, second AI, repair state, combat cooldowns, and active configuration in addition to canonical state fingerprints. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md) a 40/40 browser save, reload, load, continuation, bitmap, storage, and error gate; versioned command replay and native/WASM equivalence remain open.
 >
 > GitHub Actions workflow definitions are intentionally local and untracked as of 2026-09-08. Release gates remain manual until M5 restores a reviewed CI provider.
 

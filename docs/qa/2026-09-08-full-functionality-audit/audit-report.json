@@ -297,10 +297,11 @@
         "F-011A adds a versioned canonical logical-state fingerprint to native and browser save metadata",
         "two independently seeded initial campaigns now produce identical fingerprints after unordered map and set normalization",
         "Astra medium r3 passed 34 browser save, reload, load, bitmap, network, and error assertions with a matching verified fingerprint",
+        "F-011B1 save v10 preserves the known continuation envelope and Astra medium r2 passed 40 browser continuation assertions",
         "unordered map iteration affects movement and AI tie-breaking",
         "headless and app paths consume random values differently",
         "interactive seeds are wall-clock-derived",
-        "save state omits RNG, AI runtime, combat cooldown, configuration, and data hashes"
+        "versioned command streams, data-input hashes, and cross-runtime checkpoint equivalence remain absent"
       ],
       "verified_tranches": [
         {
@@ -355,14 +356,76 @@
             "runtime_pack_sha256": "491fd403efb4bbb8210331c535626d9f10f8efb568a2f0a70f7cafc963c208ca"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md"
+        },
+        {
+          "id": "F-011B1",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "save_format": {
+            "current": 10,
+            "continuation_fields": [
+              "simulation_rng",
+              "second_ai",
+              "repair_state",
+              "automatic_combat_cooldowns",
+              "active_game_config"
+            ],
+            "native_v8_v9_compatible": true,
+            "historical_v9_fingerprint_checked_before_migration": true,
+            "browser_v9_fallback": true,
+            "browser_v10_keys": true
+          },
+          "determinism": {
+            "populated_typed_maps_canonicalized": true,
+            "bincode_map_layout_preserved": true,
+            "subsequent_rng_values_compared": 8,
+            "data_input_hashes_recorded": false,
+            "versioned_command_replay": false
+          },
+          "automated": {
+            "workspace_tests_passed": 483,
+            "core_tests_passed": 356,
+            "data_tests_passed": 60,
+            "save_tests_passed": 21,
+            "historical_v9_artifact_load": "pass",
+            "seeded_fingerprint_probe": "pass",
+            "failures": 0,
+            "wasm_check": "pass",
+            "release_package": "pass_with_preexisting_warnings"
+          },
+          "browser": {
+            "assertions": 40,
+            "save_reload_load_continue": "pass",
+            "matching_verified_fingerprint": "v1:6bb217229d3c4c60",
+            "saved_day": 84,
+            "resumed_to_day": 88,
+            "bitmap_cockpit_and_map": "pass",
+            "runtime_pack_loads": 2,
+            "loose_asset_requests": 0,
+            "http_or_loading_failures": 0,
+            "page_or_console_errors": 0,
+            "missing_asset_or_texture_errors": 0,
+            "favicon_requests_or_errors": 0
+          },
+          "artifact": {
+            "wasm_bytes": 4607142,
+            "wasm_sha256": "6bc4ef3e0d173cc347c4e9341cabd3686d556c72928989bb3c6f44c8b90a5992",
+            "runtime_pack_bytes": 28285762,
+            "runtime_pack_sha256": "491fd403efb4bbb8210331c535626d9f10f8efb568a2f0a70f7cafc963c208ca",
+            "v9_fixture_bytes": 718,
+            "v9_fixture_sha256": "a667db5092ddb6bea0b3729db6bcfefc73916609c373ed6f2a10f88a36b3127d"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md"
         }
       ],
       "remaining": [
-        "persist RNG and all deterministic continuation state",
         "record and replay versioned command streams",
         "remove simulation-time unordered iteration effects",
+        "identify game-data inputs by hash",
         "converge headless and interactive tick paths",
-        "compare native, WASM, automatic, and tactical checkpoints"
+        "compare native, WASM, automatic, and tactical checkpoints",
+        "persist and resume any interactive mid-combat state required by the unified engine"
       ],
       "acceptance": "Repeated native and native-versus-WASM runs produce identical versioned fingerprints from the same seed and command stream, including across save/load."
     },
@@ -457,7 +520,7 @@
       "title": "Browser persistence is not production-safe",
       "evidence": [
         "synchronous base64 bincode localStorage path",
-        "save schema does not preserve all deterministic continuation state"
+        "save v10 preserves the currently known continuation envelope, but quota failures and asynchronous migration are not exercised end to end"
       ],
       "acceptance": "Versioned compressed IndexedDB saves round-trip complete state asynchronously, surface quota/corruption errors, and preserve fingerprints."
     }

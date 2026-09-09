@@ -1,46 +1,53 @@
 ---
 title: "Save/Load System"
-description: "Bincode serialization with versioned headers, mod metadata, and migration framework"
+description: "Native and browser save v10, canonical fingerprints, continuation state, and historical migration"
 category: "agent-docs"
 created: 2026-03-15
-updated: 2026-03-16
-tags: [save-load, bincode, migration, serialization]
+updated: 2026-09-09
+tags: [save-load, bincode, migration, serialization, wasm, determinism]
 ---
 
 # Save/Load System
 
-`crates/rebellion-data/src/save.rs` — Bincode serialization with versioned headers, mod metadata, and migration framework.
+`crates/rebellion-data/src/save.rs` owns native files and browser storage.
+`crates/rebellion-app/src/main.rs` converts between a live campaign and the
+serializable snapshot. The current format is v10.
 
-## Format (v4)
+## Native format (v10)
 
-```
+```text
 [magic: 8 bytes "OPENREB\0"]
-[version: u32 LE]             — SAVE_VERSION = 4
+[version: u32 LE]             — SAVE_VERSION = 10
 [save_name: u32 len + UTF-8]
 [timestamp_secs: u64 LE]
-[mod_count: u32 LE]           — number of active mods (v4+)
+[mod_count: u32 LE]           — v4+
   for each mod:
     [name_len: u32 + name: UTF-8]
     [version_len: u32 + version: UTF-8]
-[mod_hash: u64 LE]            — FNV-1a hash of sorted (name, version) pairs
+[mod_hash: u64 LE]            — FNV-1a over sorted name/version pairs
+[fingerprint_version: u16 LE] — v9+
+[state_fingerprint: u64 LE]   — v9+
 [bincode body: SaveState]
 ```
 
+The fingerprint is versioned separately from the save format. It is a
+domain-separated FNV-1a digest of canonical JSON and is intended for replay
+comparison and corruption detection, not authentication.
+
 ## SaveState
 
-All simulation states serialized:
+Every mutable campaign subsystem required by the app is serialized:
 
 | Field | Type |
 |-------|------|
-| `world` | `GameWorld` (all 11 SlotMap arenas + GNPRTB + mission tables) |
+| `world` | `GameWorld` |
 | `clock` | `GameClock` |
 | `manufacturing` | `ManufacturingState` |
 | `missions` | `MissionState` |
 | `events` | `EventState` |
 | `ai` | `AIState` |
 | `movement` | `MovementState` |
-| `fog_alliance` | `FogState` |
-| `fog_empire` | `FogState` |
+| `fog_alliance`, `fog_empire` | `FogState` |
 | `player_is_alliance` | `bool` |
 | `blockade` | `BlockadeState` |
 | `uprising` | `UprisingState` |
@@ -49,53 +56,87 @@ All simulation states serialized:
 | `jedi` | `JediState` |
 | `victory` | `VictoryState` |
 | `betrayal` | `BetrayalState` |
+| `economy` | `EconomyState` |
+| `sim_rng` | `Xoshiro256PlusPlus` |
+| `ai2` | `Option<AIState>` |
+| `repair` | `RepairState` |
+| `combat_cooldowns` | `HashMap<SystemKey, u64>` |
+| `game_config` | `GameConfig` |
 
-## Migration Framework
+The last five fields are the v10 continuation envelope. Loading restores them
+instead of reseeding RNG or clearing dual-AI, repair, and combat memory.
 
-```rust
-match version {
-    SAVE_VERSION => bincode::deserialize(&body),  // current version
-    3 => bail!("v3 incompatible — Character struct changed"),  // reject
-    v if v > SAVE_VERSION => bail!("newer build"),  // future version
-    v => bail!("too old to migrate (minimum: 3)"),  // ancient
-}
+## Deterministic fingerprints
+
+Unordered sets and maps use stable human-readable serialization for the
+fingerprint. Typed-key maps become sorted key/value sequences because JSON
+object keys must be strings. The adapters intentionally leave non-human
+serialization unchanged, preserving the historical bincode layout.
+
+Sequence order that carries gameplay meaning remains ordered. A matching
+fingerprint proves that the recorded logical snapshot matches; it does not yet
+prove a versioned command replay or native/WASM execution equivalence.
+
+## Migration rules
+
+- v10 is read directly and its stored fingerprint must match.
+- v9 is decoded through the exact historical `SaveStateV9` body. Its v9
+  fingerprint is checked before migration; new v10 fields receive explicit
+  defaults and the migrated fingerprint is reported as unverified.
+- v8 uses the same historical body without a stored fingerprint. It migrates
+  with explicit defaults and is reported as unverified.
+- v3–v7 are recognized but rejected with an incompatibility explanation.
+- Versions newer than v10 and versions older than v3 fail closed.
+
+Do not rely on `#[serde(default)]` to migrate bincode. Bincode is positional.
+Changing `SaveState` requires a version bump and an exact legacy body struct.
+The checked-in 718-byte v9 fixture was produced by the old writer and protects
+the real migration boundary.
+
+## Browser storage
+
+WASM stores base64 bincode and versioned JSON metadata in `localStorage`:
+
+```text
+rebellion_save_v10_<slot>
+rebellion_meta_v10_<slot>
 ```
 
-**Why v3 can't migrate**: Bincode is a positional format. `#[serde(default)]` is inoperative — it only works with self-describing formats (JSON, TOML). Adding fields to `Character` (captivity fields) changes the byte layout. A true v3→v4 migration would require a `SaveStateV3` struct matching the old layout.
+Metadata includes the full save name, game tick, and fingerprint with its
+`u64` value encoded as a decimal string so JavaScript cannot truncate it. The
+reader falls back to v9 keys, verifies their v9 fingerprint, migrates the body,
+and writes new saves only under v10 keys. Delete removes both generations.
 
-## Mod Metadata
-
-- `compute_mod_hash(mods: &[(String, String)]) -> u64` — FNV-1a over sorted (name:version) pairs
-- On load: compare saved `mod_hash` with current active mods. Mismatch is a warning, not a rejection.
-- `SaveMeta` includes `mod_names: Vec<String>` and `mod_hash: u64` for UI display.
+This path is functional but not the production persistence target: base64 and
+synchronous `localStorage` can block the main thread or hit quota limits. M3
+moves it to versioned, compressed, asynchronous IndexedDB and adds browser
+quota/corruption acceptance tests.
 
 ## API
 
 ```rust
-// Save (with mod metadata)
-save_slot(saves_dir, slot, name, &state, &active_mods)?;
-
-// Save (no mods — backward compat)
-save_slot_no_mods(saves_dir, slot, name, &state)?;
-
-// Load (with migration)
+let fingerprint = save_slot(saves_dir, slot, name, &state, &active_mods)?;
+let fingerprint = save_slot_no_mods(saves_dir, slot, name, &state)?;
 let (meta, state) = load_slot(saves_dir, slot)?;
-
-// List all occupied slots
-let metas = list_saves(saves_dir);
-
-// Delete
+let occupied = list_saves(saves_dir);
 delete_slot(saves_dir, slot)?;
 ```
 
-## WASM
+Native saves live at `<saves_dir>/<slot>.reb`. The UI exposes ten slots.
 
-All IO functions are `#[cfg(not(target_arch = "wasm32"))]`. WASM stubs return `Err("not supported in the browser build")`. No IndexedDB/localStorage fallback yet.
+## Safe change checklist
 
-## Adding Fields to SaveState
+1. Add the field to the current `SaveState` and the live snapshot/restore path.
+2. Preserve the previous body exactly in a versioned legacy struct.
+3. Bump `SAVE_VERSION` and browser key prefixes.
+4. Validate the old stored fingerprint before migration.
+5. Define explicit migration defaults and mark migrated fingerprints honestly.
+6. Update native and WASM load/list/delete paths.
+7. Add current round-trip, corruption, exact-continuation, and real-artifact
+   migration tests.
+8. Run workspace tests, the seeded fingerprint probe, WASM/package checks, and
+   an Astra browser save/reload/load/continue pass with bitmap and error gates.
 
-1. Add the field with `#[serde(default)]` — but note this only helps JSON, NOT bincode
-2. Bump `SAVE_VERSION`
-3. Add a migration arm in `load_slot()` that either converts or rejects older saves
-4. Update `minimal_save_state()` in tests
-5. Add a fixture test for the migration path
+Current verification evidence:
+[F-011A fingerprints](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md)
+and [F-011B1 continuation](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md).

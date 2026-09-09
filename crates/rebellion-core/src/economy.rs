@@ -224,6 +224,10 @@ impl Default for SystemEconomy {
 /// controlled system has a garrison deficit.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct EconomyState {
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     pub per_system: HashMap<SystemKey, SystemEconomy>,
     /// Ticks until the next Alliance maintenance-shortfall check fires.
     /// Initialized lazily to `GNPRTB[7694]` (30) on the first tick.

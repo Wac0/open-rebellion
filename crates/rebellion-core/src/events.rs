@@ -456,6 +456,10 @@ pub struct GameEvent {
 pub struct EventState {
     events: Vec<GameEvent>,
     /// IDs of one-shot events that have already fired.
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_set",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_set"
+    )]
     fired_ids: HashSet<u32>,
 }
 

@@ -1,6 +1,6 @@
 //! Save / load for the full game state.
 //!
-//! # Format (v9)
+//! # Format (v10)
 //!
 //! Binary `bincode` encoding. A save file is:
 //!
@@ -19,7 +19,9 @@
 //! [bincode-encoded SaveState]
 //! ```
 //!
-//! `SaveState` wraps all mutable simulation state. `GameWorld` (the entity
+//! `SaveState` wraps all mutable simulation state, including the random-number
+//! generator and tuning configuration needed to continue deterministically.
+//! `GameWorld` (the entity
 //! arenas) is included because fleet positions, popularity, etc. change during
 //! play. Slotmap keys are stable across a session but are NOT portable across
 //! different `load_game_data` calls — the save includes world state, not DAT
@@ -38,6 +40,8 @@
 //! `MAX_SAVE_SLOTS` named slots. `list_saves()` returns metadata for all
 //! occupied slots.
 
+use rand::SeedableRng;
+use rand_xoshiro::Xoshiro256PlusPlus;
 use serde::{Deserialize, Serialize};
 
 use rebellion_core::ai::AIState;
@@ -47,12 +51,15 @@ use rebellion_core::death_star::DeathStarState;
 use rebellion_core::economy::EconomyState;
 use rebellion_core::events::EventState;
 use rebellion_core::fog::FogState;
+use rebellion_core::ids::SystemKey;
 use rebellion_core::jedi::JediState;
 use rebellion_core::manufacturing::ManufacturingState;
 use rebellion_core::missions::MissionState;
 use rebellion_core::movement::MovementState;
+use rebellion_core::repair::RepairState;
 use rebellion_core::research::ResearchState;
 use rebellion_core::tick::GameClock;
+use rebellion_core::tuning::GameConfig;
 use rebellion_core::uprising::UprisingState;
 use rebellion_core::victory::VictoryState;
 use rebellion_core::world::GameWorld;
@@ -67,7 +74,9 @@ pub const SAVE_MAGIC: &[u8; 8] = b"OPENREB\0";
 /// Current save format version. Increment when `SaveState` layout changes.
 ///
 /// v9: Header gained a versioned fingerprint of the logical `SaveState`.
-pub const SAVE_VERSION: u32 = 9;
+/// v10: Body gained deterministic continuation state (RNG, second AI, repair,
+/// combat cooldowns, and tuning configuration).
+pub const SAVE_VERSION: u32 = 10;
 
 /// Current state-fingerprint algorithm version.
 ///
@@ -132,6 +141,45 @@ const UNORDERED_SET_FIELDS: &[&str] = &[
     "visible",
 ];
 
+/// In v9 these typed-key maps used serde's native JSON map representation.
+/// The only representable shape was an empty object; non-empty slotmap keys
+/// made `save_slot` fail before writing. Preserve that exact empty-map shape
+/// when validating fingerprints from an existing v9 file.
+const LEGACY_V9_TYPED_MAP_FIELDS: &[&str] = &[
+    "active_uprisings",
+    "battle_cooldowns",
+    "incident_cooldowns",
+    "last_check",
+    "orders",
+    "per_system",
+    "queues",
+];
+
+fn restore_legacy_v9_empty_map_shapes(
+    value: &mut serde_json::Value,
+    field_name: Option<&str>,
+) {
+    match value {
+        serde_json::Value::Object(fields) => {
+            for (name, child) in fields {
+                restore_legacy_v9_empty_map_shapes(child, Some(name));
+            }
+        }
+        serde_json::Value::Array(items)
+            if items.is_empty()
+                && field_name.is_some_and(|name| LEGACY_V9_TYPED_MAP_FIELDS.contains(&name)) =>
+        {
+            *value = serde_json::Value::Object(serde_json::Map::new());
+        }
+        serde_json::Value::Array(items) => {
+            for item in items {
+                restore_legacy_v9_empty_map_shapes(item, None);
+            }
+        }
+        _ => {}
+    }
+}
+
 fn canonicalize_fingerprint_value(
     value: &mut serde_json::Value,
     field_name: Option<&str>,
@@ -160,11 +208,14 @@ fn canonicalize_fingerprint_value(
     Ok(())
 }
 
-fn compute_state_fingerprint_for_version(
+fn compute_serializable_fingerprint_for_version<T: Serialize + ?Sized>(
     save_version: u32,
-    state: &SaveState,
+    state: &T,
 ) -> anyhow::Result<StateFingerprint> {
     let mut canonical_state = serde_json::to_value(state)?;
+    if save_version == 9 {
+        restore_legacy_v9_empty_map_shapes(&mut canonical_state, None);
+    }
     canonicalize_fingerprint_value(&mut canonical_state, None)?;
     let canonical_bytes = serde_json::to_vec(&canonical_state)?;
 
@@ -187,7 +238,7 @@ fn compute_state_fingerprint_for_version(
 
 /// Canonicalize a snapshot and return the fingerprint used by new save files.
 pub fn compute_state_fingerprint(state: &SaveState) -> anyhow::Result<StateFingerprint> {
-    compute_state_fingerprint_for_version(SAVE_VERSION, state)
+    compute_serializable_fingerprint_for_version(SAVE_VERSION, state)
 }
 
 // ---------------------------------------------------------------------------
@@ -223,6 +274,100 @@ pub struct SaveState {
     pub betrayal: BetrayalState,
     // ── v8: economy state (closes incident re-fire on reload bug) ────────
     pub economy: EconomyState,
+    // ── v10: deterministic continuation envelope ────────────────────────
+    /// Exact simulation RNG position; restoring it prevents post-load rolls
+    /// from diverging from an uninterrupted campaign.
+    pub sim_rng: Xoshiro256PlusPlus,
+    /// Optional AI controlling the player's nominal faction in dual-AI mode.
+    pub ai2: Option<AIState>,
+    pub repair: RepairState,
+    /// Last automatic-combat tick per system.
+    #[serde(
+        serialize_with = "rebellion_core::serde_ordered::serialize_hash_map",
+        deserialize_with = "rebellion_core::serde_ordered::deserialize_hash_map"
+    )]
+    pub combat_cooldowns: std::collections::HashMap<SystemKey, u64>,
+    /// Tuning parameters used by the simulation that produced this state.
+    pub game_config: GameConfig,
+}
+
+/// Body layout shared by v8 and v9 saves. Bincode is positional, so legacy
+/// bodies must be decoded into their exact historical shape before migration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct SaveStateV9 {
+    world: GameWorld,
+    clock: GameClock,
+    manufacturing: ManufacturingState,
+    missions: MissionState,
+    events: EventState,
+    ai: AIState,
+    movement: MovementState,
+    fog_alliance: FogState,
+    fog_empire: FogState,
+    player_is_alliance: bool,
+    blockade: BlockadeState,
+    uprising: UprisingState,
+    death_star: DeathStarState,
+    research: ResearchState,
+    jedi: JediState,
+    victory: VictoryState,
+    betrayal: BetrayalState,
+    economy: EconomyState,
+}
+
+impl From<SaveStateV9> for SaveState {
+    fn from(legacy: SaveStateV9) -> Self {
+        Self {
+            world: legacy.world,
+            clock: legacy.clock,
+            manufacturing: legacy.manufacturing,
+            missions: legacy.missions,
+            events: legacy.events,
+            ai: legacy.ai,
+            movement: legacy.movement,
+            fog_alliance: legacy.fog_alliance,
+            fog_empire: legacy.fog_empire,
+            player_is_alliance: legacy.player_is_alliance,
+            blockade: legacy.blockade,
+            uprising: legacy.uprising,
+            death_star: legacy.death_star,
+            research: legacy.research,
+            jedi: legacy.jedi,
+            victory: legacy.victory,
+            betrayal: legacy.betrayal,
+            economy: legacy.economy,
+            sim_rng: Xoshiro256PlusPlus::seed_from_u64(0),
+            ai2: None,
+            repair: RepairState::default(),
+            combat_cooldowns: std::collections::HashMap::new(),
+            game_config: GameConfig::default(),
+        }
+    }
+}
+
+impl From<&SaveState> for SaveStateV9 {
+    fn from(current: &SaveState) -> Self {
+        Self {
+            world: current.world.clone(),
+            clock: current.clock.clone(),
+            manufacturing: current.manufacturing.clone(),
+            missions: current.missions.clone(),
+            events: current.events.clone(),
+            ai: current.ai.clone(),
+            movement: current.movement.clone(),
+            fog_alliance: current.fog_alliance.clone(),
+            fog_empire: current.fog_empire.clone(),
+            player_is_alliance: current.player_is_alliance,
+            blockade: current.blockade.clone(),
+            uprising: current.uprising.clone(),
+            death_star: current.death_star.clone(),
+            research: current.research.clone(),
+            jedi: current.jedi.clone(),
+            victory: current.victory.clone(),
+            betrayal: current.betrayal.clone(),
+            economy: current.economy.clone(),
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -479,9 +624,41 @@ mod native {
         let mut body = Vec::new();
         file.read_to_end(&mut body).context("reading save body")?;
 
-        let state: SaveState = match version {
-            SAVE_VERSION | 8 => {
-                bincode::deserialize(&body).context("deserializing save state")?
+        let (state, state_fingerprint, fingerprint_verified) = match version {
+            SAVE_VERSION => {
+                let state: SaveState =
+                    bincode::deserialize(&body).context("deserializing save state")?;
+                let fingerprint =
+                    compute_serializable_fingerprint_for_version(version, &state)?;
+                if let Some(expected) = expected_fingerprint {
+                    anyhow::ensure!(
+                        expected == fingerprint,
+                        "save state fingerprint mismatch: expected {}, computed {}",
+                        expected,
+                        fingerprint
+                    );
+                }
+                (state, fingerprint, expected_fingerprint.is_some())
+            }
+            9 | 8 => {
+                let legacy: SaveStateV9 =
+                    bincode::deserialize(&body).context("deserializing legacy save state")?;
+                if let Some(expected) = expected_fingerprint {
+                    let legacy_fingerprint =
+                        compute_serializable_fingerprint_for_version(version, &legacy)?;
+                    anyhow::ensure!(
+                        expected == legacy_fingerprint,
+                        "save state fingerprint mismatch: expected {}, computed {}",
+                        expected,
+                        legacy_fingerprint
+                    );
+                }
+                let state = SaveState::from(legacy);
+                let fingerprint = compute_state_fingerprint(&state)?;
+                // Legacy bodies never persisted the complete continuation
+                // envelope, so their migrated current-state fingerprint is
+                // intentionally reported as unverified.
+                (state, fingerprint, false)
             }
             7 => {
                 anyhow::bail!(
@@ -520,16 +697,6 @@ mod native {
             _ => unreachable!("version range already validated above"),
         };
 
-        let state_fingerprint = compute_state_fingerprint_for_version(version, &state)?;
-        if let Some(expected) = expected_fingerprint {
-            anyhow::ensure!(
-                expected == state_fingerprint,
-                "save state fingerprint mismatch: expected {}, computed {}",
-                expected,
-                state_fingerprint
-            );
-        }
-
         let meta = SaveMeta {
             slot,
             name,
@@ -538,7 +705,7 @@ mod native {
             mod_names,
             mod_hash,
             state_fingerprint,
-            fingerprint_verified: expected_fingerprint.is_some(),
+            fingerprint_verified,
         };
 
         Ok((meta, state))
@@ -743,6 +910,10 @@ pub mod wasm_impl {
     /// from older builds get rejected cleanly instead of attempting an
     /// inoperable bincode deserialize.
     fn slot_key(slot: usize) -> String {
+        format!("rebellion_save_v10_{}", slot)
+    }
+
+    fn legacy_slot_key(slot: usize) -> String {
         format!("rebellion_save_v9_{}", slot)
     }
 
@@ -750,6 +921,10 @@ pub mod wasm_impl {
     ///
     /// Prefix is bumped per save format version (see [`slot_key`]).
     fn meta_key(slot: usize) -> String {
+        format!("rebellion_meta_v10_{}", slot)
+    }
+
+    fn legacy_meta_key(slot: usize) -> String {
         format!("rebellion_meta_v9_{}", slot)
     }
 
@@ -806,22 +981,44 @@ pub mod wasm_impl {
         _saves_dir: &Path,
         slot: usize,
     ) -> anyhow::Result<(SaveMeta, SaveState)> {
-        let b64 = storage_get(&slot_key(slot))?
-            .ok_or_else(|| anyhow::anyhow!("no save in slot {}", slot))?;
-
+        let (save_version, b64, meta_encoded) = if let Some(body) = storage_get(&slot_key(slot))? {
+            let meta = storage_get(&meta_key(slot))?
+                .ok_or_else(|| anyhow::anyhow!("save metadata missing for slot {}", slot))?;
+            (SAVE_VERSION, body, meta)
+        } else if let Some(body) = storage_get(&legacy_slot_key(slot))? {
+            let meta = storage_get(&legacy_meta_key(slot))?
+                .ok_or_else(|| anyhow::anyhow!("legacy save metadata missing for slot {}", slot))?;
+            (9, body, meta)
+        } else {
+            anyhow::bail!("no save in slot {}", slot);
+        };
         let bytes = b64_decode(&b64)?;
-        let meta_encoded = storage_get(&meta_key(slot))?
-            .ok_or_else(|| anyhow::anyhow!("save metadata missing for slot {}", slot))?;
         let browser_meta = parse_meta(&meta_encoded)?;
         let expected_fingerprint = browser_meta.state_fingerprint.to_fingerprint()?;
-        let state: SaveState = bincode::deserialize(&bytes)?;
-        let state_fingerprint = compute_state_fingerprint(&state)?;
-        anyhow::ensure!(
-            expected_fingerprint == state_fingerprint,
-            "save state fingerprint mismatch: expected {}, computed {}",
-            expected_fingerprint,
-            state_fingerprint
-        );
+        let (state, state_fingerprint, fingerprint_verified) = if save_version == SAVE_VERSION {
+            let state: SaveState = bincode::deserialize(&bytes)?;
+            let fingerprint = compute_state_fingerprint(&state)?;
+            anyhow::ensure!(
+                expected_fingerprint == fingerprint,
+                "save state fingerprint mismatch: expected {}, computed {}",
+                expected_fingerprint,
+                fingerprint
+            );
+            (state, fingerprint, true)
+        } else {
+            let legacy: SaveStateV9 = bincode::deserialize(&bytes)?;
+            let legacy_fingerprint =
+                compute_serializable_fingerprint_for_version(save_version, &legacy)?;
+            anyhow::ensure!(
+                expected_fingerprint == legacy_fingerprint,
+                "save state fingerprint mismatch: expected {}, computed {}",
+                expected_fingerprint,
+                legacy_fingerprint
+            );
+            let state = SaveState::from(legacy);
+            let fingerprint = compute_state_fingerprint(&state)?;
+            (state, fingerprint, false)
+        };
 
         let meta = SaveMeta {
             slot,
@@ -831,7 +1028,7 @@ pub mod wasm_impl {
             mod_names: vec![],
             mod_hash: compute_mod_hash(&[]),
             state_fingerprint,
-            fingerprint_verified: true,
+            fingerprint_verified,
         };
 
         Ok((meta, state))
@@ -839,22 +1036,30 @@ pub mod wasm_impl {
 
     pub fn list_saves(_saves_dir: &Path) -> Vec<anyhow::Result<SaveMeta>> {
         (0..MAX_SAVE_SLOTS)
-            .filter_map(|slot| match storage_get(&meta_key(slot)) {
-                Ok(None) => None,
-                Ok(Some(encoded)) => Some(parse_meta(&encoded).and_then(|meta| {
-                    let state_fingerprint = meta.state_fingerprint.to_fingerprint()?;
-                    Ok(SaveMeta {
-                        slot,
-                        name: meta.name,
-                        timestamp_secs: 0,
-                        game_tick: meta.game_tick,
-                        mod_names: vec![],
-                        mod_hash: compute_mod_hash(&[]),
-                        state_fingerprint,
-                        fingerprint_verified: true,
-                    })
-                })),
-                Err(error) => Some(Err(error)),
+            .filter_map(|slot| {
+                let encoded = match storage_get(&meta_key(slot)) {
+                    Ok(Some(encoded)) => Ok(Some((encoded, true))),
+                    Ok(None) => storage_get(&legacy_meta_key(slot))
+                        .map(|legacy| legacy.map(|encoded| (encoded, false))),
+                    Err(error) => Err(error),
+                };
+                match encoded {
+                    Ok(None) => None,
+                    Ok(Some((encoded, current))) => Some(parse_meta(&encoded).and_then(|meta| {
+                        let state_fingerprint = meta.state_fingerprint.to_fingerprint()?;
+                        Ok(SaveMeta {
+                            slot,
+                            name: meta.name,
+                            timestamp_secs: 0,
+                            game_tick: meta.game_tick,
+                            mod_names: vec![],
+                            mod_hash: compute_mod_hash(&[]),
+                            state_fingerprint,
+                            fingerprint_verified: current,
+                        })
+                    })),
+                    Err(error) => Some(Err(error)),
+                }
             })
             .collect()
     }
@@ -862,6 +1067,8 @@ pub mod wasm_impl {
     pub fn delete_slot(_saves_dir: &Path, slot: usize) -> anyhow::Result<()> {
         storage_remove(&slot_key(slot))?;
         storage_remove(&meta_key(slot))?;
+        storage_remove(&legacy_slot_key(slot))?;
+        storage_remove(&legacy_meta_key(slot))?;
         Ok(())
     }
 }
@@ -878,6 +1085,7 @@ pub use wasm_impl::{
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
+    use rand::RngCore;
     use rebellion_core::ai::{AIState, AiFaction};
     use rebellion_core::dat::Faction;
     use rebellion_core::world::ControlKind;
@@ -939,6 +1147,11 @@ mod tests {
             victory: rebellion_core::victory::VictoryState::new(sys_a, sys_b),
             betrayal: BetrayalState::new(),
             economy: EconomyState::default(),
+            sim_rng: Xoshiro256PlusPlus::seed_from_u64(42),
+            ai2: None,
+            repair: RepairState::default(),
+            combat_cooldowns: std::collections::HashMap::new(),
+            game_config: GameConfig::default(),
         }
     }
 
@@ -981,7 +1194,14 @@ mod tests {
             file.write_all(&0u32.to_le_bytes()).unwrap(); // empty mod list
             file.write_all(&compute_mod_hash(&[]).to_le_bytes()).unwrap();
         }
-        let encoded = bincode::serialize(state).expect("serialize body");
+        let legacy = SaveStateV9::from(state);
+        if version >= 9 {
+            let fingerprint = compute_serializable_fingerprint_for_version(version, &legacy)
+                .expect("fingerprint legacy body");
+            file.write_all(&fingerprint.version.to_le_bytes()).unwrap();
+            file.write_all(&fingerprint.value.to_le_bytes()).unwrap();
+        }
+        let encoded = bincode::serialize(&legacy).expect("serialize legacy body");
         file.write_all(&encoded).unwrap();
     }
 
@@ -1007,6 +1227,35 @@ mod tests {
             meta.state_fingerprint,
             compute_state_fingerprint(&loaded).expect("fingerprint loaded state")
         );
+    }
+
+    #[test]
+    fn round_trip_preserves_deterministic_continuation_envelope() {
+        let saves_dir = tmp_dir("continuation_envelope_v10");
+        let mut state = minimal_save_state();
+        state.sim_rng = Xoshiro256PlusPlus::seed_from_u64(0x5eed);
+        state.ai2 = Some(AIState::new(AiFaction::Alliance));
+        state.ai2.as_mut().unwrap().last_eval_tick = 77;
+        let system = state.world.systems.keys().next().unwrap();
+        state.combat_cooldowns.insert(system, 61);
+        state.game_config.ai.tick_interval = 13;
+
+        save_slot(&saves_dir, 0, "Continuation", &state, &[]).unwrap();
+        let mut uninterrupted_rng = state.sim_rng.clone();
+        let expected_rolls = (0..8)
+            .map(|_| uninterrupted_rng.next_u64())
+            .collect::<Vec<_>>();
+
+        let (meta, mut loaded) = load_slot(&saves_dir, 0).unwrap();
+        let loaded_rolls = (0..8)
+            .map(|_| loaded.sim_rng.next_u64())
+            .collect::<Vec<_>>();
+
+        assert!(meta.fingerprint_verified);
+        assert_eq!(loaded_rolls, expected_rolls);
+        assert_eq!(loaded.ai2.as_ref().unwrap().last_eval_tick, 77);
+        assert_eq!(loaded.combat_cooldowns.get(&system), Some(&61));
+        assert_eq!(loaded.game_config.ai.tick_interval, 13);
     }
 
     #[test]
@@ -1052,6 +1301,42 @@ mod tests {
     }
 
     #[test]
+    fn fingerprint_normalizes_typed_map_insertion() {
+        let mut forward = minimal_save_state();
+        let mut reverse = forward.clone();
+        let system_keys = forward.world.systems.keys().collect::<Vec<_>>();
+
+        forward.combat_cooldowns.insert(system_keys[0], 10);
+        forward.combat_cooldowns.insert(system_keys[1], 20);
+        reverse.combat_cooldowns.insert(system_keys[1], 20);
+        reverse.combat_cooldowns.insert(system_keys[0], 10);
+
+        assert_eq!(
+            compute_state_fingerprint(&forward).unwrap(),
+            compute_state_fingerprint(&reverse).unwrap()
+        );
+    }
+
+    #[test]
+    fn fingerprint_covers_rng_and_configuration() {
+        let original = minimal_save_state();
+        let mut rng_changed = original.clone();
+        rng_changed.sim_rng.next_u64();
+        let mut config_changed = original.clone();
+        config_changed.game_config.ai.tick_interval += 1;
+
+        let original_fingerprint = compute_state_fingerprint(&original).unwrap();
+        assert_ne!(
+            original_fingerprint,
+            compute_state_fingerprint(&rng_changed).unwrap()
+        );
+        assert_ne!(
+            original_fingerprint,
+            compute_state_fingerprint(&config_changed).unwrap()
+        );
+    }
+
+    #[test]
     fn fingerprint_mismatch_rejects_tampered_body() {
         let saves_dir = tmp_dir("fingerprint_tamper_v9");
         const SAVE_NAME: &str = "Tamper Check";
@@ -1089,6 +1374,47 @@ mod tests {
         let (meta, loaded) = load_slot(&saves_dir, 0).expect("v8 save should remain compatible");
         assert_eq!(loaded.clock.tick, state.clock.tick);
         assert_eq!(meta.state_fingerprint.version, STATE_FINGERPRINT_VERSION);
+        assert!(!meta.fingerprint_verified);
+    }
+
+    #[test]
+    fn v9_save_migrates_with_safe_continuation_defaults() {
+        let saves_dir = tmp_dir("v9_continuation_compatibility");
+        let state = minimal_save_state();
+        let path = slot_path(&saves_dir, 0);
+        write_versioned_fixture(&path, 9, "V9 Save", &state);
+
+        let (meta, mut loaded) = load_slot(&saves_dir, 0).expect("v9 save should migrate");
+        let mut default_rng = Xoshiro256PlusPlus::seed_from_u64(0);
+
+        assert_eq!(loaded.clock.tick, state.clock.tick);
+        assert_eq!(loaded.sim_rng.next_u64(), default_rng.next_u64());
+        assert!(loaded.ai2.is_none());
+        assert!(loaded.combat_cooldowns.is_empty());
+        assert!(!meta.fingerprint_verified);
+    }
+
+    #[test]
+    fn loads_v9_artifact_written_by_previous_release() {
+        let saves_dir = tmp_dir("v9_historical_artifact");
+        let path = slot_path(&saves_dir, 0);
+        // Generated by commit 355715b's real v9 writer. Keeping the binary
+        // fixture catches accidental drift in both bincode layout and the
+        // historical fingerprint algorithm.
+        std::fs::write(
+            &path,
+            include_bytes!("../tests/fixtures/v9-minimal-save.reb"),
+        )
+        .unwrap();
+
+        let (meta, mut loaded) = load_slot(&saves_dir, 0)
+            .expect("the previously released v9 artifact must migrate");
+        let mut default_rng = Xoshiro256PlusPlus::seed_from_u64(0);
+
+        assert_eq!(meta.name, "Test Save");
+        assert_eq!(loaded.sim_rng.next_u64(), default_rng.next_u64());
+        assert!(loaded.ai2.is_none());
+        assert!(loaded.combat_cooldowns.is_empty());
         assert!(!meta.fingerprint_verified);
     }
 

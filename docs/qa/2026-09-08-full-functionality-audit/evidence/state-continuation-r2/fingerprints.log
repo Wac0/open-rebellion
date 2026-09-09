@@ -1,0 +1,2 @@
+save_state_fingerprint slot=0 tick=84 fingerprint=v1:6bb217229d3c4c60
+load_state_fingerprint slot=0 tick=84 fingerprint=v1:6bb217229d3c4c60 verified=true

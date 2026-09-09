@@ -1,0 +1,283 @@
+{
+  "console": [
+    {
+      "type": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "Missed function: audio_init"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+    },
+    {
+      "type": "info",
+      "text": "save_state_fingerprint slot=0 tick=84 fingerprint=v1:6bb217229d3c4c60"
+    },
+    {
+      "type": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "type": "warning",
+      "text": "Missed function: audio_init"
+    },
+    {
+      "type": "info",
+      "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+    },
+    {
+      "type": "info",
+      "text": "load_state_fingerprint slot=0 tick=84 fingerprint=v1:6bb217229d3c4c60 verified=true"
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4173/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "method": "GET"
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:4173/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 304
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200
+    }
+  ],
+  "requestFailures": [],
+  "pageErrors": [],
+  "cdpLog": [
+    {
+      "source": "rendering",
+      "level": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "timestamp": 1788927992784.209,
+      "url": "http://127.0.0.1:4173/"
+    },
+    {
+      "source": "rendering",
+      "level": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "timestamp": 1788927992784.239,
+      "url": "http://127.0.0.1:4173/"
+    },
+    {
+      "source": "rendering",
+      "level": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "timestamp": 1788927992784.248,
+      "url": "http://127.0.0.1:4173/"
+    },
+    {
+      "source": "rendering",
+      "level": "warning",
+      "text": "[.WebGL-0x134000dcc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "timestamp": 1788927992784.256,
+      "url": "http://127.0.0.1:4173/"
+    }
+  ],
+  "cdpRequests": [
+    {
+      "url": "http://127.0.0.1:4173/",
+      "type": "Document",
+      "requestId": "2373B0D0C855924A0A98CD19E409CDC0"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "type": "Script",
+      "requestId": "2262.2"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "type": "Fetch",
+      "requestId": "2262.4"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "type": "XHR",
+      "requestId": "2262.5"
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "type": "Document",
+      "requestId": "72754E695C0A00539F7BCCC28CC22ECF"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "type": "Script",
+      "requestId": "2262.7"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "type": "Fetch",
+      "requestId": "2262.9"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "type": "XHR",
+      "requestId": "2262.10"
+    }
+  ],
+  "cdpResponses": [
+    {
+      "url": "http://127.0.0.1:4173/",
+      "status": 200,
+      "type": "Document"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 200,
+      "type": "Script"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200,
+      "type": "Fetch"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200,
+      "type": "XHR"
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "status": 200,
+      "type": "Document"
+    },
+    {
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 304,
+      "type": "Script"
+    },
+    {
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200,
+      "type": "Fetch"
+    },
+    {
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200,
+      "type": "XHR"
+    }
+  ],
+  "cdpFailures": [],
+  "storageWrites": [
+    {
+      "event": "domStorageItemAdded",
+      "storageId": {
+        "securityOrigin": "http://127.0.0.1:4173",
+        "storageKey": "http://127.0.0.1:4173/",
+        "isLocalStorage": true
+      },
+      "key": "rebellion_save_v10_0",
+      "new_value_length": 124083
+    },
+    {
+      "event": "domStorageItemAdded",
+      "storageId": {
+        "securityOrigin": "http://127.0.0.1:4173",
+        "storageKey": "http://127.0.0.1:4173/",
+        "isLocalStorage": true
+      },
+      "key": "rebellion_meta_v10_0",
+      "newValue": "{\"schema_version\":1,\"name\":\"Continuation | Astra r2\",\"game_tick\":84,\"state_fingerprint\":{\"version\":1,\"value\":\"7760290545347087456\"}}"
+    }
+  ]
+}

@@ -108,6 +108,10 @@ impl BlockadeEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BlockadeState {
     /// Systems currently under blockade (hostile fleet present, no defender).
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_set",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_set"
+    )]
     blockaded: HashSet<SystemKey>,
 }
 

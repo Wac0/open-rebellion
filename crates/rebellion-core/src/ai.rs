@@ -158,10 +158,18 @@ pub struct AIState {
     /// Game-day of the last full evaluation pass.
     pub last_eval_tick: u64,
     /// Characters currently dispatched on missions (not available for re-dispatch).
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_set",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_set"
+    )]
     pub busy_characters: HashSet<CharacterKey>,
     /// Systems where combat recently occurred — deprioritized for attack targeting.
     /// Maps SystemKey → tick of last battle. Decays over ~100 ticks.
-    #[serde(default)]
+    #[serde(
+        default,
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     pub battle_cooldowns: HashMap<SystemKey, u64>,
 }
 

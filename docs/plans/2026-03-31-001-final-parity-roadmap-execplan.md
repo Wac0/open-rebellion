@@ -35,6 +35,7 @@ instead of a frame-cycling fallback.
 - [x] (2026-09-08) Replaced the approximate fleet-list icon offset with exact mappings for all 38 fighter and capital-ship classes; Astra-medium R9 passed the browser bitmap and interaction gate. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.md`.
 - [x] (2026-09-08) Shipped deterministic `runtime.orpk` with 52 game-data entries and 2,231 BMPs. Astra-medium R6 passed both factions with four cold-load requests, zero loose asset requests, correct transparent fleet art, working interactions, and no errors across twenty zoom steps. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md`.
 - [x] (2026-09-08) Added F-011A canonical save-state fingerprints and v9 integrity metadata. The seeded two-run probe passes; Astra-medium R3 passed 34 browser save/reload/load, lossless metadata, bitmap, network, and error assertions. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md`.
+- [x] (2026-09-09) Added the F-011B1 save v10 continuation envelope, deterministic populated typed-map fingerprints, and real-v9-artifact migration. All 483 workspace tests passed; Astra-medium R2 passed 40/40 browser storage, reload, continuation, bitmap, network, and error assertions. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md`.
 - [ ] Implement Milestone 1: targeted mission parity and covert foil parity.
 - [ ] Implement Milestone 2: remaining AI decision parity.
 - [ ] Implement Milestone 3: remaining UI and media parity.
@@ -43,7 +44,7 @@ instead of a frame-cycling fallback.
 
 ### Current continuation milestones
 
-- [ ] M0: complete save/load/delete acceptance and deterministic continuation state. HD/troop-data paths, the self-contained browser package, and the F-011A fingerprint primitive are verified.
+- [ ] M0: complete save/load/delete acceptance and browser persistence hardening. HD/troop-data paths, the self-contained browser package, F-011A fingerprints, and the F-011B1 v10 continuation envelope are verified; command replay, data hashes, and cross-runtime equivalence remain open.
 - [ ] M1: stop fleet redispatch/spawn/backlog feedback loops and prove deterministic native/WASM replay across five 5,000-tick seeds.
 - [ ] M2: converge app, playtest, automatic combat, and tactical combat on one authoritative simulation/event path.
 - [ ] M3: extend the verified indexed/lazy runtime pack with compression and bounded caches, then add IndexedDB saves, high-DPI rendering, browser audio/advisors, and Chrome/Firefox/Safari acceptance.

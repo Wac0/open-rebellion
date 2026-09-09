@@ -97,8 +97,16 @@ pub enum UprisingEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UprisingState {
     /// Systems currently in active revolt (after `UprisingBegan` fired).
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     pub active_uprisings: HashMap<SystemKey, ActiveUprising>,
     /// Cooldown: last tick an UprisingIncident was fired per system (prevents spam).
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     pub incident_cooldowns: HashMap<SystemKey, u64>,
 }
 

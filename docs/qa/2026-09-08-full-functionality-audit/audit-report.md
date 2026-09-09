@@ -3,7 +3,7 @@ title: "Open Rebellion Full Functionality Audit"
 description: "Repository status, verified evidence, release blockers, and feature-by-feature acceptance plan"
 category: qa
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-09
 commit: fc25634be905839dfa6fb477d5fff0faa49d8ae9
 tags: [qa, audit, functionality, parity, bitmap, wasm, astra, fable]
 ---
@@ -221,11 +221,12 @@ the run as formally degenerate.
 ### F-011: Deterministic replay is not established
 
 - Severity: P0 for multiplayer; P1 for reproducible single-player acceptance
-- Status: partially remediated; F-011A fingerprint primitive passes
+- Status: partially remediated; F-011A and F-011B1 pass
 - Evidence: unordered map iteration can affect movement and AI tie-breaking;
   headless and interactive paths consume randomness differently; interactive
-  seeds are wall-clock-derived; and save state omits RNG, AI runtime, combat
-  cooldown, configuration, and data-hash state.
+  seeds are wall-clock-derived; no versioned command stream or data-hash
+  manifest is recorded; and app, headless, automatic, and tactical execution
+  paths are not yet proven equivalent.
 - Verified tranche F-011A: save format v9 persists a versioned canonical
   logical-state fingerprint, rejects mismatches, preserves native v8 saves as
   explicitly unverified, and stores lossless browser metadata. The seeded
@@ -233,6 +234,15 @@ the run as formally degenerate.
   save/reload/load, metadata, bitmap, network, and error assertions with the
   matching fingerprint `v1:e2ad73730e68434a`; evidence is retained in
   `evidence/2026-09-08-state-fingerprints.md`.
+- Verified tranche F-011B1: save format v10 persists the simulation RNG,
+  optional second AI, repair state, automatic-combat cooldowns, and active
+  configuration. Human-readable fingerprints now canonicalize populated
+  typed-key maps without changing historical bincode layout. All 483 workspace
+  tests pass, including an actual 718-byte v9 artifact and eight-value RNG
+  continuation proof. Astra-medium r2 passed 40/40 browser storage, reload,
+  load, continuation, bitmap, network, and error assertions with fingerprint
+  `v1:6bb217229d3c4c60`; evidence is retained in
+  `evidence/2026-09-09-state-continuation.md`.
 - Acceptance: repeated native runs and native-versus-WASM runs produce the same
   versioned state fingerprints for the same seed and command stream, including
   after save/load.
@@ -281,8 +291,9 @@ the run as formally degenerate.
 - Severity: P1
 - Status: confirmed design gap
 - Evidence: synchronous base64-encoded bincode in `localStorage` is vulnerable
-  to quota limits and main-thread stalls, and the save schema does not contain
-  all state required for deterministic continuation.
+  to quota limits and main-thread stalls. Save v10 captures the currently known
+  deterministic campaign continuation envelope, but browser persistence remains
+  synchronous and quota failures are not yet exercised end to end.
 - Acceptance: versioned, compressed, asynchronous IndexedDB saves round-trip
   complete state, expose quota/corruption errors, and preserve fingerprints.
 
@@ -315,7 +326,7 @@ later work must not hide failures in an earlier invariant.
 
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
-| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. Save/load wiring, paths, a self-contained four-request package, and the F-011A versioned save-state fingerprint are implemented. Complete deterministic continuation and replay remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
+| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. Save/load wiring, paths, a self-contained four-request package, F-011A fingerprints, and the F-011B1 v10 continuation envelope are implemented. Command replay, data hashes, and cross-runtime equivalence remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
 | M1 — Simulation correctness | Prevent in-transit redispatch; model fleet position; merge arrivals; attach production correctly; impose stable ordering/RNG; aggregate system combat; enable Death Star production/fire; repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |

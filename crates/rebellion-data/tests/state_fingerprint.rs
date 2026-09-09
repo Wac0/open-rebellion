@@ -6,6 +6,8 @@
 
 use std::path::PathBuf;
 
+use rand::SeedableRng;
+use rand_xoshiro::Xoshiro256PlusPlus;
 use rebellion_core::ai::{AIState, AiFaction};
 use rebellion_core::betrayal::BetrayalState;
 use rebellion_core::blockade::BlockadeState;
@@ -18,8 +20,10 @@ use rebellion_core::jedi::JediState;
 use rebellion_core::manufacturing::ManufacturingState;
 use rebellion_core::missions::MissionState;
 use rebellion_core::movement::MovementState;
+use rebellion_core::repair::RepairState;
 use rebellion_core::research::ResearchState;
 use rebellion_core::tick::GameClock;
+use rebellion_core::tuning::GameConfig;
 use rebellion_core::uprising::UprisingState;
 use rebellion_core::victory::VictoryState;
 use rebellion_core::world::SeedOptions;
@@ -77,6 +81,11 @@ fn seeded_snapshot(seed: u64) -> SaveState {
         victory: VictoryState::new(alliance_hq, empire_hq),
         betrayal: BetrayalState::new(),
         economy: EconomyState::default(),
+        sim_rng: Xoshiro256PlusPlus::seed_from_u64(seed),
+        ai2: None,
+        repair: RepairState::default(),
+        combat_cooldowns: std::collections::HashMap::new(),
+        game_config: GameConfig::default(),
     }
 }
 

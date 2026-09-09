@@ -3,7 +3,7 @@ title: "Full Functionality Audit Index"
 description: "Entry point for the September 2026 Open Rebellion functionality, parity, and bitmap audit"
 category: qa
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-09
 tags: [qa, audit, functionality, parity, bitmap, astra, fable]
 ---
 
@@ -23,6 +23,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Fleet miniature proof](evidence/2026-09-08-fleet-miniatures.md) | Exact GOKRES mappings, transparency checks, Astra browser evidence, interactions, and screenshots for F-010B. |
 | [Runtime pack proof](evidence/2026-09-08-runtime-pack.md) | Deterministic package hashes, four-request startup, two-faction bitmap/interaction proof, and zoom/WebGL regression evidence for F-014A. |
 | [Save-state fingerprint proof](evidence/2026-09-08-state-fingerprints.md) | Canonical two-run fingerprints, v9 integrity checks, native v8 compatibility, and Astra browser save/reload/load proof for F-011A. |
+| [Save-continuation proof](evidence/2026-09-09-state-continuation.md) | Save v10 continuation envelope, historical v9 migration fixture, deterministic typed maps, and Astra 40/40 browser continuation proof for F-011B1. |
 | [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
@@ -30,8 +31,9 @@ acceptance plan required before the project can claim 100% functionality.
 
 The project is substantially implemented, but it is not yet demonstrably 100%
 functional. Fleet-miniature acceptance, deterministic four-request browser
-startup, and the F-011A canonical save-state fingerprint tranche now pass.
-Long-running deterministic replay, tactical parity, remaining browser
+startup, the F-011A fingerprint primitive, and the F-011B1 save-continuation
+envelope now pass. Long-running command replay, native/WASM checkpoint parity,
+tactical parity, remaining browser
 memory/media work, cross-browser performance, formatting, lint, and
 release-level visual acceptance remain incomplete.
 

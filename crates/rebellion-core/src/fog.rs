@@ -52,6 +52,10 @@ pub struct FogState {
     /// Which faction owns this fog view.
     pub faction: Faction,
     /// All systems currently visible to this faction.
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_set",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_set"
+    )]
     pub visible: HashSet<SystemKey>,
 }
 

@@ -222,6 +222,10 @@ impl ProductionQueue {
 /// Systems with no active queue are not stored (lazy entry on first enqueue).
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ManufacturingState {
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     queues: HashMap<SystemKey, ProductionQueue>,
 }
 

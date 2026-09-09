@@ -164,6 +164,12 @@ struct LiveCampaign<'a> {
     victory: &'a mut VictoryState,
     betrayal: &'a mut BetrayalState,
     economy: &'a mut EconomyState,
+    sim_rng: &'a mut Xoshiro256PlusPlus,
+    ai2: &'a mut Option<AIState>,
+    repair: &'a mut RepairState,
+    combat_cooldowns:
+        &'a mut std::collections::HashMap<rebellion_core::ids::SystemKey, u64>,
+    game_config: &'a mut rebellion_core::tuning::GameConfig,
 }
 
 impl LiveCampaign<'_> {
@@ -187,6 +193,11 @@ impl LiveCampaign<'_> {
             victory: self.victory.clone(),
             betrayal: self.betrayal.clone(),
             economy: self.economy.clone(),
+            sim_rng: self.sim_rng.clone(),
+            ai2: self.ai2.clone(),
+            repair: self.repair.clone(),
+            combat_cooldowns: self.combat_cooldowns.clone(),
+            game_config: self.game_config.clone(),
         }
     }
 
@@ -213,6 +224,11 @@ impl LiveCampaign<'_> {
         *self.victory = state.victory;
         *self.betrayal = state.betrayal;
         *self.economy = state.economy;
+        *self.sim_rng = state.sim_rng;
+        *self.ai2 = state.ai2;
+        *self.repair = state.repair;
+        *self.combat_cooldowns = state.combat_cooldowns;
+        *self.game_config = state.game_config;
     }
 }
 
@@ -605,7 +621,7 @@ async fn main() {
     let mut mission_state = MissionState::new();
     let mut event_state = EventState::new();
     let mut ai_state = AIState::new(AiFaction::Empire);
-    let game_config = rebellion_core::tuning::GameConfig::default();
+    let mut game_config = rebellion_core::tuning::GameConfig::default();
     let mut dual_ai_mode = false;
     let mut ai2_state: Option<AIState> = None;
     let mut movement_state = MovementState::new();
@@ -2831,6 +2847,11 @@ async fn main() {
                         victory: &mut victory_state,
                         betrayal: &mut betrayal_state,
                         economy: &mut economy_state,
+                        sim_rng: &mut sim_rng,
+                        ai2: &mut ai2_state,
+                        repair: &mut repair_state,
+                        combat_cooldowns: &mut combat_cooldowns,
+                        game_config: &mut game_config,
                     }
                     .snapshot();
                     let active_mods = mod_runtime.enabled_mod_list();
@@ -2889,6 +2910,11 @@ async fn main() {
                                 victory: &mut victory_state,
                                 betrayal: &mut betrayal_state,
                                 economy: &mut economy_state,
+                                sim_rng: &mut sim_rng,
+                                ai2: &mut ai2_state,
+                                repair: &mut repair_state,
+                                combat_cooldowns: &mut combat_cooldowns,
+                                game_config: &mut game_config,
                             }
                             .restore(state);
                             warmed_galaxy_font_sizes.clear();
@@ -2930,10 +2956,7 @@ async fn main() {
                             event_screen_state = EventScreenState::new();
                             tactical_state = TacticalState::new();
                             ground_combat_state = None;
-                            dual_ai_mode = false;
-                            ai2_state = None;
-                            combat_cooldowns.clear();
-                            repair_state = RepairState::default();
+                            dual_ai_mode = ai2_state.is_some();
                             msg_log = MessageLog::default();
                             msg_log.push(GameMessage::new(
                                 clock.tick,

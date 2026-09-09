@@ -42,6 +42,10 @@ pub enum BetrayalEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BetrayalState {
     /// Last tick a betrayal check ran per character (prevents spam).
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     last_check: HashMap<CharacterKey, u64>,
 }
 

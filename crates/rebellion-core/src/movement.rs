@@ -203,6 +203,10 @@ impl MovementOrder {
 /// At most one order per fleet — issuing a new order cancels the previous one.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MovementState {
+    #[serde(
+        serialize_with = "crate::serde_ordered::serialize_hash_map",
+        deserialize_with = "crate::serde_ordered::deserialize_hash_map"
+    )]
     orders: HashMap<FleetKey, MovementOrder>,
 }
 

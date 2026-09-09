@@ -1,0 +1,376 @@
+{
+  "build": "Open Rebellion F-011B1 (user-specified package)",
+  "url": "http://127.0.0.1:4173/",
+  "timestamp": "2026-09-09T04:23:30.306Z",
+  "result": "FAIL",
+  "assertion_counts": {
+    "total": 36,
+    "passed": 34,
+    "failed": 2
+  },
+  "save_name": "Continuation | Astra",
+  "saved_day": 119,
+  "loaded_day": 119,
+  "resumed_day": 126,
+  "fingerprint": "v1:555470a04e0f52b9",
+  "fingerprint_decimal": "6148663225074275001",
+  "load_verified": true,
+  "save_console_record": "save_state_fingerprint slot=0 tick=119 fingerprint=v1:555470a04e0f52b9",
+  "load_console_record": "load_state_fingerprint slot=0 tick=119 fingerprint=v1:555470a04e0f52b9 verified=true",
+  "storage": {
+    "initial_keys": [],
+    "saved_keys": [
+      "rebellion_meta_v10_0",
+      "rebellion_save_v10_0"
+    ],
+    "final_keys": [
+      "rebellion_meta_v10_0",
+      "rebellion_save_v10_0"
+    ],
+    "metadata": {
+      "schema_version": 1,
+      "name": "Continuation | Astra",
+      "game_tick": 119,
+      "state_fingerprint": {
+        "version": 1,
+        "value": "6148663225074275001"
+      }
+    },
+    "body_length": 124134,
+    "new_v9_keys": []
+  },
+  "network": {
+    "playwright_request_count": 8,
+    "playwright_response_count": 8,
+    "browser_only_requests_recovered_from_cdp": 1,
+    "total_observed_requests": 9,
+    "runtime_pack_successes": 2,
+    "loose_dat_bmp": 0,
+    "http_failures": 1,
+    "loading_failures": 0,
+    "http_failure_details": [
+      {
+        "url": "http://127.0.0.1:4173/favicon.ico",
+        "status": 404,
+        "source": "CDP Log.entryAdded"
+      }
+    ]
+  },
+  "diagnostics": {
+    "page_exceptions": 0,
+    "console_errors": 1,
+    "missing_asset_warnings": 0,
+    "invalid_deleted_texture_warnings": 0,
+    "optional_warning_count": 14,
+    "optional_warnings": [
+      {
+        "type": "warning",
+        "text": "No audio_init function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No js_create_string function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No quad_url_link_open function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No js_free_object function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "Missed function: audio_init"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x124000e5600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x124000e5600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x124000e5600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x124000e5600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      },
+      {
+        "type": "warning",
+        "text": "No audio_init function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No js_create_string function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No quad_url_link_open function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "No js_free_object function in gl.js"
+      },
+      {
+        "type": "warning",
+        "text": "Missed function: audio_init"
+      }
+    ]
+  },
+  "bitmap_observations": {
+    "before": "Authentic silver/teal cockpit surround, textured side panels, toolbar art, galaxy icon, sector map and planet markers visible.",
+    "after": "Same cockpit/map graphics intact after reload and Day 126 continuation; no blank or corrupted textures observed."
+  },
+  "failures": [
+    {
+      "name": "zero HTTP failures",
+      "pass": false,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:4173/favicon.ico",
+          "status": 404,
+          "source": "CDP Log.entryAdded"
+        }
+      ]
+    },
+    {
+      "name": "zero console errors",
+      "pass": false,
+      "evidence": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (File not found)"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "name": "fresh isolated nonpersistent Chromium context",
+      "pass": true,
+      "evidence": {}
+    },
+    {
+      "name": "runtime pack succeeds on boot and reload",
+      "pass": true,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:4173/data/runtime.orpk",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4173/data/runtime.orpk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "runtime bitmap payload loaded twice",
+      "pass": true
+    },
+    {
+      "name": "Alliance Standard campaign selected",
+      "pass": true,
+      "evidence": "03-alliance-standard.png"
+    },
+    {
+      "name": "authentic cockpit bitmap before save",
+      "pass": true,
+      "evidence": "04-campaign-initial.png: silver/teal cockpit surround and textured control panels"
+    },
+    {
+      "name": "map graphics display before save",
+      "pass": true,
+      "evidence": "04-campaign-initial.png: galaxy sectors, planet markers, labels, lower-left galaxy bitmap"
+    },
+    {
+      "name": "advanced to at least Day 10",
+      "pass": true,
+      "evidence": 119
+    },
+    {
+      "name": "Save Game opened with S",
+      "pass": true,
+      "evidence": "07-save-dialog.png"
+    },
+    {
+      "name": "save slot 1 body exists",
+      "pass": true
+    },
+    {
+      "name": "save slot 1 metadata exists",
+      "pass": true
+    },
+    {
+      "name": "exact save name including pipe",
+      "pass": true,
+      "evidence": "Continuation | Astra"
+    },
+    {
+      "name": "metadata schema_version 1",
+      "pass": true,
+      "evidence": 1
+    },
+    {
+      "name": "fingerprint value is decimal string",
+      "pass": true,
+      "evidence": {
+        "version": 1,
+        "value": "6148663225074275001"
+      }
+    },
+    {
+      "name": "no newly written v9 key",
+      "pass": true,
+      "evidence": [
+        "rebellion_meta_v10_0",
+        "rebellion_save_v10_0"
+      ]
+    },
+    {
+      "name": "save fingerprint console captured",
+      "pass": true,
+      "evidence": "save_state_fingerprint slot=0 tick=119 fingerprint=v1:555470a04e0f52b9"
+    },
+    {
+      "name": "console fingerprint matches lossless metadata",
+      "pass": true
+    },
+    {
+      "name": "save console tick matches metadata",
+      "pass": true
+    },
+    {
+      "name": "same-context reload preserved body",
+      "pass": true
+    },
+    {
+      "name": "same-context reload preserved metadata",
+      "pass": true
+    },
+    {
+      "name": "main menu Load Game used",
+      "pass": true,
+      "evidence": "12-reloaded-menu.png and 13-load-persisted.png"
+    },
+    {
+      "name": "named slot visibly persisted",
+      "pass": true,
+      "evidence": "13-load-persisted.png: [1] Continuation | Astra — Day 119"
+    },
+    {
+      "name": "load fingerprint console captured",
+      "pass": true,
+      "evidence": "load_state_fingerprint slot=0 tick=119 fingerprint=v1:555470a04e0f52b9 verified=true"
+    },
+    {
+      "name": "load verified=true",
+      "pass": true
+    },
+    {
+      "name": "save/load exact fingerprint equality",
+      "pass": true,
+      "evidence": {
+        "save": "v1:555470a04e0f52b9",
+        "load": "v1:555470a04e0f52b9"
+      }
+    },
+    {
+      "name": "loaded saved day",
+      "pass": true,
+      "evidence": "14-loaded-campaign.png"
+    },
+    {
+      "name": "resumed beyond saved day",
+      "pass": true,
+      "evidence": "15-resumed-campaign.png: Day 126"
+    },
+    {
+      "name": "cockpit bitmap intact after load and resume",
+      "pass": true,
+      "evidence": "15-resumed-campaign.png: same silver/teal frame, textured side panels and toolbar art"
+    },
+    {
+      "name": "map graphics intact after load and resume",
+      "pass": true,
+      "evidence": "15-resumed-campaign.png: sector outlines, system markers, routes, labels and lower-left galaxy bitmap"
+    },
+    {
+      "name": "zero loose DAT/BMP requests",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "zero HTTP failures",
+      "pass": false,
+      "evidence": [
+        {
+          "url": "http://127.0.0.1:4173/favicon.ico",
+          "status": 404,
+          "source": "CDP Log.entryAdded"
+        }
+      ]
+    },
+    {
+      "name": "zero loading failures",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "zero page exceptions",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "zero console errors",
+      "pass": false,
+      "evidence": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (File not found)"
+        }
+      ]
+    },
+    {
+      "name": "zero missing-asset warnings",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "zero invalid/deleted texture warnings",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "only allowed optional warnings",
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    "/tmp/open-rebellion-f011b1-astra/01-main-menu.png",
+    "/tmp/open-rebellion-f011b1-astra/02-setup.png",
+    "/tmp/open-rebellion-f011b1-astra/03-alliance-standard.png",
+    "/tmp/open-rebellion-f011b1-astra/04-campaign-initial.png",
+    "/tmp/open-rebellion-f011b1-astra/05-advanced.png",
+    "/tmp/open-rebellion-f011b1-astra/06-save-dialog.png",
+    "/tmp/open-rebellion-f011b1-astra/07-save-dialog.png",
+    "/tmp/open-rebellion-f011b1-astra/08-save-named.png",
+    "/tmp/open-rebellion-f011b1-astra/09-saved-campaign.png",
+    "/tmp/open-rebellion-f011b1-astra/10-save-selected.png",
+    "/tmp/open-rebellion-f011b1-astra/11-save-complete.png",
+    "/tmp/open-rebellion-f011b1-astra/12-reloaded-menu.png",
+    "/tmp/open-rebellion-f011b1-astra/13-load-persisted.png",
+    "/tmp/open-rebellion-f011b1-astra/14-loaded-campaign.png",
+    "/tmp/open-rebellion-f011b1-astra/15-resumed-campaign.png"
+  ],
+  "repository_files_modified": false,
+  "notes": [
+    "Strict FAIL due to favicon.ico HTTP 404 and corresponding console error; optional warnings excluded from failure.",
+    "Playwright omits the browser favicon request; cached CDP Log.entryAdded captured its URL and HTTP 404.",
+    "Test harness initially required sandbox escalation to launch Chromium; no application failure inferred from that launch attempt."
+  ]
+}
