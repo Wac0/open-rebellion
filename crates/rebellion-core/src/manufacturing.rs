@@ -366,22 +366,31 @@ impl ManufacturingSystem {
         let mut completions = Vec::new();
         let mut newly_idle = Vec::new();
 
-        for (system_key, queue) in state.queues.iter_mut() {
+        // HashMap iteration order is randomized per process. Completion order
+        // mutates slotmaps downstream, so walk queues by stable system key.
+        let mut system_keys: Vec<_> = state.queues.keys().copied().collect();
+        system_keys.sort_unstable();
+
+        for system_key in system_keys {
             // Skip blockaded systems — manufacturing halted and they can't
             // transition idle while blocked.
-            if blocked_systems.contains(system_key) {
+            if blocked_systems.contains(&system_key) {
                 continue;
             }
+            let queue = state
+                .queues
+                .get_mut(&system_key)
+                .expect("manufacturing queue key collected from the same map");
             let pre_len = queue.len();
             for kind in queue.advance_ticks(tick_count) {
                 completions.push(CompletionEvent {
-                    system: *system_key,
+                    system: system_key,
                     tick: final_tick,
                     kind,
                 });
             }
             if pre_len > 0 && queue.is_empty() {
-                newly_idle.push(*system_key);
+                newly_idle.push(system_key);
             }
         }
 
@@ -650,5 +659,28 @@ mod tests {
         assert_eq!(advance.newly_idle, vec![sys_b], "only sys_b transitions to idle");
         assert!(!advance.newly_idle.contains(&sys_a),
             "K6: blockaded systems must never appear in newly_idle");
+    }
+
+    #[test]
+    fn completions_use_stable_system_key_order() {
+        let keys = mock_system_keys(3);
+        let mut state = ManufacturingState::new();
+        for &system in keys.iter().rev() {
+            state.enqueue(system, cap_ship_item(1));
+        }
+
+        let advance = ManufacturingSystem::advance_tracked(
+            &mut state,
+            &[TickEvent { tick: 1 }],
+            &HashSet::new(),
+        );
+        let completion_systems: Vec<_> = advance
+            .completions
+            .iter()
+            .map(|completion| completion.system)
+            .collect();
+
+        assert_eq!(completion_systems, keys);
+        assert_eq!(advance.newly_idle, keys);
     }
 }

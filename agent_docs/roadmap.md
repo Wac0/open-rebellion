@@ -371,13 +371,14 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [x] Link README parity claims to current acceptance evidence.
 - [x] Add F-011B2 replay format v1: strict JSON, typed `{tick, sequence, actor}` commands, checkpoint positions, configuration identity, and canonical per-file/aggregate hashes for all 51 simulation DATs ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md)).
-- [ ] Execute F-011B2 artifacts, remove simulation-affecting unordered iteration, and prove native/WASM checkpoint equivalence, including across save/load.
+- [x] Add the F-011B3 recorder/executor with fail-fast checkpoints, save-v11 continuation, stable state-affecting iteration, and a five-process native original-data golden ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md)).
+- [ ] Execute one F-011B3 artifact in native and WASM and prove checkpoint equivalence, including across save/load.
 
 ### M1: Simulation Correctness and Determinism — 2–3 weeks
 
 - [ ] Prevent in-transit fleet redispatch and travel-progress resets.
 - [ ] Model fleet position explicitly; merge arrivals; stop unbounded production fleets.
-- [ ] Replace iteration-order randomness with versioned deterministic streams.
+- [ ] Extend stable ordering and versioned random streams through five 5,000-tick campaign seeds.
 - [ ] Resolve combat at system scope so queued fleets cannot create a permanent backlog.
 - [ ] Enable AI Death Star construction/fire/cleanup and repair parity oracles.
 - [ ] Pass five 5,000-tick seeds: transit ≤10%, orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles across ≥8 systems, busiest system ≤40%.

@@ -1942,7 +1942,7 @@ impl AISystem {
 
         // Build transient deconfliction map from active movement orders.
         let mut targeted_counts: HashMap<SystemKey, usize> = HashMap::new();
-        for (_, order) in movement.orders() {
+        for order in movement.orders().values() {
             if let Some(f) = world.fleets.get(order.fleet) {
                 if f.is_alliance == is_alliance {
                     *targeted_counts.entry(order.destination).or_default() += 1;
@@ -2102,7 +2102,12 @@ impl AISystem {
                 // Offensive: reinforce the most-targeted enemy system (pile onto attack)
                 let best_attack = targeted_counts.iter()
                     .filter(|(_, &count)| count > 0)
-                    .max_by_key(|(_, &count)| count)
+                    .max_by(|(system_a, count_a), (system_b, count_b)| {
+                        count_a
+                            .cmp(count_b)
+                            // Prefer the lower stable key when counts tie.
+                            .then_with(|| system_b.cmp(system_a))
+                    })
                     .map(|(&sys, _)| sys);
                 if let Some(target) = best_attack {
                     if target != fleet_location {

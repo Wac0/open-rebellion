@@ -317,9 +317,18 @@ impl MovementSystem {
         let final_tick = tick_events.last().unwrap().tick;
         let mut arrivals = Vec::new();
 
+        // HashMap iteration order is randomized per process. Arrival order
+        // mutates per-system fleet vectors downstream, so walk by fleet key.
+        let mut fleet_keys: Vec<_> = state.orders.keys().copied().collect();
+        fleet_keys.sort_unstable();
+
         // Advance all orders; collect completed ones.
         let mut completed_keys = Vec::new();
-        for (fleet_key, order) in state.orders.iter_mut() {
+        for fleet_key in fleet_keys {
+            let order = state
+                .orders
+                .get_mut(&fleet_key)
+                .expect("movement order key collected from the same map");
             order.ticks_elapsed = order
                 .ticks_elapsed
                 .saturating_add(tick_count)
@@ -327,12 +336,12 @@ impl MovementSystem {
 
             if order.is_complete() {
                 arrivals.push(ArrivalEvent {
-                    fleet: *fleet_key,
+                    fleet: fleet_key,
                     tick: final_tick,
                     origin: order.origin,
                     system: order.destination,
                 });
-                completed_keys.push(*fleet_key);
+                completed_keys.push(fleet_key);
             }
         }
 
@@ -500,6 +509,26 @@ mod tests {
         assert_eq!(arrivals[0].fleet, fleet_a);
         assert_eq!(state.len(), 1);
         assert_eq!(state.get(fleet_b).unwrap().ticks_elapsed, 5);
+    }
+
+    #[test]
+    fn simultaneous_arrivals_use_stable_fleet_key_order() {
+        let mut fleet_sm: slotmap::SlotMap<FleetKey, ()> = slotmap::SlotMap::with_key();
+        let fleet_a = fleet_sm.insert(());
+        let fleet_b = fleet_sm.insert(());
+        let fleet_c = fleet_sm.insert(());
+        let mut sys_sm: slotmap::SlotMap<SystemKey, ()> = slotmap::SlotMap::with_key();
+        let origin = sys_sm.insert(());
+        let destination = sys_sm.insert(());
+        let mut state = MovementState::new();
+
+        for fleet in [fleet_c, fleet_b, fleet_a] {
+            state.order(fleet, origin, destination, 1);
+        }
+
+        let arrivals = MovementSystem::advance(&mut state, &ticks(1));
+        let arrived_fleets: Vec<_> = arrivals.iter().map(|arrival| arrival.fleet).collect();
+        assert_eq!(arrived_fleets, vec![fleet_a, fleet_b, fleet_c]);
     }
 
     // --- Distance-based transit tests ---

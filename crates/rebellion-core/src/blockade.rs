@@ -185,32 +185,38 @@ impl BlockadeSystem {
             })
             .collect();
 
-        // New blockades (entered this tick)
-        for &sys_key in &now_blockaded {
-            if !state.blockaded.contains(&sys_key) {
-                events.push(BlockadeEvent::BlockadeStarted { system: sys_key, tick });
+        // HashSet iteration order is randomized per process. Events mutate
+        // world state downstream, so emit transitions by stable system key.
+        let mut newly_blockaded: Vec<_> = now_blockaded
+            .difference(&state.blockaded)
+            .copied()
+            .collect();
+        newly_blockaded.sort_unstable();
 
-                // Destroy in-transit troops belonging to the defending faction.
-                // "In transit" = ground_units at the blockaded system that belong to
-                // the faction being blockaded (faction mismatch with blockader).
-                if let Some(sys) = world.systems.get(sys_key) {
-                    let blockader_is_alliance = Self::blockader_is_alliance(world, sys);
-                    for &troop_key in &sys.ground_units {
-                        if let Some(troop) = world.troops.get(troop_key) {
-                            // Troop is caught in blockade if it belongs to the faction
-                            // being blockaded (i.e., same faction as the system's controller,
-                            // opposite of the blockader).
-                            let troop_is_target = troop.is_alliance != blockader_is_alliance;
-                            // Only destroy troops in transit (regiment_strength > 0 but
-                            // being transported — for now all ground_units at a newly
-                            // blockaded system qualify per RE FUN_00504a00 semantics).
-                            if troop_is_target {
-                                events.push(BlockadeEvent::TroopDestroyed {
-                                    system: sys_key,
-                                    troop: troop_key,
-                                    tick,
-                                });
-                            }
+        // New blockades (entered this tick)
+        for sys_key in newly_blockaded {
+            events.push(BlockadeEvent::BlockadeStarted { system: sys_key, tick });
+
+            // Destroy in-transit troops belonging to the defending faction.
+            // "In transit" = ground_units at the blockaded system that belong to
+            // the faction being blockaded (faction mismatch with blockader).
+            if let Some(sys) = world.systems.get(sys_key) {
+                let blockader_is_alliance = Self::blockader_is_alliance(world, sys);
+                for &troop_key in &sys.ground_units {
+                    if let Some(troop) = world.troops.get(troop_key) {
+                        // Troop is caught in blockade if it belongs to the faction
+                        // being blockaded (i.e., same faction as the system's controller,
+                        // opposite of the blockader).
+                        let troop_is_target = troop.is_alliance != blockader_is_alliance;
+                        // Only destroy troops in transit (regiment_strength > 0 but
+                        // being transported — for now all ground_units at a newly
+                        // blockaded system qualify per RE FUN_00504a00 semantics).
+                        if troop_is_target {
+                            events.push(BlockadeEvent::TroopDestroyed {
+                                system: sys_key,
+                                troop: troop_key,
+                                tick,
+                            });
                         }
                     }
                 }
@@ -218,10 +224,10 @@ impl BlockadeSystem {
         }
 
         // Cleared blockades (ended this tick)
-        for &sys_key in &state.blockaded {
-            if !now_blockaded.contains(&sys_key) {
-                events.push(BlockadeEvent::BlockadeEnded { system: sys_key, tick });
-            }
+        let mut cleared: Vec<_> = state.blockaded.difference(&now_blockaded).copied().collect();
+        cleared.sort_unstable();
+        for sys_key in cleared {
+            events.push(BlockadeEvent::BlockadeEnded { system: sys_key, tick });
         }
 
         state.blockaded = now_blockaded;
@@ -355,6 +361,70 @@ mod tests {
         let mut state = BlockadeState::new();
         let events = BlockadeSystem::advance(&mut state, &world, &[]);
         assert!(events.is_empty());
+    }
+
+    #[test]
+    fn blockade_transitions_use_stable_system_key_order() {
+        let (mut world, system_a) = make_world();
+        let sector = world.systems[system_a].sector;
+        let system_b = world.systems.insert(System {
+            dat_id: DatId::new(0x9000_0001),
+            name: "Hoth".into(),
+            sector,
+            x: 30,
+            y: 40,
+            exploration_status: ExplorationStatus::Explored,
+            popularity_alliance: 0.5,
+            popularity_empire: 0.5,
+            is_populated: true,
+            total_energy: 0,
+            raw_materials: 0,
+            espionage_rating: 0.0,
+            fleets: vec![],
+            ground_units: vec![],
+            special_forces: vec![],
+            defense_facilities: vec![],
+            manufacturing_facilities: vec![],
+            production_facilities: vec![],
+            is_headquarters: false,
+            is_destroyed: false,
+            control: ControlKind::Controlled(Faction::Alliance),
+        });
+        add_fleet(&mut world, system_b, false);
+        add_fleet(&mut world, system_a, false);
+
+        let mut state = BlockadeState::new();
+        let started = BlockadeSystem::advance(&mut state, &world, &[tick(1)]);
+        assert_eq!(
+            started,
+            vec![
+                BlockadeEvent::BlockadeStarted {
+                    system: system_a,
+                    tick: 1,
+                },
+                BlockadeEvent::BlockadeStarted {
+                    system: system_b,
+                    tick: 1,
+                },
+            ]
+        );
+
+        world.systems[system_a].fleets.clear();
+        world.systems[system_b].fleets.clear();
+        let ended = BlockadeSystem::advance(&mut state, &world, &[tick(2)]);
+        assert_eq!(
+            ended,
+            vec![
+                BlockadeEvent::BlockadeEnded {
+                    system: system_a,
+                    tick: 2,
+                },
+                BlockadeEvent::BlockadeEnded {
+                    system: system_b,
+                    tick: 2,
+                },
+            ]
+        );
     }
 
     #[test]

@@ -78,8 +78,9 @@ object keys must be strings. The adapters intentionally leave non-human
 serialization unchanged, preserving the historical bincode layout.
 
 Sequence order that carries gameplay meaning remains ordered. A matching
-fingerprint proves that the recorded logical snapshot matches; it does not yet
-prove a versioned command replay or native/WASM execution equivalence.
+fingerprint proves only that one recorded logical snapshot matches. F-011B3
+adds native command replay and checkpoint proof; native/WASM equivalence
+remains open.
 
 ## Migration rules
 
@@ -152,4 +153,5 @@ Current verification evidence:
 [F-011A fingerprints](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-state-fingerprints.md)
 [F-011B1 continuation](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md),
 [F-011B2 replay contract](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md),
+[F-011B3 replay execution](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md),
 and [F-016B campaign setup](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md).

@@ -23,7 +23,8 @@ it does not yet make the app and playtest simulation loops equivalent.
 | Versioned replay JSON envelope | F-011B2 complete | Format v1 with strict decoding |
 | Canonical `.DAT` identity | F-011B2 complete | Per-file and aggregate fingerprints |
 | Gap-free command ordering | F-011B2 complete | `{tick, sequence, actor}` validation |
-| Replay executor and recorder | Open | Next F-011B tranche |
+| Replay executor and recorder | F-011B3 complete | Per-command state checkpoints |
+| Fresh-process native replay | F-011B3 complete | Stable 25-tick original-data golden |
 | App/playtest tick convergence | Open | F-012 and M2 |
 | Native/WASM checkpoint equality | Open | Final F-011 acceptance gate |
 | Automatic/tactical combat equality | Open | M2 |
@@ -48,6 +49,25 @@ change without incrementing `REPLAY_FORMAT_VERSION`.
 Each checkpoint identifies a tick, the exact number of commands already
 applied, and the expected versioned state fingerprint. This disambiguates
 multiple commands at one tick and supports prefix-by-prefix failure reports.
+
+## Recording and execution
+
+`record_replay()` derives command ticks and gap-free sequence numbers from the
+runtime, applies each typed command, and records a canonical `SaveState`
+fingerprint after every command. `execute_replay()` independently validates the
+engine version, seed, data manifest, active configuration, initial state,
+command position, and each checkpoint. Playback stops at the first mismatch
+with the checkpoint index, tick, command prefix, and expected/observed hashes.
+
+Format v1 reserves exactly 1,024 Xoshiro256++ rolls per simulated tick and
+limits one advance command to 1,000,000 ticks. The runtime supports speed
+changes, dual-AI toggling, visibility controls, forced victory checks, and
+explicit tick advances through the shared `run_simulation_tick()` path.
+
+F-011B3 also removes process-random iteration from state-affecting
+manufacturing completions, simultaneous fleet arrivals, blockade transitions,
+and the AI's equal-count reinforcement choice. Regression tests require stable
+key order at each boundary.
 
 ## Simulation-data identity
 
@@ -75,13 +95,15 @@ cargo check -p rebellion-app --target wasm32-unknown-unknown
 ```
 
 The ignored fixture test requires the locally supplied original `.DAT` files.
-The unit tests use synthetic data and run in normal repository test passes.
+It records a nine-command, 25-tick, 200-system campaign, reloads its initial
+state through save v11, and checks every command-prefix fingerprint against a
+cross-process golden. Five fresh native processes produced final fingerprint
+`v1:f512773b607069ee`. The unit tests use synthetic data and run in normal
+repository test passes.
 
 ## Next implementation boundary
 
-The next tranche should record and execute format-v1 commands through one
-runner, snapshot `SaveState` at each checkpoint, and fail on seed, data,
-configuration, command-position, or state-fingerprint mismatch. Do not claim
-native/WASM equivalence until the interactive app calls the same tick entry
-point as `rebellion-playtest`; `rebellion-app/src/main.rs` still duplicates the
-simulation sequence.
+F-011B4 must execute the same artifact in native and WASM and compare every
+checkpoint. Do not claim cross-runtime equivalence until the interactive app
+calls the same tick entry point as `rebellion-playtest`;
+`rebellion-app/src/main.rs` still duplicates the simulation sequence.

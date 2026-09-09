@@ -349,10 +349,12 @@
         "Astra medium r3 passed 34 browser save, reload, load, bitmap, network, and error assertions with a matching verified fingerprint",
         "F-011B1 save v10 preserves the known continuation envelope and Astra medium r2 passed 40 browser continuation assertions",
         "F-011B2 defines replay format v1 with strict command ordering, checkpoints, configuration identity, and canonical hashes for all 51 simulation DAT inputs",
-        "unordered map iteration affects movement and AI tie-breaking",
+        "F-011B3 records and executes format-v1 commands with fail-fast state checkpoints and save-v11 continuation",
+        "five fresh native processes reproduced the same nine original-data checkpoints and final fingerprint v1:f512773b607069ee",
+        "state-affecting manufacturing, movement, blockade, and AI tie iteration is now stable",
         "headless and app paths consume random values differently",
         "interactive seeds are wall-clock-derived",
-        "replay execution and cross-runtime checkpoint equivalence remain absent"
+        "native-WASM, automatic-combat, and tactical checkpoint equivalence remain absent"
       ],
       "verified_tranches": [
         {
@@ -511,11 +513,53 @@
             "strict_clippy": "preexisting_baseline_fail"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md"
+        },
+        {
+          "id": "F-011B3",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "replay_execution": {
+            "recorder_wired": true,
+            "executor_wired": true,
+            "checkpoint_after_each_command": true,
+            "fail_fast_checkpoint_diagnostics": true,
+            "rolls_per_tick": 1024,
+            "max_ticks_per_advance_command": 1000000,
+            "save_v11_reload_continuation": "pass"
+          },
+          "stable_runtime_order": [
+            "manufacturing_completions_by_system_key",
+            "movement_arrivals_by_fleet_key",
+            "blockade_transitions_by_system_key",
+            "ai_reinforcement_ties_by_system_key"
+          ],
+          "native_golden": {
+            "seed": 42,
+            "systems": 200,
+            "commands": 9,
+            "ticks": 25,
+            "fresh_processes": 5,
+            "initial_fingerprint": "v1:765c9318acb5cb50",
+            "final_fingerprint": "v1:f512773b607069ee",
+            "all_checkpoint_fingerprints_identical": true
+          },
+          "automated": {
+            "focused_replay_tests_passed": 11,
+            "original_data_fixture_tests_passed": 2,
+            "workspace_tests_passed": 518,
+            "workspace_tests_ignored": 4,
+            "failures": 0,
+            "wasm_app_check": "pass_with_preexisting_warnings",
+            "core_data_clippy": "pass_with_documented_baseline_exemptions",
+            "go_ui_extractor_tests": "pass",
+            "repository_rustfmt": "preexisting_baseline_fail"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md"
         }
       ],
       "remaining": [
-        "record and execute replay format v1 command streams",
-        "remove simulation-time unordered iteration effects",
+        "prove native and WASM execution produce identical checkpoints",
+        "extend deterministic ordering through five 5000-tick campaign seeds",
         "converge headless and interactive tick paths",
         "compare native, WASM, automatic, and tactical checkpoints",
         "persist and resume any interactive mid-combat state required by the unified engine"
