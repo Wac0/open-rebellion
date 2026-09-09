@@ -381,6 +381,11 @@ and underlying state mutation are both demonstrated.
 | P39 | Protected Cloudflare deployment | Preview and production Pages deployments, secret-backed password gate, signed session cookie, logout/expiry/tamper tests, cache/security headers, asset/API access denial before authentication, deployed single-player/multiplayer smoke tests, rollback, and retained Astra evidence. |
 | P40 | GitHub Pages documentation | Publish the maintained project documentation from `main`; verify Jekyll-safe Markdown, working internal links, current README/audit/roadmap content, successful deployment, and a public smoke test. |
 
+P40 passed on 2026-09-08. Pages run `34296165296` completed from `main`, and
+the public landing page, audit index, and fleet evidence page returned HTTP
+200. See `evidence/2026-09-08-github-pages.md`. This documentation pass does
+not imply that the gameplay and release-artifact passes above are complete.
+
 ## Bitmap proof protocol
 
 A bitmap passes only when all of the following evidence exists:

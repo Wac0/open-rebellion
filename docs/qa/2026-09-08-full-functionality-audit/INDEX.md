@@ -21,6 +21,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Audit data](audit-report.json) | Machine-readable baseline, findings, optimization milestones, feature passes, and release gates. |
 | [Cockpit PR #2 audit](evidence/2026-09-08-cockpit-pr-audit.md) | Resource adjudication, integrated diagnostics, Astra browser evidence, screenshots, and follow-up scope. |
 | [Fleet miniature proof](evidence/2026-09-08-fleet-miniatures.md) | Exact GOKRES mappings, transparency checks, Astra browser evidence, interactions, and screenshots for F-010B. |
+| [GitHub Pages proof](evidence/2026-09-08-github-pages.md) | Successful deployment run and public HTTP smoke tests for P40. |
 | [Project archive](../../../archive/INDEX.md) | Superseded progress and playtest artifacts retained for provenance. |
 
 ## Current conclusion

@@ -406,7 +406,7 @@ would tune around known simulation feedback defects.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
 - [ ] Generate the complete bitmap resource ledger from the entity map; fail on unexplained misses. Fleet-list miniatures are verified in F-010B.
 - [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
-- [ ] Publish current project documentation from `main` through GitHub Pages and verify the public site (P40).
+- [x] Publish current project documentation from `main` through GitHub Pages and verify the public site (P40; run `34296165296`).
 - [ ] Close every supported P00–P40 pass from release artifacts before claiming 100% functionality.
 
 ### v1.0: Password-Protected Cloudflare Release

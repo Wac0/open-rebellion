@@ -558,7 +558,20 @@
     {"id":"P37","name":"Campaign acceptance","status":"pending"},
     {"id":"P38","name":"Release artifacts","status":"pending"},
     {"id":"P39","name":"Protected Cloudflare deployment","status":"pending"},
-    {"id":"P40","name":"GitHub Pages documentation","status":"pending"}
+    {
+      "id": "P40",
+      "name": "GitHub Pages documentation",
+      "status": "pass",
+      "verified_at": "2026-09-08",
+      "source_commit": "52e646ae53a69cd6695ad4233db36f4dfd9bdb53",
+      "deployment_run": 34296165296,
+      "public_http_checks": {
+        "landing_page": 200,
+        "audit_index": 200,
+        "fleet_evidence": 200
+      },
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-github-pages.md"
+    }
   ],
   "evidence_contract": [
     "feature_id_and_commit_sha",
