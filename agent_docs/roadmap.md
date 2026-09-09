@@ -353,7 +353,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 
 ### M0: Truth and Critical Integration — 1 week
 
-- [ ] Wire Save, Load, Delete, and the main-menu save picker on native and WASM.
+- [x] Wire Save, Load, Delete, and the main-menu save picker; Astra-medium r2 passed the 33/33 browser deletion/reload gate after exposing and fixing empty-slot Load activation ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-save-delete.md)).
 - [ ] Surface browser corruption/quota errors and move production saves to asynchronous IndexedDB.
 - [x] Correct the native HD root, prefetch `TROOPSD.DAT`, and package all 52 game-data entries plus 2,231 BMPs in deterministic `runtime.orpk` (`F-014A`; [Astra evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md)).
 - [x] Map all 38 fighter/capital-ship records to authentic GOKRES fleet miniatures and pass Astra-medium bitmap/interaction proof (`4589d2e`; F-010B).

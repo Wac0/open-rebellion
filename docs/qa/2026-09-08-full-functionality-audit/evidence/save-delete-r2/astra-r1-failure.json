@@ -1,0 +1,318 @@
+{
+  "result": "FAIL",
+  "commit": "f7971f57892195e94d825d57f9c5c6f738f0ba83",
+  "url": "http://127.0.0.1:4173/",
+  "isolation": "fresh Chromium browser and nonpersistent context; same page/context reload",
+  "method": "Real canvas UI mouse/keyboard only; storage read-only inspection; handlers before navigation",
+  "totals": {
+    "responses": 8,
+    "runtimeOrpkLoads": 2,
+    "looseDatBmp": 0,
+    "httpFailures": 0,
+    "requestFailures": 0,
+    "pageExceptions": 0,
+    "consoleErrors": 0,
+    "missingAssets": 0,
+    "invalidDeletedTextures": 0,
+    "faviconErrors": 0,
+    "optionalAudioJsHookWarnings": 10,
+    "softwareReadPixelsWarnings": 0,
+    "assertions": 28,
+    "passed": 27,
+    "failed": 1,
+    "screenshots": 14,
+    "events": 44
+  },
+  "assertions": [
+    {
+      "name": "fresh_localStorage",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "alliance_standard_campaign",
+      "pass": true,
+      "evidence": "configured.png; campaign.png, 200 systems Day 0"
+    },
+    {
+      "name": "authentic_cockpit_map_bitmaps_visible",
+      "pass": true,
+      "evidence": "campaign.png: textured cockpit frame and map icons"
+    },
+    {
+      "name": "save_exact_name_populated_row",
+      "pass": true,
+      "evidence": "populated-slot.png"
+    },
+    {
+      "name": "only_v10_body_meta_keys",
+      "pass": true,
+      "evidence": [
+        {
+          "key": "rebellion_meta_v10_0",
+          "length": 125,
+          "metadata": {
+            "schema_version": 1,
+            "name": "Delete | Astra r1",
+            "game_tick": 0,
+            "state_fingerprint": {
+              "version": 1,
+              "value": "6627686791836943914"
+            }
+          }
+        },
+        {
+          "key": "rebellion_save_v10_0",
+          "length": 103503
+        }
+      ]
+    },
+    {
+      "name": "exact_metadata",
+      "pass": true,
+      "evidence": {
+        "schema_version": 1,
+        "name": "Delete | Astra r1",
+        "game_tick": 0,
+        "state_fingerprint": {
+          "version": 1,
+          "value": "6627686791836943914"
+        }
+      }
+    },
+    {
+      "name": "decimal_string_fingerprint",
+      "pass": true,
+      "evidence": {
+        "version": 1,
+        "value": "6627686791836943914"
+      }
+    },
+    {
+      "name": "delete_row_empty",
+      "pass": true,
+      "evidence": "deleted-slot.png"
+    },
+    {
+      "name": "v10_keys_removed",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "v9_keys_absent",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "delete_selection_action_safe",
+      "pass": true,
+      "evidence": "deleted-slot.png: selection/name cleared, Save dim; clicking does not recreate save"
+    },
+    {
+      "name": "same_context_reload_slot_empty",
+      "pass": true,
+      "evidence": "reloaded-empty-load.png"
+    },
+    {
+      "name": "load_initially_disabled",
+      "pass": true,
+      "evidence": "reloaded-empty-load.png; load-disabled-probe.png"
+    },
+    {
+      "name": "load_disabled_for_deleted_slot",
+      "pass": false,
+      "evidence": "empty-selected-load.png: Load enabled after selecting empty slot; empty-load-attempt.png"
+    },
+    {
+      "name": "requested_commit_checkout",
+      "pass": true,
+      "evidence": "git rev-parse HEAD = f7971f57892195e94d825d57f9c5c6f738f0ba83; served artifact commit not independently embedded/verified"
+    },
+    {
+      "name": "capture_before_first_navigation",
+      "pass": true,
+      "evidence": "handlers registered before page.goto; new browser and newContext"
+    },
+    {
+      "name": "fingerprint_matches_runtime_log",
+      "pass": true,
+      "evidence": "6627686791836943914"
+    },
+    {
+      "name": "runtime_orpk_loaded",
+      "pass": true,
+      "evidence": "2 HTTP 200 responses; runtime log: 51 game files, 2231 UI bitmaps, 28285762 bytes per load"
+    },
+    {
+      "name": "zero_looseDatBmp",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_httpFailures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_requestFailures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_pageExceptions",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_consoleErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_missingAssets",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_invalidDeletedTextures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_faviconErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "four_required_screenshots",
+      "pass": true,
+      "evidence": [
+        "campaign.png",
+        "configured.png",
+        "deleted-slot.png",
+        "empty-load-attempt.png",
+        "empty-selected-load.png",
+        "initial.png",
+        "load-disabled-probe.png",
+        "new-game.png",
+        "populated-selected.png",
+        "populated-slot.png",
+        "reloaded-empty-load.png",
+        "reloaded-menu.png",
+        "save-named.png",
+        "save-open.png"
+      ]
+    },
+    {
+      "name": "sanitized_storage_evidence",
+      "pass": true,
+      "evidence": "save body recorded only as key and length; metadata fields recorded without body"
+    }
+  ],
+  "storage": {
+    "fresh": [],
+    "saved": [
+      {
+        "key": "rebellion_meta_v10_0",
+        "length": 125,
+        "metadata": {
+          "schema_version": 1,
+          "name": "Delete | Astra r1",
+          "game_tick": 0,
+          "state_fingerprint": {
+            "version": 1,
+            "value": "6627686791836943914"
+          }
+        }
+      },
+      {
+        "key": "rebellion_save_v10_0",
+        "length": 103503
+      }
+    ],
+    "deleted": [],
+    "reloaded": []
+  },
+  "warnings": [
+    {
+      "time": "2026-09-09T04:50:31.351Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:50:31.351Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:50:31.351Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:50:31.351Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:50:31.520Z",
+      "type": "console",
+      "level": "warning",
+      "text": "Missed function: audio_init"
+    },
+    {
+      "time": "2026-09-09T04:52:22.631Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No audio_init function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:52:22.631Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No js_create_string function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:52:22.631Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No quad_url_link_open function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:52:22.631Z",
+      "type": "console",
+      "level": "warning",
+      "text": "No js_free_object function in gl.js"
+    },
+    {
+      "time": "2026-09-09T04:52:22.642Z",
+      "type": "console",
+      "level": "warning",
+      "text": "Missed function: audio_init"
+    }
+  ],
+  "screenshots": [
+    "campaign.png",
+    "configured.png",
+    "deleted-slot.png",
+    "empty-load-attempt.png",
+    "empty-selected-load.png",
+    "initial.png",
+    "load-disabled-probe.png",
+    "new-game.png",
+    "populated-selected.png",
+    "populated-slot.png",
+    "reloaded-empty-load.png",
+    "reloaded-menu.png",
+    "save-named.png",
+    "save-open.png"
+  ],
+  "findings": [
+    "Load enabled for deleted empty slot after selection; click displays no save in slot 0."
+  ],
+  "scope": "Zero error counts refer to observed full journey. v9 absence demonstrated; removal of pre-existing v9 keys was not exercised."
+}

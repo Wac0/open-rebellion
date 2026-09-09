@@ -103,15 +103,24 @@ the run as formally degenerate.
 
 ## Confirmed findings
 
-### F-001: Save, Load, and Delete commands are discarded
+### F-001: Save, Load, and Delete UI wiring
 
 - Severity: P0
-- Status: confirmed
-- Evidence: the backend and panel exist, but `PanelAction::SaveGame`,
-  `LoadGame`, and `DeleteSave` reach empty match arms in
-  `crates/rebellion-app/src/main.rs`.
+- Status: remediated; browser UI gate passes, native GUI smoke remains
+- Evidence: the app now handles `PanelAction::SaveGame`, `LoadGame`, and
+  `DeleteSave` against the full live campaign before the general action
+  dispatcher. Main-menu Load Game opens the slot picker.
+- Verified tranche: Astra-medium r1 passed 27/28 checks and found that an empty
+  slot could be selected in load mode. The panel now disables empty load rows
+  and verifies the selected slot is occupied before enabling Load. All 486
+  workspace tests pass, including three focused panel regressions.
+  Astra-medium r2 then passed 33/33 real-UI save/delete/reload assertions with
+  intact bitmaps, complete v10 key removal, an unselectable empty slot, and zero
+  strict browser/network/asset errors. See
+  `evidence/2026-09-09-save-delete.md`.
 - Acceptance: perform UI-driven save, restart, load, compare full campaign
-  state, delete the slot, and verify disk/browser storage changes.
+  state, delete the slot, and verify disk/browser storage changes. Browser is
+  verified; retain a native GUI restart smoke test in P31.
 
 ### F-002: Native HD bitmap root does not match the asset layout
 
@@ -307,9 +316,8 @@ interpretations:
   Star checks expose structural AI/event gaps, and the research mismatch may be
   an oracle-ID mismatch. The run remains practically degenerate despite the
   evaluator's `false` flag because it only detects the absence of combat.
-- Save/load is more incomplete than an unwired in-game panel: the main-menu
-  Load Game route starts a default Alliance world without a slot picker or
-  faction restoration.
+- The Fable finding that main-menu Load Game skipped slot selection and faction
+  restoration has since been remediated and browser-verified under F-001.
 - Browser parity currently excludes the entire audio engine, not only selected
   sounds. Native advisor frames also depend on a gitignored reference-art path,
   so release packaging must stage owned runtime assets explicitly.
@@ -326,7 +334,7 @@ later work must not hide failures in an earlier invariant.
 
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
-| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. Save/load wiring, paths, a self-contained four-request package, F-011A fingerprints, and the F-011B1 v10 continuation envelope are implemented. Command replay, data hashes, and cross-runtime equivalence remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
+| M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add a two-run fingerprint check. Browser Save/Load/Delete, paths, a self-contained four-request package, F-011A fingerprints, and the F-011B1 v10 continuation envelope are verified. Native GUI restart, persistence hardening, command replay, data hashes, and cross-runtime equivalence remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
 | M1 — Simulation correctness | Prevent in-transit redispatch; model fleet position; merge arrivals; attach production correctly; impose stable ordering/RNG; aggregate system combat; enable Death Star production/fire; repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |

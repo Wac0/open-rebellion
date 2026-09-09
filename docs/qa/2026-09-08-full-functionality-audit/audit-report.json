@@ -130,10 +130,55 @@
     {
       "id": "F-001",
       "severity": "P0",
-      "status": "confirmed",
-      "title": "Save, Load, and Delete commands are discarded",
+      "status": "remediated_browser_verified_native_gui_pending",
+      "title": "Save, Load, and Delete UI wiring",
       "evidence": [
-        "crates/rebellion-app/src/main.rs:2893"
+        "the app handles SaveGame, LoadGame, and DeleteSave before the general panel-action dispatcher",
+        "main-menu Load Game opens the real slot picker and restores the saved faction",
+        "Astra medium r1 passed 27 of 28 checks and exposed empty-slot Load activation",
+        "the focused guard disables empty load rows and requires an occupied selection",
+        "486 workspace tests pass, including 3 focused save-panel regressions",
+        "Astra medium r2 passed 33 of 33 save, delete, reload, bitmap, storage, network, and error assertions"
+      ],
+      "verified_tranches": [
+        {
+          "id": "F-001-browser",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "automated": {
+            "workspace_tests_passed": 486,
+            "render_tests_passed": 67,
+            "focused_panel_tests_passed": 3,
+            "failures": 0,
+            "wasm_release_package": "pass_with_preexisting_warnings"
+          },
+          "browser": {
+            "r1": "27_passed_1_failed_empty_load_slot_selectable",
+            "r2_assertions": 33,
+            "save_delete_reload": "pass",
+            "empty_load_slot_pointer_and_keyboard_rejected": true,
+            "bitmap_cockpit_and_map": "pass",
+            "v10_keys_removed": true,
+            "v9_keys_absent": true,
+            "runtime_pack_loads": 2,
+            "loose_asset_requests": 0,
+            "http_or_request_failures": 0,
+            "page_or_console_errors": 0,
+            "missing_asset_or_texture_errors": 0
+          },
+          "artifact": {
+            "wasm_bytes": 4607698,
+            "wasm_sha256": "454f3f3b2d2741c8c1e490ff579b9128a1280ff2a9372ca52ae627fd87e030cd",
+            "runtime_pack_bytes": 28285762,
+            "runtime_pack_sha256": "491fd403efb4bbb8210331c535626d9f10f8efb568a2f0a70f7cafc963c208ca"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-save-delete.md"
+        }
+      ],
+      "remaining": [
+        "run the native GUI restart path in the P31 cross-platform release matrix",
+        "complete asynchronous quota-safe browser persistence under F-015"
       ],
       "acceptance": "UI-driven save, restart, full-state load comparison, delete, and storage verification pass on each supported platform."
     },

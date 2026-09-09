@@ -1,0 +1,575 @@
+{
+  "result": "PASS",
+  "commit": "f7971f57892195e94d825d57f9c5c6f738f0ba83",
+  "url": "http://127.0.0.1:4173/",
+  "browser": "141.0.7390.37",
+  "totals": {
+    "requests": 9,
+    "responses": 9,
+    "runtimeOrpkLoads": 2,
+    "looseDatBmp": 0,
+    "httpFailures": 0,
+    "requestFailures": 0,
+    "pageExceptions": 0,
+    "consoleErrors": 0,
+    "browserLogErrors": 0,
+    "missingAssets": 0,
+    "invalidDeletedTextures": 0,
+    "faviconErrors": 0,
+    "optionalAudioJsHookWarnings": 10,
+    "softwareReadPixelsWarnings": 4,
+    "otherConsoleWarnings": 0,
+    "auditErrors": 0,
+    "assertions": 33,
+    "passed": 33,
+    "failed": 0,
+    "screenshots": 45,
+    "events": 151,
+    "storageOperations": 126
+  },
+  "assertions": [
+    {
+      "name": "fresh_isolated_browser_context",
+      "pass": true,
+      "evidence": {
+        "time": 1788932809.732113,
+        "stage": "initial",
+        "type": "setup",
+        "fresh_browser": true,
+        "fresh_context": true,
+        "handlers_before_navigation": true
+      }
+    },
+    {
+      "name": "capture_before_first_navigation",
+      "pass": true,
+      "evidence": "runner.py registers console/pageerror/request/response/requestfailed/CDP Log handlers before goto"
+    },
+    {
+      "name": "fresh_empty_localStorage",
+      "pass": true,
+      "evidence": []
+    },
+    {
+      "name": "alliance_standard_real_UI",
+      "pass": true,
+      "evidence": "configured.png selects Rebel Alliance and Standard; campaign.png shows C-3PO and Systems: 200, Day 0"
+    },
+    {
+      "name": "authentic_bitmap_cockpit_and_galaxy_map_visible",
+      "pass": true,
+      "evidence": "campaign.png: textured grey Alliance cockpit, bitmap top icons, labeled sector polygons and systems"
+    },
+    {
+      "name": "populated_slot_1_exact_name",
+      "pass": true,
+      "evidence": "populated-slot.png and saved metadata"
+    },
+    {
+      "name": "v10_body_and_meta_only",
+      "pass": true,
+      "evidence": [
+        {
+          "key": "rebellion_meta_v10_0",
+          "length": 126,
+          "metadata": {
+            "schema_version": 1,
+            "name": "Delete | Astra r2",
+            "game_tick": 0,
+            "state_fingerprint": {
+              "version": 1,
+              "value": "10152098691578018386"
+            }
+          }
+        },
+        {
+          "key": "rebellion_save_v10_0",
+          "length": 103503
+        }
+      ]
+    },
+    {
+      "name": "metadata_schema_tick_name_lossless",
+      "pass": true,
+      "evidence": {
+        "schema_version": 1,
+        "name": "Delete | Astra r2",
+        "game_tick": 0,
+        "state_fingerprint": {
+          "version": 1,
+          "value": "10152098691578018386"
+        }
+      }
+    },
+    {
+      "name": "fingerprint_decimal_string_lossless",
+      "pass": true,
+      "evidence": {
+        "metadata": {
+          "version": 1,
+          "value": "10152098691578018386"
+        },
+        "runtime": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:8ce37ff8cc373a52",
+        "decimalFromRuntime": "10152098691578018386"
+      }
+    },
+    {
+      "name": "delete_visible_row_empty",
+      "pass": true,
+      "evidence": "post-delete-slot.png; visible Delete click at 590,410"
+    },
+    {
+      "name": "delete_clears_selection_functionally",
+      "pass": true,
+      "evidence": "delete-selection-probe-save.png: nonempty name Delete | Astra r2X, empty unselected row; clicking Save caused zero storage operations"
+    },
+    {
+      "name": "v10_v9_keys_absent_after_delete",
+      "pass": true,
+      "evidence": {
+        "storage": [],
+        "removeOperations": [
+          {
+            "op": "removeItem",
+            "key": "rebellion_save_v10_0",
+            "length": null
+          },
+          {
+            "op": "removeItem",
+            "key": "rebellion_meta_v10_0",
+            "length": null
+          },
+          {
+            "op": "removeItem",
+            "key": "rebellion_save_v9_0",
+            "length": null
+          },
+          {
+            "op": "removeItem",
+            "key": "rebellion_meta_v9_0",
+            "length": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "v9_keys_absent_entire_journey",
+      "pass": true,
+      "evidence": {
+        "fresh": [],
+        "saved": [
+          {
+            "key": "rebellion_meta_v10_0",
+            "length": 126,
+            "metadata": {
+              "schema_version": 1,
+              "name": "Delete | Astra r2",
+              "game_tick": 0,
+              "state_fingerprint": {
+                "version": 1,
+                "value": "10152098691578018386"
+              }
+            }
+          },
+          {
+            "key": "rebellion_save_v10_0",
+            "length": 103503
+          }
+        ],
+        "deleted": [],
+        "after-delete-probe": [],
+        "reloaded": [],
+        "final": []
+      }
+    },
+    {
+      "name": "same_context_reload_empty_load_panel",
+      "pass": true,
+      "evidence": "runner.py p.reload reuses page/context; reloaded-menu.png then post-reload-empty-load.png"
+    },
+    {
+      "name": "load_initially_disabled",
+      "pass": true,
+      "evidence": {
+        "screenshot": "initial-load-click-probe.png",
+        "pixelsIdenticalToInitialEmptyPanel": true,
+        "storageOperations": [],
+        "method": "Actual mouse click; unchanged panel/selection plus zero storage reads or writes; Load click produced no error banner or transition."
+      }
+    },
+    {
+      "name": "empty_slot_click_stays_unselected",
+      "pass": true,
+      "evidence": {
+        "screenshot": "empty-slot-click-probe.png",
+        "pixelsIdenticalToInitialEmptyPanel": true,
+        "storageOperations": [],
+        "method": "Actual mouse click; unchanged panel/selection plus zero storage reads or writes; Load click produced no error banner or transition."
+      }
+    },
+    {
+      "name": "load_disabled_after_empty_slot_click",
+      "pass": true,
+      "evidence": {
+        "screenshot": "empty-load-click-probe.png",
+        "pixelsIdenticalToInitialEmptyPanel": true,
+        "storageOperations": [],
+        "method": "Actual mouse click; unchanged panel/selection plus zero storage reads or writes; Load click produced no error banner or transition."
+      }
+    },
+    {
+      "name": "served_wasm_matches_rebuilt_local_wasm",
+      "pass": true,
+      "evidence": {
+        "time": 1788932944.012319,
+        "stage": "served-wasm-integrity",
+        "type": "wasm_integrity",
+        "served": {
+          "length": 4607698,
+          "sha256": "454f3f3b2d2741c8c1e490ff579b9128a1280ff2a9372ca52ae627fd87e030cd"
+        },
+        "local": "454f3f3b2d2741c8c1e490ff579b9128a1280ff2a9372ca52ae627fd87e030cd"
+      }
+    },
+    {
+      "name": "requested_baseline_commit",
+      "pass": true,
+      "evidence": "f7971f57892195e94d825d57f9c5c6f738f0ba83"
+    },
+    {
+      "name": "runtime_orpk_loaded",
+      "pass": true,
+      "evidence": [
+        {
+          "time": 1788932809.928256,
+          "stage": "initial",
+          "type": "console",
+          "level": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+        },
+        {
+          "time": 1788932909.46099,
+          "stage": "reloaded-menu",
+          "type": "console",
+          "level": "info",
+          "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+        }
+      ]
+    },
+    {
+      "name": "zero_looseDatBmp",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_httpFailures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_requestFailures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_pageExceptions",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_consoleErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_browserLogErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_missingAssets",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_invalidDeletedTextures",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_faviconErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_otherConsoleWarnings",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "zero_auditErrors",
+      "pass": true,
+      "evidence": 0
+    },
+    {
+      "name": "four_required_screenshots",
+      "pass": true,
+      "evidence": [
+        "campaign.png",
+        "populated-slot.png",
+        "post-delete-slot.png",
+        "post-reload-empty-load.png"
+      ]
+    },
+    {
+      "name": "sanitized_save_body_key_length_only",
+      "pass": true,
+      "evidence": "Storage observer records op/key/length only; snapshots parse metadata only. No HAR, trace or storage-state export."
+    }
+  ],
+  "storage": {
+    "fresh": [],
+    "saved": [
+      {
+        "key": "rebellion_meta_v10_0",
+        "length": 126,
+        "metadata": {
+          "schema_version": 1,
+          "name": "Delete | Astra r2",
+          "game_tick": 0,
+          "state_fingerprint": {
+            "version": 1,
+            "value": "10152098691578018386"
+          }
+        }
+      },
+      {
+        "key": "rebellion_save_v10_0",
+        "length": 103503
+      }
+    ],
+    "deleted": [],
+    "after-delete-probe": [],
+    "reloaded": [],
+    "final": []
+  },
+  "network": [
+    {
+      "time": 1788932809.735157,
+      "stage": "initial",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/",
+      "status": 200
+    },
+    {
+      "time": 1788932809.7376618,
+      "stage": "initial",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 200
+    },
+    {
+      "time": 1788932809.746378,
+      "stage": "initial",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "time": 1788932809.885325,
+      "stage": "initial",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200
+    },
+    {
+      "time": 1788932909.210227,
+      "stage": "reloaded-menu",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/",
+      "status": 200
+    },
+    {
+      "time": 1788932909.240847,
+      "stage": "reloaded-menu",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/gl.js",
+      "status": 200
+    },
+    {
+      "time": 1788932909.242817,
+      "stage": "reloaded-menu",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200
+    },
+    {
+      "time": 1788932909.390677,
+      "stage": "reloaded-menu",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/data/runtime.orpk",
+      "status": 200
+    },
+    {
+      "time": 1788932943.977677,
+      "stage": "served-wasm-integrity",
+      "type": "response",
+      "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+      "status": 200
+    }
+  ],
+  "warnings": {
+    "optionalAudioJsHooks": [
+      {
+        "time": 1788932809.754431,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "No audio_init function in gl.js"
+      },
+      {
+        "time": 1788932809.754518,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "No js_create_string function in gl.js"
+      },
+      {
+        "time": 1788932809.7545888,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "No quad_url_link_open function in gl.js"
+      },
+      {
+        "time": 1788932809.754661,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "No js_free_object function in gl.js"
+      },
+      {
+        "time": 1788932809.771472,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "Missed function: audio_init"
+      },
+      {
+        "time": 1788932909.2526872,
+        "stage": "reloaded-menu",
+        "type": "console",
+        "level": "warning",
+        "text": "No audio_init function in gl.js"
+      },
+      {
+        "time": 1788932909.2528992,
+        "stage": "reloaded-menu",
+        "type": "console",
+        "level": "warning",
+        "text": "No js_create_string function in gl.js"
+      },
+      {
+        "time": 1788932909.253005,
+        "stage": "reloaded-menu",
+        "type": "console",
+        "level": "warning",
+        "text": "No quad_url_link_open function in gl.js"
+      },
+      {
+        "time": 1788932909.253094,
+        "stage": "reloaded-menu",
+        "type": "console",
+        "level": "warning",
+        "text": "No js_free_object function in gl.js"
+      },
+      {
+        "time": 1788932909.266012,
+        "stage": "reloaded-menu",
+        "type": "console",
+        "level": "warning",
+        "text": "Missed function: audio_init"
+      }
+    ],
+    "softwareReadPixels": [
+      {
+        "time": 1788932809.877034,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "time": 1788932809.877325,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "time": 1788932809.877491,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "time": 1788932809.8776152,
+        "stage": "initial",
+        "type": "console",
+        "level": "warning",
+        "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ],
+    "readPixelsCDPMirrorEvents": 4
+  },
+  "screenshots": [
+    "after-delete-probe.png",
+    "campaign.png",
+    "configured.png",
+    "delete-selection-probe-focus.png",
+    "delete-selection-probe-name.png",
+    "delete-selection-probe-save.png",
+    "deleted.png",
+    "empty-load-click-probe.png",
+    "empty-load-tab-probe.png",
+    "empty-load-tab2-probe.png",
+    "empty-slot-click-probe.png",
+    "final.png",
+    "initial-load-click-probe.png",
+    "initial.png",
+    "keyboard-activation-probe.png",
+    "name-focus.png",
+    "name-input-focus.png",
+    "new-game.png",
+    "populated-slot.png",
+    "post-delete-slot.png",
+    "post-reload-empty-load.png",
+    "reloaded-menu.png",
+    "reloaded.png",
+    "save-named.png",
+    "save-open.png",
+    "saved.png",
+    "served-wasm-integrity.png",
+    "slot-selected.png",
+    "type-0.png",
+    "type-1.png",
+    "type-10.png",
+    "type-11.png",
+    "type-12.png",
+    "type-13.png",
+    "type-14.png",
+    "type-15.png",
+    "type-16.png",
+    "type-2.png",
+    "type-3.png",
+    "type-4.png",
+    "type-5.png",
+    "type-6.png",
+    "type-7.png",
+    "type-8.png",
+    "type-9.png"
+  ],
+  "scope": "Observed real-UI journey only. Disabled-state proof combines click outcomes, exact screenshot equality, and intercepted storage operations; no internal Rust state was exposed. Keyboard probes were inconclusive and are not used for acceptance. Initial temporary harness attempts were discarded before the final fresh-context run; no app files changed. Save body retained only inside application localStorage until UI deletion, never exported. Name input remains after deletion; selection is cleared.",
+  "findings": []
+}

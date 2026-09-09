@@ -1,0 +1,1817 @@
+[
+  {
+    "time": 1788932809.732113,
+    "stage": "initial",
+    "type": "setup",
+    "fresh_browser": true,
+    "fresh_context": true,
+    "handlers_before_navigation": true
+  },
+  {
+    "time": 1788932809.733751,
+    "stage": "initial",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/",
+    "method": "GET"
+  },
+  {
+    "time": 1788932809.735157,
+    "stage": "initial",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/",
+    "status": 200
+  },
+  {
+    "time": 1788932809.736966,
+    "stage": "initial",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/gl.js",
+    "method": "GET"
+  },
+  {
+    "time": 1788932809.7376618,
+    "stage": "initial",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/gl.js",
+    "status": 200
+  },
+  {
+    "time": 1788932809.745727,
+    "stage": "initial",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "method": "GET"
+  },
+  {
+    "time": 1788932809.746378,
+    "stage": "initial",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "status": 200
+  },
+  {
+    "time": 1788932809.754431,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "No audio_init function in gl.js"
+  },
+  {
+    "time": 1788932809.754518,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "No js_create_string function in gl.js"
+  },
+  {
+    "time": 1788932809.7545888,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "No quad_url_link_open function in gl.js"
+  },
+  {
+    "time": 1788932809.754661,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "No js_free_object function in gl.js"
+  },
+  {
+    "time": 1788932809.771472,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "Missed function: audio_init"
+  },
+  {
+    "time": 1788932809.877034,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+    "time": 1788932809.877216,
+    "stage": "initial",
+    "type": "browserlog",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "source": "rendering",
+    "url": "http://127.0.0.1:4173/"
+  },
+  {
+    "time": 1788932809.877325,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+    "time": 1788932809.877376,
+    "stage": "initial",
+    "type": "browserlog",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "source": "rendering",
+    "url": "http://127.0.0.1:4173/"
+  },
+  {
+    "time": 1788932809.877491,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  },
+  {
+    "time": 1788932809.877561,
+    "stage": "initial",
+    "type": "browserlog",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "source": "rendering",
+    "url": "http://127.0.0.1:4173/"
+  },
+  {
+    "time": 1788932809.8776152,
+    "stage": "initial",
+    "type": "console",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  },
+  {
+    "time": 1788932809.877696,
+    "stage": "initial",
+    "type": "browserlog",
+    "level": "warning",
+    "text": "[.WebGL-0x11c004f4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "source": "rendering",
+    "url": "http://127.0.0.1:4173/"
+  },
+  {
+    "time": 1788932809.884821,
+    "stage": "initial",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/data/runtime.orpk",
+    "method": "GET"
+  },
+  {
+    "time": 1788932809.885325,
+    "stage": "initial",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/data/runtime.orpk",
+    "status": 200
+  },
+  {
+    "time": 1788932809.928256,
+    "stage": "initial",
+    "type": "console",
+    "level": "info",
+    "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+  },
+  {
+    "time": 1788932812.286057,
+    "stage": "initial",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932812.321056,
+    "stage": "initial",
+    "type": "storage_snapshot",
+    "name": "fresh",
+    "entries": []
+  },
+  {
+    "time": 1788932813.008644,
+    "stage": "initial",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932815.4651551,
+    "stage": "new-game",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 715,
+      "y": 425,
+      "name": "new-game"
+    }
+  },
+  {
+    "time": 1788932816.636478,
+    "stage": "new-game",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932827.004666,
+    "stage": "configured",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 565,
+      "y": 477,
+      "name": "configured"
+    }
+  },
+  {
+    "time": 1788932828.154562,
+    "stage": "configured",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932828.1550488,
+    "stage": "campaign",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 720,
+      "y": 593,
+      "name": "campaign"
+    }
+  },
+  {
+    "time": 1788932829.3788931,
+    "stage": "campaign",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932836.569411,
+    "stage": "save-open",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 455,
+      "y": 980,
+      "name": "save-open"
+    }
+  },
+  {
+    "time": 1788932837.8176908,
+    "stage": "save-open",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932846.655157,
+    "stage": "slot-selected",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 603,
+      "y": 383,
+      "name": "slot-selected"
+    }
+  },
+  {
+    "time": 1788932847.9095008,
+    "stage": "slot-selected",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932847.910028,
+    "stage": "name-focus",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 720,
+      "y": 654,
+      "name": "name-focus"
+    }
+  },
+  {
+    "time": 1788932849.174714,
+    "stage": "name-focus",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932849.175284,
+    "stage": "save-named",
+    "type": "interaction",
+    "command": {
+      "op": "text",
+      "text": "Delete | Astra r2",
+      "name": "save-named"
+    }
+  },
+  {
+    "time": 1788932850.2503302,
+    "stage": "save-named",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932850.250931,
+    "stage": "populated-slot",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 552,
+      "y": 685,
+      "name": "populated-slot"
+    }
+  },
+  {
+    "time": 1788932851.5315928,
+    "stage": "populated-slot",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932851.532188,
+    "stage": "saved",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "saved"
+    }
+  },
+  {
+    "time": 1788932851.557142,
+    "stage": "saved",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932851.6076102,
+    "stage": "saved",
+    "type": "storage_snapshot",
+    "name": "saved",
+    "entries": []
+  },
+  {
+    "time": 1788932852.1530309,
+    "stage": "saved",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932865.156595,
+    "stage": "name-input-focus",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 710,
+      "y": 654,
+      "name": "name-input-focus"
+    }
+  },
+  {
+    "time": 1788932866.431867,
+    "stage": "name-input-focus",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932866.4324858,
+    "stage": "type-0",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "D",
+      "name": "type-0"
+    }
+  },
+  {
+    "time": 1788932867.516725,
+    "stage": "type-0",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932867.517332,
+    "stage": "type-1",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "e",
+      "name": "type-1"
+    }
+  },
+  {
+    "time": 1788932868.6171892,
+    "stage": "type-1",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932868.6178932,
+    "stage": "type-2",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "l",
+      "name": "type-2"
+    }
+  },
+  {
+    "time": 1788932869.7041569,
+    "stage": "type-2",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932869.70485,
+    "stage": "type-3",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "e",
+      "name": "type-3"
+    }
+  },
+  {
+    "time": 1788932870.807074,
+    "stage": "type-3",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932870.8077672,
+    "stage": "type-4",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "t",
+      "name": "type-4"
+    }
+  },
+  {
+    "time": 1788932871.9335208,
+    "stage": "type-4",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932871.9341881,
+    "stage": "type-5",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "e",
+      "name": "type-5"
+    }
+  },
+  {
+    "time": 1788932873.049577,
+    "stage": "type-5",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932873.05026,
+    "stage": "type-6",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Space",
+      "name": "type-6"
+    }
+  },
+  {
+    "time": 1788932874.1497521,
+    "stage": "type-6",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932874.150437,
+    "stage": "type-7",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "|",
+      "name": "type-7"
+    }
+  },
+  {
+    "time": 1788932875.253139,
+    "stage": "type-7",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932875.2538471,
+    "stage": "type-8",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Space",
+      "name": "type-8"
+    }
+  },
+  {
+    "time": 1788932876.3448288,
+    "stage": "type-8",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932876.345514,
+    "stage": "type-9",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "A",
+      "name": "type-9"
+    }
+  },
+  {
+    "time": 1788932877.445139,
+    "stage": "type-9",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932877.445754,
+    "stage": "type-10",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "s",
+      "name": "type-10"
+    }
+  },
+  {
+    "time": 1788932878.558263,
+    "stage": "type-10",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932878.558935,
+    "stage": "type-11",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "t",
+      "name": "type-11"
+    }
+  },
+  {
+    "time": 1788932879.650353,
+    "stage": "type-11",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932879.6510599,
+    "stage": "type-12",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "r",
+      "name": "type-12"
+    }
+  },
+  {
+    "time": 1788932880.754546,
+    "stage": "type-12",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932880.7551491,
+    "stage": "type-13",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "a",
+      "name": "type-13"
+    }
+  },
+  {
+    "time": 1788932881.823806,
+    "stage": "type-13",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932881.8244538,
+    "stage": "type-14",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Space",
+      "name": "type-14"
+    }
+  },
+  {
+    "time": 1788932882.974229,
+    "stage": "type-14",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932882.974826,
+    "stage": "type-15",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "r",
+      "name": "type-15"
+    }
+  },
+  {
+    "time": 1788932884.069546,
+    "stage": "type-15",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932884.070225,
+    "stage": "type-16",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "2",
+      "name": "type-16"
+    }
+  },
+  {
+    "time": 1788932885.1445298,
+    "stage": "type-16",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932885.145283,
+    "stage": "populated-slot",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 552,
+      "y": 685,
+      "name": "populated-slot"
+    }
+  },
+  {
+    "time": 1788932885.184642,
+    "stage": "populated-slot",
+    "type": "console",
+    "level": "info",
+    "text": "save_state_fingerprint slot=0 tick=0 fingerprint=v1:8ce37ff8cc373a52"
+  },
+  {
+    "time": 1788932886.431812,
+    "stage": "populated-slot",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "setItem",
+        "key": "rebellion_save_v10_0",
+        "length": 103503
+      },
+      {
+        "op": "setItem",
+        "key": "rebellion_meta_v10_0",
+        "length": 126
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": 126
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": 126
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932886.432441,
+    "stage": "saved",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "saved"
+    }
+  },
+  {
+    "time": 1788932886.457372,
+    "stage": "saved",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932886.508536,
+    "stage": "saved",
+    "type": "storage_snapshot",
+    "name": "saved",
+    "entries": [
+      {
+        "key": "rebellion_meta_v10_0",
+        "length": 126,
+        "metadata": {
+          "schema_version": 1,
+          "name": "Delete | Astra r2",
+          "game_tick": 0,
+          "state_fingerprint": {
+            "version": 1,
+            "value": "10152098691578018386"
+          }
+        }
+      },
+      {
+        "key": "rebellion_save_v10_0",
+        "length": 103503
+      }
+    ]
+  },
+  {
+    "time": 1788932887.0669062,
+    "stage": "saved",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932903.023802,
+    "stage": "post-delete-slot",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 590,
+      "y": 410,
+      "name": "post-delete-slot"
+    }
+  },
+  {
+    "time": 1788932904.285046,
+    "stage": "post-delete-slot",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "removeItem",
+        "key": "rebellion_save_v10_0",
+        "length": null
+      },
+      {
+        "op": "removeItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "removeItem",
+        "key": "rebellion_save_v9_0",
+        "length": null
+      },
+      {
+        "op": "removeItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932904.2856681,
+    "stage": "deleted",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "deleted"
+    }
+  },
+  {
+    "time": 1788932904.3078232,
+    "stage": "deleted",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932904.3589802,
+    "stage": "deleted",
+    "type": "storage_snapshot",
+    "name": "deleted",
+    "entries": []
+  },
+  {
+    "time": 1788932904.9217489,
+    "stage": "deleted",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932904.9224582,
+    "stage": "delete-selection-probe-focus",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 710,
+      "y": 654,
+      "name": "delete-selection-probe-focus"
+    }
+  },
+  {
+    "time": 1788932906.1896052,
+    "stage": "delete-selection-probe-focus",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932906.190256,
+    "stage": "delete-selection-probe-name",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "X",
+      "name": "delete-selection-probe-name"
+    }
+  },
+  {
+    "time": 1788932907.293002,
+    "stage": "delete-selection-probe-name",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932907.293681,
+    "stage": "delete-selection-probe-save",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 552,
+      "y": 685,
+      "name": "delete-selection-probe-save"
+    }
+  },
+  {
+    "time": 1788932908.5641239,
+    "stage": "delete-selection-probe-save",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932908.564925,
+    "stage": "after-delete-probe",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "after-delete-probe"
+    }
+  },
+  {
+    "time": 1788932908.589094,
+    "stage": "after-delete-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932908.638643,
+    "stage": "after-delete-probe",
+    "type": "storage_snapshot",
+    "name": "after-delete-probe",
+    "entries": []
+  },
+  {
+    "time": 1788932909.180434,
+    "stage": "after-delete-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932909.181091,
+    "stage": "reloaded-menu",
+    "type": "interaction",
+    "command": {
+      "op": "reload",
+      "name": "reloaded-menu"
+    }
+  },
+  {
+    "time": 1788932909.2065349,
+    "stage": "reloaded-menu",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932909.208717,
+    "stage": "reloaded-menu",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/",
+    "method": "GET"
+  },
+  {
+    "time": 1788932909.210227,
+    "stage": "reloaded-menu",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/",
+    "status": 200
+  },
+  {
+    "time": 1788932909.240331,
+    "stage": "reloaded-menu",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/gl.js",
+    "method": "GET"
+  },
+  {
+    "time": 1788932909.240847,
+    "stage": "reloaded-menu",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/gl.js",
+    "status": 200
+  },
+  {
+    "time": 1788932909.2417018,
+    "stage": "reloaded-menu",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "method": "GET"
+  },
+  {
+    "time": 1788932909.242817,
+    "stage": "reloaded-menu",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "status": 200
+  },
+  {
+    "time": 1788932909.2526872,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "warning",
+    "text": "No audio_init function in gl.js"
+  },
+  {
+    "time": 1788932909.2528992,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "warning",
+    "text": "No js_create_string function in gl.js"
+  },
+  {
+    "time": 1788932909.253005,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "warning",
+    "text": "No quad_url_link_open function in gl.js"
+  },
+  {
+    "time": 1788932909.253094,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "warning",
+    "text": "No js_free_object function in gl.js"
+  },
+  {
+    "time": 1788932909.266012,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "warning",
+    "text": "Missed function: audio_init"
+  },
+  {
+    "time": 1788932909.390246,
+    "stage": "reloaded-menu",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/data/runtime.orpk",
+    "method": "GET"
+  },
+  {
+    "time": 1788932909.390677,
+    "stage": "reloaded-menu",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/data/runtime.orpk",
+    "status": 200
+  },
+  {
+    "time": 1788932909.46099,
+    "stage": "reloaded-menu",
+    "type": "console",
+    "level": "info",
+    "text": "runtime_asset_pack loaded game_files=51 ui_bitmaps=2231 bytes=28285762"
+  },
+  {
+    "time": 1788932912.162524,
+    "stage": "reloaded-menu",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932912.163161,
+    "stage": "post-reload-empty-load",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 720,
+      "y": 485,
+      "name": "post-reload-empty-load"
+    }
+  },
+  {
+    "time": 1788932913.2630641,
+    "stage": "post-reload-empty-load",
+    "type": "storage_operations",
+    "operations": [
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_0",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_1",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_2",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_3",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_4",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_5",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_6",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_7",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_8",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v10_9",
+        "length": null
+      },
+      {
+        "op": "getItem",
+        "key": "rebellion_meta_v9_9",
+        "length": null
+      }
+    ]
+  },
+  {
+    "time": 1788932924.098803,
+    "stage": "reloaded",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "reloaded"
+    }
+  },
+  {
+    "time": 1788932924.1097448,
+    "stage": "reloaded",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932924.110972,
+    "stage": "reloaded",
+    "type": "storage_snapshot",
+    "name": "reloaded",
+    "entries": []
+  },
+  {
+    "time": 1788932924.4764018,
+    "stage": "reloaded",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932924.4768682,
+    "stage": "initial-load-click-probe",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 554,
+      "y": 671,
+      "name": "initial-load-click-probe"
+    }
+  },
+  {
+    "time": 1788932925.5425558,
+    "stage": "initial-load-click-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932925.543029,
+    "stage": "empty-slot-click-probe",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 590,
+      "y": 396,
+      "name": "empty-slot-click-probe"
+    }
+  },
+  {
+    "time": 1788932926.610175,
+    "stage": "empty-slot-click-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932926.610629,
+    "stage": "empty-load-click-probe",
+    "type": "interaction",
+    "command": {
+      "op": "click",
+      "x": 554,
+      "y": 671,
+      "name": "empty-load-click-probe"
+    }
+  },
+  {
+    "time": 1788932927.6943429,
+    "stage": "empty-load-click-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932927.69484,
+    "stage": "empty-load-tab-probe",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Tab",
+      "name": "empty-load-tab-probe"
+    }
+  },
+  {
+    "time": 1788932928.5608552,
+    "stage": "empty-load-tab-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932942.213839,
+    "stage": "empty-load-tab2-probe",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Tab",
+      "name": "empty-load-tab2-probe"
+    }
+  },
+  {
+    "time": 1788932943.093455,
+    "stage": "empty-load-tab2-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932943.093979,
+    "stage": "keyboard-activation-probe",
+    "type": "interaction",
+    "command": {
+      "op": "key",
+      "key": "Enter",
+      "name": "keyboard-activation-probe"
+    }
+  },
+  {
+    "time": 1788932943.974815,
+    "stage": "keyboard-activation-probe",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932943.9752908,
+    "stage": "served-wasm-integrity",
+    "type": "interaction",
+    "command": {
+      "op": "hash",
+      "name": "served-wasm-integrity"
+    }
+  },
+  {
+    "time": 1788932943.976445,
+    "stage": "served-wasm-integrity",
+    "type": "request",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "method": "GET"
+  },
+  {
+    "time": 1788932943.977677,
+    "stage": "served-wasm-integrity",
+    "type": "response",
+    "url": "http://127.0.0.1:4173/open-rebellion.wasm",
+    "status": 200
+  },
+  {
+    "time": 1788932944.012319,
+    "stage": "served-wasm-integrity",
+    "type": "wasm_integrity",
+    "served": {
+      "length": 4607698,
+      "sha256": "454f3f3b2d2741c8c1e490ff579b9128a1280ff2a9372ca52ae627fd87e030cd"
+    },
+    "local": "454f3f3b2d2741c8c1e490ff579b9128a1280ff2a9372ca52ae627fd87e030cd"
+  },
+  {
+    "time": 1788932944.376947,
+    "stage": "served-wasm-integrity",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932950.0787048,
+    "stage": "final",
+    "type": "interaction",
+    "command": {
+      "op": "storage",
+      "name": "final"
+    }
+  },
+  {
+    "time": 1788932950.079705,
+    "stage": "final",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932950.080767,
+    "stage": "final",
+    "type": "storage_snapshot",
+    "name": "final",
+    "entries": []
+  },
+  {
+    "time": 1788932950.4597068,
+    "stage": "final",
+    "type": "storage_operations",
+    "operations": []
+  },
+  {
+    "time": 1788932950.460192,
+    "stage": "complete",
+    "type": "interaction",
+    "command": {
+      "op": "close",
+      "name": "complete"
+    }
+  },
+  {
+    "time": 1788932950.460744,
+    "stage": "complete",
+    "type": "storage_operations",
+    "operations": []
+  }
+]

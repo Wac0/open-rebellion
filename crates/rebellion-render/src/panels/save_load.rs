@@ -89,6 +89,22 @@ impl SaveLoadPanelState {
     }
 }
 
+fn slot_is_selectable(save_mode: bool, occupied: bool) -> bool {
+    save_mode || occupied
+}
+
+fn confirm_is_enabled(saves: &[SaveSlotInfo], state: &SaveLoadPanelState) -> bool {
+    let Some(slot) = state.selected_slot else {
+        return false;
+    };
+
+    if state.save_mode {
+        !state.name_input.trim().is_empty()
+    } else {
+        saves.iter().any(|save| save.slot == slot)
+    }
+}
+
 // ---------------------------------------------------------------------------
 // draw_save_load
 // ---------------------------------------------------------------------------
@@ -156,7 +172,8 @@ pub fn draw_save_load(
                             Color32::from_rgb(140, 140, 140)
                         };
 
-                        let response = ui.add(
+                        let response = ui.add_enabled(
+                            slot_is_selectable(state.save_mode, existing.is_some()),
                             egui::SelectableLabel::new(
                                 is_selected,
                                 RichText::new(&slot_text).color(label_color),
@@ -216,8 +233,7 @@ pub fn draw_save_load(
             // ── Action buttons ────────────────────────────────────────────
             ui.horizontal(|ui| {
                 let confirm_label = if state.save_mode { "Save" } else { "Load" };
-                let confirm_enabled = state.selected_slot.is_some()
-                    && (!state.save_mode || !state.name_input.trim().is_empty());
+                let confirm_enabled = confirm_is_enabled(saves, state);
 
                 if ui
                     .add_enabled(
@@ -257,4 +273,62 @@ pub fn draw_save_load(
     }
 
     action
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn occupied_slot(slot: usize) -> SaveSlotInfo {
+        SaveSlotInfo {
+            slot,
+            name: "Campaign".to_string(),
+            timestamp: "Browser save".to_string(),
+            game_tick: 42,
+        }
+    }
+
+    #[test]
+    fn load_mode_rejects_empty_slots() {
+        let state = SaveLoadPanelState {
+            open: true,
+            save_mode: false,
+            selected_slot: Some(0),
+            ..Default::default()
+        };
+
+        assert!(!slot_is_selectable(false, false));
+        assert!(!confirm_is_enabled(&[], &state));
+    }
+
+    #[test]
+    fn load_mode_accepts_only_an_occupied_selection() {
+        let saves = vec![occupied_slot(1)];
+        let mut state = SaveLoadPanelState {
+            open: true,
+            save_mode: false,
+            selected_slot: Some(0),
+            ..Default::default()
+        };
+
+        assert!(slot_is_selectable(false, true));
+        assert!(!confirm_is_enabled(&saves, &state));
+        state.selected_slot = Some(1);
+        assert!(confirm_is_enabled(&saves, &state));
+    }
+
+    #[test]
+    fn save_mode_allows_empty_slot_after_a_name_is_entered() {
+        let mut state = SaveLoadPanelState {
+            open: true,
+            save_mode: true,
+            selected_slot: Some(0),
+            ..Default::default()
+        };
+
+        assert!(slot_is_selectable(true, false));
+        assert!(!confirm_is_enabled(&[], &state));
+        state.name_input = "New Campaign".to_string();
+        assert!(confirm_is_enabled(&[], &state));
+    }
 }

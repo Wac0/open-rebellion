@@ -29,7 +29,7 @@
 
 If you ever stayed up past midnight watching your fleet crawl across the galaxy map toward Coruscant, wondering if your three Mon Cal cruisers could take the Super Star Destroyer parked there—this project is for you.
 
-If you spent hours on TheForce.Net debating whether Vergere was secretly Sith or whether the Force has no dark side as Jacen learned in *Traitor*, or ran play-by-post RPGs on private InvisionFree boards set in the Outer Rim—this project is for you.
+If you spent hours on TheForce.net debating whether Vergere was secretly a Sith, rolling dice and envisioning new storylines for Star Wars DnD, or composing elaborate threads on InvisionFree RPG message boards set in the Outer Rim—this project is for you.
 
 If you modded *Star Wars Galaxies* client-side until its servers shut down, roleplayed with your saber down on *Jedi Academy* multiplayer maps, ran *Rebellion* tournaments on mIRC, or replayed *KOTOR I* for the sixth time through a janky port on Steam—this project is *especially* for you.
 
@@ -47,7 +47,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 >
 > The current packaged browser build now loads 52 game-data files and 2,231 bitmaps through one deterministic runtime pack. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-runtime-pack.md) four-request startup, both factions, fleet artwork and interactions, and zoom rendering without browser errors; remaining browser and release gates are still open.
 >
-> Save format v10 now preserves the simulation RNG, second AI, repair state, combat cooldowns, and active configuration in addition to canonical state fingerprints. [Astra medium verified](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md) a 40/40 browser save, reload, load, continuation, bitmap, storage, and error gate; versioned command replay and native/WASM equivalence remain open.
+> Save format v10 now preserves the simulation RNG, second AI, repair state, combat cooldowns, and active configuration in addition to canonical state fingerprints. Astra medium verified the [40/40 continuation gate](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md) and a separate [33/33 delete-and-reload gate](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-save-delete.md), both with intact bitmap UI; versioned command replay and native/WASM equivalence remain open.
 >
 > GitHub Actions workflow definitions are intentionally local and untracked as of 2026-09-08. Release gates remain manual until M5 restores a reviewed CI provider.
 
