@@ -356,6 +356,7 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [ ] Wire Save, Load, Delete, and the main-menu save picker on native and WASM.
 - [ ] Persist complete deterministic campaign state and surface corruption/quota errors.
 - [ ] Correct the native HD root; prefetch `TROOPSD.DAT`; package browser runtime data.
+- [x] Map all 38 fighter/capital-ship records to authentic GOKRES fleet miniatures and pass Astra-medium bitmap/interaction proof (`4589d2e`; F-010B).
 - [ ] Resolve the original cockpit command-to-animation table from Ghidra and screenshot evidence; do not infer logical buttons from sequential resource IDs.
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [ ] Link README parity claims to acceptance evidence and add two-run fingerprints.
@@ -403,7 +404,7 @@ would tune around known simulation feedback defects.
 - [ ] Restore a reviewed CI provider; GitHub Actions workflow definitions are intentionally local/untracked as of 2026-09-08, so current gates are manual.
 - [ ] Enforce format, strict clippy, native, packaged-WASM, and clean-package boot gates.
 - [ ] Add at least 20 app/browser integration cases and promote long campaigns when stable.
-- [ ] Generate the bitmap resource ledger from the entity map; fail on unexplained misses.
+- [ ] Generate the complete bitmap resource ledger from the entity map; fail on unexplained misses. Fleet-list miniatures are verified in F-010B.
 - [ ] Retain screenshot, console, network, performance, data-hash, and save-schema evidence.
 - [ ] Publish current project documentation from `main` through GitHub Pages and verify the public site (P40).
 - [ ] Close every supported P00–P40 pass from release artifacts before claiming 100% functionality.

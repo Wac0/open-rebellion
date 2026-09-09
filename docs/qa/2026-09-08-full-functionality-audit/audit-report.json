@@ -250,7 +250,41 @@
         "docs/qa/defect-inventory.md",
         "Astra medium browser run R6: Strategy 11016-11027 returned HTTP 200 but rendered character portraits",
         "ghidra/notes/FUN_00405560.c: animated COMMON.DLL resource bases are non-sequential logical controls",
-        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-cockpit-pr-audit.md"
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-cockpit-pr-audit.md",
+        "F-010B passed at implementation commit 4589d2ecb6399eabda79fb57e048672f2e214365",
+        "Astra medium browser run R8: correct fleet resources and interactions, failed visible blue matte",
+        "Astra medium browser run R9: seven representative miniatures passed identity, zero-matte-pixel, aspect-ratio, request, manifest, and interaction checks",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.md"
+      ],
+      "verified_tranches": [
+        {
+          "id": "F-010B",
+          "name": "Authentic fleet-list miniatures",
+          "status": "pass",
+          "implementation_commit": "4589d2ecb6399eabda79fb57e048672f2e214365",
+          "wasm_sha256": "d549f4fca8fb4bd9ef81a487ae4b656b1c9fa37ad8fd0e79013736ced5d6c323",
+          "mapping_unit_coverage": {
+            "capital_ship_classes": 30,
+            "fighter_classes": 8,
+            "unknown_ids_fail_closed": true
+          },
+          "browser": {
+            "runner": "GPT-6 Astra",
+            "effort": "medium",
+            "run": "R9",
+            "representative_resources": 7,
+            "factions": 2,
+            "matte_blue_pixels": 0,
+            "runtime_exceptions": 0,
+            "bitmap_request_failures": 0,
+            "interactions": [
+              "expand",
+              "collapse",
+              "go_to_system"
+            ]
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.md"
+        }
       ],
       "acceptance": "Every image consumer has resource identity, runtime load, screenshot, interaction, and fallback evidence on each claimed platform."
     },

@@ -1,0 +1,198 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.183
+   Compiling version_check v0.9.5
+   Compiling simd-adler32 v0.3.8
+   Compiling crc32fast v1.5.0
+   Compiling adler2 v2.0.1
+   Compiling maybe-uninit v2.0.0
+   Compiling objc-sys v0.3.5
+   Compiling bitflags v2.11.0
+   Compiling autocfg v1.5.0
+   Compiling parking_lot_core v0.9.12
+   Compiling zerocopy v0.8.42
+   Compiling miniz_oxide v0.8.9
+   Compiling byteorder v1.5.0
+   Compiling fdeflate v0.3.7
+   Compiling smallvec v1.15.1
+   Compiling ahash v0.8.12
+   Compiling ttf-parser v0.25.1
+   Compiling num-traits v0.2.19
+   Compiling scopeguard v1.2.0
+   Compiling objc2-encode v4.1.0
+   Compiling serde_core v1.0.228
+   Compiling lock_api v0.4.14
+   Compiling ogg v0.7.1
+   Compiling miniquad v0.4.8
+   Compiling ab_glyph_rasterizer v0.1.10
+   Compiling once_cell v1.21.4
+   Compiling dasp_sample v0.11.0
+   Compiling quad-snd v0.2.8
+   Compiling dasp_frame v0.11.0
+   Compiling foldhash v0.1.5
+   Compiling nohash-hasher v0.2.0
+   Compiling profiling v1.0.17
+   Compiling equivalent v1.0.2
+   Compiling serde v1.0.228
+   Compiling objc2 v0.5.2
+   Compiling owned_ttf_parser v0.25.1
+   Compiling bitflags v1.3.2
+   Compiling allocator-api2 v0.2.21
+   Compiling smallvec v0.6.14
+   Compiling ab_glyph v0.2.32
+   Compiling epaint_default_fonts v0.31.1
+   Compiling lewton v0.9.4
+   Compiling zmij v1.0.21
+   Compiling hound v3.5.1
+   Compiling flate2 v1.1.9
+   Compiling hashbrown v0.15.5
+   Compiling objc2-foundation v0.2.2
+   Compiling png v0.17.16
+   Compiling slotmap v1.1.1
+   Compiling webbrowser v0.5.5
+   Compiling memchr v2.8.0
+   Compiling serde_json v1.0.149
+   Compiling color_quant v1.1.0
+   Compiling ttf-parser v0.21.1
+   Compiling audrey v0.3.0
+   Compiling quad-url v0.1.2
+   Compiling malloc_buf v0.0.6
+   Compiling objc-rs v0.2.8
+   Compiling parking_lot v0.12.5
+   Compiling objc2-app-kit v0.2.2
+   Compiling syn v2.0.117
+   Compiling glam v0.27.0
+   Compiling copypasta v0.10.2
+   Compiling macroquad_macro v0.1.8
+   Compiling pxfm v0.1.28
+   Compiling itoa v1.0.17
+   Compiling fontdue v0.9.3
+   Compiling quad-rand v0.2.3
+   Compiling png v0.18.1
+   Compiling byteorder-lite v0.1.0
+   Compiling unicode-segmentation v1.12.0
+   Compiling nucleo-matcher v0.3.1
+   Compiling bytemuck_derive v1.10.2
+   Compiling serde_derive v1.0.228
+   Compiling moxcms v0.8.1
+   Compiling bytemuck v1.25.0
+   Compiling emath v0.31.1
+   Compiling image v0.24.9
+   Compiling ecolor v0.31.1
+   Compiling epaint v0.31.1
+   Compiling macroquad v0.4.14
+   Compiling egui v0.31.1
+   Compiling rebellion-core v0.1.0 (/Users/tomdimino/Desktop/Programming/open-rebellion/crates/rebellion-core)
+   Compiling image v0.25.10
+   Compiling egui-miniquad v0.16.0
+   Compiling egui-macroquad v0.17.3
+warning: constant `GNPRTB_MAINTENANCE_RATE_NEUTRAL` is never used
+  --> crates/rebellion-core/src/economy.rs:56:7
+   |
+56 | const GNPRTB_MAINTENANCE_RATE_NEUTRAL: u16 = 7696;   // =30: ticks between maintenance checks (neutral)
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling rebellion-render v0.1.0 (/Users/tomdimino/Desktop/Programming/open-rebellion/crates/rebellion-render)
+warning: unused variable: `state`
+  --> crates/rebellion-render/src/panels/jedi.rs:29:5
+   |
+29 |     state: &mut JediPanelState,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rebellion-core` (lib) generated 1 warning
+warning: `rebellion-render` (lib) generated 1 warning (run `cargo fix --lib -p rebellion-render` to apply 1 suggestion)
+warning: `rebellion-render` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.93s
+     Running unittests src/lib.rs (/tmp/open-rebellion-fleet-r9-target/debug/deps/rebellion_render-d159ad71fdaeec3c)
+
+running 64 tests
+test advisor::tests::advisor_greet_empire ... ok
+test advisor::tests::advisor_greet_alliance ... ok
+test advisor::tests::advisor_message_queue_fifo ... ok
+test advisor::tests::bmp_mapped_falls_back_to_modulo_on_missing_id ... ok
+test advisor::tests::cascade_rejects_2_byte_stubs ... ok
+test advisor::tests::cascade_rejects_4_byte_zero_prefix_stubs ... ok
+test advisor::tests::cascade_v1_explicit_frame_list ... ok
+test advisor::tests::bmp_mapped_sequence_uses_direct_lookup ... ok
+test advisor::tests::cascade_v1_single_frame ... ok
+test advisor::tests::bin_state_advances_and_wraps_for_normal_priority ... ok
+test advisor::tests::cascade_v2_sequential_range ... ok
+test advisor::tests::cascade_v2_distinguishes_from_v1_with_trailing_zeros ... ok
+test advisor::tests::cascade_v2_with_large_count ... ok
+test advisor::tests::cascade_v3_bmp_range ... ok
+test advisor::tests::cascade_v4_bmp_single ... ok
+test advisor::tests::faction_from_cockpit ... ok
+test advisor::tests::high_priority_preempts ... ok
+test advisor::tests::idle_sequence_loops_in_place ... ok
+test advisor::tests::legacy_frame_cycling_fallback_without_bins ... ok
+test advisor::tests::parse_advisor_bin_happy_path ... ok
+test advisor::tests::parse_advisor_bin_rejects_length_mismatch ... ok
+test advisor::tests::parse_advisor_bin_rejects_truncated_frames ... ok
+test advisor::tests::same_priority_does_not_preempt ... ok
+test combat_view::tests::battle_outcome_labels ... ok
+test combat_view::tests::combat_summary_state_push_and_dismiss ... ok
+test combat_view::tests::combat_summary_state_multiple_results ... ok
+test combat_view::tests::format_losses_singular_and_plural ... ok
+test combat_view::tests::to_messages_includes_bombardment_note ... ok
+test combat_view::tests::to_messages_includes_losses ... ok
+test combat_view::tests::to_messages_includes_summary_text ... ok
+test event_screen::tests::final_battle_heritage_unknown_returns_vader_vs_student ... ok
+test event_screen::tests::final_battle_heritage_known_returns_emperor_vs_knight ... ok
+test combat_view::tests::to_messages_produces_outcome_line ... ok
+test event_screen::tests::non_final_battle_ignores_heritage ... ok
+test event_screen::tests::unknown_event_returns_none ... ok
+test bmp_cache::tests::cockpit_background_blue_screen_becomes_transparent ... ok
+test bmp_cache::tests::unrelated_blue_resource_remains_opaque ... ok
+test bmp_cache::tests::fleet_miniature_blue_screen_becomes_transparent ... ok
+test ground_combat::tests::ground_combat_resolves ... ok
+test ground_combat::tests::ground_combat_stronger_wins ... ok
+test bmp_cache::tests::missing_resource_is_negatively_cached ... ok
+test panels::command_palette::tests::command_palette_state_defaults ... ok
+test panels::command_palette::tests::all_commands_have_unique_labels ... ok
+test panels::command_palette::tests::fuzzy_filter_empty_returns_all ... ok
+test panels::fleets::tests::maps_every_capital_ship_dat_record_to_its_gokres_miniature ... ok
+test panels::fleets::tests::maps_every_fighter_dat_record_to_its_gokres_miniature ... ok
+test panels::fleets::tests::unknown_class_ids_do_not_request_unrelated_bitmaps ... ok
+test panels::mod_manager::tests::action_variants ... ok
+test message_log::tests::export_jsonl_round_trip ... ok
+test panels::mod_manager::tests::mod_info_display ... ok
+test panels::mod_manager::tests::mod_manager_state_default ... ok
+test tactical_view::tests::battle_phase_variants ... ok
+test panels::command_palette::tests::fuzzy_filter_matches_advance ... ok
+test tactical_view::tests::class_to_sprite_id_in_range ... ok
+test victory_screen::tests::describe_death_star_destroyed ... ok
+test victory_screen::tests::describe_death_star_victory ... ok
+test victory_screen::tests::describe_hq_captured_alliance_wins ... ok
+test victory_screen::tests::describe_hq_captured_empire_wins ... ok
+test victory_screen::tests::game_stats_default ... ok
+test victory_screen::tests::state_is_pending_with_outcome ... ok
+test victory_screen::tests::state_not_pending_when_acknowledged ... ok
+test victory_screen::tests::state_reset_clears_all_fields ... ok
+test video_player::native::tests::resolves_ref_video_paths_into_decoded_assets ... ok
+test video_player::native::tests::open_returns_not_decoded_when_cutscene_directory_is_missing ... ok
+
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rebellion_render
+
+running 12 tests
+test crates/rebellion-render/src/audio.rs - audio (line 14) ... ignored
+test crates/rebellion-render/src/combat_view.rs - combat_view (line 15) ... ignored
+test crates/rebellion-render/src/encyclopedia.rs - encyclopedia (line 29) ... ignored
+test crates/rebellion-render/src/fleet_movement.rs - fleet_movement (line 13) ... ignored
+test crates/rebellion-render/src/fog.rs - fog (line 16) ... ignored
+test crates/rebellion-render/src/ground_combat.rs - ground_combat (line 10) ... ignored
+test crates/rebellion-render/src/message_log.rs - message_log (line 14) ... ignored
+test crates/rebellion-render/src/panels/mod.rs - panels (line 13) ... ignored
+test crates/rebellion-render/src/panels/mod_manager.rs - panels::mod_manager (line 5) ... ignored
+test crates/rebellion-render/src/panels/save_load.rs - panels::save_load (line 5) ... ignored
+test crates/rebellion-render/src/tactical_view.rs - tactical_view (line 15) ... ignored
+test crates/rebellion-render/src/victory_screen.rs - victory_screen (line 15) ... ignored
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out; finished in 0.00s

@@ -3,7 +3,7 @@ title: "DLL Resource Catalog"
 description: "Complete extraction inventory of all 18 game DLLs — 5,664 resources (BMPs + data)"
 category: "agent-docs"
 created: 2026-03-17
-updated: 2026-03-18
+updated: 2026-09-08
 tags: [dll, resources, bmp, sprites]
 ---
 
@@ -67,6 +67,20 @@ Entity status sprites. Every ship, character, troop, facility as it appears in i
 - 1856-1932: Ship status views (122x50) — hull profiles for info panel
 - 10048-10126: Ship damage diagrams (122x50) — shows damage locations on hull
 - 16385-17216: Facility icons (61x25) — compact icons for panel lists
+
+**Verified fleet miniature mapping (F-010B):**
+
+| DAT record index | Faction/type | GOKRES resource IDs |
+|---:|---|---:|
+| 1–4 | Alliance fighters | 17984–17987 |
+| 5–8 | Empire fighters | 18048–18051 |
+| 64–78 | Alliance capital ships | 18240–18254 |
+| 128–142 | Empire capital ships | 18304–18318 |
+
+These are record-order mappings, not offsets from the compound `DatId`. Commit
+`4589d2e` maps all 38 classes and restricts palette-blue transparency to the
+known GOKRES miniature blocks. Astra-medium R9 browser evidence is retained in
+`docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.md`.
 
 ## COMMON.DLL (2.8MB) — 321 BMPs + 1 BIN
 

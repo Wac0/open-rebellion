@@ -1,0 +1,135 @@
+[
+  {
+    "screenshot": "open-rebellion-fleet-r9-alliance-yavin.png",
+    "resource_id": 18245,
+    "display_bounds_xyxy": [
+      26,
+      96,
+      79,
+      116
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      94,
+      81,
+      118
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 229,
+    "panel_background_pixels": 577
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-alliance-rafa.png",
+    "resource_id": 18246,
+    "display_bounds_xyxy": [
+      26,
+      128,
+      79,
+      148
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      126,
+      81,
+      150
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 323,
+    "panel_background_pixels": 405
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-alliance-carida.png",
+    "resource_id": 17986,
+    "display_bounds_xyxy": [
+      26,
+      162,
+      79,
+      182
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      160,
+      81,
+      184
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 227,
+    "panel_background_pixels": 515
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-alliance-wor-tandell.png",
+    "resource_id": 17987,
+    "display_bounds_xyxy": [
+      26,
+      194,
+      79,
+      214
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      192,
+      81,
+      216
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 167,
+    "panel_background_pixels": 642
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-empire-coruscant.png",
+    "resource_id": 18309,
+    "display_bounds_xyxy": [
+      26,
+      96,
+      79,
+      116
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      94,
+      81,
+      118
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 303,
+    "panel_background_pixels": 603
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-empire-coruscant.png",
+    "resource_id": 18048,
+    "display_bounds_xyxy": [
+      26,
+      136,
+      79,
+      156
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      134,
+      81,
+      158
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 153,
+    "panel_background_pixels": 797
+  },
+  {
+    "screenshot": "open-rebellion-fleet-r9-empire-firro.png",
+    "resource_id": 18316,
+    "display_bounds_xyxy": [
+      26,
+      128,
+      79,
+      148
+    ],
+    "edge_inclusive_scan_xyxy": [
+      24,
+      126,
+      81,
+      150
+    ],
+    "blue_matte_pixels": 0,
+    "blue_gray_detail_pixels": 40,
+    "panel_background_pixels": 556
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "served_sha256": "d549f4fca8fb4bd9ef81a487ae4b656b1c9fa37ad8fd0e79013736ced5d6c323",
+  "package_sha256": "d549f4fca8fb4bd9ef81a487ae4b656b1c9fa37ad8fd0e79013736ced5d6c323",
+  "zip_sha256": "d549f4fca8fb4bd9ef81a487ae4b656b1c9fa37ad8fd0e79013736ced5d6c323",
+  "manifest_status": 200,
+  "miniatures": [
+    {
+      "id": 18245,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 973
+    },
+    {
+      "id": 18246,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 702
+    },
+    {
+      "id": 17986,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 928
+    },
+    {
+      "id": 17987,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 1092
+    },
+    {
+      "id": 18309,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 1032
+    },
+    {
+      "id": 18048,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 1296
+    },
+    {
+      "id": 18316,
+      "status": 200,
+      "manifest_present": true,
+      "dimensions": [
+        66,
+        25
+      ],
+      "served_equals_package": true,
+      "source_blue_matte_pixels": 605
+    }
+  ]
+}

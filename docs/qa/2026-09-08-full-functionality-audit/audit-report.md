@@ -208,6 +208,13 @@ the run as formally degenerate.
   command-to-animation table remains open.
 - Evidence bundle: `evidence/2026-09-08-cockpit-pr-audit.md` retains the
   resource adjudication, package hash, Astra R7 results, and screenshots.
+- Verified tranche F-010B: commit `4589d2e` maps all 38 fighter and capital-ship
+  records to their authentic GOKRES miniatures. Astra-medium R9 verified seven
+  representative resources across both factions, zero matte-blue pixels,
+  correct aspect ratio, successful requests and manifest identity, and working
+  expand/collapse/navigation interactions. The failing R8 baseline, R9
+  screenshots, hashes, pixel scans, and test log are retained in
+  `evidence/2026-09-08-fleet-miniatures.md`.
 - Acceptance: complete the bitmap proof protocol below for every image-bearing
   surface on every claimed platform.
 
