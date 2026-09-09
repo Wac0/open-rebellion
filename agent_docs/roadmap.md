@@ -370,7 +370,8 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [x] Close P03 final presentation: native visual acceptance and Astra-medium 10/10 browser acceptance pass for the documented music-only extension without changing the original 14-control contract ([evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-music-toggle.md)).
 - [ ] Make a clean packaged browser artifact boot in CI.
 - [x] Link README parity claims to current acceptance evidence.
-- [ ] Extend F-011B1 to versioned command streams, data-input hashes, stable execution ordering, and native/WASM checkpoint equivalence.
+- [x] Add F-011B2 replay format v1: strict JSON, typed `{tick, sequence, actor}` commands, checkpoint positions, configuration identity, and canonical per-file/aggregate hashes for all 51 simulation DATs ([contract](deterministic-replay.md); [evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md)).
+- [ ] Execute F-011B2 artifacts, remove simulation-affecting unordered iteration, and prove native/WASM checkpoint equivalence, including across save/load.
 
 ### M1: Simulation Correctness and Determinism — 2–3 weeks
 

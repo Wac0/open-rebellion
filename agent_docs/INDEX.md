@@ -18,6 +18,7 @@ Reference documentation for AI agents working on the Open Rebellion codebase. Re
 | [architecture.md](architecture.md) | Crate graph, type system, entity identity, data flow, render architecture |
 | [roadmap.md](roadmap.md) | Phase breakdown with status, addon plans, AI parity gaps |
 | [simulation.md](simulation.md) | 15 simulation systems, advance() contract, integration order |
+| [deterministic-replay.md](deterministic-replay.md) | Replay format, DAT/config identity, command ordering, checkpoints, and open equivalence gates |
 | [agent-tooling.md](agent-tooling.md) | Claude Code Minoan and Codex skill routing, including Astra, Fable, and Ghidra |
 
 ## Game Knowledge

@@ -117,7 +117,14 @@ impl PerceptionIntegrator {
 }
 ```
 
-Both the interactive binary (`rebellion-app`) and the headless binary (`rebellion-playtest`) call `run_simulation_tick`. `SimulationStates` bundles all 15 state types + combat cooldowns + economy state. `GameEventRecord` (in `rebellion-core/src/game_events.rs`) is the structured telemetry type — pure data, no IO. The `config` parameter (`&GameConfig` from `tuning.rs`) controls all tunable AI, movement, and production parameters — the interactive app uses defaults, the playtest binary accepts `--config <path>` for autoresearch.
+`rebellion-playtest` calls `run_simulation_tick`; the interactive
+`rebellion-app` still duplicates this sequence. That divergence is tracked as
+F-012 and must close before native/WASM replay equivalence can pass.
+`SimulationStates` bundles all 15 state types plus combat cooldowns and economy
+state. `GameEventRecord` (in `rebellion-core/src/game_events.rs`) is structured
+telemetry with no IO. The `config` parameter (`&GameConfig` from `tuning.rs`)
+controls tunable AI, movement, and production behavior; the playtest binary
+accepts `--config <path>` for autoresearch.
 
 **Architecture**: simulation.rs is a thin orchestrator that calls `advance()` on each system and delegates mutation + telemetry to integrator methods. No `events.push()` calls remain in simulation.rs — `integrator.finish()` is the sole return path.
 

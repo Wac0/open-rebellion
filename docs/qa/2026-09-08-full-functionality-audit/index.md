@@ -24,6 +24,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Runtime pack proof](evidence/2026-09-08-runtime-pack.md) | Deterministic package hashes, four-request startup, two-faction bitmap/interaction proof, and zoom/WebGL regression evidence for F-014A. |
 | [Save-state fingerprint proof](evidence/2026-09-08-state-fingerprints.md) | Canonical two-run fingerprints, v9 integrity checks, native v8 compatibility, and Astra browser save/reload/load proof for F-011A. |
 | [Save-continuation proof](evidence/2026-09-09-state-continuation.md) | Save v10 continuation envelope, historical v9 migration fixture, deterministic typed maps, and Astra 40/40 browser continuation proof for F-011B1. |
+| [Replay-contract proof](evidence/2026-09-09-replay-contract.md) | F-011B2 replay format, canonical 51-DAT identity, command ordering, checkpoints, and native/WASM compile proof. |
 | [Save/Delete UI proof](evidence/2026-09-09-save-delete.md) | F-001 wiring, empty-load-slot regression fix, storage deletion, reload persistence, and Astra 33/33 bitmap/browser proof. |
 | [Original main-menu cockpit proof](evidence/2026-09-09-main-menu-cockpit.md) | Binary-mapped controls, responsive bitmaps, direct faction starts, and Astra-verified browser playback. |
 | [Campaign setup proof](evidence/2026-09-09-game-setup-propagation.md) | Save v11 setup persistence, Standard/Headquarters Only victory rules, and Astra 18/18 bitmap/browser proof. |
@@ -38,7 +39,7 @@ acceptance plan required before the project can claim 100% functionality.
 The project is substantially implemented, but it is not yet demonstrably 100%
 functional. Fleet-miniature acceptance, deterministic four-request browser
 startup, F-001 browser Save/Load/Delete, the F-011A fingerprint primitive,
-F-011B1 save continuation and F-016A/B/C/D/E cockpit/setup functionality now
+F-011B1 save continuation, the F-011B2 replay/data contract, and F-016A/B/C/D/E cockpit/setup functionality now
 pass; P03 and P04 are complete.
 Long-running command replay, native/WASM checkpoint parity, tactical parity, remaining browser
 memory/media work, cross-browser performance, formatting, lint, and

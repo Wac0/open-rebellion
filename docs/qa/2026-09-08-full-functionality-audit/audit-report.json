@@ -348,10 +348,11 @@
         "two independently seeded initial campaigns now produce identical fingerprints after unordered map and set normalization",
         "Astra medium r3 passed 34 browser save, reload, load, bitmap, network, and error assertions with a matching verified fingerprint",
         "F-011B1 save v10 preserves the known continuation envelope and Astra medium r2 passed 40 browser continuation assertions",
+        "F-011B2 defines replay format v1 with strict command ordering, checkpoints, configuration identity, and canonical hashes for all 51 simulation DAT inputs",
         "unordered map iteration affects movement and AI tie-breaking",
         "headless and app paths consume random values differently",
         "interactive seeds are wall-clock-derived",
-        "versioned command streams, data-input hashes, and cross-runtime checkpoint equivalence remain absent"
+        "replay execution and cross-runtime checkpoint equivalence remain absent"
       ],
       "verified_tranches": [
         {
@@ -467,12 +468,54 @@
             "v9_fixture_sha256": "a667db5092ddb6bea0b3729db6bcfefc73916609c373ed6f2a10f88a36b3127d"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-state-continuation.md"
+        },
+        {
+          "id": "F-011B2",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "replay_format": {
+            "version": 1,
+            "strict_unknown_field_rejection": true,
+            "rng": "xoshiro256++/0.6",
+            "rolls_per_tick": 1024,
+            "command_position": [
+              "tick",
+              "sequence",
+              "actor"
+            ],
+            "gap_free_global_sequence": true,
+            "typed_commands": true,
+            "checkpoint_command_prefix": true,
+            "executor_wired": false
+          },
+          "data_manifest": {
+            "version": 1,
+            "algorithm": "domain_separated_fnv1a64",
+            "cryptographic_authenticator": false,
+            "json_hash_representation": "fixed_width_lowercase_hex",
+            "canonical_filename_order": true,
+            "case_collision_rejection": true,
+            "aggregate_recomputed_during_validation": true,
+            "original_data_inputs": 51,
+            "original_data_bytes": 50597,
+            "original_data_fingerprint": "5facb1c7ba0e81ad"
+          },
+          "automated": {
+            "focused_unit_tests_passed": 7,
+            "original_data_fixture_tests_passed": 1,
+            "workspace_tests_passed": 511,
+            "workspace_tests_ignored": 3,
+            "failures": 0,
+            "wasm_app_check": "pass_with_preexisting_warnings",
+            "touched_file_rustfmt": "pass",
+            "strict_clippy": "preexisting_baseline_fail"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md"
         }
       ],
       "remaining": [
-        "record and replay versioned command streams",
+        "record and execute replay format v1 command streams",
         "remove simulation-time unordered iteration effects",
-        "identify game-data inputs by hash",
         "converge headless and interactive tick paths",
         "compare native, WASM, automatic, and tactical checkpoints",
         "persist and resume any interactive mid-combat state required by the unified engine"
