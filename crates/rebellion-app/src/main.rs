@@ -1,6 +1,8 @@
 mod audio;
 #[cfg(any(target_arch = "wasm32", test))]
 mod runtime_pack;
+#[cfg(target_arch = "wasm32")]
+mod web_accessibility;
 
 use ::rand::Rng;
 use ::rand::SeedableRng;
@@ -888,6 +890,8 @@ async fn main() {
                     campaign_generation
                 );
             } else {
+                #[cfg(target_arch = "wasm32")]
+                web_accessibility::sync_menu(false, &main_menu_state);
                 break;
             }
         }
@@ -2081,10 +2085,26 @@ async fn main() {
                     &audio_vol,
                 );
 
+                #[cfg(target_arch = "wasm32")]
+                if let Some(focus) = web_accessibility::take_focus_update() {
+                    main_menu_state.set_semantic_focus(focus);
+                }
+                #[cfg(target_arch = "wasm32")]
+                let semantic_action = web_accessibility::take_activation()
+                    .and_then(|control| main_menu_state.activate_control(control));
+                #[cfg(target_arch = "wasm32")]
+                let semantic_interaction = web_accessibility::take_user_interaction();
+
                 clear_background(Color::new(0.02, 0.02, 0.06, 1.0));
+                #[cfg(target_arch = "wasm32")]
+                let mut menu_action = semantic_action;
+                #[cfg(not(target_arch = "wasm32"))]
                 let mut menu_action = None;
                 egui_macroquad::ui(|ctx| {
-                    menu_action = draw_main_menu(ctx, &mut bmp_cache, &mut main_menu_state);
+                    let canvas_action = draw_main_menu(ctx, &mut bmp_cache, &mut main_menu_state);
+                    if menu_action.is_none() {
+                        menu_action = canvas_action;
+                    }
                 });
                 egui_macroquad::draw();
 
@@ -2111,7 +2131,8 @@ async fn main() {
                     && (is_mouse_button_pressed(macroquad::input::MouseButton::Left)
                         || is_key_pressed(KeyCode::Enter)
                         || is_key_pressed(KeyCode::Space)
-                        || is_key_pressed(KeyCode::Tab))
+                        || is_key_pressed(KeyCode::Tab)
+                        || semantic_interaction)
                 {
                     browser_menu_audio_requested = true;
                     if browser_menu_audio.is_none() {
@@ -2175,6 +2196,8 @@ async fn main() {
                             if let Some(engine) = browser_menu_audio.as_mut() {
                                 engine.stop_music();
                             }
+                            #[cfg(target_arch = "wasm32")]
+                            web_accessibility::sync_menu(false, &main_menu_state);
                             break;
                         }
                     }
@@ -3446,6 +3469,14 @@ async fn main() {
                 audio_vol.muted
             );
             audio_vol.dirty = false;
+        }
+
+        #[cfg(target_arch = "wasm32")]
+        {
+            if game_mode != GameMode::MainMenu {
+                main_menu_state.set_semantic_focus(None);
+            }
+            web_accessibility::sync_menu(game_mode == GameMode::MainMenu, &main_menu_state);
         }
 
         // 7. Handle focus requests from message log + encyclopedia

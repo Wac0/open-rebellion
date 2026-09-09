@@ -52,7 +52,7 @@ pub use event_screen::{
 pub use fleet_movement::{draw_fleet_overlays, hovered_fleet};
 pub use fog::draw_fog_overlay;
 pub use ground_combat::{draw_ground_combat, GroundAction, GroundCombatState, GroundWinner};
-pub use main_menu::{draw_main_menu, MainMenuAction, MainMenuState};
+pub use main_menu::{draw_main_menu, MainMenuAction, MainMenuControl, MainMenuState};
 pub use main_menu_destinations::{
     draw_credits, draw_multiplayer_setup, CreditsState, MenuDestinationAction,
     MultiplayerSetupAction, MultiplayerSetupState, MultiplayerTransport,

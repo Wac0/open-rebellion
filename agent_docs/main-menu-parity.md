@@ -108,7 +108,8 @@ Death Star outcome to supersede that rule.
 3. Treat palette-blue matte in the Common menu sprites as transparent.
 4. Animate the matching sequence on hover and show a pressed state on pointer down.
 5. Transform the exact logical rectangles above for pointer hit testing.
-6. Preserve mouse behavior and add accessible keyboard focus without replacement text buttons.
+6. Preserve mouse behavior and expose all 14 controls through clipped semantic
+   DOM buttons without adding visible replacement text.
 7. Keep difficulty, galaxy size, and game type selection visible.
 8. Start the selected faction directly; do not show the custom setup page.
 
@@ -121,7 +122,9 @@ Death Star outcome to supersede that rule.
 
 F-016B verifies that all four setup values reach active configuration, save v11,
 reload, and `VictorySystem` in the browser. F-016C verifies that a subsequent
-campaign cleanly replaces every campaign subsystem.
+campaign cleanly replaces every campaign subsystem. F-016D verifies that the
+browser accessibility tree operates the same Rust controls, focus art, state,
+destinations, and sound paths.
 
 ## Music contract
 
@@ -161,6 +164,7 @@ screenshots and a JSON result for every run.
 | Navigation | Load/options, credits, multiplayer, and quit reach the correct destination or remain explicit failures |
 | Pointer geometry | Center and edge clicks pass at 640x480, 1280x960, 1280x800, 1440x900, and a narrow supported viewport |
 | Keyboard access | Every control is keyboard reachable, single-activation, and visibly focused without covering art |
+| Browser semantics | One named navigation landmark exposes all 14 controls, selection state, cyclic traversal, and the same actions; it is absent outside the menu |
 | Visual quality | No blank aperture, blue matte, stretch, clip, wrong sprite family, or text-button overlay |
 | Runtime quality | Zero page, console, request, WebGL, missing-asset, or panic errors |
 | Audio | MDATA.300 loads once, begins after the browser gesture, loops without overlap, obeys gain/mute, resumes on return, and the mapped WAVE effects play without overlap |
@@ -169,6 +173,8 @@ The setup/state rows are verified in
 [F-016B evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-game-setup-propagation.md),
 and the endpoint/audio/reset rows in
 [F-016C evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md).
-P04 is complete. P03 functional acceptance passes in the browser and native
-build/startup paths; native interactive visual acceptance and a per-control
-browser semantic accessibility layer remain separate release-hardening gates.
+The semantic row is verified in
+[F-016D evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md).
+P04 is complete. P03 functional and semantic acceptance pass in the browser,
+and native build/startup passes; native interactive visual acceptance remains
+the final main-menu release-hardening gate.

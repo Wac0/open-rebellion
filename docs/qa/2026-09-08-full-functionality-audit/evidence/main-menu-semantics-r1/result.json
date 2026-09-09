@@ -1,0 +1,51 @@
+{
+  "feature": "F-016D",
+  "verified_at": "2026-09-09",
+  "runner": "codex-orchestrator gpt-6-astra medium",
+  "verdict": "safe_to_commit",
+  "assertions": {
+    "passed": 9,
+    "failed": 0,
+    "unverified": 0
+  },
+  "browser": {
+    "engine": "Chromium 151.0.7922.34",
+    "viewport": "1280x960",
+    "contexts": 2,
+    "requests": 4,
+    "successful_requests": 4,
+    "failed_requests": 0,
+    "console_errors": 0,
+    "page_errors": 0,
+    "plugin_or_import_warnings": 0,
+    "gpu_performance_warnings": 4
+  },
+  "semantics": {
+    "landmarks": 1,
+    "controls": 14,
+    "focus_transitions_passed": 84,
+    "focus_transitions_failed": 0,
+    "keyboard_activations_passed": 6,
+    "keyboard_activations_failed": 0,
+    "hidden_outside_menu": true,
+    "restored_after_return": true
+  },
+  "destinations": [
+    "Load game and options",
+    "Credits",
+    "Multiplayer",
+    "Alliance campaign"
+  ],
+  "audio": {
+    "music_resource": "MDATA.300",
+    "music_duration_seconds": 35.34077083333333,
+    "music_sha256": "7d1212e1a91eb8d88ebaf0ce59000753561e4066425a24177baf1b04d07447f5",
+    "sfx_resources": [8000, 8001, 8002, 8004]
+  },
+  "artifact": {
+    "wasm_bytes": 4677433,
+    "wasm_sha256": "caa999e986be6c90d9c28bfbc6794c4656f7f88a8dd0d61b9f9715ff50f20d96",
+    "runtime_pack_bytes": 29096058,
+    "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+  }
+}

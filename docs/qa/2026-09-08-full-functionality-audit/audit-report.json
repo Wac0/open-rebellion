@@ -577,8 +577,8 @@
     {
       "id": "F-016",
       "severity": "P1",
-      "status": "functionally_remediated_release_hardening_open",
-      "title": "Original main-menu functional parity passes; release hardening remains",
+      "status": "browser_remediated_native_visual_open",
+      "title": "Original main-menu browser parity passes; native visual acceptance remains",
       "evidence": [
         "The browser composes COMMON 20001 with binary-mapped control resources instead of stretching and dimming the empty shell or overlaying replacement text buttons",
         "Astra medium R2 exercised all control families, eight outside-edge clicks, four viewports, both factions, Load/Options, Quit, and instrumented menu WebAudio",
@@ -586,7 +586,9 @@
         "F-016B persists faction, difficulty, galaxy size, and game type through save v11 and enforces Standard principal-leader capture versus Headquarters Only rules",
         "Astra medium F-016B R2 passed 18 of 18 setup, reload, bitmap, storage, network, and error assertions",
         "F-016C adds Credits, explicit M4 multiplayer status, gain/mute, return-to-menu audio, a clean second-campaign reset, the exact MDATA.300 menu cue, and original COMMON.DLL button effects",
-        "All 500 workspace tests and native build/startup pass; native interactive visual acceptance and browser semantic accessibility remain release-hardening gates"
+        "F-016D exposes all 14 authentic hotspots through clipped browser semantics and the same Rust action, focus, state, destination, and original-effect paths",
+        "All 502 workspace tests pass; Astra medium F-016D passed 9 of 9 browser gates and 84 of 84 focus transitions with four startup requests and zero runtime errors",
+        "Native build/startup passes; native interactive visual acceptance remains the final P03 release-hardening gate"
       ],
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
@@ -746,9 +748,59 @@
             "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md"
+        },
+        {
+          "id": "F-016D",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "runner": "codex-orchestrator gpt-6-astra medium",
+          "scope": "per-control browser semantics over the authentic bitmap cockpit",
+          "workspace_tests": {
+            "passed": 502,
+            "failed": 0,
+            "ignored": 2
+          },
+          "browser": {
+            "assertions_passed": 9,
+            "assertions_failed": 0,
+            "assertions_unverified": 0,
+            "engine": "Chromium 151.0.7922.34",
+            "contexts": 2,
+            "viewport": "1280x960",
+            "requests_per_cold_load": 4,
+            "semantic_landmarks": 1,
+            "original_controls": 14,
+            "focus_transitions_passed": 84,
+            "focus_transitions_failed": 0,
+            "keyboard_activations_passed": 6,
+            "keyboard_activations_failed": 0,
+            "console_errors": 0,
+            "page_errors": 0,
+            "failed_requests": 0,
+            "plugin_or_import_warnings": 0,
+            "bitmap_ui": "pass"
+          },
+          "audio": {
+            "music_source": "MDATA.300",
+            "music_sha256": "7d1212e1a91eb8d88ebaf0ce59000753561e4066425a24177baf1b04d07447f5",
+            "decoded_duration_seconds": 35.34077083333333,
+            "menu_sfx_resources": [8000, 8001, 8002, 8004]
+          },
+          "artifact": {
+            "wasm_bytes": 4677433,
+            "wasm_sha256": "caa999e986be6c90d9c28bfbc6794c4656f7f88a8dd0d61b9f9715ff50f20d96",
+            "runtime_pack_entries": {
+              "game_data": 52,
+              "bitmaps": 2231,
+              "audio": 5
+            },
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md"
         }
       ],
-      "acceptance": "Browser functional acceptance reproduces the assembled cockpit, every mapped hover/click/keyboard behavior and selection, direct faction start, MDATA.300 menu music, original button effects, 4:3 scaling, destinations, audio lifecycle, and clean campaign reset with no blank aperture or missing resource. Native interactive visual and semantic canvas accessibility acceptance remain open."
+      "acceptance": "Browser functional and semantic acceptance reproduces the assembled cockpit, every mapped hover/click/keyboard/screen-reader behavior and selection, direct faction start, MDATA.300 menu music, original button effects, 4:3 scaling, destinations, audio lifecycle, and clean campaign reset with no blank aperture, visible replacement control, or missing resource. Native interactive visual acceptance remains open."
     }
   ],
   "fable_review": {
@@ -930,7 +982,8 @@
       "reference": "agent_docs/main-menu-parity.md",
       "verified_tranches": [
         "F-016A browser cockpit composition, exact pointer regions, direct faction start, Load/Options, and responsive scaling",
-        "F-016C Credits, explicit M4 multiplayer status, keyboard traversal, gain/mute, return lifecycle, MDATA.300 music, and original button effects"
+        "F-016C Credits, explicit M4 multiplayer status, keyboard traversal, gain/mute, return lifecycle, MDATA.300 music, and original button effects",
+        "F-016D all 14 browser-semantic controls, selection state, cyclic focus, shared action/SFX routing, and destination lifecycle"
       ],
       "subpasses": [
         "browser cockpit assembly and original hotspot behavior: pass",
@@ -938,9 +991,9 @@
         "responsive browser acceptance: pass",
         "native build, startup, and original resource loading: pass",
         "native interactive visual acceptance: open",
-        "per-control browser semantic accessibility: open"
+        "per-control browser semantic accessibility: pass"
       ],
-      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-completion.md"
+      "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-semantics.md"
     },
     {
       "id": "P04",

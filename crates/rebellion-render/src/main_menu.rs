@@ -20,6 +20,7 @@ pub const LOGICAL_HEIGHT: f32 = 480.0;
 const ANIMATION_FPS: f64 = 15.0;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u8)]
 pub enum MainMenuControl {
     Easy,
     Intermediate,
@@ -35,6 +36,38 @@ pub enum MainMenuControl {
     Credits,
     Multiplayer,
     Quit,
+}
+
+impl MainMenuControl {
+    /// Stable DOM/keyboard order shared with the browser accessibility bridge.
+    pub const fn index(self) -> usize {
+        self as usize
+    }
+
+    pub fn from_index(index: u32) -> Option<Self> {
+        CONTROL_RECTS
+            .get(index as usize)
+            .map(|(control, _)| *control)
+    }
+
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::Easy => "Easy difficulty, X-wing",
+            Self::Intermediate => "Intermediate difficulty, Star Destroyer",
+            Self::Expert => "Expert difficulty, Death Star",
+            Self::GalaxyLever => "Cycle galaxy size",
+            Self::SmallGalaxy => "Small galaxy",
+            Self::MediumGalaxy => "Medium galaxy",
+            Self::LargeGalaxy => "Large galaxy",
+            Self::GameType => "Toggle Standard or Headquarters Only game",
+            Self::Empire => "Start as the Galactic Empire",
+            Self::Alliance => "Start as the Rebel Alliance",
+            Self::LoadOptions => "Load game and options",
+            Self::Credits => "Credits",
+            Self::Multiplayer => "Multiplayer",
+            Self::Quit => "Quit",
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -131,6 +164,7 @@ pub struct MainMenuState {
     hovered: Option<MainMenuControl>,
     hover_started_at: f64,
     keyboard_focus: Option<MainMenuControl>,
+    semantic_focus: Option<MainMenuControl>,
     pending_sfx: Option<SfxKind>,
 }
 
@@ -143,6 +177,7 @@ impl Default for MainMenuState {
             hovered: None,
             hover_started_at: 0.0,
             keyboard_focus: None,
+            semantic_focus: None,
             pending_sfx: None,
         }
     }
@@ -152,6 +187,26 @@ impl MainMenuState {
     /// Take the sound assigned by the original COMMON.DLL control constructor.
     pub fn take_sfx(&mut self) -> Option<SfxKind> {
         self.pending_sfx.take()
+    }
+
+    /// Mirror DOM focus onto the authentic bitmap control without adding a
+    /// visible replacement widget.
+    pub fn set_semantic_focus(&mut self, control: Option<MainMenuControl>) {
+        self.semantic_focus = control;
+        if let Some(control) = control {
+            self.keyboard_focus = Some(control);
+        }
+    }
+
+    pub fn semantic_focus(&self) -> Option<MainMenuControl> {
+        self.semantic_focus
+    }
+
+    /// Route assistive-technology activation through the exact pointer and
+    /// canvas-keyboard behavior, including the recovered COMMON.DLL effect.
+    pub fn activate_control(&mut self, control: MainMenuControl) -> Option<MainMenuAction> {
+        self.pending_sfx = Some(sfx_for(control));
+        activate(control, self)
     }
 }
 
@@ -202,25 +257,6 @@ pub fn hit_test(canvas: Rect, pointer: Pos2) -> Option<MainMenuControl> {
     CONTROL_RECTS
         .iter()
         .find_map(|(control, rect)| rect.contains(logical).then_some(*control))
-}
-
-fn control_label(control: MainMenuControl) -> &'static str {
-    match control {
-        MainMenuControl::Easy => "Easy difficulty, X-wing",
-        MainMenuControl::Intermediate => "Intermediate difficulty, Star Destroyer",
-        MainMenuControl::Expert => "Expert difficulty, Death Star",
-        MainMenuControl::GalaxyLever => "Cycle galaxy size",
-        MainMenuControl::SmallGalaxy => "Small galaxy",
-        MainMenuControl::MediumGalaxy => "Medium galaxy",
-        MainMenuControl::LargeGalaxy => "Large galaxy",
-        MainMenuControl::GameType => "Toggle Standard or Headquarters Only game",
-        MainMenuControl::Empire => "Start as the Galactic Empire",
-        MainMenuControl::Alliance => "Start as the Rebel Alliance",
-        MainMenuControl::LoadOptions => "Load game and options",
-        MainMenuControl::Credits => "Credits",
-        MainMenuControl::Multiplayer => "Multiplayer",
-        MainMenuControl::Quit => "Quit",
-    }
 }
 
 fn animation_resource(start: u32, count: u32, elapsed: f64) -> u32 {
@@ -418,8 +454,7 @@ pub fn draw_main_menu(
             // egui owns Tab/Shift+Tab traversal for these focusable controls.
             // Handling Tab here as well advances twice in the browser.
             let focus_direction = ui.input(|input| {
-                if input.key_pressed(egui::Key::ArrowLeft)
-                    || input.key_pressed(egui::Key::ArrowUp)
+                if input.key_pressed(egui::Key::ArrowLeft) || input.key_pressed(egui::Key::ArrowUp)
                 {
                     Some(true)
                 } else if input.key_pressed(egui::Key::ArrowRight)
@@ -472,9 +507,8 @@ pub fn draw_main_menu(
                 ) || *control == galaxy_indicator;
                 let rect = control_rect(canvas, *logical);
                 let response = ui.interact(rect, ui.id().with(*control as u8), Sense::click());
-                response.widget_info(|| {
-                    WidgetInfo::labeled(WidgetType::Button, true, control_label(*control))
-                });
+                response
+                    .widget_info(|| WidgetInfo::labeled(WidgetType::Button, true, control.label()));
                 let keyboard_activation = response.has_focus()
                     && ui.input(|input| {
                         input.key_pressed(egui::Key::Enter) || input.key_pressed(egui::Key::Space)
@@ -494,7 +528,10 @@ pub fn draw_main_menu(
                     draw_texture(ui.painter(), cache, ctx, resource_id, rect);
                 }
 
-                if response.has_focus() {
+                let focus_visible = state
+                    .semantic_focus
+                    .map_or_else(|| response.has_focus(), |focused| focused == *control);
+                if focus_visible {
                     ui.painter().rect_stroke(
                         rect.expand(2.0),
                         1.0,
@@ -507,8 +544,7 @@ pub fn draw_main_menu(
                 let exact_pointer_activation =
                     response.clicked() && state.hovered == Some(*control);
                 if exact_pointer_activation || keyboard_activation {
-                    state.pending_sfx = Some(sfx_for(*control));
-                    action = activate(*control, state);
+                    action = state.activate_control(*control);
                 }
             }
 
@@ -638,6 +674,35 @@ mod tests {
             adjacent_control(Some(MainMenuControl::Credits), false),
             MainMenuControl::Multiplayer
         );
+    }
+
+    #[test]
+    fn semantic_indices_and_labels_cover_every_original_control() {
+        assert_eq!(CONTROL_RECTS.len(), 14);
+        for (index, (control, _)) in CONTROL_RECTS.iter().enumerate() {
+            assert_eq!(control.index(), index);
+            assert_eq!(MainMenuControl::from_index(index as u32), Some(*control));
+            assert!(!control.label().is_empty());
+        }
+        assert_eq!(MainMenuControl::from_index(14), None);
+    }
+
+    #[test]
+    fn semantic_activation_uses_original_state_and_sound_path() {
+        let mut state = MainMenuState::default();
+        state.set_semantic_focus(Some(MainMenuControl::Expert));
+        assert_eq!(state.semantic_focus(), Some(MainMenuControl::Expert));
+        assert_eq!(state.activate_control(MainMenuControl::Expert), None);
+        assert_eq!(state.difficulty, Difficulty::Hard);
+        assert_eq!(state.take_sfx(), Some(SfxKind::MenuSelect));
+
+        assert_eq!(
+            state.activate_control(MainMenuControl::LoadOptions),
+            Some(MainMenuAction::LoadGame)
+        );
+        assert_eq!(state.take_sfx(), Some(SfxKind::MenuLoadOptions));
+        state.set_semantic_focus(None);
+        assert_eq!(state.semantic_focus(), None);
     }
 
     #[test]
