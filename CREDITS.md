@@ -3,13 +3,34 @@ title: "Credits & Acknowledgments"
 description: "Attribution for open-source projects, AI services, and community efforts used in Open Rebellion"
 category: "reference"
 created: 2026-03-14
-updated: 2026-03-16
+updated: 2026-09-09
 tags: [credits, attribution, tools]
 ---
 
 # Credits & Acknowledgments
 
 Open Rebellion is built on the work of many open-source projects, AI services, and community efforts.
+
+## People
+
+### Open Rebellion
+
+- **Tom di Mino** ([GitHub](https://github.com/tdimino)) created and maintains Open Rebellion.
+- **Will Forster** ([GitHub](https://github.com/will-forster)) contributed the dependency-free Go UI asset extractor in [PR #3](https://github.com/tdimino/open-rebellion/pull/3).
+- **Monte Quercus** ([GitHub](https://github.com/moqucu)) identified silent bitmap-loading failures and proposed missing-asset diagnostics in [PR #2](https://github.com/tdimino/open-rebellion/pull/2). The adopted diagnostics were incorporated with Monte as a co-author in [commit 4015098](https://github.com/tdimino/open-rebellion/commit/4015098b700aeff32badb72ae933fbc9e1d8f9ac).
+
+### Original Star Wars: Rebellion Team
+
+Thank you to the original developers and production team whose work made this project possible. The role groups below follow the [published Windows credits](https://www.mobygames.com/game/1144/star-wars-rebellion/credits/windows/), which record 24 people across 28 credits.
+
+- **Direction and lead design:** Scott Witte
+- **Assistant project leadership:** Michael Mortimer
+- **Executive production and design:** Doug Mogica
+- **Design assistance:** Scott Evans
+- **Production management:** Wayne Cline
+- **Production coordination:** Dino Ago and Polly Jenkins
+- **Programming:** Sim Dietrich, Ray Kraus, Martin Livesey, Lee Marshall, Ernesto Melendez, Michael Mortimer, Daniel Van Olst, Tom Park, Hugh Sider, and Scott Witte
+- **Additional graphics and artwork:** Ross Armstrong, Kevin A. Brown, Nikolay Chigirev, Richard Green, Ron K. Lussier, Christopher Sherrill, Craig Woida, Kent Yee, and Carolyn Yokoyama
 
 ## Game Heritage
 
@@ -67,6 +88,8 @@ Open Rebellion is built on the work of many open-source projects, AI services, a
 ## Development Tools
 
 - **Claude Code** — Anthropic. AI-assisted development throughout the project.
+- **OpenAI Codex** — OpenAI. Primary implementation, audit, and browser-verification orchestration.
+- **GPT-5.6 Sol**, **Claude Opus 4.6**, and **Fable 5.1** — Model-assisted coding, auditing, and review.
 - **nano-banana-pro** — Gemini 3 Pro Image integration skill.
 - **gemini-claude-resonance** — Cross-model visual dialogue for style analysis.
 
