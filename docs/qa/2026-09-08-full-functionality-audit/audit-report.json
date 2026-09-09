@@ -676,8 +676,8 @@
       "name": "GitHub Pages documentation",
       "status": "pass",
       "verified_at": "2026-09-08",
-      "source_commit": "52e646ae53a69cd6695ad4233db36f4dfd9bdb53",
-      "deployment_run": 34296165296,
+      "source_commit": "aaf428d286e482471662881124fbad78062fce6f",
+      "deployment_run": 34306480934,
       "public_http_checks": {
         "landing_page": 200,
         "audit_index": 200,

@@ -10,9 +10,9 @@ tags: [qa, documentation, github-pages, deployment]
 # GitHub Pages Documentation Proof
 
 P40 passes. GitHub Pages deployment run
-[`34296165296`](https://github.com/tdimino/open-rebellion/actions/runs/34296165296)
+[`34306480934`](https://github.com/tdimino/open-rebellion/actions/runs/34306480934)
 built, uploaded, and deployed documentation from `main` at commit
-`52e646ae53a69cd6695ad4233db36f4dfd9bdb53`.
+`aaf428d286e482471662881124fbad78062fce6f`.
 
 Public HTTP smoke tests returned 200 for:
 
@@ -20,9 +20,10 @@ Public HTTP smoke tests returned 200 for:
 - [Full-functionality audit index](https://tdimino.github.io/open-rebellion/docs/qa/2026-09-08-full-functionality-audit/)
 - [Fleet miniature browser proof](https://tdimino.github.io/open-rebellion/docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-08-fleet-miniatures.html)
 
-The first run for the documentation commit built successfully but GitHub
-canceled its artifact upload when the amended README commit superseded it. The
-newer run completed all build, artifact, status-reporting, and deploy jobs.
-The only annotation was GitHub's platform notice that the bundled
+The audit entry point is deliberately named lowercase `index.md`; this makes
+the directory URL above resolve on GitHub Pages instead of requiring the
+case-sensitive `INDEX.html` path. The recorded run completed all build,
+artifact, status-reporting, and deploy jobs. The only annotation was GitHub's
+platform notice that the bundled
 `actions/upload-artifact@v4` Node 20 action was forced onto Node 24; it did not
 affect the deployment.
