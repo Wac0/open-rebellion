@@ -13,6 +13,11 @@ This is the canonical implementation reference for the original *Star Wars
 Rebellion* shuttle-cockpit menu. Use it for P03 (main menu), P04 (game setup),
 and every visual test of `crates/rebellion-render/src/main_menu.rs`.
 
+![Open Rebellion shuttle-cockpit main menu with the optional music control enabled](../docs/qa/2026-09-08-full-functionality-audit/evidence/main-menu-music-toggle-r1/enabled-640x480.png)
+
+*The completed 640×480 composition: 14 original bitmap controls plus the
+documented Open Rebellion music-only extension in the upper-right corner.*
+
 ## Ground truth
 
 The original menu is not a text menu placed over a background. `COMMON.DLL`

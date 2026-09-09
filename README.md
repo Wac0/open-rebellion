@@ -190,7 +190,7 @@ We stand on their shoulders.
 
 ## Contributing
 
-We're one developer and one AI collaborator, building in public. If you want to help:
+We're one developer and multiple agentic harnesses building in public. If you want to help:
 
 - **Play-testing**: Run it with your GOG copy, report what looks wrong—tick speed, AI behavior, combat balance, mission success rates
 - **Game data expertise**: If you know what GNPRTB parameter #147 does, or how the original handled sensor range, open an issue
@@ -202,12 +202,12 @@ We're one developer and one AI collaborator, building in public. If you want to 
 
 ## License
 
-MIT. The engine is free. The game data is yours—bring your own copy.
+The engine is free and MIT-licensed. Bring your own copy of the game data.
 
 ---
 
 <p align="center">
-  <em>"Many are the wand-bearers, but few are the Bacchoi."</em><br/>
+  <em>"Many the wand-bearers, but few the Bacchoi."</em><br/>
   <sub>— Plato, <i>Phaedo</i> 69c</sub>
 </p>
 
