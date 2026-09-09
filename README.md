@@ -28,7 +28,7 @@ If you ever stayed up past midnight watching your fleet crawl across the galaxy 
 
 If you spent hours on TheForce.net debating whether Vergere was secretly a Sith, rolling dice and envisioning new storylines for Star Wars DnD, or composing elaborate threads on InvisionFree RPG message boards set in the Outer Rim—this project is for you.
 
-If you modded *Star Wars Galaxies* client-side until its servers shut down, roleplayed with lightsabers holstered on *Jedi Academy* multiplayer servers, ran *Rebellion* tournaments on mIRC, or replayed *KOTOR I* for the sixth time through a janky port on Steam—this project is *especially* for you.
+If you modded *Star Wars Galaxies* client-side until its servers shut down, roleplayed with sabers holstered on *Jedi Academy* multiplayer servers, ran *Rebellion* tournaments on mIRC, or replayed *KOTOR I* for the sixth time through a janky port on Steam—this project is *especially* for you.
 
 **Open Rebellion** is a from-scratch Rust reimplementation of [Star Wars Rebellion](https://www.gog.com/en/game/star_wars_rebellion) (Coolhand/LucasArts, 1998), the 4X galactic strategy game that never got a sequel, never got a Mac port, and never got the love it deserved. We're fixing all three.
 
