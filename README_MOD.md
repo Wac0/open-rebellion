@@ -73,8 +73,8 @@ silently skips the file with an `unknown arena` warning.
 | `characters.json` | `MJCHARSD.DAT` (named) + `MNCHARSD.DAT` (generic) | Both feed the same `characters` arena |
 | `troop_classes.json` | `TROOPSD.DAT` | Ground unit stats |
 | `defense_facility_classes.json` | `DEFFACSD.DAT` | Planetary shields/defenses |
-| `gnprtb.json` | `GNPRTB.DAT` | Global balance constants (combat formulas, bombardment divisors, etc.) — not a keyed list, patch its fields directly |
-| `sdprtb.json` | `SDPRTB.DAT` | Per-side startup parameters |
+| `gnprtb.json` | `GNPRTB.DAT` | Global balance constants; overlay `id` selects the matching `parameter_id` entry |
+| `sdprtb.json` | `SDPRTB.DAT` | Per-side startup parameters; overlay `id` selects the matching `parameter_id` entry |
 
 The full, authoritative field list for `GameWorld` (and thus every other
 possible overlay target) is `crates/rebellion-core/src/world/mod.rs` —
@@ -121,7 +121,8 @@ Patch**:
 ```
 
 Rules:
-- `"id"` is required and must match the target entity's `dat_id`.
+- `"id"` is required and must match the target entity's `dat_id`, or the
+  parameter entry's `parameter_id` for `gnprtb.json` and `sdprtb.json`.
 - A field you include **overwrites** that field.
 - A field set to `null` **deletes** it.
 - Any field you omit is **left untouched**.

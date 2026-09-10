@@ -141,7 +141,7 @@ This runs two services:
   (`scripts/decode-cutscenes.sh`), then runs `scripts/build-wasm.sh`. Each
   step skips work that's already done, so re-running `docker compose up` is
   fast; set `FORCE_REBUILD=1` in `.env` to force a full rebuild.
-- **`web`**—serves `web/` on [http://localhost:8080](http://localhost:8080)
+- **`web`**—serves `web/` on [http://localhost:8095](http://localhost:8095)
   with `python3 -m http.server`, starting only after `builder` finishes
   successfully.
 
