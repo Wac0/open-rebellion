@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-macroquad-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Browser-blue.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Tests-530%20passing-green.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-533%20passing-green.svg" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
   <a href="https://tdimino.github.io/open-rebellion/"><img src="https://img.shields.io/badge/Docs-Ghidra%20RE-blueviolet.svg" alt="Ghidra RE Docs"></a>
 </p>
@@ -40,7 +40,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification (2026-09-09):** The bitmap cockpit and exact native/WASM replay pass browser acceptance. Fleet transit now has one authoritative position, compatible arrivals consolidate, and five 5,000-tick seeds keep the fleet arena at or below 1.4 times its initial size. All 530 workspace unit tests pass. Ordinary player fleet dispatch, combat distribution, victory, multiplayer, and release gates remain open in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [fleet evidence](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
+> **Verification (2026-09-09):** The bitmap cockpit, exact native/WASM replay, and ordinary player fleet dispatch now pass browser acceptance for both factions. Fleet transit has one authoritative position, compatible arrivals consolidate, and all 533 workspace tests pass. Transit balance, combat distribution, victory, multiplayer, and release gates remain open in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [movement evidence](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
 
 | Layer | Implementation status | Release acceptance |
 |-------|-----------------------|--------------------|
@@ -54,13 +54,13 @@ Major implemented areas (each remains subject to the linked acceptance audit):
 - **Living Galaxy** — Game clock, manufacturing, 9 mission types, AI manager, event system, mod loader
 - **War Room** — Player faction selection, 5 UI panels, fleet movement, fog of war, encyclopedia, audio
 - **War Machine** — Space combat (7-phase pipeline), ground combat, orbital bombardment, blockade, uprising, Death Star, research, Jedi training, victory conditions, save/load
-- **Legacy behavior coverage** — 4 scripted story chains, Han Solo speed bonus, betrayal, decoy, escape, mission state flags
-- **Mod Workshop** — Sensor-radius fog, captivity, save v4, ModRuntime, Mod Manager panel
-- **Release groundwork** — Story events, local release packaging, example mod
+- **Legacy Behavior Coverage** — 4 scripted story chains, Han Solo speed bonus, betrayal, decoy, escape, mission state flags
+- **Mod Workshop** — Sensor-radius fog, captivity, save migration, ModRuntime, Mod Manager panel
+- **Release Groundwork** — Story events, local release packaging, example mod
 - **AI Overhaul** — Distance-based transit, per-fleet targeting with deconfliction, ControlKind state machine, faction-asymmetric doctrine, role-based character AI
-- **AI Parity** — Config-driven AI (16 tunable params), 18/18 dispatch validators, troop deployment, Death Star multi-target, reconnaissance
+- **AI Behavior Coverage** — Config-driven AI (16 tunable params), 18/18 dispatch validators, troop deployment, Death Star multi-target, reconnaissance
 - **UI Rebuild** — 13 egui panels, cockpit BMP sprites, galaxy overlays, tactical combat view, event screens, GOKRES portraits
-- **Knesset Tammuz** — Cutscene state machine (8 story triggers), Emperor combat modifier, advisor BIN v2 decoder (99% parse rate), mission telemetry
+- **Story and Runtime Integration** — Cutscene state machine (8 story triggers), Emperor combat modifier, advisor BIN v2 decoder (99% parse rate), mission telemetry
 - **Ghidra RE corpus** — [5,127 functions decompiled](https://tdimino.github.io/open-rebellion/) from REBEXE.EXE, 111 GNPRTB parameters mapped, C++ class hierarchy reconstructed
 
 ## You Will Need
@@ -93,7 +93,7 @@ python3 -m http.server 8080 -d web/
 
 ## Architecture
 
-Five Rust crates in a Cargo workspace:
+Five runtime crates and one CLI tool in a Cargo workspace:
 
 | Crate | Purpose |
 |-------|---------|
@@ -104,25 +104,27 @@ Five Rust crates in a Cargo workspace:
 | `rebellion-playtest` | Headless play-test binary—runs simulation without rendering, outputs JSONL for analysis. |
 | `dat-dumper` | CLI tool that exports all `.DAT` files to human-readable JSON. |
 
-The original game's binary data files (51 DAT files) and executable (REBEXE.EXE, 22,741 functions) have been fully reverse-engineered using [Metasharp's editor](https://github.com/MetasharpNet/StarWarsRebellionEditor.NET) and [Ghidra](https://ghidra-sre.org/). Every DAT parser passes round-trip byte validation. Combat formulas, AI decision trees, and game balance parameters are documented in `ghidra/notes/`.
+All 51 original DAT files have parsers with round-trip byte validation. The reverse-engineering corpus also contains 5,127 decompiled functions from the 22,741-function `REBEXE.EXE`, plus documented combat formulas, AI decision trees, and game-balance parameters. See [Metasharp's editor](https://github.com/MetasharpNet/StarWarsRebellionEditor.NET), [Ghidra](https://ghidra-sre.org/), and `ghidra/notes/`.
 
-## Roadmap
+## Implemented Milestones
 
-| Milestone | Status | What You Get |
-|-----------|--------|-------------|
-| **Galaxy Viewer** | Complete | Interactive star map, 51/51 DAT parsers, WASM build |
-| **Living Galaxy** | Complete | Game clock, 9 missions, manufacturing, AI, events, mod loader |
-| **War Room** | Complete | Player UI, fleet movement, fog of war, encyclopedia, audio |
-| **War Machine** | Complete | Combat (space/ground/bombardment), blockade, uprising, Death Star, victory, save/load |
-| **Full Parity** | Complete | Story events, betrayal, decoys, escape, Han speed bonus, mission flags |
-| **Mod Workshop** | Complete | Sensor fog, captivity, save migration, mod manager panel, ModRuntime |
-| **Release** | Complete | Release packaging, CI, example mod, vendored WASM deps |
-| **AI Parity** | Complete | 18/18 dispatch validators, troop deployment, Death Star multi-target, reconnaissance |
-| **UI Rebuild** | Complete | 13 egui panels, cockpit chrome, tactical combat, event screens, native cutscenes |
-| **Knesset Tammuz** | Complete | Cutscene state machine, Emperor modifier, advisor BIN v2 (99%), mission telemetry |
+These rows record delivered implementation work, not final parity or release acceptance. The [September 2026 audit](docs/qa/2026-09-08-full-functionality-audit/) owns the remaining acceptance gates.
+
+| Milestone | Implementation status | What You Get |
+|-----------|-----------------------|-------------|
+| **Galaxy Viewer** | Implemented | Interactive star map, 51/51 DAT parsers, WASM build |
+| **Living Galaxy** | Implemented | Game clock, 9 missions, manufacturing, AI, events, mod loader |
+| **War Room** | Implemented | Player UI, fleet movement, fog of war, encyclopedia, audio |
+| **War Machine** | Implemented | Combat (space/ground/bombardment), blockade, uprising, Death Star, victory, save/load |
+| **Legacy Behavior Coverage** | Implemented | Story events, betrayal, decoys, escape, Han speed bonus, mission flags |
+| **Mod Workshop** | Implemented | Sensor fog, captivity, save migration, mod manager panel, ModRuntime |
+| **Release Groundwork** | Implemented | Local release packaging, example mod, vendored WASM dependencies |
+| **AI Behavior Coverage** | Implemented | 18/18 dispatch validators, troop deployment, Death Star multi-target, reconnaissance |
+| **UI Rebuild** | Implemented | 13 egui panels, cockpit chrome, tactical combat, event screens, native cutscenes |
+| **Story and Runtime Integration** | Implemented | Cutscene state machine, Emperor modifier, advisor BIN v2 (99%), mission telemetry |
 | **HD Visual Polish** | In Progress | UltraSharp V2 upscaling—235/2,231 DLL BMPs done |
 
-**Ghidra RE complete.** 5,127 functions decompiled from `REBEXE.EXE`, combat formulas decoded, 111 GNPRTB parameters mapped, C++ class hierarchy reconstructed. See `ghidra/notes/` for the full corpus (7 scholar documents, 4,179 lines).
+**Ghidra RE corpus.** 5,127 functions decompiled from `REBEXE.EXE`, combat formulas decoded, 111 GNPRTB parameters mapped, and the C++ class hierarchy reconstructed. See `ghidra/notes/` for the implementation-focused corpus (7 scholar documents, 4,179 lines).
 
 ## The Data Pipeline
 
@@ -140,17 +142,17 @@ Run `cargo run -p dat-dumper -- --gdata data/base --output data/base/json` to ex
 
 ## Asset Pipeline
 
-Every resource in the original game has been fully extracted to open formats—**nothing remains locked in the 1998 binaries**:
+The local extraction inventory converts the original game's resource DLLs and media into workable formats. These assets require a legal copy and are not distributed with the engine:
 
 | Resource | Count | Format | Source |
 |----------|-------|--------|--------|
 | Game data | 51 files | DAT → JSON | dat-dumper (round-trip validated) |
-| UI images | 2,441 BMPs | BMP → PNG | 11 DLLs via pefile extraction |
-| Animation data | 3,223 files | BIN | ALSPRITE/EMSPRITE/ALBRIEF/EMBRIEF.DLL |
+| UI images | 2,441 BMPs | BMP | 9 resource DLLs |
+| DLL data resources | 3,223 files | BIN/data | 9 resource DLLs; includes the text subsets below |
 | Voice lines | 285 WAVs | WAV | VOICEFXA/VOICEFXE.DLL |
 | Cutscene videos | 15 files | SMK → WebM | MDATA/ via ffmpeg |
 | Soundtrack | 16 WAVs | WAV | MDATA/300-315 (John Williams excerpts) |
-| Entity names | 511+ strings | UTF-16 → text | TEXTSTRA.DLL via pelite |
+| Entity names | 511 string bundles | UTF-16 → text | TEXTSTRA.DLL via pelite |
 | Encyclopedia text | 348 entries | RT_RCDATA | ENCYTEXT.DLL |
 
 HD upscaling uses **UltraSharp V2** (DAT2 architecture via Spandrel + Apple Silicon MPS)—selected via an 8-model shootout that tested Real-ESRGAN, PBRify, UltraSharp, GTAV_dither, FSDedither Riven, Vertex AI Imagen 4.0, Topaz Gigapixel CGI, and classical palette reconstruction. UltraSharp V2 won all five asset categories (portraits, ships, sprites, UI, events) by preserving the original 1998 pre-rendered CGI aesthetic without photorealizing. Free, local, ~0.5s/image on M4 Max.

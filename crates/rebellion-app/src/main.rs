@@ -29,8 +29,8 @@ use rebellion_core::missions::{
     MissionEffect, MissionFaction, MissionKind, MissionState, MissionSystem,
 };
 use rebellion_core::movement::{
-    apply_fleet_arrival, begin_fleet_transit, reconcile_fleet_orbits, MovementState,
-    MovementSystem,
+    apply_fleet_arrival, begin_faction_fleet_transit, begin_fleet_transit,
+    reconcile_fleet_orbits, MovementState, MovementSystem,
 };
 use rebellion_core::repair::{RepairEvent, RepairState, RepairSystem};
 use rebellion_core::research::{ResearchState, ResearchSystem};
@@ -3462,6 +3462,7 @@ async fn main() {
                         &mut ai2_state,
                         &mut victory_state,
                         &campaign_config,
+                        &game_config,
                         &mut blockade_state,
                         &event_state,
                         &mut mod_runtime,
@@ -3541,6 +3542,7 @@ fn apply_panel_action(
     ai2_state: &mut Option<AIState>,
     victory_state: &mut VictoryState,
     campaign_config: &CampaignConfig,
+    game_config: &rebellion_core::tuning::GameConfig,
     blockade_state: &mut BlockadeState,
     event_state: &EventState,
     mod_runtime: &mut rebellion_data::mods::ModRuntime,
@@ -3657,6 +3659,56 @@ fn apply_panel_action(
                 "Fleets merged".to_string(),
                 MessageCategory::Event,
             ));
+        }
+        PanelAction::DispatchFleet { fleet, destination } => {
+            let expected_is_alliance = *player_faction == MissionFaction::Alliance;
+            match begin_faction_fleet_transit(
+                movement_state,
+                world,
+                fleet,
+                destination,
+                expected_is_alliance,
+                &game_config.movement,
+            ) {
+                Ok(departure) => {
+                    let origin_name = world
+                        .systems
+                        .get(departure.origin)
+                        .map(|system| system.name.as_str())
+                        .unwrap_or("Unknown");
+                    let destination_name = world
+                        .systems
+                        .get(departure.destination)
+                        .map(|system| system.name.as_str())
+                        .unwrap_or("Unknown");
+                    msg_log.push(GameMessage::at_system(
+                        clock.tick,
+                        format!(
+                            "Fleet departed {} for {} ({} days)",
+                            origin_name, destination_name, departure.transit_ticks,
+                        ),
+                        MessageCategory::Event,
+                        departure.destination,
+                    ));
+                    #[cfg(not(target_arch = "wasm32"))]
+                    {
+                        audio_engine.play_sfx(SfxKind::FleetDeparture, audio_vol);
+                        let voice = if departure.is_alliance {
+                            VoiceLine::AllianceFleetDeparts
+                        } else {
+                            VoiceLine::EmpireFleetDeparts
+                        };
+                        audio_engine.play_voice(voice, audio_vol);
+                    }
+                }
+                Err(error) => {
+                    msg_log.push(GameMessage::new(
+                        clock.tick,
+                        format!("Fleet move rejected: {}", error),
+                        MessageCategory::Event,
+                    ));
+                }
+            }
         }
         PanelAction::Enqueue {
             system,

@@ -39,11 +39,13 @@
 //! ```
 
 use std::collections::HashMap;
+use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
 use crate::ids::{FleetKey, SystemKey};
 use crate::tick::TickEvent;
+use crate::tuning::MovementConfig;
 use crate::world::{Fleet, FighterEntry, GameWorld};
 
 // ---------------------------------------------------------------------------
@@ -289,13 +291,8 @@ impl MovementState {
 
 /// Emitted when a fleet completes hyperspace transit.
 ///
-/// The caller must update `GameWorld`:
-/// ```text
-/// if let Some(fleet) = world.fleets.get_mut(event.fleet) {
-///     fleet.location = event.system;
-/// }
-/// // Also update the source and destination system's fleet lists.
-/// ```
+/// Apply this event through [`apply_fleet_arrival`] so fleet records and orbit
+/// indexes remain canonical.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ArrivalEvent {
     /// The fleet that arrived.
@@ -317,6 +314,119 @@ pub struct AppliedArrival {
     pub is_alliance: bool,
     /// Number of compatible fleet records absorbed into `fleet`.
     pub merged_fleets: usize,
+}
+
+/// Accepted faction-controlled fleet departure.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct AppliedDeparture {
+    pub fleet: FleetKey,
+    pub origin: SystemKey,
+    pub destination: SystemKey,
+    pub transit_ticks: u32,
+    pub is_alliance: bool,
+}
+
+/// Reason a player-facing fleet dispatch cannot begin.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FleetDispatchError {
+    MissingFleet,
+    MissingOrigin,
+    MissingDestination,
+    DestinationDestroyed,
+    WrongFaction,
+    AlreadyInTransit,
+    AlreadyAtDestination,
+    EmptyFleet,
+}
+
+impl fmt::Display for FleetDispatchError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let message = match self {
+            Self::MissingFleet => "fleet no longer exists",
+            Self::MissingOrigin => "fleet origin is unavailable",
+            Self::MissingDestination => "destination is unavailable",
+            Self::DestinationDestroyed => "destination has been destroyed",
+            Self::WrongFaction => "fleet is not controlled by the player",
+            Self::AlreadyInTransit => "fleet is already in transit",
+            Self::AlreadyAtDestination => "fleet is already at the destination",
+            Self::EmptyFleet => "fleet has no ships or fighter squadrons",
+        };
+        formatter.write_str(message)
+    }
+}
+
+/// Validate a player-facing fleet dispatch without mutating the campaign.
+pub fn validate_fleet_dispatch(
+    state: &MovementState,
+    world: &GameWorld,
+    fleet: FleetKey,
+    destination: SystemKey,
+    expected_is_alliance: bool,
+) -> Result<(), FleetDispatchError> {
+    let value = world
+        .fleets
+        .get(fleet)
+        .ok_or(FleetDispatchError::MissingFleet)?;
+    if value.is_alliance != expected_is_alliance {
+        return Err(FleetDispatchError::WrongFaction);
+    }
+    if state.is_in_transit(fleet) {
+        return Err(FleetDispatchError::AlreadyInTransit);
+    }
+    if !world.systems.contains_key(value.location) {
+        return Err(FleetDispatchError::MissingOrigin);
+    }
+    let destination_system = world
+        .systems
+        .get(destination)
+        .ok_or(FleetDispatchError::MissingDestination)?;
+    if destination_system.is_destroyed {
+        return Err(FleetDispatchError::DestinationDestroyed);
+    }
+    if value.location == destination {
+        return Err(FleetDispatchError::AlreadyAtDestination);
+    }
+    if value.is_empty() {
+        return Err(FleetDispatchError::EmptyFleet);
+    }
+    Ok(())
+}
+
+/// Validate, time, and begin a faction-controlled fleet departure.
+pub fn begin_faction_fleet_transit(
+    state: &mut MovementState,
+    world: &mut GameWorld,
+    fleet: FleetKey,
+    destination: SystemKey,
+    expected_is_alliance: bool,
+    config: &MovementConfig,
+) -> Result<AppliedDeparture, FleetDispatchError> {
+    validate_fleet_dispatch(state, world, fleet, destination, expected_is_alliance)?;
+    let value = world
+        .fleets
+        .get(fleet)
+        .ok_or(FleetDispatchError::MissingFleet)?;
+    let origin = value.location;
+    let is_alliance = value.is_alliance;
+    let transit_ticks = fleet_transit_ticks_with_config(
+        value,
+        world,
+        origin,
+        destination,
+        config.distance_scale,
+        config.min_transit_ticks,
+        config.default_fighter_hyperdrive,
+    );
+    if !begin_fleet_transit(state, world, fleet, destination, transit_ticks) {
+        return Err(FleetDispatchError::AlreadyInTransit);
+    }
+    Ok(AppliedDeparture {
+        fleet,
+        origin,
+        destination,
+        transit_ticks,
+        is_alliance,
+    })
 }
 
 /// Begin transit and remove the fleet from its origin's orbit index.
@@ -884,6 +994,66 @@ mod tests {
         assert!(world.fleets.contains_key(stationed));
         assert!(world.fleets.contains_key(arriving));
         assert_eq!(world.systems[destination].fleets, vec![stationed, arriving]);
+    }
+
+    #[test]
+    fn faction_dispatch_validates_and_begins_one_authoritative_order() {
+        let (mut world, origin, destination) = make_transit_world(0, 0, 30, 40);
+        let ship_key = world.capital_ship_classes.insert(test_ship_class(80));
+        let fleet = add_test_fleet(&mut world, origin, ship_key);
+        let mut movement = MovementState::new();
+
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, destination, false),
+            Err(FleetDispatchError::WrongFaction),
+        );
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, origin, true),
+            Err(FleetDispatchError::AlreadyAtDestination),
+        );
+
+        world.fleets[fleet].capital_ships.clear();
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, destination, true),
+            Err(FleetDispatchError::EmptyFleet),
+        );
+        world.fleets[fleet]
+            .capital_ships
+            .push(ShipInstance::new(ship_key, 100, true));
+
+        let sector = world.systems[origin].sector;
+        let missing = world.systems.insert(make_system(sector, 60, 80));
+        world.systems.remove(missing);
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, missing, true),
+            Err(FleetDispatchError::MissingDestination),
+        );
+
+        world.systems[destination].is_destroyed = true;
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, destination, true),
+            Err(FleetDispatchError::DestinationDestroyed),
+        );
+        world.systems[destination].is_destroyed = false;
+
+        let departure = begin_faction_fleet_transit(
+            &mut movement,
+            &mut world,
+            fleet,
+            destination,
+            true,
+            &MovementConfig::default(),
+        )
+        .unwrap();
+        assert_eq!(departure.origin, origin);
+        assert_eq!(departure.destination, destination);
+        assert_eq!(departure.transit_ticks, 10);
+        assert!(!world.systems[origin].fleets.contains(&fleet));
+        assert_eq!(movement.get(fleet).unwrap().destination, destination);
+        assert_eq!(
+            validate_fleet_dispatch(&movement, &world, fleet, destination, true),
+            Err(FleetDispatchError::AlreadyInTransit),
+        );
     }
 
     #[test]

@@ -1,15 +1,15 @@
 //! Fleets panel — fleet roster with composition editing, character assignment,
-//! and fleet merge controls.
+//! fleet merge controls, and destination-based dispatch.
 //!
 //! Rendered as a left-side egui panel. Lists all fleets belonging to the player
 //! faction. Clicking a fleet expands a detail row showing capital ships, fighter
 //! squadrons, assigned characters, and action buttons (assign/remove officer,
-//! merge with another fleet at same system, go to system).
+//! merge with another fleet at the same system, move, and go to system).
 
 use egui_macroquad::egui::{self, RichText, ScrollArea, Vec2};
 use rebellion_core::ids::{CharacterKey, DatId, FleetKey, SystemKey};
 use rebellion_core::missions::MissionFaction;
-use rebellion_core::movement::MovementState;
+use rebellion_core::movement::{validate_fleet_dispatch, FleetDispatchError, MovementState};
 use rebellion_core::world::GameWorld;
 
 use super::PanelAction;
@@ -125,6 +125,45 @@ pub fn draw_fleets(
             );
             ui.add_space(4.0);
 
+            if let Some(destination) = state.pending_move_destination {
+                ui.group(|ui| {
+                    let destination_name = world
+                        .systems
+                        .get(destination)
+                        .map(|system| system.name.as_str())
+                        .unwrap_or("Unavailable destination");
+                    ui.label(
+                        RichText::new("MOVE FLEET")
+                            .color(theme::GOLD_DIM)
+                            .size(10.0)
+                            .strong(),
+                    );
+                    ui.horizontal(|ui| {
+                        ui.label(
+                            RichText::new(format!("Destination: {}", destination_name))
+                                .color(theme::TEXT_PRIMARY)
+                                .size(11.0),
+                        );
+                        if ui
+                            .small_button(
+                                RichText::new("Cancel")
+                                    .color(theme::TEXT_DISABLED)
+                                    .size(10.0),
+                            )
+                            .clicked()
+                        {
+                            state.pending_move_destination = None;
+                        }
+                    });
+                    ui.label(
+                        RichText::new("Choose an orbiting fleet below.")
+                            .color(theme::TEXT_SECONDARY)
+                            .size(10.0),
+                    );
+                });
+                ui.add_space(4.0);
+            }
+
             ScrollArea::vertical().show(ui, |ui| {
                 for &(fleet_key, fleet) in &player_fleets {
                     let system_name = world
@@ -136,6 +175,21 @@ pub fn draw_fleets(
                     let ship_count: u32 = fleet.ship_count();
                     let fighter_count: u32 = fleet.fighters.iter().map(|e| e.count).sum();
                     let is_expanded = state.expanded_fleet == Some(fleet_key);
+                    let location_text = movement_state.get(fleet_key).map_or_else(
+                        || format!("Fleet @ {}", system_name),
+                        |order| {
+                            let destination_name = world
+                                .systems
+                                .get(order.destination)
+                                .map(|system| system.name.as_str())
+                                .unwrap_or("Unknown");
+                            format!(
+                                "En route to {} ({} days)",
+                                destination_name,
+                                order.ticks_remaining(),
+                            )
+                        },
+                    );
 
                     // ── Fleet header row ─────────────────────────────────
                     ui.horizontal(|ui| {
@@ -145,13 +199,13 @@ pub fn draw_fleets(
                             state.assigning_to = None;
                         }
 
-                        ui.label(
-                            RichText::new(format!("Fleet @ {}", system_name))
-                                .color(fleet_color(player_faction))
-                                .strong(),
-                        );
+                        ui.vertical(|ui| {
+                            ui.label(
+                                RichText::new(location_text)
+                                    .color(fleet_color(player_faction))
+                                    .strong(),
+                            );
 
-                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                             let mut parts = Vec::new();
                             if ship_count > 0 {
                                 parts.push(format!("{} ships", ship_count));
@@ -162,13 +216,73 @@ pub fn draw_fleets(
                             if fleet.has_death_star {
                                 parts.push("DS".to_string());
                             }
-                            ui.label(
-                                RichText::new(parts.join(" · "))
-                                    .size(10.0)
-                                    .color(theme::TEXT_SECONDARY),
-                            );
+                            if !parts.is_empty() {
+                                ui.label(
+                                    RichText::new(parts.join(" · "))
+                                        .size(10.0)
+                                        .color(theme::TEXT_SECONDARY),
+                                );
+                            }
                         });
                     });
+
+                    if let Some(destination) = state.pending_move_destination {
+                        let expected_is_alliance = player_faction == MissionFaction::Alliance;
+                        match validate_fleet_dispatch(
+                            movement_state,
+                            world,
+                            fleet_key,
+                            destination,
+                            expected_is_alliance,
+                        ) {
+                            Ok(()) => {
+                                let destination_name = world
+                                    .systems
+                                    .get(destination)
+                                    .map(|system| system.name.as_str())
+                                    .unwrap_or("destination");
+                                if ui
+                                    .button(
+                                        RichText::new(format!(
+                                            "Dispatch to {}",
+                                            destination_name,
+                                        ))
+                                        .color(theme::GOLD)
+                                        .size(11.0),
+                                    )
+                                    .clicked()
+                                {
+                                    action = Some(PanelAction::DispatchFleet {
+                                        fleet: fleet_key,
+                                        destination,
+                                    });
+                                    state.pending_move_destination = None;
+                                }
+                            }
+                            Err(FleetDispatchError::AlreadyInTransit) => {
+                                ui.label(
+                                    RichText::new("Already in transit")
+                                        .color(theme::TEXT_DISABLED)
+                                        .size(10.0),
+                                );
+                            }
+                            Err(FleetDispatchError::AlreadyAtDestination) => {
+                                ui.label(
+                                    RichText::new("Already at destination")
+                                        .color(theme::TEXT_DISABLED)
+                                        .size(10.0),
+                                );
+                            }
+                            Err(FleetDispatchError::EmptyFleet) => {
+                                ui.label(
+                                    RichText::new("No ships available")
+                                        .color(theme::TEXT_DISABLED)
+                                        .size(10.0),
+                                );
+                            }
+                            Err(_) => {}
+                        }
+                    }
 
                     if is_expanded {
                         ui.indent("fleet_detail", |ui| {

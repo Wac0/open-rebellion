@@ -70,6 +70,8 @@ pub enum PanelAction {
     RemoveCharacterFromFleet { character: CharacterKey, fleet: FleetKey },
     /// Merge fleet_b into fleet_a (ships, fighters, characters transfer).
     MergeFleets { fleet_a: FleetKey, fleet_b: FleetKey },
+    /// Dispatch one player-controlled fleet to a selected destination.
+    DispatchFleet { fleet: FleetKey, destination: SystemKey },
 
     // ── Manufacturing ─────────────────────────────────────────────────────────
     /// Add a buildable to the production queue at a system.

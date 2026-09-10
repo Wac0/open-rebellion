@@ -29,6 +29,7 @@ acceptance plan required before the project can claim 100% functionality.
 | [Native/WASM replay proof](evidence/2026-09-09-replay-wasm-equivalence.md) | F-011B4 exact-artifact execution, nine native/WASM checkpoints, fail-closed browser diagnostics, and normal four-request startup. |
 | [Fleet redispatch proof](evidence/2026-09-09-fleet-redispatch.md) | F-007A active-order invariants, AI exclusion, accepted-event telemetry, and the 5,000-tick seed-42 delta. |
 | [Fleet position proof](evidence/2026-09-09-fleet-position-consolidation.md) | F-007B authoritative transit position, stale-index repair, orbit-only production, deterministic arrival consolidation, five-seed bounds, and Astra bitmap acceptance. |
+| [Player fleet dispatch proof](evidence/2026-09-09-player-fleet-dispatch.md) | F-007C validated destination selection, authoritative departure, transit feedback, stale-menu cleanup, and Astra two-faction bitmap acceptance. |
 | [Save/Delete UI proof](evidence/2026-09-09-save-delete.md) | F-001 wiring, empty-load-slot regression fix, storage deletion, reload persistence, and Astra 33/33 bitmap/browser proof. |
 | [Original main-menu cockpit proof](evidence/2026-09-09-main-menu-cockpit.md) | Binary-mapped controls, responsive bitmaps, direct faction starts, and Astra-verified browser playback. |
 | [Campaign setup proof](evidence/2026-09-09-game-setup-propagation.md) | Save v11 setup persistence, Standard/Headquarters Only victory rules, and Astra 18/18 bitmap/browser proof. |
@@ -45,9 +46,9 @@ functional. Fleet-miniature acceptance, deterministic four-request browser
 startup, F-001 browser Save/Load/Delete, the F-011A fingerprint primitive,
 F-011B1 save continuation, the F-011B2 replay/data contract, F-011B3 native
 replay execution, F-011B4 native/WASM fixture equivalence, F-007A fleet-order
-protection, F-007B fleet-position consolidation, and F-016A/B/C/D/E
-cockpit/setup functionality now pass; P03 and P04 are complete. Ordinary
-player fleet movement, transit balance, combat distribution, victory,
+protection, F-007B fleet-position consolidation, F-007C player fleet dispatch,
+and F-016A/B/C/D/E cockpit/setup functionality now pass; P03 and P04 are
+complete. Transit balance, combat distribution, victory,
 five-seed cross-runtime replay, interactive/tactical convergence, browser
 memory/media work, cross-browser performance, formatting, lint, and
 release-level visual acceptance remain incomplete.

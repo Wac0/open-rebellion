@@ -380,7 +380,11 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
   orders are immutable until arrival or explicit cancellation, AI candidates
   exclude transit and same-pass reservations, and seed 42 reduced attack
   orders from 306,012 to 78,946 ([F-007A evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md)).
-- [ ] Model fleet position explicitly; merge arrivals; stop unbounded production fleets.
+- [x] Model fleet position explicitly, merge compatible arrivals, and prevent
+  production from attaching to in-transit fleets ([F-007B evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md)).
+- [x] Wire ordinary player fleet dispatch through the validated authoritative
+  departure path and pass Astra-medium bitmap acceptance for both factions
+  ([F-007C evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md)).
 - [ ] Extend stable ordering and versioned random streams through five 5,000-tick campaign seeds.
 - [ ] Resolve combat at system scope so queued fleets cannot create a permanent backlog.
 - [ ] Enable AI Death Star construction/fire/cleanup and repair parity oracles.

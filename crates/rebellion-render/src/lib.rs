@@ -145,6 +145,8 @@ impl Default for GalaxyMapState {
 pub fn draw_galaxy_map(world: &GameWorld, state: &mut GalaxyMapState) -> CameraView {
     clear_background(Color::new(0.02, 0.02, 0.08, 1.0));
 
+    discard_stale_context_menus(world, state);
+
     let sw = screen_width();
     let sh = screen_height();
     // Reserve space on the right when a system is selected.
@@ -288,11 +290,11 @@ pub fn draw_galaxy_map(world: &GameWorld, state: &mut GalaxyMapState) -> CameraV
     }
 
     // ── Click to select ───────────────────────────────────────────────────────
-    if is_mouse_button_pressed(MouseButton::Left) && mx < map_width {
+    if is_mouse_button_pressed(MouseButton::Left)
+        && mx < map_width
+        && !context_menu_owns_pointer(state)
+    {
         state.selected_system = state.hovered_system;
-        // Left-click anywhere dismisses context menus.
-        state.context_menu_system = None;
-        state.context_menu_fleet = None;
     }
 
     // ── Right-click context menu ─────────────────────────────────────────────
@@ -337,6 +339,29 @@ pub fn draw_galaxy_map(world: &GameWorld, state: &mut GalaxyMapState) -> CameraV
         zoom,
         map_width,
         screen_height: sh,
+    }
+}
+
+/// An open egui context menu receives the click before the map may select a
+/// system. Closing happens through the menu action or its explicit Close button.
+fn context_menu_owns_pointer(state: &GalaxyMapState) -> bool {
+    state.context_menu_system.is_some() || state.context_menu_fleet.is_some()
+}
+
+/// Remove menu targets that disappeared after an arrival merge or world update.
+/// A stale target has no visible window and must not continue consuming map clicks.
+fn discard_stale_context_menus(world: &GameWorld, state: &mut GalaxyMapState) {
+    if state
+        .context_menu_system
+        .is_some_and(|(system, _, _)| world.systems.get(system).is_none())
+    {
+        state.context_menu_system = None;
+    }
+    if state
+        .context_menu_fleet
+        .is_some_and(|(fleet, _, _)| world.fleets.get(fleet).is_none())
+    {
+        state.context_menu_fleet = None;
     }
 }
 
@@ -1302,4 +1327,36 @@ pub fn draw_status_bar(
             audio::draw_audio_controls(ui, audio_vol);
         });
     });
+}
+
+#[cfg(test)]
+mod interaction_tests {
+    use super::*;
+
+    #[test]
+    fn open_context_menu_owns_map_left_click() {
+        let mut state = GalaxyMapState::default();
+        assert!(!context_menu_owns_pointer(&state));
+
+        state.context_menu_system = Some((SystemKey::default(), 10.0, 20.0));
+        assert!(context_menu_owns_pointer(&state));
+
+        state.context_menu_system = None;
+        state.context_menu_fleet = Some((FleetKey::default(), 30.0, 40.0));
+        assert!(context_menu_owns_pointer(&state));
+    }
+
+    #[test]
+    fn stale_context_menu_releases_map_left_click() {
+        let world = GameWorld::default();
+        let mut state = GalaxyMapState {
+            context_menu_system: Some((SystemKey::default(), 10.0, 20.0)),
+            context_menu_fleet: Some((FleetKey::default(), 30.0, 40.0)),
+            ..GalaxyMapState::default()
+        };
+
+        discard_stale_context_menus(&world, &mut state);
+
+        assert!(!context_menu_owns_pointer(&state));
+    }
 }

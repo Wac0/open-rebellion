@@ -257,8 +257,10 @@
         "The F-007A seed-42 rerun produced 78946 attack orders and 153462 accepted moves against 152513 arrivals",
         "F-007B makes movement orders authoritative for transit, rebuilds orbit indexes before production, and consolidates compatible arrivals",
         "Across five 5000-tick seeds, final fleet arenas are no more than 1.4 times their initial size and accepted moves are no more than 1.002 times arrivals",
+        "F-007C routes ordinary player movement through validated authoritative departure, presents accurate transit state, and prevents context-menu click loss or stale-target capture",
         "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md",
-        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md"
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md"
       ],
       "resolved_root_causes": [
         "In-transit fleets remained eligible for AI dispatch and replacement orders reset travel progress.",
@@ -382,10 +384,57 @@
             "music_muted_during_testing": true
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md"
+        },
+        {
+          "id": "F-007C",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "automated": {
+            "workspace_unit_tests_passed": 533,
+            "failures": 0,
+            "unit_tests_ignored": 4,
+            "doc_tests_passed": 3,
+            "doc_tests_ignored": 16,
+            "focused_render_tests_passed": 83,
+            "focused_movement_tests_passed": 25,
+            "independent_dispatch_assertions_passed": 13,
+            "native_wasm_checkpoints": 9,
+            "replay_final_fingerprint": "v1:b8a40a56246c1314",
+            "replay_artifact_bytes": 13482,
+            "wasm_build": "pass_with_preexisting_warnings",
+            "wasm_bytes": 4956299,
+            "wasm_sha256": "5cf3c3b107ab1e54d3914cab85bbe2a52638bee80baa680f232153a25aa854f4",
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "browser": {
+            "runner": "codex-orchestrator",
+            "model": "gpt-6-astra",
+            "effort": "medium",
+            "review": "pass_no_p0_p3",
+            "alliance_dispatch": "Yavin to Geedon V",
+            "empire_dispatch": "Coruscant to Ghorman",
+            "alliance_requests": 4,
+            "empire_requests": 4,
+            "all_http_200": true,
+            "bitmap_cockpit": true,
+            "faction_bitmap_galaxy": true,
+            "fleet_bitmap_art": true,
+            "destination_banner": true,
+            "origin_index_removal": true,
+            "countdown_updates": true,
+            "repeat_dispatch_prevented": true,
+            "transit_composition_overlap": false,
+            "console_errors": 0,
+            "page_errors": 0,
+            "request_errors": 0,
+            "missing_assets": 0,
+            "music_muted_during_testing": true
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md"
         }
       ],
       "remaining": [
-        "Wire ordinary player fleet movement to the shared positioned-departure helper.",
         "Resolve combat at system scope, reduce transit churn, diversify battle locations, and pass the five-seed M1 campaign bounds.",
         "Enable and verify Death Star and victory outcomes in permitted fixtures."
       ],
@@ -1196,14 +1245,14 @@
       "work": [
         "exclude in-transit fleets from dispatch and prevent travel resets (verified in F-007A)",
         "model fleet position, merge arrivals, and attach production without unbounded fleet creation (verified in F-007B)",
+        "route ordinary player fleet dispatch through validated authoritative departure (verified in F-007C)",
         "use stable iteration and deterministic per-tick random streams",
         "aggregate combat at system level",
         "enable Death Star construction, fire, and cleanup paths",
         "repair parity oracles and degeneracy detection"
       ],
-      "verified_tranches": ["F-007A", "F-007B"],
+      "verified_tranches": ["F-007A", "F-007B", "F-007C"],
       "remaining": [
-        "ordinary player fleet dispatch",
         "transit balance",
         "system-level combat and target diversity",
         "Death Star and victory outcomes",
@@ -1360,7 +1409,7 @@
     {"id":"P06","name":"Galaxy navigation","status":"pending"},
     {"id":"P07","name":"Fog and overlays","status":"partial","verified_tranches":["F-007B_transit_origin_exclusion"]},
     {"id":"P08","name":"Officers","status":"pending"},
-    {"id":"P09","name":"Fleets","status":"pending"},
+    {"id":"P09","name":"Fleets","status":"partial","verified_tranches":["F-007C_validated_player_dispatch"]},
     {"id":"P10","name":"Economy","status":"pending"},
     {"id":"P11","name":"Manufacturing","status":"partial","verified_tranches":["F-007B_orbit_only_fleet_attachment"]},
     {"id":"P12","name":"Diplomacy","status":"pending"},
@@ -1371,7 +1420,7 @@
     {"id":"P17","name":"Uprisings and betrayal","status":"pending"},
     {"id":"P18","name":"Research","status":"pending"},
     {"id":"P19","name":"Jedi","status":"pending"},
-    {"id":"P20","name":"Movement","status":"partial","verified_tranches":["F-007A_active_order_protection","F-007B_position_and_arrival_consolidation"]},
+    {"id":"P20","name":"Movement","status":"partial","verified_tranches":["F-007A_active_order_protection","F-007B_position_and_arrival_consolidation","F-007C_validated_player_dispatch"]},
     {"id":"P21","name":"Blockade and repair","status":"pending"},
     {"id":"P22","name":"AI","status":"partial","verified_tranches":["F-007A_transit_and_same_pass_move_deconfliction","F-007B_bounded_fleet_arena"]},
     {"id":"P23","name":"Core space combat","status":"pending"},

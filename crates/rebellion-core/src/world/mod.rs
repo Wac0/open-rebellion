@@ -282,7 +282,7 @@ pub struct System {
     /// Populated from SYSTEMSD.DAT field; defaults to 0 (no counter-intel).
     #[serde(default)]
     pub espionage_rating: f32,
-    /// Fleets currently orbiting or departing from this system.
+    /// Fleets currently orbiting this system. Transit lives in `MovementState`.
     pub fleets: Vec<FleetKey>,
     /// Ground troop units stationed on the surface.
     pub ground_units: Vec<TroopKey>,
