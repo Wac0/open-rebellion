@@ -177,6 +177,8 @@ impl CombatSystem {
         // Phase 1: Initialize — build mutable hull snapshots (FUN_005442f0).
         let (mut atk_ships, mut atk_fighters) = Self::snapshot_fleet(world, attacker);
         let (mut def_ships, mut def_fighters) = Self::snapshot_fleet(world, defender);
+        let atk_initial_hulls: Vec<i32> = atk_ships.iter().map(|ship| ship.hull_current).collect();
+        let def_initial_hulls: Vec<i32> = def_ships.iter().map(|ship| ship.hull_current).collect();
         let atk_initial_fighters = atk_fighters.clone();
         let def_initial_fighters = def_fighters.clone();
 
@@ -186,6 +188,8 @@ impl CombatSystem {
         // Checks if either side has armed ships. Does NOT set PHASES_ENABLED yet.
         let any_armed = atk_ships.iter().any(|s| s.alive && s.weapon_nibble > 0)
             || def_ships.iter().any(|s| s.alive && s.weapon_nibble > 0);
+        let any_fighters = atk_fighters.iter().any(|&count| count > 0)
+            || def_fighters.iter().any(|&count| count > 0);
 
         // Difficulty modifier: FUN_0053e190 scales combat damage via GNPRTB.
         let difficulty_mod = {
@@ -234,7 +238,7 @@ impl CombatSystem {
         }
 
         // NOW arm subsequent phases after weapon fire completes.
-        if any_armed {
+        if any_armed || any_fighters {
             flags.set(CombatPhaseFlags::PHASES_ENABLED);
         }
 
@@ -280,6 +284,7 @@ impl CombatSystem {
         // Phase 8: Post-combat cleanup (FUN_00544a20, 86 lines) — handled by caller.
 
         Self::build_space_result(attacker, defender, system, &atk_ships, &def_ships,
+                                 &atk_initial_hulls, &def_initial_hulls,
                                  &atk_fighters, &def_fighters,
                                  &atk_initial_fighters, &def_initial_fighters,
                                  winner, tick)
@@ -480,17 +485,23 @@ impl CombatSystem {
         }
     }
 
-    /// Compute total fighter carrier capacity for a fleet's alive capital ships.
+    /// Compute fighter launch capacity for a fleet at the battle system.
     ///
     /// Sums `fighter_capacity` across all capital ship classes, scaled by the
-    /// number of alive hulls of each class. Returns the maximum number of
-    /// fighter squadrons that can be launched simultaneously.
+    /// number of alive hulls of each class. A fleet that begins the engagement
+    /// with no capital ships is a system-based fighter wing, so its full roster
+    /// can launch locally. A fleet whose carriers are destroyed during combat
+    /// cannot gain that fallback while the engagement is in progress.
     fn compute_carrier_capacity(
         world: &GameWorld,
         fleet_key: FleetKey,
         ship_snaps: &[ShipSnap],
+        system_based_fighters: bool,
     ) -> u32 {
         let fleet = &world.fleets[fleet_key];
+        if system_based_fighters {
+            return fleet.fighters.iter().map(|entry| entry.count).sum();
+        }
         // ShipSnap array is 1:1 with alive ships in capital_ships.
         let alive_ships = fleet.capital_ships.iter().filter(|s| s.alive);
         alive_ships
@@ -540,9 +551,22 @@ impl CombatSystem {
         def_ships: &mut Vec<ShipSnap>,
         rng: &mut impl Iterator<Item = f64>,
     ) {
+        let atk_system_based_fighters = atk_ships.is_empty();
+        let def_system_based_fighters = def_ships.is_empty();
+
         // Step 1: Launch — cap deployed squadrons to carrier capacity.
-        let atk_capacity = Self::compute_carrier_capacity(world, attacker, atk_ships);
-        let def_capacity = Self::compute_carrier_capacity(world, defender, def_ships);
+        let atk_capacity = Self::compute_carrier_capacity(
+            world,
+            attacker,
+            atk_ships,
+            atk_system_based_fighters,
+        );
+        let def_capacity = Self::compute_carrier_capacity(
+            world,
+            defender,
+            def_ships,
+            def_system_based_fighters,
+        );
 
         let mut atk_launched = Self::launch_fighters(atk_fighters, atk_capacity);
         let mut def_launched = Self::launch_fighters(def_fighters, def_capacity);
@@ -563,17 +587,37 @@ impl CombatSystem {
             &def_launched, def_fleet, atk_ships, world, rng,
         );
 
-        // Step 3: Fighter-vs-fighter dogfight using attack_strength and maneuverability.
+        // Step 3: Capital-ship laser cannons screen against enemy fighters.
+        // The original tactical rules identify laser cannons as the anti-fighter
+        // armament. Resolve that fire before the surviving squadrons dogfight.
+        Self::capital_ships_attack_fighters(
+            world, attacker, atk_ships, &mut def_launched, rng,
+        );
+        Self::capital_ships_attack_fighters(
+            world, defender, def_ships, &mut atk_launched, rng,
+        );
+
+        // Step 4: Fighter-vs-fighter dogfight using attack_strength and maneuverability.
         Self::fighter_dogfight(
             &mut atk_launched, atk_fleet,
             &mut def_launched, def_fleet,
             world, rng,
         );
 
-        // Step 4: Recall — surviving fighters return to carriers.
+        // Step 5: Recall — surviving fighters return to carriers.
         // Re-check capacity (carriers may have been destroyed during this phase).
-        let atk_capacity_post = Self::compute_carrier_capacity(world, attacker, atk_ships);
-        let def_capacity_post = Self::compute_carrier_capacity(world, defender, def_ships);
+        let atk_capacity_post = Self::compute_carrier_capacity(
+            world,
+            attacker,
+            atk_ships,
+            atk_system_based_fighters,
+        );
+        let def_capacity_post = Self::compute_carrier_capacity(
+            world,
+            defender,
+            def_ships,
+            def_system_based_fighters,
+        );
 
         Self::recall_fighters(atk_fighters, &atk_launched, &atk_originally_launched, atk_capacity_post);
         Self::recall_fighters(def_fighters, &def_launched, &def_originally_launched, def_capacity_post);
@@ -605,18 +649,16 @@ impl CombatSystem {
             };
             let class = &world.fighter_classes[class_key];
 
-            // Compute per-squadron attack power from weapon-type strengths.
-            // Each weapon type contributes: weapon_count * weapon_attack_strength.
-            // Falls back to overall_attack_strength if per-weapon stats are zero.
-            let per_weapon_attack =
-                class.turbolaser_fore * class.turbolaser_attack_strength
-                + class.ion_cannon_fore * class.ion_cannon_attack_strength
-                + class.laser_cannon_fore * class.laser_cannon_attack_strength;
-
-            let base_attack = if per_weapon_attack > 0 {
-                per_weapon_attack
-            } else {
+            // DAT stores overall_attack_strength as the aggregate weapon rating.
+            // Older fixtures may only populate the per-type strengths, so keep a
+            // direct-sum fallback without multiplying the ratings by themselves.
+            let per_weapon_attack = class.turbolaser_attack_strength
+                + class.ion_cannon_attack_strength
+                + class.laser_cannon_attack_strength;
+            let base_attack = if class.overall_attack_strength > 0 {
                 class.overall_attack_strength
+            } else {
+                per_weapon_attack
             };
 
             let attack_power = base_attack * sq_count;
@@ -626,10 +668,15 @@ impl CombatSystem {
             let raw_idx = (roll * alive_targets.len() as f64) as usize;
             let target_idx = alive_targets[raw_idx.min(alive_targets.len() - 1)];
 
-            // Shield absorption: target's shield_nibble absorbs a fraction.
+            // Fighters strike the current shield pool before reaching the hull.
+            // shield_nibble is the recharge rate, not an absorption percentage.
             let raw_damage = attack_power as i32;
-            let absorbed = (raw_damage as f64 * enemy_ships[target_idx].shield_nibble as f64 / 15.0) as i32;
-            let damage = (raw_damage - absorbed).max(1);
+            let absorbed = raw_damage.min(enemy_ships[target_idx].shield_current.max(0));
+            enemy_ships[target_idx].shield_current -= absorbed;
+            let damage = raw_damage - absorbed;
+            if damage == 0 {
+                continue;
+            }
 
             enemy_ships[target_idx].hull_current =
                 (enemy_ships[target_idx].hull_current - damage).max(0);
@@ -637,6 +684,53 @@ impl CombatSystem {
                 enemy_ships[target_idx].alive = false;
             }
         }
+    }
+
+    /// Apply capital-ship laser-cannon fire to an opposing fighter screen.
+    ///
+    /// DAT laser attack strength is an aggregate rating. Every 100 points
+    /// removes one squadron, with the remainder resolved as a deterministic
+    /// fractional chance from the caller-provided roll stream.
+    fn capital_ships_attack_fighters(
+        world: &GameWorld,
+        fleet_key: FleetKey,
+        ship_snaps: &[ShipSnap],
+        enemy_fighters: &mut Vec<u32>,
+        rng: &mut impl Iterator<Item = f64>,
+    ) {
+        if enemy_fighters.iter().all(|&count| count == 0) {
+            return;
+        }
+
+        let fleet = &world.fleets[fleet_key];
+        let laser_power: u32 = ship_snaps
+            .iter()
+            .zip(fleet.capital_ships.iter().filter(|ship| ship.alive))
+            .filter(|(snapshot, _)| snapshot.alive)
+            .map(|(_, ship)| {
+                let class = &world.capital_ship_classes[ship.class];
+                let arc_total = class.laser_cannon_fore
+                    + class.laser_cannon_aft
+                    + class.laser_cannon_port
+                    + class.laser_cannon_starboard;
+                if class.laser_cannon_attack_strength > 0 {
+                    class.laser_cannon_attack_strength
+                } else {
+                    arc_total
+                }
+            })
+            .sum();
+        if laser_power == 0 {
+            return;
+        }
+
+        let roll = rng.next().unwrap_or(0.5).clamp(0.0, 1.0);
+        let guaranteed = laser_power / 100;
+        let remainder = laser_power % 100;
+        let fractional = u32::from(roll * 100.0 < remainder as f64);
+        let total_fighters: u32 = enemy_fighters.iter().sum();
+        let losses = (guaranteed + fractional).min(total_fighters);
+        Self::apply_fighter_losses(enemy_fighters, losses);
     }
 
     /// Fighter-vs-fighter dogfight using FighterClass attack_strength and maneuverability.
@@ -695,8 +789,15 @@ impl CombatSystem {
         let atk_loss_rate = def_power / total_power;
         let def_loss_rate = atk_power / total_power;
 
-        let atk_losses = ((atk_total as f64 * atk_loss_rate * attrition_rate * roll_atk) as u32).min(atk_total);
-        let def_losses = ((def_total as f64 * def_loss_rate * attrition_rate * roll_def) as u32).min(def_total);
+        // Once opposing squadrons engage, each side with nonzero enemy power
+        // takes at least one squadron of attrition. Integer truncation used to
+        // make small wings permanently immortal against much larger forces.
+        let atk_losses = ((atk_total as f64 * atk_loss_rate * attrition_rate * roll_atk) as u32)
+            .max(1)
+            .min(atk_total);
+        let def_losses = ((def_total as f64 * def_loss_rate * attrition_rate * roll_def) as u32)
+            .max(1)
+            .min(def_total);
 
         Self::apply_fighter_losses(atk_launched, atk_losses);
         Self::apply_fighter_losses(def_launched, def_losses);
@@ -745,6 +846,8 @@ impl CombatSystem {
         system: SystemKey,
         atk_ships: &[ShipSnap],
         def_ships: &[ShipSnap],
+        atk_initial_hulls: &[i32],
+        def_initial_hulls: &[i32],
         atk_fighters: &[u32],
         def_fighters: &[u32],
         atk_initial_fighters: &[u32],
@@ -754,21 +857,23 @@ impl CombatSystem {
     ) -> SpaceCombatResult {
         let mut ship_damage = Vec::new();
         for (i, snap) in atk_ships.iter().enumerate() {
-            if snap.hull_current < snap.hull_max {
+            let hull_before = atk_initial_hulls.get(i).copied().unwrap_or(snap.hull_max);
+            if snap.hull_current < hull_before {
                 ship_damage.push(ShipDamageEvent {
                     fleet: attacker,
                     ship_index: i,
-                    hull_before: snap.hull_max,
+                    hull_before,
                     hull_after: snap.hull_current,
                 });
             }
         }
         for (i, snap) in def_ships.iter().enumerate() {
-            if snap.hull_current < snap.hull_max {
+            let hull_before = def_initial_hulls.get(i).copied().unwrap_or(snap.hull_max);
+            if snap.hull_current < hull_before {
                 ship_damage.push(ShipDamageEvent {
                     fleet: defender,
                     ship_index: i,
-                    hull_before: snap.hull_max,
+                    hull_before,
                     hull_after: snap.hull_current,
                 });
             }
@@ -1681,6 +1786,133 @@ mod tests {
             .filter(|e| e.fleet == def)
             .collect();
         assert!(!def_damage.is_empty(), "fighters with attack_strength=50 should damage capital ships");
+    }
+
+    #[test]
+    fn test_system_based_fighter_wing_can_engage_without_carrier() {
+        let mut world = empty_world();
+        let sector = make_sector(&mut world);
+        let sys = make_system(&mut world, sector);
+        let unused_ship_class = make_class(&mut world, 100, 0);
+        let defender_class = make_class(&mut world, 200, 0);
+        let fighter_class = make_fighter_class(&mut world, 50, 5, true);
+
+        let attacker = make_fleet_with_fighters(
+            &mut world,
+            sys,
+            unused_ship_class,
+            0,
+            fighter_class,
+            8,
+            true,
+        );
+        let defender = make_fleet(&mut world, sys, defender_class, 1, false);
+
+        let result = CombatSystem::resolve_space(
+            &world,
+            attacker,
+            defender,
+            sys,
+            1,
+            &vec![0.5; 200],
+            1,
+            false,
+        );
+
+        assert!(result
+            .ship_damage
+            .iter()
+            .any(|event| event.fleet == defender && event.hull_after < event.hull_before));
+    }
+
+    #[test]
+    fn test_capital_ship_laser_cannons_screen_enemy_fighters() {
+        let mut world = empty_world();
+        let sector = make_sector(&mut world);
+        let sys = make_system(&mut world, sector);
+        let unused_ship_class = make_class(&mut world, 100, 0);
+        let fighter_class = make_fighter_class(&mut world, 5, 5, true);
+        let screen_class = world.capital_ship_classes.insert(CapitalShipClass {
+            dat_id: DatId::new(0x30000041),
+            name: "Escort".into(),
+            hull: 1000,
+            laser_cannon_fore: 100,
+            laser_cannon_attack_strength: 100,
+            ..CapitalShipClass::default()
+        });
+        let fighter_wing = make_fleet_with_fighters(
+            &mut world,
+            sys,
+            unused_ship_class,
+            0,
+            fighter_class,
+            1,
+            true,
+        );
+        let screen = make_fleet(&mut world, sys, screen_class, 1, false);
+
+        let result = CombatSystem::resolve_space(
+            &world,
+            fighter_wing,
+            screen,
+            sys,
+            1,
+            &[0.5; 200],
+            1,
+            false,
+        );
+
+        assert!(result.fighter_losses.iter().any(|event| {
+            event.fleet == fighter_wing && event.squads_before == 1 && event.squads_after == 0
+        }));
+        assert_eq!(result.winner, CombatSide::Defender);
+    }
+
+    #[test]
+    fn test_outnumbered_system_fighter_wing_takes_integer_attrition() {
+        let mut world = empty_world();
+        let sector = make_sector(&mut world);
+        let sys = make_system(&mut world, sector);
+        let unused_ship_class = make_class(&mut world, 100, 0);
+        let alliance_fighter = make_fighter_class(&mut world, 5, 5, true);
+        let empire_fighter = make_fighter_class(&mut world, 8, 5, false);
+        let attacker = make_fleet_with_fighters(
+            &mut world,
+            sys,
+            unused_ship_class,
+            0,
+            alliance_fighter,
+            1,
+            true,
+        );
+        let defender = make_fleet_with_fighters(
+            &mut world,
+            sys,
+            unused_ship_class,
+            0,
+            empire_fighter,
+            6,
+            false,
+        );
+
+        let result = CombatSystem::resolve_space(
+            &world,
+            attacker,
+            defender,
+            sys,
+            1,
+            &[0.5; 200],
+            1,
+            false,
+        );
+
+        assert_eq!(result.winner, CombatSide::Defender);
+        assert!(result.fighter_losses.iter().any(|event| {
+            event.fleet == attacker && event.squads_before == 1 && event.squads_after == 0
+        }));
+        assert!(result.fighter_losses.iter().any(|event| {
+            event.fleet == defender && event.squads_before == 6 && event.squads_after == 5
+        }));
     }
 
     #[test]

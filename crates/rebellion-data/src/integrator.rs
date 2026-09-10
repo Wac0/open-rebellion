@@ -15,13 +15,13 @@ use std::collections::HashMap;
 use rebellion_core::ai::{AIAction, AIState};
 use rebellion_core::betrayal::BetrayalEvent;
 use rebellion_core::blockade::BlockadeEvent;
-use rebellion_core::combat::{CombatSide, GroundCombatResult, SpaceCombatResult};
+use rebellion_core::combat::{CombatSide, CombatSystem, GroundCombatResult, SpaceCombatResult};
 use rebellion_core::death_star::{DeathStarEvent, DeathStarState};
 use rebellion_core::economy::{EconomyEvent, EconomyState};
 use rebellion_core::events::{EventAction, FiredEvent, SkillField, SystemTag};
 use rebellion_core::fog::RevealEvent;
 use rebellion_core::game_events::*;
-use rebellion_core::ids::{CharacterKey, SystemKey, TroopKey};
+use rebellion_core::ids::{CharacterKey, FleetKey, SystemKey, TroopKey};
 use rebellion_core::jedi::{JediEvent, JediState};
 use rebellion_core::manufacturing::{BuildableKind, CompletionEvent, ManufacturingState, QueueItem};
 use rebellion_core::missions::{MissionEffect, MissionFaction, MissionKind, MissionResult, MissionState};
@@ -459,6 +459,47 @@ impl PerceptionIntegrator {
         self.emit(SYS_COMBAT, EVT_COMBAT_SPACE, serde_json::json!({
             "system": sys_name(world, system),
             "winner": winner_str,
+        }));
+    }
+
+    /// Emit one summary event after a complete system-level space engagement.
+    pub fn emit_system_space_combat(
+        &mut self,
+        world: &GameWorld,
+        result: &SystemSpaceCombatResult,
+    ) {
+        let winner_str = match result.winner {
+            CombatSide::Attacker => "alliance",
+            CombatSide::Defender => "empire",
+            CombatSide::Draw => "draw",
+        };
+        self.emit(SYS_COMBAT, EVT_COMBAT_SPACE, serde_json::json!({
+            "system": sys_name(world, result.system),
+            "winner": winner_str,
+            "rounds": result.rounds,
+            "alliance_fleets": result.alliance_fleets,
+            "empire_fleets": result.empire_fleets,
+            "alliance_before": {
+                "capital_ships": result.alliance_before.capital_ships,
+                "fighter_squadrons": result.alliance_before.fighter_squadrons,
+                "hull": result.alliance_before.hull,
+            },
+            "alliance_after": {
+                "capital_ships": result.alliance_after.capital_ships,
+                "fighter_squadrons": result.alliance_after.fighter_squadrons,
+                "hull": result.alliance_after.hull,
+            },
+            "empire_before": {
+                "capital_ships": result.empire_before.capital_ships,
+                "fighter_squadrons": result.empire_before.fighter_squadrons,
+                "hull": result.empire_before.hull,
+            },
+            "empire_after": {
+                "capital_ships": result.empire_after.capital_ships,
+                "fighter_squadrons": result.empire_after.fighter_squadrons,
+                "hull": result.empire_after.hull,
+            },
+            "stalemate": result.stalemate,
         }));
     }
 
@@ -1538,6 +1579,164 @@ mod tests {
 // Combat helpers (moved from simulation.rs)
 // ---------------------------------------------------------------------------
 
+/// Safety cap for a complete system-level engagement.
+///
+/// A round that changes neither hull nor fighter strength ends the engagement
+/// immediately, so this cap only protects against unexpectedly large battles.
+pub const MAX_SYSTEM_COMBAT_ROUNDS: u32 = 256;
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct SpaceForceSummary {
+    pub capital_ships: usize,
+    pub fighter_squadrons: u32,
+    pub hull: i64,
+}
+
+/// Aggregate result for every hostile fleet orbiting one system.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SystemSpaceCombatResult {
+    pub system: SystemKey,
+    /// Alliance is the attacker and Empire is the defender in auto-resolve.
+    pub winner: CombatSide,
+    /// A surviving fleet belonging to the winning faction, when decisive.
+    pub winner_fleet: Option<FleetKey>,
+    pub rounds: u32,
+    pub alliance_fleets: usize,
+    pub empire_fleets: usize,
+    pub alliance_before: SpaceForceSummary,
+    pub alliance_after: SpaceForceSummary,
+    pub empire_before: SpaceForceSummary,
+    pub empire_after: SpaceForceSummary,
+    /// True when combat could not change any remaining unit or reached the cap.
+    pub stalemate: bool,
+}
+
+fn orbiting_fleets_by_faction(
+    world: &GameWorld,
+    system: SystemKey,
+) -> (Vec<FleetKey>, Vec<FleetKey>) {
+    let Some(system) = world.systems.get(system) else {
+        return (Vec::new(), Vec::new());
+    };
+    system
+        .fleets
+        .iter()
+        .copied()
+        .filter_map(|fleet_key| {
+            world
+                .fleets
+                .get(fleet_key)
+                .map(|fleet| (fleet_key, fleet.is_alliance))
+        })
+        .fold(
+            (Vec::new(), Vec::new()),
+            |(mut alliance, mut empire), (fleet_key, is_alliance)| {
+                if is_alliance {
+                    alliance.push(fleet_key);
+                } else {
+                    empire.push(fleet_key);
+                }
+                (alliance, empire)
+            },
+        )
+}
+
+fn summarize_space_force(world: &GameWorld, fleets: &[FleetKey]) -> SpaceForceSummary {
+    fleets.iter().fold(SpaceForceSummary::default(), |mut summary, fleet_key| {
+        if let Some(fleet) = world.fleets.get(*fleet_key) {
+            summary.capital_ships += fleet.capital_ships.iter().filter(|ship| ship.alive).count();
+            summary.fighter_squadrons += fleet.fighters.iter().map(|entry| entry.count).sum::<u32>();
+            summary.hull += fleet
+                .capital_ships
+                .iter()
+                .filter(|ship| ship.alive)
+                .map(|ship| i64::from(ship.hull_current))
+                .sum::<i64>();
+        }
+        summary
+    })
+}
+
+/// Resolve all hostile task forces at a system as one uninterrupted engagement.
+///
+/// Each core combat call models one combat round. Applying every damaging round
+/// here prevents repair ticks from healing fleets between rounds and advances to
+/// the next deterministic pair when either task force is destroyed.
+pub fn resolve_system_space_combat(
+    world: &mut GameWorld,
+    system: SystemKey,
+    difficulty: u8,
+    rng_rolls: &[f64],
+    tick: u64,
+    death_star_shield_active: bool,
+) -> SystemSpaceCombatResult {
+    let (initial_alliance, initial_empire) = orbiting_fleets_by_faction(world, system);
+    let alliance_before = summarize_space_force(world, &initial_alliance);
+    let empire_before = summarize_space_force(world, &initial_empire);
+    let mut rounds = 0;
+    let mut stalemate = false;
+
+    while rounds < MAX_SYSTEM_COMBAT_ROUNDS {
+        let (alliance, empire) = orbiting_fleets_by_faction(world, system);
+        let (Some(&attacker), Some(&defender)) = (alliance.first(), empire.first()) else {
+            break;
+        };
+
+        let round = CombatSystem::resolve_space(
+            world,
+            attacker,
+            defender,
+            system,
+            difficulty,
+            rng_rolls,
+            tick,
+            death_star_shield_active,
+        );
+        let made_progress = round
+            .ship_damage
+            .iter()
+            .any(|event| event.hull_after < event.hull_before)
+            || round
+                .fighter_losses
+                .iter()
+                .any(|event| event.squads_after < event.squads_before);
+
+        apply_space_combat_result_inner(&round, world);
+        rounds += 1;
+
+        if !made_progress {
+            stalemate = true;
+            break;
+        }
+    }
+
+    let (alliance, empire) = orbiting_fleets_by_faction(world, system);
+    let alliance_after = summarize_space_force(world, &alliance);
+    let empire_after = summarize_space_force(world, &empire);
+    let (winner, winner_fleet) = match (alliance.first().copied(), empire.first().copied()) {
+        (Some(fleet), None) => (CombatSide::Attacker, Some(fleet)),
+        (None, Some(fleet)) => (CombatSide::Defender, Some(fleet)),
+        _ => (CombatSide::Draw, None),
+    };
+    if rounds == MAX_SYSTEM_COMBAT_ROUNDS && winner == CombatSide::Draw {
+        stalemate = true;
+    }
+
+    SystemSpaceCombatResult {
+        system,
+        winner,
+        winner_fleet,
+        rounds,
+        alliance_fleets: initial_alliance.len(),
+        empire_fleets: initial_empire.len(),
+        alliance_before,
+        alliance_after,
+        empire_before,
+        empire_after,
+        stalemate,
+    }
+}
+
 pub fn apply_space_combat_result_inner(
     result: &SpaceCombatResult,
     world: &mut GameWorld,
@@ -1559,6 +1758,16 @@ pub fn apply_space_combat_result_inner(
                     break;
                 }
                 alive_idx += 1;
+            }
+        }
+    }
+
+    // Apply fighter attrition before testing whether either fleet is empty.
+    // `fighter_index` maps directly to the roster snapshot used by combat.
+    for evt in &result.fighter_losses {
+        if let Some(fleet) = world.fleets.get_mut(evt.fleet) {
+            if let Some(entry) = fleet.fighters.get_mut(evt.fighter_index) {
+                entry.count = evt.squads_after;
             }
         }
     }
@@ -1605,6 +1814,201 @@ pub fn apply_space_combat_result_inner(
             }
             world.fleets.remove(fleet_key);
         }
+    }
+}
+
+#[cfg(test)]
+mod combat_application_tests {
+    use super::*;
+    use rebellion_core::combat::{FighterLossEvent, SpaceCombatResult};
+    use rebellion_core::dat::ExplorationStatus;
+    use rebellion_core::world::{CapitalShipClass, FighterEntry, Fleet, System};
+
+    fn add_combat_system(world: &mut GameWorld) -> SystemKey {
+        world.systems.insert(System {
+            dat_id: DatId::new(0x90000001),
+            name: "Test System".into(),
+            sector: Default::default(),
+            x: 0,
+            y: 0,
+            exploration_status: ExplorationStatus::Explored,
+            popularity_alliance: 0.5,
+            popularity_empire: 0.5,
+            is_populated: true,
+            total_energy: 0,
+            raw_materials: 0,
+            espionage_rating: 0.0,
+            fleets: vec![],
+            ground_units: vec![],
+            special_forces: vec![],
+            defense_facilities: vec![],
+            manufacturing_facilities: vec![],
+            production_facilities: vec![],
+            is_headquarters: false,
+            is_destroyed: false,
+            control: ControlKind::Uncontrolled,
+        })
+    }
+
+    fn add_ship_fleet(
+        world: &mut GameWorld,
+        system: SystemKey,
+        is_alliance: bool,
+        hull: u32,
+        attack: u32,
+    ) -> FleetKey {
+        let class = world.capital_ship_classes.insert(CapitalShipClass {
+            dat_id: DatId::new(if is_alliance { 0x30000001 } else { 0x30000002 }),
+            is_alliance,
+            is_empire: !is_alliance,
+            hull,
+            turbolaser_fore: attack,
+            ..CapitalShipClass::default()
+        });
+        let fleet = world.fleets.insert(Fleet {
+            location: system,
+            capital_ships: vec![ShipInstance::new(class, hull as i32, is_alliance)],
+            fighters: vec![],
+            characters: vec![],
+            is_alliance,
+            has_death_star: false,
+        });
+        world.systems[system].fleets.push(fleet);
+        fleet
+    }
+
+    #[test]
+    fn fighter_losses_update_rosters_and_remove_defeated_fleet() {
+        let mut world = GameWorld::default();
+        let attacker = world.fleets.insert(Fleet {
+            location: SystemKey::default(),
+            capital_ships: vec![],
+            fighters: vec![FighterEntry {
+                class: Default::default(),
+                count: 4,
+            }],
+            characters: vec![],
+            is_alliance: true,
+            has_death_star: false,
+        });
+        let defender = world.fleets.insert(Fleet {
+            location: SystemKey::default(),
+            capital_ships: vec![],
+            fighters: vec![FighterEntry {
+                class: Default::default(),
+                count: 3,
+            }],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: false,
+        });
+        let result = SpaceCombatResult {
+            attacker_fleet: attacker,
+            defender_fleet: defender,
+            system: SystemKey::default(),
+            winner: CombatSide::Attacker,
+            ship_damage: vec![],
+            fighter_losses: vec![
+                FighterLossEvent {
+                    fleet: attacker,
+                    fighter_index: 0,
+                    squads_before: 4,
+                    squads_after: 2,
+                },
+                FighterLossEvent {
+                    fleet: defender,
+                    fighter_index: 0,
+                    squads_before: 3,
+                    squads_after: 0,
+                },
+            ],
+            tick: 1,
+        };
+
+        apply_space_combat_result_inner(&result, &mut world);
+
+        assert_eq!(world.fleets[attacker].fighters[0].count, 2);
+        assert!(!world.fleets.contains_key(defender));
+    }
+
+    #[test]
+    fn system_engagement_resolves_multiple_rounds_before_repair() {
+        let mut world = GameWorld::default();
+        let system = add_combat_system(&mut world);
+        let attacker = add_ship_fleet(&mut world, system, true, 100, 30);
+        let defender = add_ship_fleet(&mut world, system, false, 100, 1);
+
+        let result = resolve_system_space_combat(
+            &mut world,
+            system,
+            1,
+            &[0.5; 256],
+            10,
+            false,
+        );
+
+        assert_eq!(result.winner, CombatSide::Attacker);
+        assert_eq!(result.winner_fleet, Some(attacker));
+        assert!(result.rounds > 1);
+        assert!(!result.stalemate);
+        assert!(!world.fleets.contains_key(defender));
+    }
+
+    #[test]
+    fn system_engagement_includes_every_orbiting_task_force() {
+        let mut world = GameWorld::default();
+        let system = add_combat_system(&mut world);
+        let first_alliance = add_ship_fleet(&mut world, system, true, 200, 100);
+        let second_alliance = add_ship_fleet(&mut world, system, true, 200, 100);
+        let first_empire = add_ship_fleet(&mut world, system, false, 30, 1);
+        let second_empire = add_ship_fleet(&mut world, system, false, 30, 1);
+
+        let result = resolve_system_space_combat(
+            &mut world,
+            system,
+            1,
+            &[0.5; 256],
+            11,
+            false,
+        );
+
+        assert_eq!(result.alliance_fleets, 2);
+        assert_eq!(result.empire_fleets, 2);
+        assert_eq!(result.winner, CombatSide::Attacker);
+        assert!(world.fleets.contains_key(first_alliance));
+        assert!(world.fleets.contains_key(second_alliance));
+        assert!(!world.fleets.contains_key(first_empire));
+        assert!(!world.fleets.contains_key(second_empire));
+
+        let mut integrator = PerceptionIntegrator::new(11, 0);
+        integrator.emit_system_space_combat(&world, &result);
+        let events = integrator.finish();
+        assert_eq!(events.len(), 1);
+        assert_eq!(events[0].event_type, EVT_COMBAT_SPACE);
+        assert_eq!(events[0].details["alliance_fleets"], 2);
+        assert_eq!(events[0].details["empire_fleets"], 2);
+    }
+
+    #[test]
+    fn system_engagement_stops_on_true_no_progress_stalemate() {
+        let mut world = GameWorld::default();
+        let system = add_combat_system(&mut world);
+        add_ship_fleet(&mut world, system, true, 100, 0);
+        add_ship_fleet(&mut world, system, false, 100, 0);
+
+        let result = resolve_system_space_combat(
+            &mut world,
+            system,
+            1,
+            &[0.5; 256],
+            12,
+            false,
+        );
+
+        assert_eq!(result.winner, CombatSide::Draw);
+        assert_eq!(result.rounds, 1);
+        assert!(result.stalemate);
+        assert_eq!(world.systems[system].fleets.len(), 2);
     }
 }
 

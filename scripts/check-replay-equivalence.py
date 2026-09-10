@@ -121,21 +121,39 @@ def browser_report(
         )
         attempts = 200 if expect_report else 30
         for _ in range(attempts):
+            # Some agent-browser Chrome builds instantiate WASM but suppress
+            # requestAnimationFrame in headless sessions. Drive the exported
+            # macroquad frame only until replay output or the menu is ready.
             evaluated = agent(
                 "eval",
-                "JSON.stringify({"
+                "(() => {"
+                "const report = window.__openRebellionReplay || null;"
+                "const menuActive = document.getElementById('main-menu-semantics')?.dataset.active || null;"
+                "let framePumped = false;"
+                "if (report === null && menuActive !== 'true' "
+                "&& typeof wasm_exports !== 'undefined' "
+                "&& typeof wasm_exports.frame === 'function') {"
+                "wasm_exports.frame();"
+                "framePumped = true;"
+                "}"
+                "return JSON.stringify({"
                 "report: window.__openRebellionReplay || null,"
                 "menuActive: document.getElementById('main-menu-semantics')?.dataset.active || null,"
                 "canvasWidth: document.getElementById('glcanvas')?.width || 0,"
-                "canvasHeight: document.getElementById('glcanvas')?.height || 0"
-                "})",
+                "canvasHeight: document.getElementById('glcanvas')?.height || 0,"
+                "framePumped"
+                "});"
+                "})()",
             )
             page_state = json.loads(evaluated.get("result", "{}"))
             if expect_report and page_state.get("report") is not None:
                 break
             time.sleep(0.1)
         if expect_report and page_state.get("report") is None:
-            raise RuntimeError("browser replay gate did not report within 20 seconds")
+            raise RuntimeError(
+                "browser replay gate did not report within 20 seconds: "
+                f"{json.dumps(page_state, sort_keys=True)}"
+            )
 
         errors = agent("errors").get("errors", [])
         request_records = agent("network", "requests").get("requests", [])

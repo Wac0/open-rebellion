@@ -40,7 +40,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification (2026-09-09):** The bitmap cockpit, exact native/WASM replay, and ordinary player fleet dispatch now pass browser acceptance for both factions. Fleet transit has one authoritative position, compatible arrivals consolidate, and all 533 workspace tests pass. Transit balance, combat distribution, victory, multiplayer, and release gates remain open in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [movement evidence](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
+> **Verification (2026-09-10):** The authentic bitmap cockpit, exact native/WASM replay, player fleet dispatch, and system-scoped combat backlog fix pass acceptance; all 541 workspace tests pass. AI encounter balance, transit fan-in, repair telemetry, victory, multiplayer, and release gates remain open in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [combat evidence](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
 
 | Layer | Implementation status | Release acceptance |
 |-------|-----------------------|--------------------|

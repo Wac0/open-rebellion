@@ -3,12 +3,14 @@
   "reference_documents": {
     "main_menu": "agent_docs/main-menu-parity.md",
     "deterministic_replay": "agent_docs/deterministic-replay.md",
+    "system_combat": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md",
     "victory_rules": "agent_docs/systems/victory.md",
     "original_game_flow": "docs/GAME-FLOW.md#21-victory--defeat"
   },
   "audit": {
     "name": "Open Rebellion Full Functionality Audit",
     "date": "2026-09-08",
+    "last_updated": "2026-09-10",
     "commit": "fc25634be905839dfa6fb477d5fff0faa49d8ae9",
     "branch": "main",
     "origin_synchronized": true,
@@ -256,19 +258,26 @@
         "F-007A emits AI telemetry, movement messages, and departure audio only for accepted fleet moves; explicit player retries retain accurate in-transit feedback",
         "The F-007A seed-42 rerun produced 78946 attack orders and 153462 accepted moves against 152513 arrivals",
         "F-007B makes movement orders authoritative for transit, rebuilds orbit indexes before production, and consolidates compatible arrivals",
-        "Across five 5000-tick seeds, final fleet arenas are no more than 1.4 times their initial size and accepted moves are no more than 1.002 times arrivals",
+        "At the F-007B checkpoint, five 5000-tick seeds kept final fleet arenas at no more than 1.4 times their initial size and accepted moves at no more than 1.002 times arrivals",
         "F-007C routes ordinary player movement through validated authoritative departure, presents accurate transit state, and prevents context-menu click loss or stale-target capture",
+        "F-007D resolves every hostile task force at a system in one bounded engagement, persists fighter losses, corrects fighter launch and shield handling, and suppresses unchanged five-tick stalemates",
+        "The F-007D seed-42 rerun produces 2 decisive engagements instead of 603 space events, including the former 602-draw Xyquine loop",
         "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md",
         "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md",
-        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md"
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md"
       ],
       "resolved_root_causes": [
         "In-transit fleets remained eligible for AI dispatch and replacement orders reset travel progress.",
         "Production could attach to stale in-transit orbit records or create repeated one-ship replacements.",
-        "Compatible arriving fleets accumulated as separate records instead of consolidating."
+        "Compatible arriving fleets accumulated as separate records instead of consolidating.",
+        "Only one opposing fleet pair per system resolved on a five-tick cadence, while fighter attrition and several fighter-versus-ship mechanics could not close the engagement."
       ],
       "root_causes": [
-        "Only one opposing fleet pair per system resolves on a five-tick cadence, creating a combat backlog."
+        "AI target balance can collapse movement and production-fed fleets toward one enemy system after opposing forces are eliminated.",
+        "Victory is not emitted in the observed zero-Alliance-controlled-system campaign.",
+        "Repair-start telemetry repeats without a corresponding repair-state transition.",
+        "Some seeded ground units still use a missing TroopClassDef fallback."
       ],
       "verified_tranches": [
         {
@@ -432,10 +441,76 @@
             "music_muted_during_testing": true
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md"
+        },
+        {
+          "id": "F-007D",
+          "status": "pass",
+          "verified_at": "2026-09-10",
+          "scope": "system_combat_backlog",
+          "automated": {
+            "focused_regressions_passed": 8,
+            "failures": 0,
+            "workspace_unit_tests_passed": 541,
+            "unit_tests_ignored": 4,
+            "doc_tests_passed": 3,
+            "doc_tests_ignored": 16,
+            "original_data_replay_manifest_passed": 2,
+            "native_wasm_checkpoints": 9,
+            "replay_final_fingerprint": "v1:b8a40a56246c1314",
+            "replay_artifact_bytes": 13482,
+            "wasm_build": "pass_with_preexisting_warnings",
+            "wasm_bytes": 4965795,
+            "wasm_sha256": "3428ab31a8950dfb58cd83cd873635ccf9f2cfa983f35ea4d34a89e314a91fb0",
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "five_seed_runs": [
+            {"seed":7,"initial_fleets":7,"final_fleets":4,"in_transit":4,"move_orders":2696,"arrivals":2692,"space_engagements":1,"battle_systems":1,"alliance_systems":1,"empire_systems":9,"victory":false},
+            {"seed":42,"initial_fleets":5,"final_fleets":6,"in_transit":6,"move_orders":2884,"arrivals":2878,"space_engagements":2,"battle_systems":2,"alliance_systems":2,"empire_systems":5,"victory":false},
+            {"seed":99,"initial_fleets":8,"final_fleets":4,"in_transit":4,"move_orders":3243,"arrivals":3239,"space_engagements":0,"battle_systems":0,"alliance_systems":3,"empire_systems":5,"victory":false},
+            {"seed":1337,"initial_fleets":7,"final_fleets":106,"in_transit":105,"move_orders":3308,"arrivals":3203,"space_engagements":2,"battle_systems":2,"alliance_systems":2,"empire_systems":6,"victory":false},
+            {"seed":424242,"initial_fleets":8,"final_fleets":76,"in_transit":0,"move_orders":535,"arrivals":535,"space_engagements":6,"battle_systems":2,"alliance_systems":0,"empire_systems":6,"repair_started":192902,"repair_completed":163,"victory":false}
+          ],
+          "m1_bounds": {
+            "maximum_fleet_arena_multiple": {"limit":3,"observed":15.143,"status":"fail"},
+            "maximum_move_orders_per_arrival": {"limit":1.5,"observed":1.033,"status":"pass"},
+            "maximum_transit_fraction": {"limit":0.1,"observed_range":[0.0,1.0],"status":"fail"},
+            "battle_count_range": {"limit":[50,400],"observed_range":[0,6],"status":"fail"},
+            "minimum_battle_systems": {"limit":8,"observed_range":[0,2],"status":"fail"},
+            "maximum_top_system_battle_fraction": {"limit":0.4,"observed_range":[0.5,1.0],"status":"fail"},
+            "victory_when_rules_permit": {"observed":false,"status":"fail"}
+          },
+          "browser": {
+            "runner": "codex-orchestrator",
+            "model": "gpt-6-astra",
+            "effort": "medium",
+            "review": "runtime_pass_with_separate_combat_followups",
+            "replay_checkpoints": 9,
+            "replay_requests": 4,
+            "normal_startup_requests": 4,
+            "all_http_200": true,
+            "game_data_files": 52,
+            "ui_bitmaps": 2231,
+            "audio_files": 5,
+            "bitmap_main_menu": true,
+            "semantic_menu_active": true,
+            "console_errors": 0,
+            "page_errors": 0,
+            "request_errors": 0,
+            "music_muted_during_testing": true,
+            "headless_frame_scheduler_workaround_verified": true
+          },
+          "open_followups": [
+            "AI campaign balance, transit fan-in, repair telemetry, and victory remain F-007E",
+            "interactive and headless combat convergence remains F-012 and M2",
+            "exact per-arc and anti-fighter formula parity remains P23"
+          ],
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md"
         }
       ],
       "remaining": [
-        "Resolve combat at system scope, reduce transit churn, diversify battle locations, and pass the five-seed M1 campaign bounds.",
+        "Balance AI encounters, reduce transit fan-in, diversify battle locations, and pass the five-seed M1 campaign bounds.",
+        "Correct repair-start telemetry and the remaining TroopClassDef fallback.",
         "Enable and verify Death Star and victory outcomes in permitted fixtures."
       ],
       "acceptance": "Multi-seed bounds for fleet count, orders, event volume, targeting, balance, combat spread, and victory timing all pass."
@@ -1246,15 +1321,16 @@
         "exclude in-transit fleets from dispatch and prevent travel resets (verified in F-007A)",
         "model fleet position, merge arrivals, and attach production without unbounded fleet creation (verified in F-007B)",
         "route ordinary player fleet dispatch through validated authoritative departure (verified in F-007C)",
+        "resolve all hostile task forces at one system as a bounded engagement and suppress unchanged stalemate retries (verified in F-007D)",
         "use stable iteration and deterministic per-tick random streams",
-        "aggregate combat at system level",
         "enable Death Star construction, fire, and cleanup paths",
         "repair parity oracles and degeneracy detection"
       ],
-      "verified_tranches": ["F-007A", "F-007B", "F-007C"],
+      "verified_tranches": ["F-007A", "F-007B", "F-007C", "F-007D"],
       "remaining": [
-        "transit balance",
-        "system-level combat and target diversity",
+        "AI encounter balance and transit fan-in",
+        "battle target diversity",
+        "repair-start telemetry and TroopClassDef fallback",
         "Death Star and victory outcomes",
         "five-seed native/WASM checkpoint equivalence"
       ],
@@ -1423,7 +1499,7 @@
     {"id":"P20","name":"Movement","status":"partial","verified_tranches":["F-007A_active_order_protection","F-007B_position_and_arrival_consolidation","F-007C_validated_player_dispatch"]},
     {"id":"P21","name":"Blockade and repair","status":"pending"},
     {"id":"P22","name":"AI","status":"partial","verified_tranches":["F-007A_transit_and_same_pass_move_deconfliction","F-007B_bounded_fleet_arena"]},
-    {"id":"P23","name":"Core space combat","status":"pending"},
+    {"id":"P23","name":"Core space combat","status":"partial","verified_tranches":["F-007D_system_scope_and_fighter_attrition"],"evidence":"docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md"},
     {"id":"P24","name":"Tactical space combat","status":"pending"},
     {"id":"P25","name":"Ground combat","status":"pending"},
     {"id":"P26","name":"Bombardment","status":"pending"},

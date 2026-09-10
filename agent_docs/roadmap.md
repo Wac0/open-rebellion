@@ -3,7 +3,7 @@ title: "Roadmap"
 description: "Development milestones from Galaxy Viewer through Release packaging"
 category: "agent-docs"
 created: 2026-03-11
-updated: 2026-09-09
+updated: 2026-09-10
 tags: [roadmap, planning, milestones, parity]
 ---
 
@@ -385,8 +385,15 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 - [x] Wire ordinary player fleet dispatch through the validated authoritative
   departure path and pass Astra-medium bitmap acceptance for both factions
   ([F-007C evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-player-fleet-dispatch.md)).
+- [x] Resolve every hostile task force at a system as one bounded engagement,
+  persist fighter attrition, correct fighter launch and shield handling, and
+  suppress unchanged five-tick stalemates. Seed 42 now reports two decisive
+  engagements instead of 603 repeated combat events
+  ([F-007D evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-10-system-combat-resolution.md)).
 - [ ] Extend stable ordering and versioned random streams through five 5,000-tick campaign seeds.
-- [ ] Resolve combat at system scope so queued fleets cannot create a permanent backlog.
+- [ ] Balance both AI factions so battles reach 50-400 across at least eight
+  systems without production-fed transit fan-in; emit victory when its rules
+  are met and stop repeated repair-start telemetry (F-007E).
 - [ ] Enable AI Death Star construction/fire/cleanup and repair parity oracles.
 - [ ] Pass five 5,000-tick seeds: transit ≤10%, orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles across ≥8 systems, busiest system ≤40%.
 

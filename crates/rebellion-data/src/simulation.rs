@@ -6,7 +6,7 @@
 
 use std::collections::HashMap;
 
-use crate::integrator::PerceptionIntegrator;
+use crate::integrator::{resolve_system_space_combat, PerceptionIntegrator};
 use rebellion_core::ai::{AIState, AISystem};
 use rebellion_core::betrayal::{BetrayalState, BetrayalSystem};
 use rebellion_core::blockade::{BlockadeState, BlockadeSystem};
@@ -28,6 +28,14 @@ use rebellion_core::tick::{GameClock, TickEvent};
 use rebellion_core::uprising::{UprisingState, UprisingSystem};
 use rebellion_core::victory::{VictoryState, VictorySystem};
 use rebellion_core::world::{CampaignConfig, GameWorld, MstbTable};
+
+const COMBAT_RETRY_TICKS: u64 = 5;
+const UNCHANGED_STALEMATE_COOLDOWN: u64 = u64::MAX;
+
+fn combat_is_on_cooldown(last_battle: u64, current_tick: u64) -> bool {
+    last_battle == UNCHANGED_STALEMATE_COOLDOWN
+        || current_tick < last_battle.saturating_add(COMBAT_RETRY_TICKS)
+}
 
 /// Bundles all mutable simulation state needed for a tick.
 ///
@@ -119,10 +127,16 @@ pub fn run_simulation_tick(
     );
     integrator.apply_build_completions(world, &mfg_advance.completions);
     integrator.apply_manufacturing_idle(world, &mfg_advance.newly_idle);
+    for completion in &mfg_advance.completions {
+        states.combat_cooldowns.remove(&completion.system);
+    }
 
     // ── 2. Movement ──────────────────────────────────────────────────────
     let arrivals = MovementSystem::advance(&mut states.movement, tick_events);
     integrator.apply_arrivals(world, &arrivals);
+    for arrival in &arrivals {
+        states.combat_cooldowns.remove(&arrival.system);
+    }
 
     // ── 3. Combat ────────────────────────────────────────────────────────
     let combat_triggers: Vec<_> = world
@@ -130,37 +144,29 @@ pub fn run_simulation_tick(
         .keys()
         .filter_map(|sys_key| {
             if let Some(&last_battle) = states.combat_cooldowns.get(&sys_key) {
-                if current_tick < last_battle + 5 {
+                if combat_is_on_cooldown(last_battle, current_tick) {
                     return None;
                 }
             }
             let sys = &world.systems[sys_key];
-            let alliance_fleets: Vec<_> = sys
+            let has_alliance = sys
                 .fleets
                 .iter()
                 .copied()
-                .filter(|&k| world.fleets.get(k).map(|f| f.is_alliance).unwrap_or(false))
-                .collect();
-            let empire_fleets: Vec<_> = sys
+                .any(|k| world.fleets.get(k).map(|f| f.is_alliance).unwrap_or(false));
+            let has_empire = sys
                 .fleets
                 .iter()
                 .copied()
-                .filter(|&k| world.fleets.get(k).map(|f| !f.is_alliance).unwrap_or(false))
-                .collect();
-            if !alliance_fleets.is_empty() && !empire_fleets.is_empty() {
-                Some((sys_key, alliance_fleets[0], empire_fleets[0]))
-            } else {
-                None
-            }
+                .any(|k| world.fleets.get(k).map(|f| !f.is_alliance).unwrap_or(false));
+            (has_alliance && has_empire).then_some(sys_key)
         })
         .collect();
 
-    for (sys_key, atk_fleet, def_fleet) in combat_triggers {
+    for sys_key in combat_triggers {
         let combat_rolls = take_rolls(256);
-        let space_result = CombatSystem::resolve_space(
+        let space_result = resolve_system_space_combat(
             world,
-            atk_fleet,
-            def_fleet,
             sys_key,
             world.difficulty_index,
             &combat_rolls,
@@ -168,9 +174,15 @@ pub fn run_simulation_tick(
             states.death_star.shield_generator_active,
         );
 
-        // Apply ship damage + telemetry via integrator
-        integrator.apply_space_combat(world, sys_key, &space_result);
-        states.combat_cooldowns.insert(sys_key, current_tick);
+        integrator.emit_system_space_combat(world, &space_result);
+        states.combat_cooldowns.insert(
+            sys_key,
+            if space_result.stalemate {
+                UNCHANGED_STALEMATE_COOLDOWN
+            } else {
+                current_tick
+            },
+        );
         // Record battle for AI target scoring (battle repeat penalty)
         AISystem::record_battle(&mut states.ai, sys_key, current_tick);
         if let Some(ref mut ai2) = states.ai2 {
@@ -180,10 +192,11 @@ pub fn run_simulation_tick(
         // Ground combat + bombardment after either side wins space combat.
         // Alliance is always coded as attacker, Empire as defender in the trigger above.
         // The space combat winner gets to follow up with ground assault + orbital bombardment.
-        let winner_info = match space_result.winner {
-            CombatSide::Attacker => Some((atk_fleet, true)), // Alliance won
-            CombatSide::Defender => Some((def_fleet, false)), // Empire won
-            CombatSide::Draw => None,
+        let winner_info = match (space_result.winner, space_result.winner_fleet) {
+            (CombatSide::Attacker, Some(fleet)) => Some((fleet, true)), // Alliance won
+            (CombatSide::Defender, Some(fleet)) => Some((fleet, false)), // Empire won
+            (CombatSide::Draw, _) => None,
+            _ => None,
         };
         if let Some((winner_fleet, winner_is_alliance)) = winner_info {
             let ground_rolls = take_rolls(256);
@@ -681,5 +694,13 @@ mod tests {
             &rebellion_core::tuning::GameConfig::default(),
         );
         assert!(result.is_empty());
+    }
+
+    #[test]
+    fn unchanged_stalemate_does_not_reopen_on_five_tick_cadence() {
+        assert!(combat_is_on_cooldown(UNCHANGED_STALEMATE_COOLDOWN, 5));
+        assert!(combat_is_on_cooldown(UNCHANGED_STALEMATE_COOLDOWN, 50_000));
+        assert!(combat_is_on_cooldown(10, 14));
+        assert!(!combat_is_on_cooldown(10, 15));
     }
 }
