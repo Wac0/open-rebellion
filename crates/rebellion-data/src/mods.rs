@@ -329,8 +329,8 @@ impl ModLoader {
     /// Apply mod overlays to a serialized world represented as a `serde_json::Value`.
     ///
     /// The `world_json` must be a JSON object whose top-level keys match the
-    /// entity type names used in mod overlay filenames (e.g. `"capital_ships"`
-    /// maps to the `capital_ships` field of the serialized `GameWorld`).
+    /// entity type names used in mod overlay filenames (e.g. `"capital_ship_classes"`
+    /// maps to the `capital_ship_classes` field of the serialized `GameWorld`).
     ///
     /// Each patch array targets entities by matching the `"id"` field (which
     /// corresponds to `dat_id.raw()` in world types). Fields are merged via

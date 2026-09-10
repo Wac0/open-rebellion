@@ -91,6 +91,43 @@ python3 -m http.server 8080 -d web/
 
 **Controls**: scroll to zoom, right-drag to pan, left-click to select a system, `R` to reset view, `Esc` to quit.
 
+## Docker (Browser Build)
+
+On Linux, building the native app requires ALSA/X11/GL dev headers, and the
+cutscene pipeline requires ffmpeg and Go—easy to get wrong on a fresh machine.
+The Docker Compose stack packages all of that and reproduces the browser
+(WASM) path from Quick Start without installing anything but Docker.
+
+It does **not** build or run the native macroquad app—only the WASM + `python3
+-m http.server` path.
+
+```bash
+cp .env.example .env
+# Edit .env: set STAR_WARS_REBELLION_DIR to your original game install
+# (the directory containing GData/, MDATA/, and the game DLLs)
+
+docker compose up
+```
+
+This runs two services:
+
+- **`builder`**—a one-shot container that stages `*.DAT`/`*.DLL` files into
+  `data/base/`, extracts UI bitmaps (`tools/stage-ui-assets`), converts the
+  Smacker `MDATA.*` cutscenes to WebM and decodes them to frame sequences
+  (`scripts/decode-cutscenes.sh`), then runs `scripts/build-wasm.sh`. Each
+  step skips work that's already done, so re-running `docker compose up` is
+  fast; set `FORCE_REBUILD=1` in `.env` to force a full rebuild.
+- **`web`**—serves `web/` on [http://localhost:8080](http://localhost:8080)
+  with `python3 -m http.server`, starting only after `builder` finishes
+  successfully.
+
+Set `PREPARE_MODDING=1` in `.env` to also have `builder` dump every original
+`.DAT` table and TEXTSTRA.DLL's name strings to `data/base/json/`—the
+reference you need to write a mod. See [README_MOD.md](README_MOD.md).
+
+Your original game files are mounted read-only and never copied into a Docker
+image layer or committed to git—same rule as everywhere else in this project.
+
 ## Architecture
 
 Five runtime crates and one CLI tool in a Cargo workspace:
@@ -178,6 +215,10 @@ The mod system supports:
 - **Save compatibility**—save files track which mods were active (FNV-1a hash, warns on mismatch)
 
 If you've ever wanted to add the *Executor*-class as a buildable ship, give Mara Jade a recruitment mission, or create a Clone Wars total conversion—that's what this is for.
+
+See [README_MOD.md](README_MOD.md) for step-by-step instructions, including
+how to generate the JSON reference data you need to find entity IDs and
+field names.
 
 ## Community Roots
 
