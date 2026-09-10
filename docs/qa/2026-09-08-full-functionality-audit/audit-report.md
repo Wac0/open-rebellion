@@ -101,6 +101,12 @@ occurred.
 This is release-blocking behavior even though the evaluator did not classify
 the run as formally degenerate.
 
+F-007A reran the same seed after protecting active fleet orders. Accepted
+moves fell to 153,462 against 152,513 arrivals, and attack orders fell to
+78,946. The remaining 950-fleet arena and 949 in-transit fleets confirm that
+production, arrival merging, and combat backlog are separate open causes
+([evidence](evidence/2026-09-09-fleet-redispatch.md)).
+
 ## Confirmed findings
 
 ### F-001: Save, Load, and Delete UI wiring
@@ -171,13 +177,17 @@ the run as formally degenerate.
 ### F-007: Long-running AI simulation exhibits runaway fleet behavior
 
 - Severity: P0
-- Status: reproduced
+- Status: partially remediated
 - Evidence: seed 42 grew from 5 initial fleets to 980 fleets in transit,
   generated 306,012 attack orders, and produced no victory by tick 5,000.
-  In-transit fleets remain eligible for AI dispatch, a replacement order resets
-  their travel, production creates replacement one-ship fleets at vacated
-  shipyards, arrivals do not merge, and only one fleet pair per system is
-  resolved on a five-tick cadence.
+  F-007A now rejects replacement orders, preserves elapsed travel, excludes
+  transit and same-pass reservations from AI dispatch, and emits AI telemetry,
+  movement messages, or departure audio only for accepted moves. Explicit
+  player retries retain accurate in-transit feedback. Its 5,000-tick rerun
+  produced 78,946 attack orders and a 1.006 accepted-move/arrival ratio.
+  Production still creates replacement one-ship fleets at vacated shipyards,
+  arrivals do not merge, and only one fleet pair per system resolves on a
+  five-tick cadence.
 - Acceptance: multi-seed bounds for fleet counts, orders, event volume, target
   diversity, faction balance, battle spread, and victory timing all pass.
 
@@ -265,9 +275,11 @@ the run as formally degenerate.
   command-position, and checkpoint mismatches. Stable key ordering now covers
   manufacturing completions, simultaneous arrivals, blockade transitions, and
   equal-count AI reinforcement choices. A nine-command, 25-tick original-data
-  campaign matched after save-v11 reload in five fresh native processes, with
-  final fingerprint `v1:f512773b607069ee`. All 518 workspace tests and the
-  supported WASM compile gate pass. Evidence is retained in
+  campaign matched after save-v11 reload in five fresh native processes.
+  F-007A subsequently changed tick-15 onward state as intended; the same
+  reviewed stream now ends at `v1:8fbffe578f9319e4` and passes the native
+  fixture. All 518 workspace tests and the supported WASM compile gate passed
+  at the original tranche. Evidence is retained in
   `evidence/2026-09-09-replay-execution.md`.
 - Verified tranche F-011B4: native and packaged browser WASM decode the same
   13,482-byte replay artifact and independently reconstruct its 51-DAT seed-42
@@ -276,7 +288,7 @@ the run as formally degenerate.
   gate also proves invalid queries and missing packs fail without partial
   state, while normal startup retains four requests and reaches the semantic
   bitmap menu. Astra medium independently passed the gate with zero browser
-  errors. All 521 workspace tests pass. Evidence is retained in
+  errors. The F-007A revalidation passes all 524 workspace unit tests. Evidence is retained in
   `evidence/2026-09-09-replay-wasm-equivalence.md`.
 - Acceptance: repeated native runs and native-versus-WASM runs produce the same
   versioned state fingerprints for the same seed and command stream, including
@@ -416,7 +428,7 @@ later work must not hide failures in an earlier invariant.
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
 | M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add deterministic replay gates. Browser Save/Load/Delete, paths, a self-contained four-request package, F-011A fingerprints, the F-011B1 continuation envelope, the F-011B2/B3 replay pipeline, and F-011B4 native/WASM fixture equivalence are verified. Native GUI restart and persistence hardening remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
-| M1 — Simulation correctness | Prevent in-transit redispatch; model fleet position; merge arrivals; attach production correctly; impose stable ordering/RNG; aggregate system combat; enable Death Star production/fire; repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
+| M1 — Simulation correctness | In-transit redispatch is fixed in F-007A. Next model fleet position, merge arrivals, attach production correctly, impose stable ordering/RNG, aggregate system combat, enable Death Star production/fire, and add repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |
 | M4 — Multiplayer | Introduce validated, tick-stamped commands; authoritative host simulation; faction-filtered fog-safe deltas and snapshots; secure WSS transport; prediction/reconciliation; reconnect; persistence and observability. | Two clients run 5,000 ticks with matching server checkpoints every 250 ticks; at 200 ms RTT there are no input stalls and ≤1 reconciliation per 100 commands; reconnect within 60 s; all illegal commands rejected; hidden state absent from client memory. |

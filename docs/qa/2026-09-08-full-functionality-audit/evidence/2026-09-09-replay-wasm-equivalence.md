@@ -18,7 +18,7 @@ and tactical combat share one authoritative engine path.
 Both runtimes embed and decode
 `crates/rebellion-data/tests/fixtures/replay_seed42_v1.json` without regenerating
 expectations. The reviewed artifact is 13,482 bytes with SHA-256
-`0e83c6d020fd80de5ac8991a5b777c373a009df0436193848cde93b492307d00`.
+`2bb6fc3eb117c6076d29ea518ce5fdf27032355a5ba372d150e91a3aea319ab7`.
 It identifies 51 simulation DAT inputs totaling 50,597 bytes with aggregate
 fingerprint `5facb1c7ba0e81ad`.
 
@@ -33,14 +33,16 @@ state.
 | 2 | 0 | `v1:357708f65600307b` |
 | 3 | 5 | `v1:c3782c7f2ba38f9d` |
 | 4 | 10 | `v1:772525cf399636af` |
-| 5 | 15 | `v1:f0131ad2a2d7a2c1` |
-| 6 | 20 | `v1:54316ab6da548898` |
-| 7 | 25 | `v1:bc68cc7ac27bd974` |
-| 8 | 25 | `v1:f512773b607069ee` |
-| 9 | 25 | `v1:f512773b607069ee` |
+| 5 | 15 | `v1:ef31005899c83de6` |
+| 6 | 20 | `v1:cca303d469e957c8` |
+| 7 | 25 | `v1:012c1b55b88248d6` |
+| 8 | 25 | `v1:8fbffe578f9319e4` |
+| 9 | 25 | `v1:8fbffe578f9319e4` |
 
 The initial fingerprint is `v1:765c9318acb5cb50`. The final state is tick 25
-with fingerprint `v1:f512773b607069ee`.
+with fingerprint `v1:8fbffe578f9319e4`. F-007A intentionally changed the
+tick-15 onward checkpoints by rejecting active-fleet AI redispatch. The same
+nine-command artifact profile was re-reviewed and the native/WASM gate passed.
 
 ## Browser boundary
 
@@ -73,7 +75,7 @@ bash scripts/package-web.sh
 
 | Gate | Result |
 |---|---|
-| Workspace tests | 521 passed, 0 failed, 4 intentionally ignored |
+| Workspace unit tests | 524 passed, 0 failed, 4 intentionally ignored |
 | Focused replay tests | 14 passed, 0 failed |
 | Original-data fixtures | 2 passed, 0 failed |
 | Exact artifact text | Native = WASM = committed 13,482 bytes |
@@ -86,8 +88,8 @@ bash scripts/package-web.sh
 | Go UI extractor | Passed |
 | Web package | Passed with hash manifest |
 
-The final staged WASM is 4,930,910 bytes with SHA-256
-`126e487eb472d3b51cc6c494d6944d87c762e96a95dd5c78e95bf691bda7545c`.
+The final staged WASM is 4,934,894 bytes with SHA-256
+`04e5137b4b4be2bd14b6ef2d2748a21bf118cf0e36e35a97e59f4f83fd0175d7`.
 The runtime pack remains 29,096,058 bytes with SHA-256
 `6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509`.
 

@@ -55,15 +55,16 @@ command-prefix checkpoints during playback.
 | 2 | 0 | `v1:357708f65600307b` |
 | 3 | 5 | `v1:c3782c7f2ba38f9d` |
 | 4 | 10 | `v1:772525cf399636af` |
-| 5 | 15 | `v1:f0131ad2a2d7a2c1` |
-| 6 | 20 | `v1:54316ab6da548898` |
-| 7 | 25 | `v1:bc68cc7ac27bd974` |
-| 8 | 25 | `v1:f512773b607069ee` |
-| 9 | 25 | `v1:f512773b607069ee` |
+| 5 | 15 | `v1:ef31005899c83de6` |
+| 6 | 20 | `v1:cca303d469e957c8` |
+| 7 | 25 | `v1:012c1b55b88248d6` |
+| 8 | 25 | `v1:8fbffe578f9319e4` |
+| 9 | 25 | `v1:8fbffe578f9319e4` |
 
 The initial fingerprint is `v1:765c9318acb5cb50`. Five fresh native test
-processes reproduced every value above and the final fingerprint
-`v1:f512773b607069ee`.
+processes originally established this gate. F-007A then intentionally changed
+tick-15 onward state by preventing active-fleet redispatch; the same reviewed
+command stream now ends at `v1:8fbffe578f9319e4` and passes the native fixture.
 
 ## Verification
 

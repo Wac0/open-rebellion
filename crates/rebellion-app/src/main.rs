@@ -4597,22 +4597,11 @@ fn apply_ai_actions(
                 to_system,
                 reason,
             } => {
-                let reason_str = match reason {
-                    FleetMoveReason::Attack => "attack",
-                    FleetMoveReason::Reinforce => "reinforce",
-                };
-                // Only issue a new order if the fleet isn't already in transit
-                // to the same destination. Re-issuing would reset ticks_elapsed to 0.
-                let already_moving = movement_state
-                    .get(*fleet)
-                    .map(|o| o.destination == *to_system)
-                    .unwrap_or(false);
-                if !already_moving {
-                    if let Some(f) = world.fleets.get(*fleet) {
-                        let transit = rebellion_core::movement::fleet_transit_ticks(
-                            f, world, f.location, *to_system,
-                        );
-                        movement_state.order(*fleet, f.location, *to_system, transit);
+                if let Some(f) = world.fleets.get(*fleet) {
+                    let transit = rebellion_core::movement::fleet_transit_ticks(
+                        f, world, f.location, *to_system,
+                    );
+                    if movement_state.order(*fleet, f.location, *to_system, transit) {
                         #[cfg(not(target_arch = "wasm32"))]
                         {
                             audio_engine.play_sfx(SfxKind::FleetDeparture, audio_vol);
@@ -4623,14 +4612,18 @@ fn apply_ai_actions(
                             };
                             audio_engine.play_voice(voice, audio_vol);
                         }
+                        let reason_str = match reason {
+                            FleetMoveReason::Attack => "attack",
+                            FleetMoveReason::Reinforce => "reinforce",
+                        };
+                        log.push(GameMessage::at_system(
+                            tick,
+                            format!("Empire fleet moving to system ({})", reason_str),
+                            MessageCategory::Ai,
+                            *to_system,
+                        ));
                     }
                 }
-                log.push(GameMessage::at_system(
-                    tick,
-                    format!("Empire fleet moving to system ({})", reason_str),
-                    MessageCategory::Ai,
-                    *to_system,
-                ));
             }
             AIAction::DispatchResearch {
                 character,

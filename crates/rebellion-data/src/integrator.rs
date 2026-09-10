@@ -676,9 +676,12 @@ impl PerceptionIntegrator {
         config: &rebellion_core::tuning::GameConfig,
         is_dual: bool,
     ) {
-        apply_ai_actions_inner(actions, rolls, ai_state, mission_state, mfg_state,
+        let applied = apply_ai_actions_inner(actions, rolls, ai_state, mission_state, mfg_state,
             movement_state, research_state, world, _tick, config);
-        for action in actions {
+        for (action, was_applied) in actions.iter().zip(applied) {
+            if !was_applied {
+                continue;
+            }
             let mut payload = ai_action_json(action, world);
             if is_dual {
                 if let Some(obj) = payload.as_object_mut() {
@@ -1328,23 +1331,26 @@ fn apply_ai_actions_inner(
     world: &mut GameWorld,
     _tick: u64,
     config: &rebellion_core::tuning::GameConfig,
-) {
+) -> Vec<bool> {
     let mission_faction = ai_state
         .faction
         .map(|f| f.as_mission_faction())
         .unwrap_or(MissionFaction::Empire);
 
     let mut roll_idx = 0;
+    let mut applied = Vec::with_capacity(actions.len());
     for action in actions {
-        match action {
+        let was_applied = match action {
             AIAction::DispatchMission { kind, character, target_system, target_character, duration_roll } => {
                 let roll = rolls.get(roll_idx).copied().unwrap_or(*duration_roll);
                 roll_idx += 1;
                 mission_state.dispatch(*kind, mission_faction, *character, *target_system, *target_character, roll);
                 ai_state.mark_busy(*character);
+                true
             }
             AIAction::EnqueueProduction { system, kind, ticks } => {
                 mfg_state.enqueue(*system, QueueItem::new(*kind, *ticks, *ticks));
+                true
             }
             AIAction::DispatchResearch { character, tech_type, ticks } => {
                 let is_alliance = ai_state.faction
@@ -1358,19 +1364,19 @@ fn apply_ai_actions_inner(
                     total_ticks: *ticks,
                 });
                 ai_state.mark_busy(*character);
+                true
             }
             AIAction::MoveFleet { fleet, to_system, .. } => {
-                let already_moving = movement_state.get(*fleet).map(|o| o.destination == *to_system).unwrap_or(false);
-                if !already_moving {
-                    if let Some(f) = world.fleets.get(*fleet) {
-                        let transit = rebellion_core::movement::fleet_transit_ticks_with_config(
-                            f, world, f.location, *to_system,
-                            config.movement.distance_scale,
-                            config.movement.min_transit_ticks,
-                            config.movement.default_fighter_hyperdrive,
-                        );
-                        movement_state.order(*fleet, f.location, *to_system, transit);
-                    }
+                if let Some(f) = world.fleets.get(*fleet) {
+                    let transit = rebellion_core::movement::fleet_transit_ticks_with_config(
+                        f, world, f.location, *to_system,
+                        config.movement.distance_scale,
+                        config.movement.min_transit_ticks,
+                        config.movement.default_fighter_hyperdrive,
+                    );
+                    movement_state.order(*fleet, f.location, *to_system, transit)
+                } else {
+                    false
                 }
             }
             AIAction::MoveTroops { troop, from_system, to_system } => {
@@ -1381,8 +1387,111 @@ fn apply_ai_actions_inner(
                 if let Some(dst) = world.systems.get_mut(*to_system) {
                     dst.ground_units.push(*troop);
                 }
+                true
             }
-        }
+        };
+        applied.push(was_applied);
+    }
+    applied
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rebellion_core::ai::{AiFaction, FleetMoveReason};
+    use rebellion_core::dat::{ExplorationStatus, Faction, SectorGroup};
+    use rebellion_core::tuning::GameConfig;
+    use rebellion_core::world::{Sector, System};
+
+    fn add_system(world: &mut GameWorld, name: &str) -> SystemKey {
+        let sector = world.sectors.insert(Sector {
+            dat_id: DatId(1),
+            name: format!("{name} Sector"),
+            group: SectorGroup::Core,
+            x: 0,
+            y: 0,
+            systems: vec![],
+        });
+        world.systems.insert(System {
+            dat_id: DatId(2),
+            name: name.into(),
+            sector,
+            x: 0,
+            y: 0,
+            exploration_status: ExplorationStatus::Explored,
+            popularity_alliance: 0.0,
+            popularity_empire: 1.0,
+            is_populated: true,
+            total_energy: 0,
+            raw_materials: 0,
+            espionage_rating: 0.0,
+            fleets: vec![],
+            ground_units: vec![],
+            special_forces: vec![],
+            defense_facilities: vec![],
+            manufacturing_facilities: vec![],
+            production_facilities: vec![],
+            is_headquarters: false,
+            is_destroyed: false,
+            control: ControlKind::Controlled(Faction::Empire),
+        })
+    }
+
+    #[test]
+    fn duplicate_move_action_preserves_first_order_and_emits_once() {
+        let mut world = GameWorld::default();
+        let origin = add_system(&mut world, "Origin");
+        let first_target = add_system(&mut world, "First Target");
+        let second_target = add_system(&mut world, "Second Target");
+        let fleet = world.fleets.insert(Fleet {
+            location: origin,
+            capital_ships: vec![],
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: false,
+        });
+        world.systems[origin].fleets.push(fleet);
+
+        let actions = vec![
+            AIAction::MoveFleet {
+                fleet,
+                to_system: first_target,
+                reason: FleetMoveReason::Attack,
+            },
+            AIAction::MoveFleet {
+                fleet,
+                to_system: second_target,
+                reason: FleetMoveReason::Reinforce,
+            },
+        ];
+        let mut ai = AIState::new(AiFaction::Empire);
+        let mut missions = MissionState::new();
+        let mut manufacturing = ManufacturingState::new();
+        let mut movement = MovementState::new();
+        let mut research = ResearchState::new();
+        let mut integrator = PerceptionIntegrator::new(5, 0);
+
+        integrator.apply_ai_actions(
+            &actions,
+            &[],
+            &mut ai,
+            &mut missions,
+            &mut manufacturing,
+            &mut movement,
+            &mut research,
+            &mut world,
+            5,
+            &GameConfig::default(),
+            false,
+        );
+
+        assert_eq!(movement.len(), 1);
+        assert_eq!(movement.get(fleet).unwrap().destination, first_target);
+        let events = integrator.finish();
+        assert_eq!(events.len(), 1);
+        assert_eq!(events[0].event_type, EVT_AI_ACTION);
+        assert_eq!(events[0].details["to"], "First Target");
     }
 }
 
@@ -1635,4 +1744,3 @@ pub fn apply_build_completion_inner(
         }
     }
 }
-

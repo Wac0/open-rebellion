@@ -144,7 +144,7 @@ pub fn fleet_transit_ticks_with_config(
 // ---------------------------------------------------------------------------
 
 /// An active hyperspace transit order for one fleet.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MovementOrder {
     /// The fleet making this transit.
     pub fleet: FleetKey,
@@ -200,7 +200,9 @@ impl MovementOrder {
 
 /// All active fleet movement orders.
 ///
-/// At most one order per fleet — issuing a new order cancels the previous one.
+/// At most one order per fleet. An active order must arrive or be cancelled
+/// explicitly before another can be issued, so travel progress cannot be reset
+/// accidentally by repeated player or AI dispatch.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MovementState {
     #[serde(
@@ -217,20 +219,26 @@ impl MovementState {
         }
     }
 
-    /// Issue a movement order. Replaces any existing order for this fleet.
+    /// Issue a movement order if the fleet is not already in transit.
     ///
     /// `transit_ticks` should be computed via `fleet_transit_ticks`.
+    /// Returns `true` when the order was accepted. Existing orders are left
+    /// unchanged and return `false`.
     pub fn order(
         &mut self,
         fleet: FleetKey,
         origin: SystemKey,
         destination: SystemKey,
         transit_ticks: u32,
-    ) {
+    ) -> bool {
+        if self.orders.contains_key(&fleet) {
+            return false;
+        }
         self.orders.insert(
             fleet,
             MovementOrder::new(fleet, origin, destination, transit_ticks),
         );
+        true
     }
 
     /// Cancel a movement order (fleet stays at current location).
@@ -246,6 +254,11 @@ impl MovementState {
     /// Get the active order for a fleet, if any.
     pub fn get(&self, fleet: FleetKey) -> Option<&MovementOrder> {
         self.orders.get(&fleet)
+    }
+
+    /// Whether a fleet currently has an active hyperspace order.
+    pub fn is_in_transit(&self, fleet: FleetKey) -> bool {
+        self.orders.contains_key(&fleet)
     }
 
     /// All active orders (immutable).
@@ -428,17 +441,21 @@ mod tests {
     }
 
     #[test]
-    fn new_order_replaces_existing() {
+    fn active_order_rejects_redispatch_without_resetting_progress() {
         let (fleet, origin, dest) = mock_fleet_and_systems();
         let mut sys_sm: slotmap::SlotMap<SystemKey, ()> = slotmap::SlotMap::with_key();
         let dest2 = sys_sm.insert(());
 
         let mut state = MovementState::new();
-        state.order(fleet, origin, dest, 10);
-        state.order(fleet, origin, dest2, 20);
+        assert!(state.order(fleet, origin, dest, 10));
+        MovementSystem::advance(&mut state, &ticks(4));
+        let before = state.get(fleet).unwrap().clone();
+
+        assert!(!state.order(fleet, origin, dest2, 20));
         assert_eq!(state.len(), 1);
-        assert_eq!(state.get(fleet).unwrap().destination, dest2);
-        assert_eq!(state.get(fleet).unwrap().transit_ticks, 20);
+        assert_eq!(state.get(fleet).unwrap(), &before);
+        assert_eq!(state.get(fleet).unwrap().destination, dest);
+        assert_eq!(state.get(fleet).unwrap().ticks_elapsed, 4);
     }
 
     // --- MovementSystem ---

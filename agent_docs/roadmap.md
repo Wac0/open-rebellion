@@ -376,7 +376,10 @@ release acceptance. The September 2026 [full-functionality audit](../docs/qa/202
 
 ### M1: Simulation Correctness and Determinism — 2–3 weeks
 
-- [ ] Prevent in-transit fleet redispatch and travel-progress resets.
+- [x] Prevent in-transit fleet redispatch and travel-progress resets. Active
+  orders are immutable until arrival or explicit cancellation, AI candidates
+  exclude transit and same-pass reservations, and seed 42 reduced attack
+  orders from 306,012 to 78,946 ([F-007A evidence](../docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md)).
 - [ ] Model fleet position explicitly; merge arrivals; stop unbounded production fleets.
 - [ ] Extend stable ordering and versioned random streams through five 5,000-tick campaign seeds.
 - [ ] Resolve combat at system scope so queued fleets cannot create a permanent backlog.

@@ -1791,6 +1791,12 @@ impl AISystem {
             None => return,
         };
 
+        // A fleet already in hyperspace cannot be retasked until it arrives or
+        // its movement order is cancelled explicitly.
+        if movement.is_in_transit(ds_fleet_key) {
+            return;
+        }
+
         // ── DS retreat logic ────────────────────────────────────────────────
         // If the DS is at a system with overwhelming enemy presence, retreat
         // to the nearest friendly system rather than risking destruction.
@@ -1853,7 +1859,7 @@ impl AISystem {
                 continue;
             }
             // Skip fleets already in transit.
-            if movement.orders().contains_key(&fk) {
+            if movement.is_in_transit(fk) {
                 continue;
             }
             if fleet.location == ds_location {
@@ -1962,11 +1968,22 @@ impl AISystem {
             }
         }
 
-        // Collect our idle fleets (not in combat, not already assigned).
+        // Active movement orders and actions proposed by an earlier heuristic
+        // in this same evaluation both reserve a fleet. This prevents the
+        // deployment pass from retasking a Death Star or its chosen escort.
+        let mut reserved_fleets: HashSet<FleetKey> =
+            movement.orders().keys().copied().collect();
+        reserved_fleets.extend(actions.iter().filter_map(|action| match action {
+            AIAction::MoveFleet { fleet, .. } => Some(*fleet),
+            _ => None,
+        }));
+
+        // Collect our idle fleets (not in combat, transit, or already assigned).
         let mut idle_fleets: Vec<(FleetKey, SystemKey)> = Vec::new();
         for (fleet_key, fleet) in world.fleets.iter() {
             let is_ours = if is_alliance { fleet.is_alliance } else { !fleet.is_alliance };
             if !is_ours { continue; }
+            if reserved_fleets.contains(&fleet_key) { continue; }
 
             // Skip fleets currently in combat (enemy present at their location).
             let in_combat = world.systems.get(fleet.location)
@@ -2523,6 +2540,105 @@ mod tests {
             if *fleet == fleet_key && *to_system == target_sys
         ));
         assert!(fleet_move.is_some(), "expected fleet to be directed at weak enemy system");
+    }
+
+    #[test]
+    fn fleet_in_transit_is_not_redispatched() {
+        let mut world = empty_world();
+        let sector = add_sector(&mut world);
+        let home_sys = add_system(&mut world, sector, 0.1, 0.9);
+        world.systems[home_sys].control = ControlKind::Controlled(crate::dat::Faction::Empire);
+        let target_sys = add_system(&mut world, sector, 0.8, 0.1);
+        world.systems[target_sys].control = ControlKind::Controlled(crate::dat::Faction::Alliance);
+
+        let class_key = world.capital_ship_classes.insert(CapitalShipClass::default());
+        let fleet_key = world.fleets.insert(Fleet {
+            location: home_sys,
+            capital_ships: ShipInstance::make(class_key, 100, false, 1),
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: false,
+        });
+        world.systems[home_sys].fleets.push(fleet_key);
+
+        let mut movement = crate::movement::MovementState::new();
+        assert!(movement.order(fleet_key, home_sys, target_sys, 10));
+        crate::movement::MovementSystem::advance(&mut movement, &ticks(3));
+        let before = movement.get(fleet_key).unwrap().clone();
+
+        let mut state = AIState::new(AiFaction::Empire);
+        let actions = AISystem::advance(
+            &mut state,
+            &world,
+            &ManufacturingState::new(),
+            &MissionState::new(),
+            &movement,
+            &ticks(7),
+            &GameConfig::default(),
+            &ResearchState::new(),
+        );
+
+        assert!(!actions.iter().any(
+            |action| matches!(action, AIAction::MoveFleet { fleet, .. } if *fleet == fleet_key)
+        ));
+        assert_eq!(movement.get(fleet_key), Some(&before));
+    }
+
+    #[test]
+    fn fleet_receives_at_most_one_move_action_per_evaluation() {
+        let mut world = empty_world();
+        let sector = add_sector(&mut world);
+        let home_sys = add_system(&mut world, sector, 0.1, 0.9);
+        world.systems[home_sys].control = ControlKind::Controlled(crate::dat::Faction::Empire);
+        let staging_sys = add_system(&mut world, sector, 0.1, 0.9);
+        world.systems[staging_sys].control = ControlKind::Controlled(crate::dat::Faction::Empire);
+        world.systems[staging_sys].x = 25;
+        let target_sys = add_system(&mut world, sector, 0.8, 0.1);
+        world.systems[target_sys].control = ControlKind::Controlled(crate::dat::Faction::Alliance);
+        world.systems[target_sys].x = 100;
+
+        let class_key = world.capital_ship_classes.insert(CapitalShipClass::default());
+        let death_star = world.fleets.insert(Fleet {
+            location: home_sys,
+            capital_ships: ShipInstance::make(class_key, 100, false, 1),
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: true,
+        });
+        world.systems[home_sys].fleets.push(death_star);
+        let escort = world.fleets.insert(Fleet {
+            location: staging_sys,
+            capital_ships: ShipInstance::make(class_key, 100, false, 1),
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: false,
+        });
+        world.systems[staging_sys].fleets.push(escort);
+
+        let mut state = AIState::new(AiFaction::Empire);
+        let actions = AISystem::advance(
+            &mut state,
+            &world,
+            &ManufacturingState::new(),
+            &MissionState::new(),
+            &crate::movement::MovementState::new(),
+            &ticks(7),
+            &GameConfig::default(),
+            &ResearchState::new(),
+        );
+
+        for fleet in [death_star, escort] {
+            let move_count = actions
+                .iter()
+                .filter(|action| {
+                    matches!(action, AIAction::MoveFleet { fleet: moved, .. } if *moved == fleet)
+                })
+                .count();
+            assert!(move_count <= 1, "fleet received {move_count} move actions");
+        }
     }
 
     // -----------------------------------------------------------------------
