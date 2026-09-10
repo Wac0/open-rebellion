@@ -255,14 +255,17 @@
         "F-007A excludes in-transit fleets and same-evaluation reservations from AI movement candidates",
         "F-007A emits AI telemetry, movement messages, and departure audio only for accepted fleet moves; explicit player retries retain accurate in-transit feedback",
         "The F-007A seed-42 rerun produced 78946 attack orders and 153462 accepted moves against 152513 arrivals",
-        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md"
+        "F-007B makes movement orders authoritative for transit, rebuilds orbit indexes before production, and consolidates compatible arrivals",
+        "Across five 5000-tick seeds, final fleet arenas are no more than 1.4 times their initial size and accepted moves are no more than 1.002 times arrivals",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md",
+        "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md"
       ],
       "resolved_root_causes": [
-        "In-transit fleets remained eligible for AI dispatch and replacement orders reset travel progress."
+        "In-transit fleets remained eligible for AI dispatch and replacement orders reset travel progress.",
+        "Production could attach to stale in-transit orbit records or create repeated one-ship replacements.",
+        "Compatible arriving fleets accumulated as separate records instead of consolidating."
       ],
       "root_causes": [
-        "Production creates replacement one-ship fleets at shipyards vacated by in-transit fleets.",
-        "Arriving fleets do not merge.",
         "Only one opposing fleet pair per system resolves on a five-tick cadence, creating a combat backlog."
       ],
       "verified_tranches": [
@@ -319,12 +322,72 @@
             "quality_degenerate": false
           },
           "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md"
+        },
+        {
+          "id": "F-007B",
+          "status": "pass",
+          "verified_at": "2026-09-09",
+          "automated": {
+            "focused_regressions_passed": 6,
+            "astra_arrival_probes_passed": 5,
+            "failures": 0,
+            "workspace_unit_tests_passed": 530,
+            "doc_tests_passed": 3,
+            "unit_tests_ignored": 4,
+            "doc_tests_ignored": 16,
+            "seed_42_repeated_runs": 2,
+            "seed_42_semantic_event_count": 215703,
+            "seed_42_semantic_sha256": "2a99868cb055063dea648a6ce4bd79c2a4946d2808e77ca8b3a80aa4b2f90296",
+            "native_replay_fresh_processes": 5,
+            "native_wasm_checkpoints": 9,
+            "replay_final_fingerprint": "v1:b8a40a56246c1314",
+            "replay_artifact_bytes": 13482,
+            "replay_artifact_sha256": "d65099c51cb87a139667529cf61a237f34ba0b114138b7cb59d832777e72c71e",
+            "wasm_build": "pass_with_preexisting_warnings",
+            "wasm_bytes": 4950051,
+            "wasm_sha256": "4af91b553fe9ffc327b914ea070b92623f19dc94c862a4d410bb05d2daee6987",
+            "runtime_pack_bytes": 29096058,
+            "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
+          },
+          "five_seed_runs": [
+            {"seed":7,"initial_fleets":7,"final_fleets":6,"in_transit":4,"move_orders":2559,"arrivals":2555,"space_battles":584,"battle_systems":1,"victory":false},
+            {"seed":42,"initial_fleets":5,"final_fleets":7,"in_transit":5,"move_orders":2721,"arrivals":2716,"space_battles":603,"battle_systems":2,"victory":false},
+            {"seed":99,"initial_fleets":8,"final_fleets":4,"in_transit":4,"move_orders":3243,"arrivals":3239,"space_battles":0,"battle_systems":0,"victory":false},
+            {"seed":1337,"initial_fleets":7,"final_fleets":7,"in_transit":5,"move_orders":2767,"arrivals":2762,"space_battles":601,"battle_systems":2,"victory":false},
+            {"seed":424242,"initial_fleets":8,"final_fleets":8,"in_transit":5,"move_orders":2881,"arrivals":2876,"space_battles":883,"battle_systems":2,"victory":false}
+          ],
+          "m1_bounds": {
+            "maximum_fleet_arena_multiple": {"limit":3,"observed":1.4,"status":"pass"},
+            "maximum_move_orders_per_arrival": {"limit":1.5,"observed":1.002,"status":"pass"},
+            "maximum_transit_fraction": {"limit":0.1,"observed_range":[0.625,1.0],"status":"fail"},
+            "battle_count_range": {"limit":[50,400],"observed_range":[0,883],"status":"fail"},
+            "minimum_battle_systems": {"limit":8,"observed_range":[0,2],"status":"fail"},
+            "maximum_top_system_battle_fraction": {"limit":0.4,"observed_range":[0.998,1.0],"status":"fail"},
+            "death_star_victory_when_fixture_permits": {"observed":false,"status":"fail"}
+          },
+          "browser": {
+            "runner": "codex-orchestrator",
+            "model": "gpt-6-astra",
+            "effort": "medium",
+            "review": "pass_no_new_p0_p2",
+            "alliance_requests": 4,
+            "empire_requests": 4,
+            "all_http_200": true,
+            "bitmap_cockpit": true,
+            "faction_bitmap_galaxy": true,
+            "console_errors": 0,
+            "page_errors": 0,
+            "request_errors": 0,
+            "missing_assets": 0,
+            "music_muted_during_testing": true
+          },
+          "evidence": "docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md"
         }
       ],
       "remaining": [
-        "Attach completed production to an existing positioned fleet instead of creating an unbounded one-ship fleet arena.",
-        "Model fleet position explicitly and merge compatible arrivals.",
-        "Resolve combat at system scope and pass the five-seed M1 campaign bounds."
+        "Wire ordinary player fleet movement to the shared positioned-departure helper.",
+        "Resolve combat at system scope, reduce transit churn, diversify battle locations, and pass the five-seed M1 campaign bounds.",
+        "Enable and verify Death Star and victory outcomes in permitted fixtures."
       ],
       "acceptance": "Multi-seed bounds for fleet count, orders, event volume, targeting, balance, combat spread, and victory timing all pass."
     },
@@ -413,7 +476,7 @@
         "F-011B1 save v10 preserves the known continuation envelope and Astra medium r2 passed 40 browser continuation assertions",
         "F-011B2 defines replay format v1 with strict command ordering, checkpoints, configuration identity, and canonical hashes for all 51 simulation DAT inputs",
         "F-011B3 records and executes format-v1 commands with fail-fast state checkpoints and save-v11 continuation",
-        "five fresh native processes established the nine original-data checkpoints; F-007A intentionally changed tick-15 onward state and the re-reviewed stream now ends at v1:8fbffe578f9319e4",
+        "five fresh native processes established the nine original-data checkpoints; F-007B intentionally changed tick-10 onward state and the re-reviewed stream now ends at v1:b8a40a56246c1314",
         "F-011B4 executes the exact 13482-byte seed-42 artifact in native and browser WASM with nine identical checkpoints",
         "Astra medium independently passed exact-artifact, fail-closed, and normal four-request browser gates with zero errors",
         "state-affecting manufacturing, movement, blockade, and AI tie iteration is now stable",
@@ -605,7 +668,7 @@
             "ticks": 25,
             "fresh_processes": 5,
             "initial_fingerprint": "v1:765c9318acb5cb50",
-            "final_fingerprint": "v1:8fbffe578f9319e4",
+            "final_fingerprint": "v1:b8a40a56246c1314",
             "all_checkpoint_fingerprints_identical": true
           },
           "automated": {
@@ -629,7 +692,7 @@
           "artifact": {
             "path": "crates/rebellion-data/tests/fixtures/replay_seed42_v1.json",
             "bytes": 13482,
-            "sha256": "2bb6fc3eb117c6076d29ea518ce5fdf27032355a5ba372d150e91a3aea319ab7",
+            "sha256": "d65099c51cb87a139667529cf61a237f34ba0b114138b7cb59d832777e72c71e",
             "embedded_exactly_in_native_and_wasm": true
           },
           "equivalence": {
@@ -641,7 +704,7 @@
             "initial_fingerprint": "v1:765c9318acb5cb50",
             "checkpoints_compared": 9,
             "final_tick": 25,
-            "final_fingerprint": "v1:8fbffe578f9319e4",
+            "final_fingerprint": "v1:b8a40a56246c1314",
             "artifact_text_equal": true
           },
           "browser": {
@@ -657,7 +720,7 @@
           "automated": {
             "focused_replay_tests_passed": 14,
             "original_data_fixture_tests_passed": 2,
-            "workspace_tests_passed": 524,
+            "workspace_tests_passed": 530,
             "workspace_tests_ignored": 4,
             "failures": 0,
             "go_ui_extractor_tests": "pass",
@@ -665,8 +728,8 @@
             "strict_clippy": "preexisting_baseline_fail"
           },
           "build": {
-            "wasm_bytes": 4934894,
-            "wasm_sha256": "04e5137b4b4be2bd14b6ef2d2748a21bf118cf0e36e35a97e59f4f83fd0175d7",
+            "wasm_bytes": 4950051,
+            "wasm_sha256": "4af91b553fe9ffc327b914ea070b92623f19dc94c862a4d410bb05d2daee6987",
             "runtime_pack_bytes": 29096058,
             "runtime_pack_sha256": "6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509"
           },
@@ -1131,12 +1194,20 @@
       "estimate": "2-3 weeks",
       "depends_on": ["M0"],
       "work": [
-        "exclude in-transit fleets from dispatch and prevent travel resets",
-        "model fleet position, merge arrivals, and attach production without unbounded fleet creation",
+        "exclude in-transit fleets from dispatch and prevent travel resets (verified in F-007A)",
+        "model fleet position, merge arrivals, and attach production without unbounded fleet creation (verified in F-007B)",
         "use stable iteration and deterministic per-tick random streams",
         "aggregate combat at system level",
         "enable Death Star construction, fire, and cleanup paths",
         "repair parity oracles and degeneracy detection"
+      ],
+      "verified_tranches": ["F-007A", "F-007B"],
+      "remaining": [
+        "ordinary player fleet dispatch",
+        "transit balance",
+        "system-level combat and target diversity",
+        "Death Star and victory outcomes",
+        "five-seed native/WASM checkpoint equivalence"
       ],
       "exit_metrics": {
         "seeds": 5,
@@ -1287,11 +1358,11 @@
     },
     {"id":"P05","name":"Clock","status":"pending"},
     {"id":"P06","name":"Galaxy navigation","status":"pending"},
-    {"id":"P07","name":"Fog and overlays","status":"pending"},
+    {"id":"P07","name":"Fog and overlays","status":"partial","verified_tranches":["F-007B_transit_origin_exclusion"]},
     {"id":"P08","name":"Officers","status":"pending"},
     {"id":"P09","name":"Fleets","status":"pending"},
     {"id":"P10","name":"Economy","status":"pending"},
-    {"id":"P11","name":"Manufacturing","status":"pending"},
+    {"id":"P11","name":"Manufacturing","status":"partial","verified_tranches":["F-007B_orbit_only_fleet_attachment"]},
     {"id":"P12","name":"Diplomacy","status":"pending"},
     {"id":"P13","name":"Recruitment","status":"pending"},
     {"id":"P14","name":"Espionage","status":"pending"},
@@ -1300,9 +1371,9 @@
     {"id":"P17","name":"Uprisings and betrayal","status":"pending"},
     {"id":"P18","name":"Research","status":"pending"},
     {"id":"P19","name":"Jedi","status":"pending"},
-    {"id":"P20","name":"Movement","status":"partial","verified_tranches":["F-007A_active_order_protection"]},
+    {"id":"P20","name":"Movement","status":"partial","verified_tranches":["F-007A_active_order_protection","F-007B_position_and_arrival_consolidation"]},
     {"id":"P21","name":"Blockade and repair","status":"pending"},
-    {"id":"P22","name":"AI","status":"partial","verified_tranches":["F-007A_transit_and_same_pass_move_deconfliction"]},
+    {"id":"P22","name":"AI","status":"partial","verified_tranches":["F-007A_transit_and_same_pass_move_deconfliction","F-007B_bounded_fleet_arena"]},
     {"id":"P23","name":"Core space combat","status":"pending"},
     {"id":"P24","name":"Tactical space combat","status":"pending"},
     {"id":"P25","name":"Ground combat","status":"pending"},

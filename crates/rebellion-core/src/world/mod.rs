@@ -793,7 +793,7 @@ pub struct SkillPair {
 /// aggregate `(class_key, count)` pairs.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Fleet {
-    /// System the fleet is currently orbiting or departing from.
+    /// Last orbiting system. An active movement order is authoritative in transit.
     pub location: SystemKey,
     /// Per-hull capital ship records. Each element is one physical hull with
     /// its own `hull_current` and `alive` state. Replaces the old aggregate

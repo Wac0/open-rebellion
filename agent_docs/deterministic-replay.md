@@ -114,10 +114,11 @@ python3 scripts/check-replay-equivalence.py --skip-build --json
 The ignored fixture test requires the locally supplied original `.DAT` files.
 It records a nine-command, 25-tick, 200-system campaign, reloads its initial
 state through save v11, and checks every command-prefix fingerprint against a
-cross-process golden. F-007A intentionally changed tick-15 onward state by
-rejecting AI redispatch of active fleets; the re-reviewed artifact retains the
-same command stream and now ends at `v1:8fbffe578f9319e4`. The unit tests use
-synthetic data and run in normal repository test passes.
+cross-process golden. F-007B intentionally changed tick-10 onward state by
+making transit position authoritative and consolidating compatible arrivals.
+The re-reviewed artifact retains the same command stream and now ends at
+`v1:b8a40a56246c1314`. The unit tests use synthetic data and run in normal
+repository test passes.
 
 ## Next implementation boundary
 

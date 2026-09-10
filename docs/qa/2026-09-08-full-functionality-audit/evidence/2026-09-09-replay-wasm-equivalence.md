@@ -18,7 +18,7 @@ and tactical combat share one authoritative engine path.
 Both runtimes embed and decode
 `crates/rebellion-data/tests/fixtures/replay_seed42_v1.json` without regenerating
 expectations. The reviewed artifact is 13,482 bytes with SHA-256
-`2bb6fc3eb117c6076d29ea518ce5fdf27032355a5ba372d150e91a3aea319ab7`.
+`d65099c51cb87a139667529cf61a237f34ba0b114138b7cb59d832777e72c71e`.
 It identifies 51 simulation DAT inputs totaling 50,597 bytes with aggregate
 fingerprint `5facb1c7ba0e81ad`.
 
@@ -32,17 +32,18 @@ state.
 | 1 | 0 | `v1:48f9a97ca6dec269` |
 | 2 | 0 | `v1:357708f65600307b` |
 | 3 | 5 | `v1:c3782c7f2ba38f9d` |
-| 4 | 10 | `v1:772525cf399636af` |
-| 5 | 15 | `v1:ef31005899c83de6` |
-| 6 | 20 | `v1:cca303d469e957c8` |
-| 7 | 25 | `v1:012c1b55b88248d6` |
-| 8 | 25 | `v1:8fbffe578f9319e4` |
-| 9 | 25 | `v1:8fbffe578f9319e4` |
+| 4 | 10 | `v1:84aed71a9cf2c60a` |
+| 5 | 15 | `v1:f32901ec3ab6430e` |
+| 6 | 20 | `v1:baa3ee3106369233` |
+| 7 | 25 | `v1:07bad2832fee46b2` |
+| 8 | 25 | `v1:b8a40a56246c1314` |
+| 9 | 25 | `v1:b8a40a56246c1314` |
 
 The initial fingerprint is `v1:765c9318acb5cb50`. The final state is tick 25
-with fingerprint `v1:8fbffe578f9319e4`. F-007A intentionally changed the
-tick-15 onward checkpoints by rejecting active-fleet AI redispatch. The same
-nine-command artifact profile was re-reviewed and the native/WASM gate passed.
+with fingerprint `v1:b8a40a56246c1314`. F-007B intentionally changed the
+tick-10 onward checkpoints by making transit position authoritative and
+consolidating compatible arrivals. The same nine-command artifact profile was
+re-reviewed and the native/WASM gate passed.
 
 ## Browser boundary
 
@@ -75,7 +76,7 @@ bash scripts/package-web.sh
 
 | Gate | Result |
 |---|---|
-| Workspace unit tests | 524 passed, 0 failed, 4 intentionally ignored |
+| Workspace unit tests | 530 passed, 0 failed, 4 intentionally ignored |
 | Focused replay tests | 14 passed, 0 failed |
 | Original-data fixtures | 2 passed, 0 failed |
 | Exact artifact text | Native = WASM = committed 13,482 bytes |
@@ -88,8 +89,8 @@ bash scripts/package-web.sh
 | Go UI extractor | Passed |
 | Web package | Passed with hash manifest |
 
-The final staged WASM is 4,934,894 bytes with SHA-256
-`04e5137b4b4be2bd14b6ef2d2748a21bf118cf0e36e35a97e59f4f83fd0175d7`.
+The final staged WASM is 4,950,051 bytes with SHA-256
+`4af91b553fe9ffc327b914ea070b92623f19dc94c862a4d410bb05d2daee6987`.
 The runtime pack remains 29,096,058 bytes with SHA-256
 `6123deec14cfbfd070573c7001ef1123bd52067273498ad0c36cb7fdb108f509`.
 

@@ -2,8 +2,9 @@
 //!
 //! Fleets travel by issuing a `MovementOrder` which specifies a destination
 //! and the total transit duration. Each tick the fleet advances toward the
-//! destination; on arrival an `ArrivalEvent` is emitted and the caller
-//! updates `Fleet.location` in `GameWorld`.
+//! destination; on arrival an `ArrivalEvent` is emitted and the caller applies
+//! it through [`apply_fleet_arrival`]. While a fleet is moving, its active
+//! order is authoritative and it is absent from every system orbit index.
 //!
 //! # Speed model
 //!
@@ -23,16 +24,18 @@
 //! # Usage
 //!
 //! ```
-//! use rebellion_core::movement::{MovementOrder, MovementState, MovementSystem};
+//! use rebellion_core::movement::{
+//!     apply_fleet_arrival, begin_fleet_transit, MovementState, MovementSystem,
+//! };
 //! use rebellion_core::tick::TickEvent;
 //!
 //! let mut state = MovementState::new();
 //! // Dispatch a fleet to move somewhere:
-//! // state.order(fleet_key, origin_key, dest_key, transit_ticks);
+//! // begin_fleet_transit(&mut state, &mut world, fleet_key, dest_key, transit_ticks);
 //!
 //! let tick_events = vec![TickEvent { tick: 1 }];
 //! let arrivals = MovementSystem::advance(&mut state, &tick_events);
-//! // Apply each ArrivalEvent: world.fleets[event.fleet].location = event.system;
+//! // for event in &arrivals { apply_fleet_arrival(&mut world, event); }
 //! ```
 
 use std::collections::HashMap;
@@ -41,7 +44,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::ids::{FleetKey, SystemKey};
 use crate::tick::TickEvent;
-use crate::world::{Fleet, GameWorld};
+use crate::world::{Fleet, FighterEntry, GameWorld};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -305,6 +308,159 @@ pub struct ArrivalEvent {
     pub system: SystemKey,
 }
 
+/// Result of applying one arrival to the canonical world fleet indexes.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct AppliedArrival {
+    /// Stable fleet identity that remains at the destination.
+    pub fleet: FleetKey,
+    /// Faction retained before any redundant fleet record is removed.
+    pub is_alliance: bool,
+    /// Number of compatible fleet records absorbed into `fleet`.
+    pub merged_fleets: usize,
+}
+
+/// Begin transit and remove the fleet from its origin's orbit index.
+///
+/// `Fleet.location` remains the last orbiting system while `MovementOrder` is
+/// the authoritative in-transit position. Rejected orders do not change the
+/// world index.
+pub fn begin_fleet_transit(
+    state: &mut MovementState,
+    world: &mut GameWorld,
+    fleet: FleetKey,
+    destination: SystemKey,
+    transit_ticks: u32,
+) -> bool {
+    let origin = match world.fleets.get(fleet) {
+        Some(value) => value.location,
+        None => return false,
+    };
+    if !state.order(fleet, origin, destination, transit_ticks) {
+        return false;
+    }
+    if let Some(system) = world.systems.get_mut(origin) {
+        system.fleets.retain(|&key| key != fleet);
+    }
+    true
+}
+
+/// Rebuild `System.fleets` so it contains each orbiting fleet exactly once and
+/// never contains an in-transit fleet.
+pub fn reconcile_fleet_orbits(state: &MovementState, world: &mut GameWorld) {
+    let mut orbiting: HashMap<FleetKey, SystemKey> = world
+        .fleets
+        .iter()
+        .filter(|(fleet, _)| !state.is_in_transit(*fleet))
+        .map(|(fleet, value)| (fleet, value.location))
+        .collect();
+
+    for (system_key, system) in world.systems.iter_mut() {
+        system
+            .fleets
+            .retain(|fleet| orbiting.get(fleet) == Some(&system_key));
+        system.fleets.sort_unstable();
+        system.fleets.dedup();
+        for fleet in &system.fleets {
+            orbiting.remove(fleet);
+        }
+    }
+
+    let mut missing: Vec<_> = orbiting.into_iter().collect();
+    missing.sort_unstable_by_key(|(fleet, _)| *fleet);
+    for (fleet, system) in missing {
+        if let Some(value) = world.systems.get_mut(system) {
+            value.fleets.push(fleet);
+            value.fleets.sort_unstable();
+        }
+    }
+}
+
+/// Apply one arrival and consolidate anonymous, same-faction task forces.
+///
+/// Fleets carrying characters or a Death Star remain separate so explicit
+/// player task-force identity is preserved. Production and ordinary AI fleets
+/// can merge deterministically instead of accumulating one-ship records.
+pub fn apply_fleet_arrival(
+    world: &mut GameWorld,
+    arrival: &ArrivalEvent,
+) -> Option<AppliedArrival> {
+    let arriving = world.fleets.get(arrival.fleet)?;
+    let is_alliance = arriving.is_alliance;
+    let can_merge = arriving.characters.is_empty() && !arriving.has_death_star;
+
+    if let Some(origin) = world.systems.get_mut(arrival.origin) {
+        origin.fleets.retain(|&fleet| fleet != arrival.fleet);
+    }
+    if let Some(fleet) = world.fleets.get_mut(arrival.fleet) {
+        fleet.location = arrival.system;
+    }
+
+    let mut compatible = Vec::new();
+    if can_merge {
+        if let Some(destination) = world.systems.get(arrival.system) {
+            compatible.extend(destination.fleets.iter().copied().filter(|&fleet| {
+                fleet != arrival.fleet
+                    && world.fleets.get(fleet).map(|value| {
+                        value.location == arrival.system
+                            && value.is_alliance == is_alliance
+                            && value.characters.is_empty()
+                            && !value.has_death_star
+                    }).unwrap_or(false)
+            }));
+        }
+    }
+    compatible.push(arrival.fleet);
+    compatible.sort_unstable();
+    compatible.dedup();
+
+    let survivor = compatible[0];
+    let absorbed_keys: Vec<_> = compatible
+        .iter()
+        .copied()
+        .filter(|&fleet| fleet != survivor)
+        .collect();
+    let absorbed: Vec<_> = absorbed_keys
+        .iter()
+        .filter_map(|&fleet| world.fleets.remove(fleet))
+        .collect();
+
+    if let Some(fleet) = world.fleets.get_mut(survivor) {
+        fleet.location = arrival.system;
+        for other in absorbed {
+            fleet.capital_ships.extend(other.capital_ships);
+            for fighter in other.fighters {
+                if let Some(entry) = fleet
+                    .fighters
+                    .iter_mut()
+                    .find(|entry| entry.class == fighter.class)
+                {
+                    entry.count = entry.count.saturating_add(fighter.count);
+                } else {
+                    fleet.fighters.push(FighterEntry {
+                        class: fighter.class,
+                        count: fighter.count,
+                    });
+                }
+            }
+        }
+    }
+
+    if let Some(destination) = world.systems.get_mut(arrival.system) {
+        destination
+            .fleets
+            .retain(|fleet| !absorbed_keys.contains(fleet) && *fleet != survivor);
+        destination.fleets.push(survivor);
+        destination.fleets.sort_unstable();
+        destination.fleets.dedup();
+    }
+
+    Some(AppliedArrival {
+        fleet: survivor,
+        is_alliance,
+        merged_fleets: absorbed_keys.len(),
+    })
+}
+
 // ---------------------------------------------------------------------------
 // MovementSystem
 // ---------------------------------------------------------------------------
@@ -316,8 +472,8 @@ impl MovementSystem {
     /// Advance all active movement orders by the ticks in `tick_events`.
     ///
     /// Returns one `ArrivalEvent` per fleet that completes transit this frame.
-    /// The caller must remove arrived fleets from their origin system's fleet
-    /// list and add them to the destination system's fleet list in `GameWorld`.
+    /// The caller applies each event through [`apply_fleet_arrival`] so world
+    /// fleet records and system orbit indexes remain canonical.
     pub fn advance(
         state: &mut MovementState,
         tick_events: &[TickEvent],
@@ -622,6 +778,112 @@ mod tests {
         let s1 = world.systems.insert(make_system(sk, x1, y1));
         let s2 = world.systems.insert(make_system(sk, x2, y2));
         (world, s1, s2)
+    }
+
+    fn add_test_fleet(
+        world: &mut GameWorld,
+        system: SystemKey,
+        ship_key: crate::ids::CapitalShipKey,
+    ) -> FleetKey {
+        let fleet = world.fleets.insert(Fleet {
+            location: system,
+            capital_ships: vec![ShipInstance::new(ship_key, 100, true)],
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: true,
+            has_death_star: false,
+        });
+        world.systems[system].fleets.push(fleet);
+        fleet
+    }
+
+    #[test]
+    fn transit_owns_position_until_arrival() {
+        let (mut world, origin, destination) = make_transit_world(0, 0, 30, 40);
+        let ship_key = world.capital_ship_classes.insert(test_ship_class(80));
+        let fleet = add_test_fleet(&mut world, origin, ship_key);
+        let mut movement = MovementState::new();
+
+        assert!(begin_fleet_transit(
+            &mut movement,
+            &mut world,
+            fleet,
+            destination,
+            5,
+        ));
+        assert!(!world.systems[origin].fleets.contains(&fleet));
+        reconcile_fleet_orbits(&movement, &mut world);
+        assert!(!world.systems[origin].fleets.contains(&fleet));
+
+        let arrival = MovementSystem::advance(&mut movement, &ticks(5)).remove(0);
+        let applied = apply_fleet_arrival(&mut world, &arrival).unwrap();
+        assert_eq!(applied.fleet, fleet);
+        assert_eq!(applied.merged_fleets, 0);
+        assert_eq!(world.fleets[fleet].location, destination);
+        assert_eq!(world.systems[destination].fleets, vec![fleet]);
+    }
+
+    #[test]
+    fn reconcile_removes_transit_ghosts_and_restores_stationary_fleets() {
+        let (mut world, origin, destination) = make_transit_world(0, 0, 30, 40);
+        let ship_key = world.capital_ship_classes.insert(test_ship_class(80));
+        let transit = add_test_fleet(&mut world, origin, ship_key);
+        let stationary = add_test_fleet(&mut world, destination, ship_key);
+        world.systems[origin].fleets.push(stationary);
+        world.systems[destination].fleets.clear();
+
+        let mut movement = MovementState::new();
+        assert!(movement.order(transit, origin, destination, 5));
+        reconcile_fleet_orbits(&movement, &mut world);
+
+        assert!(world.systems[origin].fleets.is_empty());
+        assert_eq!(world.systems[destination].fleets, vec![stationary]);
+    }
+
+    #[test]
+    fn compatible_arrival_merges_into_stable_fleet_identity() {
+        let (mut world, origin, destination) = make_transit_world(0, 0, 30, 40);
+        let ship_key = world.capital_ship_classes.insert(test_ship_class(80));
+        let survivor = add_test_fleet(&mut world, destination, ship_key);
+        let arriving = add_test_fleet(&mut world, origin, ship_key);
+        let arrival = ArrivalEvent {
+            fleet: arriving,
+            tick: 5,
+            origin,
+            system: destination,
+        };
+
+        let applied = apply_fleet_arrival(&mut world, &arrival).unwrap();
+
+        assert_eq!(applied.fleet, survivor);
+        assert_eq!(applied.merged_fleets, 1);
+        assert!(!world.fleets.contains_key(arriving));
+        assert_eq!(world.fleets[survivor].ship_count(), 2);
+        assert_eq!(world.systems[destination].fleets, vec![survivor]);
+    }
+
+    #[test]
+    fn character_task_force_remains_separate_on_arrival() {
+        let (mut world, origin, destination) = make_transit_world(0, 0, 30, 40);
+        let ship_key = world.capital_ship_classes.insert(test_ship_class(80));
+        let stationed = add_test_fleet(&mut world, destination, ship_key);
+        let arriving = add_test_fleet(&mut world, origin, ship_key);
+        let character = world.characters.insert(test_character("Commander", 0));
+        world.fleets[arriving].characters.push(character);
+        let arrival = ArrivalEvent {
+            fleet: arriving,
+            tick: 5,
+            origin,
+            system: destination,
+        };
+
+        let applied = apply_fleet_arrival(&mut world, &arrival).unwrap();
+
+        assert_eq!(applied.fleet, arriving);
+        assert_eq!(applied.merged_fleets, 0);
+        assert!(world.fleets.contains_key(stationed));
+        assert!(world.fleets.contains_key(arriving));
+        assert_eq!(world.systems[destination].fleets, vec![stationed, arriving]);
     }
 
     #[test]

@@ -21,7 +21,7 @@ use rebellion_core::ids::SystemKey;
 use rebellion_core::jedi::{JediState, JediSystem};
 use rebellion_core::manufacturing::{ManufacturingState, ManufacturingSystem};
 use rebellion_core::missions::{MissionState, MissionSystem};
-use rebellion_core::movement::{MovementState, MovementSystem};
+use rebellion_core::movement::{reconcile_fleet_orbits, MovementState, MovementSystem};
 use rebellion_core::repair::{RepairState, RepairSystem};
 use rebellion_core::research::{ResearchState, ResearchSystem};
 use rebellion_core::tick::{GameClock, TickEvent};
@@ -84,6 +84,10 @@ pub fn run_simulation_tick(
     let mut integrator = PerceptionIntegrator::new(tick_events.last().unwrap().tick, wall_ms);
     let mut roll_cursor = 0usize;
     let current_tick = tick_events.last().unwrap().tick;
+
+    // `MovementState` is authoritative while a fleet is in hyperspace. Repair
+    // stale save/index state before economy and manufacturing inspect orbits.
+    reconcile_fleet_orbits(&states.movement, world);
 
     // Helper: consume N rolls from the slice, padding with 1.0 if exhausted.
     let mut take_rolls = |n: usize| -> Vec<f64> {

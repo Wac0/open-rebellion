@@ -54,17 +54,18 @@ command-prefix checkpoints during playback.
 | 1 | 0 | `v1:48f9a97ca6dec269` |
 | 2 | 0 | `v1:357708f65600307b` |
 | 3 | 5 | `v1:c3782c7f2ba38f9d` |
-| 4 | 10 | `v1:772525cf399636af` |
-| 5 | 15 | `v1:ef31005899c83de6` |
-| 6 | 20 | `v1:cca303d469e957c8` |
-| 7 | 25 | `v1:012c1b55b88248d6` |
-| 8 | 25 | `v1:8fbffe578f9319e4` |
-| 9 | 25 | `v1:8fbffe578f9319e4` |
+| 4 | 10 | `v1:84aed71a9cf2c60a` |
+| 5 | 15 | `v1:f32901ec3ab6430e` |
+| 6 | 20 | `v1:baa3ee3106369233` |
+| 7 | 25 | `v1:07bad2832fee46b2` |
+| 8 | 25 | `v1:b8a40a56246c1314` |
+| 9 | 25 | `v1:b8a40a56246c1314` |
 
 The initial fingerprint is `v1:765c9318acb5cb50`. Five fresh native test
-processes originally established this gate. F-007A then intentionally changed
-tick-15 onward state by preventing active-fleet redispatch; the same reviewed
-command stream now ends at `v1:8fbffe578f9319e4` and passes the native fixture.
+processes originally established this gate. F-007B then intentionally changed
+tick-10 onward state by making transit position authoritative and consolidating
+compatible arrivals. The same reviewed command stream now ends at
+`v1:b8a40a56246c1314` and passes the native fixture.
 
 ## Verification
 

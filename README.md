@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-macroquad-orange.svg" alt="Rust">
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Browser-blue.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Tests-524%20passing-green.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-530%20passing-green.svg" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
   <a href="https://tdimino.github.io/open-rebellion/"><img src="https://img.shields.io/badge/Docs-Ghidra%20RE-blueviolet.svg" alt="Ghidra RE Docs"></a>
 </p>
@@ -40,7 +40,7 @@ Open Rebellion reads the original game data files, converts them to clean JSON, 
 
 ### Current State: v0.23.0
 
-> **Verification (2026-09-09):** The cockpit and exact native/WASM replay pass browser acceptance. Active fleet orders now preserve travel progress, and the seed-42 accepted-move/arrival ratio is 1.006. All 524 workspace unit tests pass. Fleet growth, combat convergence, multiplayer, and broader release gates remain in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
+> **Verification (2026-09-09):** The bitmap cockpit and exact native/WASM replay pass browser acceptance. Fleet transit now has one authoritative position, compatible arrivals consolidate, and five 5,000-tick seeds keep the fleet arena at or below 1.4 times its initial size. All 530 workspace unit tests pass. Ordinary player fleet dispatch, combat distribution, victory, multiplayer, and release gates remain open in the [audit](docs/qa/2026-09-08-full-functionality-audit/), [fleet evidence](docs/qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md), [replay reference](agent_docs/deterministic-replay.md), and [menu reference](agent_docs/main-menu-parity.md).
 
 | Layer | Implementation status | Release acceptance |
 |-------|-----------------------|--------------------|

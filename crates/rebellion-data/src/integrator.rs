@@ -25,7 +25,9 @@ use rebellion_core::ids::{CharacterKey, SystemKey, TroopKey};
 use rebellion_core::jedi::{JediEvent, JediState};
 use rebellion_core::manufacturing::{BuildableKind, CompletionEvent, ManufacturingState, QueueItem};
 use rebellion_core::missions::{MissionEffect, MissionFaction, MissionKind, MissionResult, MissionState};
-use rebellion_core::movement::{ArrivalEvent, MovementState};
+use rebellion_core::movement::{
+    apply_fleet_arrival, begin_fleet_transit, ArrivalEvent, MovementState,
+};
 use rebellion_core::repair::RepairEvent;
 use rebellion_core::research::{ResearchResult, ResearchState};
 use rebellion_core::uprising::{UprisingEvent, UprisingState};
@@ -426,21 +428,15 @@ impl PerceptionIntegrator {
         arrivals: &[ArrivalEvent],
     ) {
         for arrival in arrivals {
-            if let Some(fleet) = world.fleets.get_mut(arrival.fleet) {
-                fleet.location = arrival.system;
-            }
-            if let Some(origin_sys) = world.systems.get_mut(arrival.origin) {
-                origin_sys.fleets.retain(|&k| k != arrival.fleet);
-            }
-            if let Some(dest_sys) = world.systems.get_mut(arrival.system) {
-                if !dest_sys.fleets.contains(&arrival.fleet) {
-                    dest_sys.fleets.push(arrival.fleet);
-                }
-            }
+            let Some(applied) = apply_fleet_arrival(world, arrival) else {
+                continue;
+            };
             self.emit(SYS_MOVEMENT, EVT_FLEET_ARRIVED, serde_json::json!({
                 "system": sys_name(world, arrival.system),
                 "origin": sys_name(world, arrival.origin),
-                "fleet_faction": if world.fleets.get(arrival.fleet).map(|f| f.is_alliance).unwrap_or(false) { "Alliance" } else { "Empire" },
+                "fleet_faction": if applied.is_alliance { "Alliance" } else { "Empire" },
+                "surviving_fleet": format!("{:?}", applied.fleet),
+                "merged_fleets": applied.merged_fleets,
             }));
         }
     }
@@ -1367,17 +1363,17 @@ fn apply_ai_actions_inner(
                 true
             }
             AIAction::MoveFleet { fleet, to_system, .. } => {
-                if let Some(f) = world.fleets.get(*fleet) {
-                    let transit = rebellion_core::movement::fleet_transit_ticks_with_config(
+                let transit = world.fleets.get(*fleet).map(|f| {
+                    rebellion_core::movement::fleet_transit_ticks_with_config(
                         f, world, f.location, *to_system,
                         config.movement.distance_scale,
                         config.movement.min_transit_ticks,
                         config.movement.default_fighter_hyperdrive,
-                    );
-                    movement_state.order(*fleet, f.location, *to_system, transit)
-                } else {
-                    false
-                }
+                    )
+                });
+                transit.map(|ticks| {
+                    begin_fleet_transit(movement_state, world, *fleet, *to_system, ticks)
+                }).unwrap_or(false)
             }
             AIAction::MoveTroops { troop, from_system, to_system } => {
                 // Remove from source system and add to destination.
@@ -1401,7 +1397,7 @@ mod tests {
     use rebellion_core::ai::{AiFaction, FleetMoveReason};
     use rebellion_core::dat::{ExplorationStatus, Faction, SectorGroup};
     use rebellion_core::tuning::GameConfig;
-    use rebellion_core::world::{Sector, System};
+    use rebellion_core::world::{CapitalShipClass, Sector, System};
 
     fn add_system(world: &mut GameWorld, name: &str) -> SystemKey {
         let sector = world.sectors.insert(Sector {
@@ -1492,6 +1488,49 @@ mod tests {
         assert_eq!(events.len(), 1);
         assert_eq!(events[0].event_type, EVT_AI_ACTION);
         assert_eq!(events[0].details["to"], "First Target");
+    }
+
+    #[test]
+    fn production_uses_orbiting_garrison_instead_of_transit_fleet() {
+        let mut world = GameWorld::default();
+        let origin = add_system(&mut world, "Origin");
+        let destination = add_system(&mut world, "Destination");
+        let class = world.capital_ship_classes.insert(CapitalShipClass {
+            is_alliance: false,
+            hull: 100,
+            ..CapitalShipClass::default()
+        });
+        let transit = world.fleets.insert(Fleet {
+            location: origin,
+            capital_ships: vec![ShipInstance::new(class, 100, false)],
+            fighters: vec![],
+            characters: vec![],
+            is_alliance: false,
+            has_death_star: false,
+        });
+        world.systems[origin].fleets.push(transit);
+        let mut movement = MovementState::new();
+        assert!(begin_fleet_transit(
+            &mut movement,
+            &mut world,
+            transit,
+            destination,
+            10,
+        ));
+
+        let completion = CompletionEvent {
+            system: origin,
+            tick: 1,
+            kind: BuildableKind::CapitalShip(class),
+        };
+        apply_build_completion_inner(&completion, &mut world);
+        apply_build_completion_inner(&completion, &mut world);
+
+        assert_eq!(world.fleets.len(), 2);
+        assert_eq!(world.fleets[transit].ship_count(), 1);
+        let garrison = world.systems[origin].fleets[0];
+        assert_ne!(garrison, transit);
+        assert_eq!(world.fleets[garrison].ship_count(), 2);
     }
 }
 

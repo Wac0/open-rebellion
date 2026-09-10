@@ -8,7 +8,7 @@
 //! # Visibility rules (simplified Phase 0)
 //!
 //! A system is **visible** to a faction if:
-//! 1. The faction has at least one fleet at that system (`Fleet.location`), OR
+//! 1. The faction has at least one orbiting fleet at that system, OR
 //! 2. The faction has at least one character assigned to that system via a fleet.
 //!
 //! Once revealed a system stays revealed (no fog-of-war regression in this
@@ -124,8 +124,8 @@ impl FogSystem {
 
     /// Advance fog-of-war after fleet movement has resolved for this tick.
     ///
-    /// Scans all fleets (stationary and in-transit destination) belonging to
-    /// this faction and reveals any system not yet visible.
+    /// Scans orbiting fleets and approaching in-transit destinations belonging
+    /// to this faction, revealing any system not yet visible.
     ///
     /// Returns one `RevealEvent` per newly-revealed system.
     pub fn advance(
@@ -137,8 +137,11 @@ impl FogSystem {
         let mut events = Vec::new();
 
         // Stationary fleets reveal their current location.
-        for (_fleet_key, fleet) in world.fleets.iter() {
+        for (fleet_key, fleet) in world.fleets.iter() {
             if fleet.is_alliance != is_alliance {
+                continue;
+            }
+            if movement_state.is_in_transit(fleet_key) {
                 continue;
             }
             if !fog.is_visible(fleet.location) {
@@ -175,9 +178,12 @@ impl FogSystem {
 
         // Sensor-radius reveals: fleets with detection capability reveal nearby systems.
         const SENSOR_MULTIPLIER: f32 = 15.0; // coordinate units per detection point
-        for (_, fleet) in world.fleets.iter() {
+        for (fleet_key, fleet) in world.fleets.iter() {
             if fleet.is_alliance != is_alliance {
                 continue; // skip enemy fleets
+            }
+            if movement_state.is_in_transit(fleet_key) {
+                continue;
             }
             // Find max detection from fleet's ship classes.
             let max_detection = fleet.capital_ships.iter()
@@ -387,6 +393,25 @@ mod tests {
         assert!(fog.is_visible(sys_keys[1]));
         assert_eq!(events.len(), 1);
         assert_eq!(events[0].system, sys_keys[1]);
+    }
+
+    #[test]
+    fn in_transit_fleet_does_not_reveal_or_scan_from_stale_origin() {
+        let (world, sys_keys, fleet_keys) = make_world_with_fleets(2, &[0], true);
+        let mut fog = FogState::new(Faction::Alliance);
+        let mut movement = MovementState::new();
+        assert!(movement.order(
+            fleet_keys[0],
+            sys_keys[0],
+            sys_keys[1],
+            10,
+        ));
+
+        let events = FogSystem::advance(&mut fog, &world, &movement);
+
+        assert!(events.is_empty());
+        assert!(!fog.is_visible(sys_keys[0]));
+        assert!(!fog.is_visible(sys_keys[1]));
     }
 
     #[test]

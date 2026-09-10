@@ -28,7 +28,10 @@ use rebellion_core::manufacturing::{ManufacturingState, ManufacturingSystem, Que
 use rebellion_core::missions::{
     MissionEffect, MissionFaction, MissionKind, MissionState, MissionSystem,
 };
-use rebellion_core::movement::{MovementState, MovementSystem};
+use rebellion_core::movement::{
+    apply_fleet_arrival, begin_fleet_transit, reconcile_fleet_orbits, MovementState,
+    MovementSystem,
+};
 use rebellion_core::repair::{RepairEvent, RepairState, RepairSystem};
 use rebellion_core::research::{ResearchState, ResearchSystem};
 use rebellion_core::tick::{GameClock, GameSpeed};
@@ -994,6 +997,10 @@ async fn main() {
             // the rest of the tick loop; this earlier binding is read-only.
             let economy_tick = tick_events.last().map(|e| e.tick).unwrap_or(0);
 
+            // Active movement orders are authoritative; repair stale orbit
+            // indexes before economy and manufacturing inspect fleet presence.
+            reconcile_fleet_orbits(&movement_state, &mut world);
+
             // ── Economy (runs BEFORE manufacturing — affects production) ──────
             let economy_events = EconomySystem::advance(
                 &mut economy_state,
@@ -1121,17 +1128,8 @@ async fn main() {
             // ── Movement ────────────────────────────────────────────────────
             let arrivals = MovementSystem::advance(&mut movement_state, &tick_events);
             for arrival in &arrivals {
-                if let Some(fleet) = world.fleets.get_mut(arrival.fleet) {
-                    fleet.location = arrival.system;
-                }
-                // Update System.fleets: remove from origin, add to destination
-                if let Some(origin_sys) = world.systems.get_mut(arrival.origin) {
-                    origin_sys.fleets.retain(|&k| k != arrival.fleet);
-                }
-                if let Some(dest_sys) = world.systems.get_mut(arrival.system) {
-                    if !dest_sys.fleets.contains(&arrival.fleet) {
-                        dest_sys.fleets.push(arrival.fleet);
-                    }
+                if apply_fleet_arrival(&mut world, arrival).is_none() {
+                    continue;
                 }
                 let sys_name = world
                     .systems
@@ -3871,12 +3869,19 @@ fn apply_panel_action(
                             .get(system)
                             .map(|s| s.name.clone())
                             .unwrap_or_else(|| "Unknown".to_string());
-                        movement_state.order(fleet_key, origin, system, ticks);
-                        msg_log.push(GameMessage::new(
-                            clock.tick,
-                            format!("Death Star fleet moving to {} ({} days)", dest_name, ticks),
-                            MessageCategory::Event,
-                        ));
+                        if begin_fleet_transit(
+                            movement_state,
+                            world,
+                            fleet_key,
+                            system,
+                            ticks,
+                        ) {
+                            msg_log.push(GameMessage::new(
+                                clock.tick,
+                                format!("Death Star fleet moving to {} ({} days)", dest_name, ticks),
+                                MessageCategory::Event,
+                            ));
+                        }
                     }
                 }
             }
@@ -4597,15 +4602,26 @@ fn apply_ai_actions(
                 to_system,
                 reason,
             } => {
-                if let Some(f) = world.fleets.get(*fleet) {
-                    let transit = rebellion_core::movement::fleet_transit_ticks(
-                        f, world, f.location, *to_system,
-                    );
-                    if movement_state.order(*fleet, f.location, *to_system, transit) {
+                let transit = world.fleets.get(*fleet).map(|fleet| {
+                    (
+                        rebellion_core::movement::fleet_transit_ticks(
+                            fleet, world, fleet.location, *to_system,
+                        ),
+                        fleet.is_alliance,
+                    )
+                });
+                if let Some((transit, is_alliance)) = transit {
+                    if begin_fleet_transit(
+                        movement_state,
+                        world,
+                        *fleet,
+                        *to_system,
+                        transit,
+                    ) {
                         #[cfg(not(target_arch = "wasm32"))]
                         {
                             audio_engine.play_sfx(SfxKind::FleetDeparture, audio_vol);
-                            let voice = if f.is_alliance {
+                            let voice = if is_alliance {
                                 VoiceLine::AllianceFleetDeparts
                             } else {
                                 VoiceLine::EmpireFleetDeparts

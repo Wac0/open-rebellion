@@ -44,8 +44,9 @@ instead of a frame-cycling fallback.
 - [x] (2026-09-09) Completed F-016E and P03. The binary reference proves the original had no standalone mute control; Open Rebellion now adds one documented 30×22 music-only extension styled from the Jiff Gorda/SWG Project Thorn reference. Native presentation was accepted, all 504 tests pass, and Astra-medium passed 10/10 browser gates across four viewports with exact hit/paint bounds, music muted after its initial-state assertion, SFX preserved, and zero errors. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-main-menu-music-toggle.md`.
 - [x] (2026-09-09) Added F-011B2 replay format v1 with strict typed command order, checkpoint positions, configuration identity, and canonical per-file/aggregate fingerprints for all 51 simulation DAT inputs. All 511 workspace tests, the native fixture, and the WASM compile gate pass; execution and cross-runtime equivalence remain open. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-contract.md`.
 - [x] (2026-09-09) Added the F-011B3 recorder/executor, fail-fast state checkpoints, save-v11 continuation proof, stable manufacturing/movement/blockade/AI ordering, and a five-process 200-system native golden. All 518 workspace tests and the WASM compile gate pass; native/WASM execution equivalence remains open. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-execution.md`.
-- [x] (2026-09-09) Added F-011B4 exact-artifact native/WASM replay equivalence. The 13,482-byte seed-42 artifact produces the same initial fingerprint, nine checkpoints, tick-25 final fingerprint, and artifact text in both runtimes; Astra medium passed success, invalid-query, missing-pack, and normal four-request browser gates with zero errors. F-007A intentionally updated tick-15 onward state, and the re-reviewed artifact passes all 524 workspace unit tests plus native/WASM equivalence. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-wasm-equivalence.md`.
+- [x] (2026-09-09) Added F-011B4 exact-artifact native/WASM replay equivalence. The 13,482-byte seed-42 artifact produces the same initial fingerprint, nine checkpoints, tick-25 final fingerprint, and artifact text in both runtimes; Astra medium passed success, invalid-query, missing-pack, and normal four-request browser gates with zero errors. F-007B intentionally updated tick-10 onward state, and the re-reviewed artifact passes all 530 workspace unit tests plus native/WASM equivalence. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-replay-wasm-equivalence.md`.
 - [x] (2026-09-09) Completed F-007A: active movement orders cannot be replaced, AI fleet selection excludes transit and same-pass reservations, and rejected AI moves produce no false telemetry, movement message, or departure audio. The seed-42 5,000-tick run cut attack orders from 306,012 to 78,946 and reached 1.006 accepted moves per arrival. Astra medium passed both faction bitmap paths with four requests and zero errors. Fleet creation, arrival merging, combat backlog, and victory remain open under F-007. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-redispatch.md`.
+- [x] (2026-09-09) Completed F-007B: accepted departures leave their origin index, stale indexes reconcile before production, and compatible anonymous arrivals consolidate deterministically while character and Death Star task forces remain distinct. Five 5,000-tick seeds now keep fleet arenas at or below 1.4 times their initial size and moves at or below 1.002 times arrivals. Native/WASM replay, 530 workspace tests, and Astra medium bitmap acceptance pass. Ordinary player dispatch, transit balance, combat distribution, and victory remain open. Evidence: `../qa/2026-09-08-full-functionality-audit/evidence/2026-09-09-fleet-position-consolidation.md`.
 - [ ] Implement Milestone 1: targeted mission parity and covert foil parity.
 - [ ] Implement Milestone 2: remaining AI decision parity.
 - [ ] Implement Milestone 3: remaining UI and media parity.
@@ -55,7 +56,7 @@ instead of a frame-cycling fallback.
 ### Current continuation milestones
 
 - [ ] M0: complete native GUI restart acceptance and browser persistence hardening. Browser Save/Load/Delete, HD/troop-data paths, the self-contained browser package, F-011A fingerprints, the F-011B1 v10 continuation envelope, the F-011B2/B3 replay pipeline, and F-011B4 native/WASM fixture equivalence are verified.
-- [ ] M1: stop fleet redispatch/spawn/backlog feedback loops and prove deterministic native/WASM replay across five 5,000-tick seeds. F-007A now prevents redispatch and travel resets; spawn, merge, backlog, and five-seed gates remain.
+- [ ] M1: stop fleet redispatch/spawn/backlog feedback loops and prove deterministic native/WASM replay across five 5,000-tick seeds. F-007A prevents redispatch and travel resets. F-007B closes stale position, production attachment, and compatible arrival accumulation. Next wire ordinary player dispatch, reduce transit churn, distribute system combat, enable victory, and extend cross-runtime replay to all five seeds.
 - [ ] M2: converge app, playtest, automatic combat, and tactical combat on one authoritative simulation/event path.
 - [ ] M3: extend the verified indexed/lazy runtime pack with compression and bounded caches, then add IndexedDB saves, high-DPI rendering, browser audio/advisors, and Chrome/Firefox/Safari acceptance.
 - [ ] M4: build validated commands, an authoritative fog-safe server, prediction/reconciliation, reconnect, and multiplayer security after determinism passes.
@@ -83,6 +84,9 @@ closes so it does not tune around known simulation defects.
 - Observation: the remaining UI parity work is mostly resource lookup and media playback, not missing panels.
   Evidence: `crates/rebellion-render/src/encyclopedia.rs` explicitly falls back to a placeholder for star systems because `ENCYBMAP.DLL` is not parsed, `crates/rebellion-render/src/advisor.rs` uses sorted frame cycling instead of BIN-driven sequencing, and there is no `crates/rebellion-render/src/video_player.rs` despite the UI rebuild plan calling for it.
 
+- Observation: F-007B removes unbounded fleet-record growth but exposes a separate player-path gap and concentrated combat behavior.
+  Evidence: five 5,000-tick runs end with four to eight fleet records and a maximum 1.002 moves per arrival, but 62.5 to 100 percent of fleets remain in transit, battles occur in at most two systems, and no run reaches victory. `pending_move_destination` is written by the fleet panel but has no command consumer.
+
 ## Decision Log
 
 - Decision: use current source plus `CLAUDE.md` plus the completed 2026-03-26 and 2026-03-28 plans as the source of truth, not the older roadmap or the first-pass cross-reference report.
@@ -100,6 +104,10 @@ closes so it does not tune around known simulation defects.
 - Decision: estimate LOC as implementation plus tests, excluding generated assets and one-off batch outputs.
   Rationale: that estimate is what matters for staffing and parallelization.
   Date/Author: 2026-03-31 / Codex
+
+- Decision: preserve character-bearing and Death Star task forces as distinct fleets while consolidating compatible anonymous arrivals.
+  Rationale: this bounds fleet-record growth without erasing command assignments or strategically significant ship identity.
+  Date/Author: 2026-09-09 / Codex
 
 ## Outcomes & Retrospective
 

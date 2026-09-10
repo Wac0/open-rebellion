@@ -15,8 +15,8 @@ tags: [qa, audit, functionality, parity, bitmap, wasm, astra, fable]
 Open Rebellion is feature-rich and has substantial unit-test coverage, but it
 is not yet demonstrably 100% functional. The repository is at post-implementation
 integration and acceptance closeout. Several user-facing paths are incomplete,
-the long-running campaign simulation exhibits runaway behavior, and the existing
-CI pipeline does not establish browser or visual correctness.
+the long-running campaign still fails combat-distribution and victory gates,
+and the existing CI pipeline does not establish browser or visual correctness.
 
 This audit was performed against:
 
@@ -36,9 +36,12 @@ and `run-eval.sh`.
 
 ## Where work left off
 
-The latest commit added the ordinary WASM BMP cache pipeline and closed the
-remaining AI parity tracker entries. The preceding work added HD upscale assets
-and the Tammuz story, combat, advisor, and telemetry changes.
+The current continuation has verified the authentic bitmap main menu,
+save/load/delete, deterministic browser packaging, save continuation, exact
+native/WASM replay, fleet redispatch protection, and authoritative fleet
+position with compatible-arrival consolidation. M1 now continues with ordinary
+player fleet dispatch, transit balance, system-level combat distribution, and
+victory.
 
 The repository's records describe different scopes and are not a unified
 acceptance record:
@@ -106,6 +109,13 @@ moves fell to 153,462 against 152,513 arrivals, and attack orders fell to
 78,946. The remaining 950-fleet arena and 949 in-transit fleets confirm that
 production, arrival merging, and combat backlog are separate open causes
 ([evidence](evidence/2026-09-09-fleet-redispatch.md)).
+
+F-007B then made transit orders authoritative, rebuilt orbit indexes before
+production, and consolidated compatible arrivals. Across five 5,000-tick
+seeds, final fleet arenas are no more than 1.4 times initial size and accepted
+moves are no more than 1.002 times arrivals. Combat remains concentrated in at
+most two systems and no seed reaches victory
+([evidence](evidence/2026-09-09-fleet-position-consolidation.md)).
 
 ## Confirmed findings
 
@@ -185,9 +195,12 @@ production, arrival merging, and combat backlog are separate open causes
   movement messages, or departure audio only for accepted moves. Explicit
   player retries retain accurate in-transit feedback. Its 5,000-tick rerun
   produced 78,946 attack orders and a 1.006 accepted-move/arrival ratio.
-  Production still creates replacement one-ship fleets at vacated shipyards,
-  arrivals do not merge, and only one fleet pair per system resolves on a
-  five-tick cadence.
+  F-007B removes transit fleets from orbit indexes, reconciles stale saves,
+  attaches production only to orbiting garrisons, preserves significant task
+  forces, and merges anonymous same-faction arrivals deterministically. Five
+  seed runs now pass the fleet-arena and move/arrival bounds. Ordinary player
+  fleet dispatch is still unwired, transit share remains high, and only one
+  fleet pair per system resolves on a five-tick cadence.
 - Acceptance: multi-seed bounds for fleet counts, orders, event volume, target
   diversity, faction balance, battle spread, and victory timing all pass.
 
@@ -276,8 +289,8 @@ production, arrival merging, and combat backlog are separate open causes
   manufacturing completions, simultaneous arrivals, blockade transitions, and
   equal-count AI reinforcement choices. A nine-command, 25-tick original-data
   campaign matched after save-v11 reload in five fresh native processes.
-  F-007A subsequently changed tick-15 onward state as intended; the same
-  reviewed stream now ends at `v1:8fbffe578f9319e4` and passes the native
+  F-007B subsequently changed tick-10 onward state as intended; the same
+  reviewed stream now ends at `v1:b8a40a56246c1314` and passes the native
   fixture. All 518 workspace tests and the supported WASM compile gate passed
   at the original tranche. Evidence is retained in
   `evidence/2026-09-09-replay-execution.md`.
@@ -288,8 +301,8 @@ production, arrival merging, and combat backlog are separate open causes
   gate also proves invalid queries and missing packs fail without partial
   state, while normal startup retains four requests and reaches the semantic
   bitmap menu. Astra medium independently passed the gate with zero browser
-  errors. The F-007A revalidation passes all 524 workspace unit tests. Evidence is retained in
-  `evidence/2026-09-09-replay-wasm-equivalence.md`.
+  errors. The F-007B revalidation passes all 530 workspace unit tests. Evidence
+  is retained in `evidence/2026-09-09-replay-wasm-equivalence.md`.
 - Acceptance: repeated native runs and native-versus-WASM runs produce the same
   versioned state fingerprints for the same seed and command stream, including
   after save/load.
@@ -428,7 +441,7 @@ later work must not hide failures in an earlier invariant.
 | Milestone | Scope | Exit criteria |
 |-----------|-------|---------------|
 | M0 — Truth and bleeding | Wire save/load/delete and Load Game selection; fix native HD root and `TROOPSD.DAT`; ship browser data; attach evidence to README claims; add deterministic replay gates. Browser Save/Load/Delete, paths, a self-contained four-request package, F-011A fingerprints, the F-011B1 continuation envelope, the F-011B2/B3 replay pipeline, and F-011B4 native/WASM fixture equivalence are verified. Native GUI restart and persistence hardening remain open. | Persistence works on native/WASM, the packaged site boots from a clean directory, and claims link to current evidence. |
-| M1 — Simulation correctness | In-transit redispatch is fixed in F-007A. Next model fleet position, merge arrivals, attach production correctly, impose stable ordering/RNG, aggregate system combat, enable Death Star production/fire, and add repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
+| M1 — Simulation correctness | F-007A prevents redispatch; F-007B canonicalizes fleet position, production attachment, and compatible arrivals. Next wire ordinary player dispatch, reduce transit churn, aggregate system combat, diversify targets, enable Death Star production/fire, and add repair oracle checks. | Across five 5,000-tick seeds: transit ≤10% of fleets, move orders ≤1.5× arrivals, fleet arena ≤3× initial, 50–400 battles over ≥8 systems, top system ≤40%, and at least one Death Star victory where the fixture permits. |
 | M2 — One game engine | Route app and playtest through one tick API and event sink; make combat resumable from core state; construct victory UI; remove or correctly simulate `AdvanceTicks`. | Same seed plus command stream yields identical checkpoints and final state across interactive, headless, native, WASM, auto, and tactical paths. |
 | M3 — Browser excellence | Extend the verified deterministic `runtime.orpk` foundation with Brotli compression, bounded raw/decoded caches, HD entries, high DPI, one egui pass, cached geometry, IndexedDB, gesture-unlocked audio, owned advisor assets, and cross-browser input suites. | Cold start ≤3 s at 50 Mbps/30 ms, ≤4 requests before menu, combined heap/WASM ≤256 MB after 10 minutes, no visual/input failures in current Chrome/Firefox/Safari. |
 | M4 — Multiplayer | Introduce validated, tick-stamped commands; authoritative host simulation; faction-filtered fog-safe deltas and snapshots; secure WSS transport; prediction/reconciliation; reconnect; persistence and observability. | Two clients run 5,000 ticks with matching server checkpoints every 250 ticks; at 200 ms RTT there are no input stalls and ≤1 reconciliation per 100 commands; reconnect within 60 s; all illegal commands rejected; hidden state absent from client memory. |
