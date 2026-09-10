@@ -70,6 +70,30 @@ Major implemented areas (each remains subject to the linked acceptance audit):
 
 We don't distribute any game data. Same model as [DevilutionX](https://github.com/diasurgical/devilutionX), [OpenMW](https://openmw.org), and [The Force Engine](https://theforceengine.github.io)—you bring the data, we bring the engine.
 
+### Linux system dependencies
+
+macOS needs nothing beyond Rust—CoreAudio and windowing are built in. On
+Linux, macroquad's native backend links against ALSA/X11/GL, and the asset
+pipeline below needs ffmpeg and Go. On Debian/Ubuntu:
+
+```bash
+sudo apt install libasound2-dev libx11-dev libxi-dev libgl1-mesa-dev ffmpeg golang-go
+```
+
+- `libasound2-dev`, `libx11-dev`, `libxi-dev`, `libgl1-mesa-dev`—required to
+  `cargo build`/`cargo run` the native app at all (missing ALSA dev headers
+  in particular fails at the *link* step, not compile, so `cargo check`
+  alone won't catch it).
+- `ffmpeg`—required by `scripts/decode-cutscenes.sh` to convert/decode the
+  Smacker cutscenes.
+- `golang-go` (1.22+; check your distro's version)—required by
+  `tools/stage-ui-assets` to extract UI bitmaps. If your distro's package is
+  older than 1.22, install a newer toolchain from
+  [go.dev/dl](https://go.dev/dl/) instead.
+
+None of this is needed for the Docker path below, which bundles all of it in
+the build image instead.
+
 ## Quick Start
 
 ```bash
